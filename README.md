@@ -84,6 +84,7 @@ Las pruebas cubren:
    - Con la CLI de Supabase: `npx supabase link` y `npx supabase db push`. Las migraciones están en `supabase/migrations/`.
 2. **Vercel:** importa el repositorio. `vercel.json` ya define el build (`npm run build` → `dist/web`), la función `api/index.ts`, las reescrituras y el cron.
 3. **Variables en Vercel** (*Settings → Environment Variables*):
+   - `APP_PASSWORD`: contraseña de acceso a la web. Sin ella, cualquiera con la URL podría usar y modificar la app.
    - `DATABASE_URL`
    - `BLIZZARD_CLIENT_ID` y `BLIZZARD_CLIENT_SECRET`
    - `CRON_SECRET`
@@ -112,6 +113,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 
 | Método | Ruta | Uso |
 |---|---|---|
+| GET/POST | `/api/auth/status`, `/api/auth/login`, `/api/auth/logout` | Acceso con `APP_PASSWORD` (cookie HttpOnly; el resto de rutas devuelve 401 sin sesión) |
 | GET | `/api/meta` | Versiones, regiones, ajustes, estado del catálogo |
 | GET/POST | `/api/realms` | Reinos conocidos; añadir un slug validado contra TSM |
 | GET | `/api/market/status` | Lotes activos, antigüedad y último intento |

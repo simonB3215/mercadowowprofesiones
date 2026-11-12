@@ -26,6 +26,7 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
   const text = await res.text();
   let j: any = null;
   try { j = text ? JSON.parse(text) : null; } catch { /* respuesta no JSON */ }
+  if (res.status === 401 && j?.auth) window.dispatchEvent(new Event('auth-required'));
   if (!res.ok) throw new ApiError(res.status, j?.error ?? `Error HTTP ${res.status}`);
   return j as T;
 }

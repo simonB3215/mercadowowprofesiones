@@ -13,6 +13,7 @@ import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
 import { seedDemo } from './demo.js';
 import { storeRaw } from './storage.js';
+import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
 const routes: Array<{ method: string; pattern: RegExp; keys: string[]; handler: Handler }> = [];
@@ -644,6 +645,29 @@ export async function handle(req: Request): Promise<Response> {
   const p = url.searchParams.get('__path');
   const pathname = p !== null ? '/api/' + p.replace(/^\/+/, '') : url.pathname;
   try {
+    // Acceso con contraseña compartida (APP_PASSWORD). Ver src/server/auth.ts.
+    if (pathname === '/api/auth/status' && req.method === 'GET') {
+      return json({ required: authRequired(), authenticated: isAuthenticated(req) });
+    }
+    if (pathname === '/api/auth/login' && req.method === 'POST') {
+      if (!authRequired()) return json({ ok: true, required: false });
+      const b = await body(req);
+      if (!checkPassword(b.password)) {
+        await new Promise((r) => setTimeout(r, 800)); // frena intentos repetidos
+        return json({ error: 'Contraseña incorrecta.' }, 401);
+      }
+      const res = json({ ok: true });
+      res.headers.append('set-cookie', sessionCookie(req));
+      return res;
+    }
+    if (pathname === '/api/auth/logout' && req.method === 'POST') {
+      const res = json({ ok: true });
+      res.headers.append('set-cookie', clearCookie(req));
+      return res;
+    }
+    if (!isPublicPath(pathname) && !isAuthenticated(req)) {
+      return json({ error: 'Inicia sesión para usar la aplicación.', auth: true }, 401);
+    }
     for (const r of routes) {
       if (r.method !== req.method) continue;
       const m = r.pattern.exec(pathname);

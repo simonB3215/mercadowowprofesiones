@@ -144,8 +144,67 @@ function App() {
   );
 }
 
+/** Pantalla de acceso cuando el servidor tiene APP_PASSWORD. */
+function Login({ onDone }: { onDone: () => void }) {
+  const [pw, setPw] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { document.title = 'Acceso · Mercado de profesiones'; }, []);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setErr(null);
+    try {
+      await api('/api/auth/login', { method: 'POST', body: { password: pw } });
+      onDone();
+    } catch (x) {
+      setErr((x as Error).message);
+      setBusy(false);
+    }
+  };
+  return (
+    <main className="login" id="contenido">
+      <form className="card" onSubmit={submit} aria-labelledby="login-title">
+        <h1 id="login-title"><span className="coin" aria-hidden="true">o</span> Mercado de profesiones</h1>
+        <p className="muted small">Esta aplicación es privada. Introduce la contraseña de acceso.</p>
+        <label>
+          Contraseña
+          <input type="password" autoComplete="current-password" value={pw} onChange={(e) => setPw(e.target.value)} required autoFocus />
+        </label>
+        {err && <p className="alert bad" role="alert">{err}</p>}
+        <button type="submit" className="primary" disabled={busy || !pw}>{busy ? 'Comprobando…' : 'Entrar'}</button>
+      </form>
+    </main>
+  );
+}
+
+function Gate() {
+  const [state, setState] = useState<'loading' | 'login' | 'ok'>('loading');
+  const [required, setRequired] = useState(false);
+  useEffect(() => {
+    api<{ required: boolean; authenticated: boolean }>('/api/auth/status')
+      .then((s) => { setRequired(s.required); setState(s.authenticated ? 'ok' : 'login'); })
+      .catch(() => setState('ok')); // si la API no responde, la app muestra su propio error de conexión
+    const onAuth = () => setState('login');
+    window.addEventListener('auth-required', onAuth);
+    return () => window.removeEventListener('auth-required', onAuth);
+  }, []);
+  if (state === 'loading') return null;
+  if (state === 'login') return <Login onDone={() => setState('ok')} />;
+  return (
+    <AppProvider>
+      <App />
+      {required && (
+        <p className="small" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px 24px' }}>
+          <button type="button" className="link" onClick={() => api('/api/auth/logout', { method: 'POST' }).finally(() => setState('login'))}>Cerrar sesión</button>
+        </p>
+      )}
+    </AppProvider>
+  );
+}
+
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppProvider><App /></AppProvider>
+    <Gate />
   </React.StrictMode>,
 );

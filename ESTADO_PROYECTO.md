@@ -5,7 +5,7 @@
 ## Resumen
 
 La aplicación está implementada y conectada a **Supabase** (migraciones aplicadas, precios reales de TSM de US/Area 52 cargados). El código está en GitHub (repositorio privado `simonB3215/mercadowowprofesiones`). Comprobado:
-- 63 pruebas automáticas en verde.
+- 69 pruebas automáticas en verde.
 - La interfaz se revisó en el navegador en escritorio y en móvil.
 - La sincronización real de precios de TSM (US / Area 52) funciona.
 - La función de Vercel, compilada a JS archivo por archivo, responde correctamente con Node.
@@ -52,7 +52,7 @@ La aplicación está implementada y conectada a **Supabase** (migraciones aplica
 | Concentración y enfriamientos (PB-22) | Parcial | Hay calculadora manual de concentración. Los enfriamientos no están modelados (la API no los expone de forma verificada). |
 | Transformaciones aleatorias (PB-23) | Parcial | Hay calculadora manual de valor esperado con validación de probabilidades. Faltan tablas verificadas de molienda, prospección y desencantado. |
 | Classic y otras versiones (PB-26) | No disponible | Validar catálogo, mercados, facciones y comisión de cada versión. |
-| Acceso y autenticación | Sin decidir | La app desplegada es de un solo usuario y no tiene inicio de sesión. Habría que añadir Supabase Auth o una contraseña compartida antes de publicar la URL. |
+| Acceso y autenticación | **Hecho** (contraseña compartida) | `APP_PASSWORD` protege toda la API con una cookie HttpOnly firmada; el cron usa `CRON_SECRET`. Es de un solo usuario: no hay cuentas separadas. |
 
 ## Decisiones
 
@@ -70,7 +70,7 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 1. Revisar la cobertura del catálogo completo en «Calidad de datos».
 2. Decidir una fuente verificada para el resultado y las cantidades de las recetas de Dragonflight o posteriores.
 3. Desplegar en Vercel con las variables de entorno (`DATABASE_URL`, `BLIZZARD_CLIENT_ID`, `BLIZZARD_CLIENT_SECRET`, `CRON_SECRET`).
-4. Decidir la autenticación antes de compartir la URL.
+4. Configurar `APP_PASSWORD` en Vercel antes de compartir la URL.
 5. Verificar la comisión de subasta de cada mercado y ajustar los umbrales en «Ajustes».
 
 ## Cómo continuar sin empezar de nuevo
