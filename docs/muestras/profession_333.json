@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/333?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 333,
+  "name": {
+    "en_US": "Enchanting",
+    "es_MX": "Encantamiento",
+    "pt_BR": "Encantamento",
+    "de_DE": "Verzauberkunst",
+    "en_GB": "Enchanting",
+    "es_ES": "Encantamiento",
+    "fr_FR": "Enchantement",
+    "it_IT": "Incantamento",
+    "ru_RU": "Наложение чар",
+    "ko_KR": "마법부여",
+    "zh_TW": "附魔",
+    "zh_CN": "附魔"
+  },
+  "description": {
+    "en_US": "Higher enchanting skill allows you to learn more powerful formulae.  Formulae can be found on trainers around the world as well as from quests and monsters.",
+    "es_MX": "Con un alto nivel de habilidad en encantamiento, podrás aprender formulas mucho más poderosas. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "pt_BR": "Um alto nível na perícia encantamento permite aprender fórmulas de nível mais alto. As fórmulas podem ser aprendidas ou compradas dos instrutores de encantamento espalhados pelo mundo, bem como saqueadas de monstros e obtidas como recompensa de missões.",
+    "de_DE": "Eine hohe Verzauberfertigkeit ermöglicht es Euch, mächtigere Formeln zu benutzen. Verzauberungsformeln könnt Ihr bei Lehrern überall in der Welt erwerben und auch bei toten Gegnern und beim Questen finden.",
+    "en_GB": "Higher enchanting skill allows you to learn more powerful formulae.  Formulae can be found on trainers around the world as well as from quests and monsters.",
+    "es_ES": "Con un alto nivel de habilidad en encantamiento, podrás aprender formulas mucho más poderosas. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "fr_FR": "Un plus haut score dans la compétence enchantement vous permet d'apprendre des formules plus puissantes. Ces formules peuvent être trouvées auprès de maîtres un peu partout dans le monde, sur des monstres ou en récompense de quêtes.",
+    "it_IT": "Una maggiore competenza in Incantamento permette di apprendere formule di livello superiore. Le formule possono essere acquistate da venditori o istruttori in giro per il mondo o essere ottenute attraverso missioni o uccidendo mostri.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные формулы вы можете использовать. Формулы можно найти у учителей, а также получить в качестве добычи или награды.",
+    "ko_KR": "마법부여 숙련도가 올라갈수록 더 강력한 주문식을 배울 수 있습니다. 주문식은 전문 마법부여사나 퀘스트를 통해 배우거나 몬스터에게서 얻을 수 있습니다.",
+    "zh_TW": "高級的附魔技能使你可以學習高級的附魔公式。你可以在訓練師那裡學習新的公式，也可以通過完成任務或殺死怪物獲得新的公式。",
+    "zh_CN": "高级的附魔技能使你可以学习高级的附魔公式。你可以在训练师那里学习新的公式，也可以通过完成任务或杀死怪物获得新的公式。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/333?namespace=static-12.1.5_70077-us"
+    },
+    "id": 333
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2486?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Enchanting / Zandalari Enchanting",
+        "es_MX": "Encantamiento kultirano / Encantamiento zandalari",
+        "pt_BR": "Encantamento de Kul Tiraz / Encantamento de Zandalar",
+        "de_DE": "Verzauberkunst von Kul Tiras / Verzauberkunst von Zandalar",
+        "en_GB": "Kul Tiran Enchanting / Zandalari Enchanting",
+        "es_ES": "Encantamiento de Kul Tiras / Encantamiento Zandalari",
+        "fr_FR": "Enchantement de Kul Tiras / Enchantement de Zandalar",
+        "it_IT": "Incantamento di Kul Tiras / Incantamento di Zandalar",
+        "ru_RU": "Кул-тирасское наложение чар / Зандаларское наложение чар",
+        "ko_KR": "쿨 티란 마법부여 / 잔달라 마법부여",
+        "zh_TW": "庫爾提拉斯附魔 / 贊達拉附魔",
+        "zh_CN": "库尔提拉斯附魔 / 赞达拉附魔"
+      },
+      "id": 2486
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2487?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Enchanting",
+        "es_MX": "Encantamiento de Legion",
+        "pt_BR": "Encantamento de Legion",
+        "de_DE": "Verzauberkunst der Verheerten Inseln",
+        "en_GB": "Legion Enchanting",
+        "es_ES": "Encantamiento de Legion",
+        "fr_FR": "Enchantement de Legion",
+        "it_IT": "Incantamento di Legion",
+        "ru_RU": "Наложение чар Legion",
+        "ko_KR": "군단 마법부여",
+        "zh_TW": "軍團附魔",
+        "zh_CN": "军团附魔"
+      },
+      "id": 2487
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2488?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Enchanting",
+        "es_MX": "Encantamiento de Draenor",
+        "pt_BR": "Encantamento de Draenor",
+        "de_DE": "Verzauberkunst von Draenor",
+        "en_GB": "Draenor Enchanting",
+        "es_ES": "Encantamiento de Draenor",
+        "fr_FR": "Enchantement de Draenor",
+        "it_IT": "Incantamento di Draenor",
+        "ru_RU": "Наложение чар Дренора",
+        "ko_KR": "드레노어 마법부여",
+        "zh_TW": "德拉諾附魔",
+        "zh_CN": "德拉诺附魔"
+      },
+      "id": 2488
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2489?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Enchanting",
+        "es_MX": "Encantamiento de Pandaria",
+        "pt_BR": "Encantamento de Pandária",
+        "de_DE": "Verzauberkunst von Pandaria",
+        "en_GB": "Pandaria Enchanting",
+        "es_ES": "Encantamiento de Pandaria",
+        "fr_FR": "Enchantement de Pandarie",
+        "it_IT": "Incantamento di Pandaria",
+        "ru_RU": "Наложение чар Пандарии",
+        "ko_KR": "판다리아 마법부여",
+        "zh_TW": "潘達利亞附魔",
+        "zh_CN": "潘达利亚附魔"
+      },
+      "id": 2489
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2491?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Enchanting",
+        "es_MX": "Encantamiento de Cataclysm",
+        "pt_BR": "Encantamento de Cataclysm",
+        "de_DE": "Verzauberkunst des Kataklysmus",
+        "en_GB": "Cataclysm Enchanting",
+        "es_ES": "Encantamiento de Cataclysm",
+        "fr_FR": "Enchantement de Cataclysm",
+        "it_IT": "Incantamento di Cataclysm",
+        "ru_RU": "Наложение чар времен Катаклизма",
+        "ko_KR": "대격변 마법부여",
+        "zh_TW": "大災變附魔",
+        "zh_CN": "大地的裂变附魔"
+      },
+      "id": 2491
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2492?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Enchanting",
+        "es_MX": "Encantamiento de Rasganorte",
+        "pt_BR": "Encantamento de Nortúndria",
+        "de_DE": "Verzauberkunst von Nordend",
+        "en_GB": "Northrend Enchanting",
+        "es_ES": "Encantamiento de Rasganorte",
+        "fr_FR": "Enchantement du Norfendre",
+        "it_IT": "Incantamento di Nordania",
+        "ru_RU": "Наложение чар Нордскола",
+        "ko_KR": "노스렌드 마법부여",
+        "zh_TW": "北裂境附魔",
+        "zh_CN": "诺森德附魔"
+      },
+      "id": 2492
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2493?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Enchanting",
+        "es_MX": "Encantamiento de Terrallende",
+        "pt_BR": "Encantamento de Terralém",
+        "de_DE": "Verzauberkunst der Scherbenwelt",
+        "en_GB": "Outland Enchanting",
+        "es_ES": "Encantamiento de Terrallende",
+        "fr_FR": "Enchantement d’Outreterre",
+        "it_IT": "Incantamento delle Terre Esterne",
+        "ru_RU": "Наложение чар Запределья",
+        "ko_KR": "아웃랜드 마법부여",
+        "zh_TW": "外域附魔",
+        "zh_CN": "外域附魔"
+      },
+      "id": 2493
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2494?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Enchanting",
+        "es_MX": "Encantamiento clásico",
+        "pt_BR": "Encantamento do Classic",
+        "de_DE": "Klassische Verzauberkunst",
+        "en_GB": "Classic Enchanting",
+        "es_ES": "Encantamiento clásico",
+        "fr_FR": "Enchantement classique",
+        "it_IT": "Incantamento Classico",
+        "ru_RU": "Классическое наложение чар",
+        "ko_KR": "옛 마법부여",
+        "zh_TW": "艾澤拉斯附魔",
+        "zh_CN": "经典旧世附魔"
+      },
+      "id": 2494
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2753?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Enchanting",
+        "es_MX": "Encantamiento de Shadowlands",
+        "pt_BR": "Encantamento de Shadowlands",
+        "de_DE": "Verzauberkunst der Schattenlande",
+        "en_GB": "Shadowlands Enchanting",
+        "es_ES": "Encantamiento de Shadowlands",
+        "fr_FR": "Enchantement d’Ombreterre",
+        "it_IT": "Incantamento di Shadowlands",
+        "ru_RU": "Наложение чар Темных Земель",
+        "ko_KR": "어둠땅 마법부여",
+        "zh_TW": "暗影之境附魔",
+        "zh_CN": "暗影界附魔"
+      },
+      "id": 2753
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2825?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Enchanting",
+        "es_MX": "Encantamiento de las Islas Dragón",
+        "pt_BR": "Encantamento das Ilhas do Dragão",
+        "de_DE": "Verzauberkunst der Dracheninseln",
+        "en_GB": "Dragon Isles Enchanting",
+        "es_ES": "Encantamiento de las Islas Dragón",
+        "fr_FR": "Enchantement des îles aux Dragons",
+        "it_IT": "Incantamento delle Isole dei Draghi",
+        "ru_RU": "Наложение чар Драконьих островов",
+        "ko_KR": "용의 섬 마법부여",
+        "zh_TW": "巨龍群島附魔",
+        "zh_CN": "巨龙群岛附魔"
+      },
+      "id": 2825
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2874?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Enchanting",
+        "es_MX": "Encantamiento de Khaz Algar",
+        "pt_BR": "Encantamento de Khaz Algar",
+        "de_DE": "Verzauberkunst von Khaz Algar",
+        "en_GB": "Khaz Algar Enchanting",
+        "es_ES": "Encantamiento de Khaz Algar",
+        "fr_FR": "Enchantement de Khaz Algar",
+        "it_IT": "Incantamento di Khaz Algar",
+        "ru_RU": "Наложение чар Каз Алгара",
+        "ko_KR": "카즈 알가르 마법부여",
+        "zh_TW": "卡茲阿爾加附魔",
+        "zh_CN": "卡兹阿加附魔"
+      },
+      "id": 2874
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333/skill-tier/2909?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Enchanting",
+        "es_MX": "Encantamiento de Midnight",
+        "pt_BR": "Encantamento de Midnight",
+        "de_DE": "Verzauberkunst von Midnight",
+        "en_GB": "Midnight Enchanting",
+        "es_ES": "Encantamiento de Midnight",
+        "fr_FR": "Enchantement de Midnight",
+        "it_IT": "Incantamento di Midnight",
+        "ru_RU": "Наложение чар Midnight",
+        "ko_KR": "한밤 마법부여",
+        "zh_TW": "至暗之夜附魔",
+        "zh_CN": "至暗之夜附魔"
+      },
+      "id": 2909
+    }
+  ]
+}

@@ -1,0 +1,2352 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/773/skill-tier/2913?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2913,
+  "name": {
+    "en_US": "Midnight Inscription",
+    "es_MX": "Inscripción de Midnight",
+    "pt_BR": "Escrivania de Midnight",
+    "de_DE": "Inschriftenkunde von Midnight",
+    "en_GB": "Midnight Inscription",
+    "es_ES": "Inscripción de Midnight",
+    "fr_FR": "Calligraphie de Midnight",
+    "it_IT": "Runografia di Midnight",
+    "ru_RU": "Начертание Midnight",
+    "ko_KR": "한밤 주문각인",
+    "zh_TW": "至暗之夜銘文學",
+    "zh_CN": "至暗之夜铭文"
+  },
+  "minimum_skill_level": 1,
+  "maximum_skill_level": 100,
+  "categories": [
+    {
+      "name": {
+        "en_US": "Recrafting",
+        "es_MX": "Refabricación",
+        "pt_BR": "Recriação",
+        "de_DE": "Umfertigen",
+        "en_GB": "Recrafting",
+        "es_ES": "Refabricación",
+        "fr_FR": "Refaçonner",
+        "it_IT": "Nuova Creazione",
+        "ru_RU": "Переделка",
+        "ko_KR": "재제작",
+        "zh_TW": "重新製作",
+        "zh_CN": "再造"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51523?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Recraft Equipment",
+            "es_MX": "Refabricar equipamiento",
+            "pt_BR": "Recriar Equipamento",
+            "de_DE": "Ausrüstung umfertigen",
+            "en_GB": "Recraft Equipment",
+            "es_ES": "Refabricar equipo",
+            "fr_FR": "Refaçonner de l’équipement",
+            "it_IT": "Ricreazione Equipaggiamento",
+            "ru_RU": "Переделка снаряжения",
+            "ko_KR": "장비 재제작",
+            "zh_TW": "重新製作裝備",
+            "zh_CN": "再造装备"
+          },
+          "id": 51523
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Reagents",
+        "es_MX": "Componentes",
+        "pt_BR": "Reagentes",
+        "de_DE": "Reagenzien",
+        "en_GB": "Reagents",
+        "es_ES": "Componentes",
+        "fr_FR": "Composants",
+        "it_IT": "Reagenti",
+        "ru_RU": "Реагенты",
+        "ko_KR": "재료",
+        "zh_TW": "材料",
+        "zh_CN": "材料"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52500?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sienna Ink",
+            "es_MX": "Tinta Sienna",
+            "pt_BR": "Tinta de Sienna",
+            "de_DE": "Sienatinte",
+            "en_GB": "Sienna Ink",
+            "es_ES": "Tinta Sienna",
+            "fr_FR": "Encre de Sienne",
+            "it_IT": "Inchiostro Terra di Siena",
+            "ru_RU": "Сиеновые чернила",
+            "ko_KR": "적갈빛 잉크",
+            "zh_TW": "赭色墨水",
+            "zh_CN": "赭黄墨水"
+          },
+          "id": 52500
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52501?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Munsell Ink",
+            "es_MX": "Tinta Munsell",
+            "pt_BR": "Tinta de Munsell",
+            "de_DE": "Munselltinte",
+            "en_GB": "Munsell Ink",
+            "es_ES": "Tinta Munsell",
+            "fr_FR": "Encre de Munsell",
+            "it_IT": "Inchiostro di Munsell",
+            "ru_RU": "Многоцветные чернила",
+            "ko_KR": "문셀 잉크",
+            "zh_TW": "孟賽爾墨水",
+            "zh_CN": "标色墨水"
+          },
+          "id": 52501
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52502?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Codified Azeroot",
+            "es_MX": "Azerraíz codificada",
+            "pt_BR": "Raizeroth Codificada",
+            "de_DE": "Kodifizierte Azerwurz",
+            "en_GB": "Codified Azeroot",
+            "es_ES": "Azerraíz codificada",
+            "fr_FR": "Azeracine codifiée",
+            "it_IT": "Azeradice Codificata",
+            "ru_RU": "Зашифрованный азефит",
+            "ko_KR": "선별된 아제뿌리",
+            "zh_TW": "編典杜根草",
+            "zh_CN": "编码艾泽之根"
+          },
+          "id": 52502
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52503?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Soul Cipher",
+            "es_MX": "Clave de alma",
+            "pt_BR": "Código de Alma",
+            "de_DE": "Seelenchiffre",
+            "en_GB": "Soul Cipher",
+            "es_ES": "Clave de almas",
+            "fr_FR": "Formule d’âme",
+            "it_IT": "Codice dell'Anima",
+            "ru_RU": "Шифр души",
+            "ko_KR": "영혼 암호",
+            "zh_TW": "靈魂密文",
+            "zh_CN": "灵魂密文"
+          },
+          "id": 52503
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Profession Equipment",
+        "es_MX": "Equipamiento de profesión",
+        "pt_BR": "Equipamento de Profissão",
+        "de_DE": "Berufsausrüstung",
+        "en_GB": "Profession Equipment",
+        "es_ES": "Equipamiento de profesión",
+        "fr_FR": "Équipements de métier",
+        "it_IT": "Equipaggiamento delle Professioni",
+        "ru_RU": "Снаряжение для профессии",
+        "ko_KR": "전문 기술 장비",
+        "zh_TW": "專業技能裝備",
+        "zh_CN": "专业装备"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52504?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hobbyist Rolling Pin",
+            "es_MX": "Rodillo de aficionado",
+            "pt_BR": "Rolo de Macarrão Amador",
+            "de_DE": "Hobbynudelholz",
+            "en_GB": "Hobbyist Rolling Pin",
+            "es_ES": "Rodillo de chef aficionado",
+            "fr_FR": "Rouleau à pâtisserie de dilettante",
+            "it_IT": "Mattarello Amatoriale",
+            "ru_RU": "Любительская скалка",
+            "ko_KR": "취미 밀대",
+            "zh_TW": "業餘桿麵棍",
+            "zh_CN": "业余擀面杖"
+          },
+          "id": 52504
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52505?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hobbyist Alchemist's Mixing Rod",
+            "es_MX": "Vara mezcladora de alquimista aficionado",
+            "pt_BR": "Bastão de Mistura do Alquimista Amador",
+            "de_DE": "Mischrute des Hobbyalchemisten",
+            "en_GB": "Hobbyist Alchemist's Mixing Rod",
+            "es_ES": "Vara de mezclado de alquimista aficionado",
+            "fr_FR": "Spatule d’alchimiste dilettante",
+            "it_IT": "Verga da Mescolatura dell'Alchimista Amatoriale",
+            "ru_RU": "Любительский стержень алхимика",
+            "ko_KR": "취미 연금술사의 혼합봉",
+            "zh_TW": "業餘鍊金師的混合節杖",
+            "zh_CN": "业余炼金师的混金棒"
+          },
+          "id": 52505
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52506?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hobbyist Scribe's Quill",
+            "es_MX": "Pluma de escriba aficionado",
+            "pt_BR": "Pena do Escriba Amador",
+            "de_DE": "Federkiel des Hobbyschreibers",
+            "en_GB": "Hobbyist Scribe's Quill",
+            "es_ES": "Cálamo de escriba aficionado",
+            "fr_FR": "Plume de scribe dilettante",
+            "it_IT": "Penna dello Scriba Amatoriale",
+            "ru_RU": "Любительское перо писаря",
+            "ko_KR": "취미 각인사의 깃대",
+            "zh_TW": "業餘書記的羽毛筆",
+            "zh_CN": "业余抄写员的羽毛笔"
+          },
+          "id": 52506
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52507?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Rolling Pin",
+            "es_MX": "Rodillo sin'dorei",
+            "pt_BR": "Rolo de Macarrão Sin'dorei",
+            "de_DE": "Nudelholz der Sin'dorei",
+            "en_GB": "Sin'dorei Rolling Pin",
+            "es_ES": "Rodillo de chef sin'dorei",
+            "fr_FR": "Rouleau à pâtisserie sin’dorei",
+            "it_IT": "Mattarello dei Sin'dorei",
+            "ru_RU": "Син'дорайская скалка",
+            "ko_KR": "신도레이 밀대",
+            "zh_TW": "辛多雷桿麵棍",
+            "zh_CN": "辛多雷擀面杖"
+          },
+          "id": 52507
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52508?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Alchemist's Mixing Rod",
+            "es_MX": "Vara mezcladora de alquimista sin'dorei",
+            "pt_BR": "Bastão de Mistura do Alquimista Sin'dorei",
+            "de_DE": "Mischrute des Sin'doreialchemisten",
+            "en_GB": "Sin'dorei Alchemist's Mixing Rod",
+            "es_ES": "Vara de mezclado de alquimista sin'dorei",
+            "fr_FR": "Spatule d’alchimiste sin’dorei",
+            "it_IT": "Verga da Mescolatura dell'Alchimista Sin'dorei",
+            "ru_RU": "Син'дорайский стержень алхимика",
+            "ko_KR": "신도레이 연금술사의 혼합봉",
+            "zh_TW": "辛多雷鍊金師的混合節杖",
+            "zh_CN": "辛多雷炼金师的混金棒"
+          },
+          "id": 52508
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52509?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Quill",
+            "es_MX": "Pluma sin'dorei",
+            "pt_BR": "Pena Sin'dorei",
+            "de_DE": "Federkiel der Sin'dorei",
+            "en_GB": "Sin'dorei Quill",
+            "es_ES": "Cálamo sin'dorei",
+            "fr_FR": "Plume sin’dorei",
+            "it_IT": "Penna dei Sin'dorei",
+            "ru_RU": "Син'дорайское перо",
+            "ko_KR": "신도레이 깃펜",
+            "zh_TW": "辛多雷羽毛筆",
+            "zh_CN": "辛多雷羽毛笔"
+          },
+          "id": 52509
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56435?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Gilded Alchemist's Mixing Rod",
+            "es_MX": "Vara mezcladora de alquimista dorada",
+            "pt_BR": "Bastão de Mistura do Alquimista Dourado",
+            "de_DE": "Vergoldete Mischrute des Alchemisten",
+            "en_GB": "Gilded Alchemist's Mixing Rod",
+            "es_ES": "Vara de mezclado de alquimista dorada",
+            "fr_FR": "Spatule d’alchimiste dorée",
+            "it_IT": "Verga da Mescolatura dell'Alchimista Dorata",
+            "ru_RU": "Позолоченный стержень алхимика",
+            "ko_KR": "금빛 연금술사의 혼합봉",
+            "zh_TW": "鍍金鍊金師的混合節杖",
+            "zh_CN": "鎏金炼金师的搅拌棒"
+          },
+          "id": 56435
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56436?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Gilded Sin'dorei Rolling Pin",
+            "es_MX": "Rodillo sin'dorei dorado",
+            "pt_BR": "Rolo de Macarrão Sin'dorei Dourado",
+            "de_DE": "Vergoldetes Nudelholz der Sin'dorei",
+            "en_GB": "Gilded Sin'dorei Rolling Pin",
+            "es_ES": "Rodillo de chef sin'dorei dorado",
+            "fr_FR": "Rouleau à pâtisserie sin’dorei doré",
+            "it_IT": "Mattarello Dorato dei Sin'dorei",
+            "ru_RU": "Позолоченная син'дорайская скалка",
+            "ko_KR": "금빛 신도레이 밀대",
+            "zh_TW": "鍍金辛多雷桿麵棍",
+            "zh_CN": "鎏金辛多雷擀面杖"
+          },
+          "id": 56436
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56437?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Gilded Sin'dorei Quill",
+            "es_MX": "Pluma sin'dorei dorada",
+            "pt_BR": "Pena Sin'dorei Dourada",
+            "de_DE": "Vergoldeter Federkiel der Sin'dorei",
+            "en_GB": "Gilded Sin'dorei Quill",
+            "es_ES": "Cálamo sin'dorei dorado",
+            "fr_FR": "Plume sin’dorei dorée",
+            "it_IT": "Penna Dorata dei Sin'dorei",
+            "ru_RU": "Позолоченное син'дорайское перо",
+            "ko_KR": "금빛 신도레이 깃펜",
+            "zh_TW": "鍍金辛多雷羽毛筆",
+            "zh_CN": "鎏金辛多雷羽毛笔"
+          },
+          "id": 56437
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Profession Treatises",
+        "es_MX": "Tratados de profesión",
+        "pt_BR": "Tratados de Profissão",
+        "de_DE": "Berufsabhandlungen",
+        "en_GB": "Profession Treatises",
+        "es_ES": "Tratados de profesión",
+        "fr_FR": "Traités professionnels",
+        "it_IT": "Trattati delle Professioni",
+        "ru_RU": "Трактаты профессий",
+        "ko_KR": "전문 기술 논문",
+        "zh_TW": "專業概論",
+        "zh_CN": "专业论述"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52510?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Blacksmithing",
+            "es_MX": "Tratado thalassiano sobre herrería",
+            "pt_BR": "Tratado Talassiano sobre Ferraria",
+            "de_DE": "Thalassische Schmiedekunstabhandlung",
+            "en_GB": "Thalassian Treatise on Blacksmithing",
+            "es_ES": "Tratado thalassiano de herrería",
+            "fr_FR": "Traité thalassien de forge",
+            "it_IT": "Trattato Thalassiano sulla Forgiatura",
+            "ru_RU": "Талассийский трактат о кузнечном деле",
+            "ko_KR": "대장기술에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯鍛造概論",
+            "zh_CN": "锻造萨拉斯论述"
+          },
+          "id": 52510
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52511?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Mining",
+            "es_MX": "Tratado thalassiano sobre minería",
+            "pt_BR": "Tratado Talassiano sobre Mineração",
+            "de_DE": "Thalassische Bergbauabhandlung",
+            "en_GB": "Thalassian Treatise on Mining",
+            "es_ES": "Tratado thalassiano de minería",
+            "fr_FR": "Traité thalassien de minage",
+            "it_IT": "Trattato Thalassiano sull'Estrazione",
+            "ru_RU": "Талассийский трактат о горном деле",
+            "ko_KR": "채광에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯採礦概論",
+            "zh_CN": "采矿萨拉斯论述"
+          },
+          "id": 52511
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52512?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Herbalism",
+            "es_MX": "Tratado thalassiano sobre herboristería",
+            "pt_BR": "Tratado Talassiano sobre Herborismo",
+            "de_DE": "Thalassische Kräuterkundeabhandlung",
+            "en_GB": "Thalassian Treatise on Herbalism",
+            "es_ES": "Tratado thalassiano de herboristería",
+            "fr_FR": "Traité thalassien d’herboristerie",
+            "it_IT": "Trattato Thalassiano sull'Erbalismo",
+            "ru_RU": "Талассийский трактат о травничестве",
+            "ko_KR": "약초채집에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯草藥學概論",
+            "zh_CN": "草药学萨拉斯论述"
+          },
+          "id": 52512
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52513?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Jewelcrafting",
+            "es_MX": "Tratado thalassiano sobre joyería",
+            "pt_BR": "Tratado Talassiano sobre Joalheria",
+            "de_DE": "Thalassische Juwelierskunstabhandlung",
+            "en_GB": "Thalassian Treatise on Jewelcrafting",
+            "es_ES": "Tratado thalassiano de joyería",
+            "fr_FR": "Traité thalassien de joaillerie",
+            "it_IT": "Trattato Thalassiano sull'Oreficeria",
+            "ru_RU": "Талассийский трактат о ювелирном деле",
+            "ko_KR": "보석세공에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯珠寶設計概論",
+            "zh_CN": "珠宝加工萨拉斯论述"
+          },
+          "id": 52513
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52514?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Enchanting",
+            "es_MX": "Tratado thalassiano sobre encantamiento",
+            "pt_BR": "Tratado Talassiano sobre Encantamento",
+            "de_DE": "Thalassische Verzauberkunstabhandlung",
+            "en_GB": "Thalassian Treatise on Enchanting",
+            "es_ES": "Tratado thalassiano de encantamiento",
+            "fr_FR": "Traité thalassien d’enchantement",
+            "it_IT": "Trattato Thalassiano sull'Incantamento",
+            "ru_RU": "Талассийский трактат о наложении чар",
+            "ko_KR": "마법부여에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯附魔概論",
+            "zh_CN": "附魔萨拉斯论述"
+          },
+          "id": 52514
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52515?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Leatherworking",
+            "es_MX": "Tratado thalassiano sobre peletería",
+            "pt_BR": "Tratado Talassiano sobre Couraria",
+            "de_DE": "Thalassische Lederverarbeitungsabhandlung",
+            "en_GB": "Thalassian Treatise on Leatherworking",
+            "es_ES": "Tratado thalassiano de peletería",
+            "fr_FR": "Traité thalassien de travail du cuir",
+            "it_IT": "Trattato Thalassiano sulla Conciatura",
+            "ru_RU": "Талассийский трактат о кожевничестве",
+            "ko_KR": "가죽세공에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯製皮概論",
+            "zh_CN": "制皮萨拉斯论述"
+          },
+          "id": 52515
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52516?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Inscription",
+            "es_MX": "Tratado thalassiano sobre inscripción",
+            "pt_BR": "Tratado Talassiano sobre Escrivania",
+            "de_DE": "Thalassische Inschriftenkundeabhandlung",
+            "en_GB": "Thalassian Treatise on Inscription",
+            "es_ES": "Tratado thalassiano de inscripción",
+            "fr_FR": "Traité thalassien de calligraphie",
+            "it_IT": "Trattato Thalassiano sulla Runografia",
+            "ru_RU": "Талассийский трактат о начертании",
+            "ko_KR": "주문각인에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯銘文學概論",
+            "zh_CN": "铭文萨拉斯论述"
+          },
+          "id": 52516
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52517?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Tailoring",
+            "es_MX": "Tratado thalassiano sobre sastrería",
+            "pt_BR": "Tratado Talassiano sobre Alfaiataria",
+            "de_DE": "Thalassische Schneidereiabhandlung",
+            "en_GB": "Thalassian Treatise on Tailoring",
+            "es_ES": "Tratado thalassiano de sastrería",
+            "fr_FR": "Traité thalassien de couture",
+            "it_IT": "Trattato Thalassiano sulla Sartoria",
+            "ru_RU": "Талассийский трактат о портняжном деле",
+            "ko_KR": "재봉술에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯裁縫概論",
+            "zh_CN": "裁缝萨拉斯论述"
+          },
+          "id": 52517
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52518?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Alchemy",
+            "es_MX": "Tratado thalassiano sobre alquimia",
+            "pt_BR": "Tratado Talassiano sobre Alquimia",
+            "de_DE": "Thalassische Alchemieabhandlung",
+            "en_GB": "Thalassian Treatise on Alchemy",
+            "es_ES": "Tratado thalassiano de alquimia",
+            "fr_FR": "Traité thalassien d’alchimie",
+            "it_IT": "Trattato Thalassiano sull'Alchimia",
+            "ru_RU": "Талассийский трактат об алхимии",
+            "ko_KR": "연금술에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯鍊金術概論",
+            "zh_CN": "炼金萨拉斯论述"
+          },
+          "id": 52518
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52519?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Skinning",
+            "es_MX": "Tratado thalassiano sobre desuello",
+            "pt_BR": "Tratado Talassiano sobre Esfolamento",
+            "de_DE": "Thalassische Kürschnereiabhandlung",
+            "en_GB": "Thalassian Treatise on Skinning",
+            "es_ES": "Tratado thalassiano de desuello",
+            "fr_FR": "Traité thalassien de dépeçage",
+            "it_IT": "Trattato Thalassiano sulla Scuoiatura",
+            "ru_RU": "Талассийский трактат о снятии шкур",
+            "ko_KR": "무두질에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯剝皮概論",
+            "zh_CN": "剥皮萨拉斯论述"
+          },
+          "id": 52519
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52520?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Treatise on Engineering",
+            "es_MX": "Tratado thalassiano sobre ingeniería",
+            "pt_BR": "Tratado Talassiano sobre Engenharia",
+            "de_DE": "Thalassische Ingenieurskunstabhandlung",
+            "en_GB": "Thalassian Treatise on Engineering",
+            "es_ES": "Tratado thalassiano de ingeniería",
+            "fr_FR": "Traité thalassien d’ingénierie",
+            "it_IT": "Trattato Thalassiano sull'Ingegneria",
+            "ru_RU": "Талассийский трактат об инженерном деле",
+            "ko_KR": "기계공학에 관한 탈라시안 논문",
+            "zh_TW": "薩拉斯工程學概論",
+            "zh_CN": "工程学萨拉斯论述"
+          },
+          "id": 52520
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Combat Stats",
+        "es_MX": "Estadísticas de combate",
+        "pt_BR": "Atributos de Combate",
+        "de_DE": "Kampfwerte",
+        "en_GB": "Combat Stats",
+        "es_ES": "Estadísticas de combate",
+        "fr_FR": "Caractéristiques de combat",
+        "it_IT": "Statistiche di Combattimento",
+        "ru_RU": "Боевые характеристики",
+        "ko_KR": "전투 능력치",
+        "zh_TW": "戰鬥屬性",
+        "zh_CN": "战斗属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52521?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Quickblade",
+            "es_MX": "Misiva thalassiana de la hoja rauda",
+            "pt_BR": "Missiva Talassiana do Gumepresto",
+            "de_DE": "Thalassisches Schreiben der Schnellklinge",
+            "en_GB": "Thalassian Missive of the Quickblade",
+            "es_ES": "Misiva thalassiana de la navaja",
+            "fr_FR": "Missive thalassienne de la prestelame",
+            "it_IT": "Missiva della Lama Veloce Thalassiana",
+            "ru_RU": "Талассийское послание быстрого клинка",
+            "ko_KR": "쾌검의 탈라시안 서신",
+            "zh_TW": "薩拉斯速刃書狀",
+            "zh_CN": "快刀之萨拉斯公函"
+          },
+          "id": 52521
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52522?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Peerless",
+            "es_MX": "Misiva thalassiana del incomparable",
+            "pt_BR": "Missiva Talassiana do Inigualável",
+            "de_DE": "Thalassisches Schreiben der Unvergleichlichkeit",
+            "en_GB": "Thalassian Missive of the Peerless",
+            "es_ES": "Misiva thalassiana del incomparable",
+            "fr_FR": "Missive thalassienne des Incomparables",
+            "it_IT": "Missiva dell'Impareggiabile Thalassiana",
+            "ru_RU": "Талассийское послание бесподобия",
+            "ko_KR": "무쌍의 탈라시안 서신",
+            "zh_TW": "薩拉斯無雙書狀",
+            "zh_CN": "无双之萨拉斯公函"
+          },
+          "id": 52522
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52523?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Harmonious",
+            "es_MX": "Misiva thalassiana del armónico",
+            "pt_BR": "Missiva Talassiana do Harmonioso",
+            "de_DE": "Thalassisches Schreiben der Harmonischen",
+            "en_GB": "Thalassian Missive of the Harmonious",
+            "es_ES": "Misiva thalassiana del armonioso",
+            "fr_FR": "Missive thalassienne de l’harmonie",
+            "it_IT": "Missiva dell'Armonia Thalassiana",
+            "ru_RU": "Талассийское послание безмятежности",
+            "ko_KR": "조화의 탈라시안 서신",
+            "zh_TW": "薩拉斯和諧書狀",
+            "zh_CN": "谐律之萨拉斯公函"
+          },
+          "id": 52523
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52524?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Fireflash",
+            "es_MX": "Misiva thalassiana del fuego rápido",
+            "pt_BR": "Missiva Talassiana do Clarão de Fogo",
+            "de_DE": "Thalassisches Schreiben des Feuersturms",
+            "en_GB": "Thalassian Missive of the Fireflash",
+            "es_ES": "Misiva thalassiana del fuegolátigo",
+            "fr_FR": "Missive thalassienne des Éclats-de-feu",
+            "it_IT": "Missiva della Folgore Thalassiana",
+            "ru_RU": "Талассийское послание огненной вспышки",
+            "ko_KR": "불꽃섬광의 탈라시안 서신",
+            "zh_TW": "薩拉斯炎光書狀",
+            "zh_CN": "燎火之萨拉斯公函"
+          },
+          "id": 52524
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52525?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Feverflare",
+            "es_MX": "Misiva thalassiana de la llama febril",
+            "pt_BR": "Missiva Talassiana da Febre Ardente",
+            "de_DE": "Thalassisches Schreiben des Hitzeschocks",
+            "en_GB": "Thalassian Missive of the Feverflare",
+            "es_ES": "Misiva thalassiana de la llama febril",
+            "fr_FR": "Missive thalassienne de la poussée de fièvre",
+            "it_IT": "Missiva della Bramosia Thalassiana",
+            "ru_RU": "Талассийское послание лихорадочного света",
+            "ko_KR": "열꽃의 탈라시안 서신",
+            "zh_TW": "薩拉斯閃焰書狀",
+            "zh_CN": "灼光之萨拉斯公函"
+          },
+          "id": 52525
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52526?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of the Aurora",
+            "es_MX": "Misiva thalassiana de la aurora",
+            "pt_BR": "Missiva Talassiana da Aurora",
+            "de_DE": "Thalassisches Schreiben der Aurora",
+            "en_GB": "Thalassian Missive of the Aurora",
+            "es_ES": "Misiva thalassiana de la aurora",
+            "fr_FR": "Missive thalassienne de l’aurore",
+            "it_IT": "Missiva dell'Aurora Thalassiana",
+            "ru_RU": "Талассийское послание рассвета",
+            "ko_KR": "서광의 탈라시안 서신",
+            "zh_TW": "薩拉斯極光書狀",
+            "zh_CN": "曙光之萨拉斯公函"
+          },
+          "id": 52526
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Profession Stats",
+        "es_MX": "Estadísticas de profesión",
+        "pt_BR": "Atributos de Profissão",
+        "de_DE": "Berufswerte",
+        "en_GB": "Profession Stats",
+        "es_ES": "Estadísticas de profesión",
+        "fr_FR": "Caractéristiques de métier",
+        "it_IT": "Statistiche delle Professioni",
+        "ru_RU": "Характеристики для профессий",
+        "ko_KR": "전문 기술 능력치",
+        "zh_TW": "專業技能屬性",
+        "zh_CN": "专业属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52527?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Deftness",
+            "es_MX": "Misiva thalassiana de destreza",
+            "pt_BR": "Missiva Talassiana da Destreza",
+            "de_DE": "Thalassisches Schreiben der Gewandtheit",
+            "en_GB": "Thalassian Missive of Deftness",
+            "es_ES": "Misiva thalassiana de destreza",
+            "fr_FR": "Missive thalassienne d’adresse",
+            "it_IT": "Missiva della Destrezza Thalassiana",
+            "ru_RU": "Талассийское послание сноровки",
+            "ko_KR": "능숙함의 탈라시안 서신",
+            "zh_TW": "薩拉斯純熟書狀",
+            "zh_CN": "熟练之萨拉斯公函"
+          },
+          "id": 52527
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52528?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Perception",
+            "es_MX": "Misiva thalassiana de percepción",
+            "pt_BR": "Missiva Talassiana da Percepção",
+            "de_DE": "Thalassisches Schreiben der Wahrnehmung",
+            "en_GB": "Thalassian Missive of Perception",
+            "es_ES": "Misiva thalassiana de percepción",
+            "fr_FR": "Missive thalassienne de perception",
+            "it_IT": "Missiva della Percezione Thalassiana",
+            "ru_RU": "Талассийское послание внимательности",
+            "ko_KR": "인지력의 탈라시안 서신",
+            "zh_TW": "薩拉斯感知書狀",
+            "zh_CN": "感知之萨拉斯公函"
+          },
+          "id": 52528
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52529?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Finesse",
+            "es_MX": "Misiva thalassiana de delicadeza",
+            "pt_BR": "Missiva Talassiana da Finesse",
+            "de_DE": "Thalassisches Schreiben der Finesse",
+            "en_GB": "Thalassian Missive of Finesse",
+            "es_ES": "Misiva thalassiana de sutileza",
+            "fr_FR": "Missive thalassienne de finesse",
+            "it_IT": "Missiva della Precisione Thalassiana",
+            "ru_RU": "Талассийское послание точности",
+            "ko_KR": "기교의 탈라시안 서신",
+            "zh_TW": "薩拉斯技法書狀",
+            "zh_CN": "精细之萨拉斯公函"
+          },
+          "id": 52529
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52530?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Crafting Speed",
+            "es_MX": "Misiva thalassiana de velocidad de fabricación",
+            "pt_BR": "Missiva Talassiana da Velocidade de Criação",
+            "de_DE": "Thalassisches Schreiben der Herstellungsgeschwindigkeit",
+            "en_GB": "Thalassian Missive of Crafting Speed",
+            "es_ES": "Misiva thalassiana de velocidad de fabricación",
+            "fr_FR": "Missive thalassienne de vitesse d’artisanat",
+            "it_IT": "Missiva della Velocità di Creazione Thalassiana",
+            "ru_RU": "Талассийское послание скорости изготовления",
+            "ko_KR": "제작 속도의 탈라시안 서신",
+            "zh_TW": "薩拉斯製作速度書狀",
+            "zh_CN": "制作速度之萨拉斯公函"
+          },
+          "id": 52530
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52531?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Multicraft",
+            "es_MX": "Misiva thalassiana de fabricación múltiple",
+            "pt_BR": "Missiva Talassiana da Multicriação",
+            "de_DE": "Thalassisches Schreiben der Mehrfachherstellung",
+            "en_GB": "Thalassian Missive of Multicraft",
+            "es_ES": "Misiva thalassiana de multifabricación",
+            "fr_FR": "Missive thalassienne de fabrication multiple",
+            "it_IT": "Missiva della Creazione Multipla Thalassiana",
+            "ru_RU": "Талассийское послание перепроизводства",
+            "ko_KR": "복수 제작의 탈라시안 서신",
+            "zh_TW": "薩拉斯複數製造書狀",
+            "zh_CN": "产能之萨拉斯公函"
+          },
+          "id": 52531
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52532?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Resourcefulness",
+            "es_MX": "Misiva thalassiana de inventiva",
+            "pt_BR": "Missiva Talassiana da Desenvoltura",
+            "de_DE": "Thalassisches Schreiben des Einfallsreichtums",
+            "en_GB": "Thalassian Missive of Resourcefulness",
+            "es_ES": "Misiva thalassiana de ingenio",
+            "fr_FR": "Missive thalassienne d’ingéniosité",
+            "it_IT": "Missiva della Parsimonia Thalassiana",
+            "ru_RU": "Талассийское послание находчивости",
+            "ko_KR": "지혜의 탈라시안 서신",
+            "zh_TW": "薩拉斯精明書狀",
+            "zh_CN": "充裕之萨拉斯公函"
+          },
+          "id": 52532
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52533?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Missive of Ingenuity",
+            "es_MX": "Misiva thalassiana de ingenio",
+            "pt_BR": "Missiva Talassiana da Engenhosidade",
+            "de_DE": "Thalassisches Schreiben der Genialität",
+            "en_GB": "Thalassian Missive of Ingenuity",
+            "es_ES": "Misiva thalassiana de inventiva",
+            "fr_FR": "Missive thalassienne d’inventivité",
+            "it_IT": "Missiva dell'Ingegno Thalassiana",
+            "ru_RU": "Талассийское послание изобретательности",
+            "ko_KR": "독창성의 탈라시안 서신",
+            "zh_TW": "薩拉斯精妙書狀",
+            "zh_CN": "奇思之萨拉斯公函"
+          },
+          "id": 52533
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Runes",
+        "es_MX": "Runas",
+        "pt_BR": "Runas",
+        "de_DE": "Runen",
+        "en_GB": "Runes",
+        "es_ES": "Runas",
+        "fr_FR": "Runes",
+        "it_IT": "Rune",
+        "ru_RU": "Руны",
+        "ko_KR": "룬",
+        "zh_TW": "符文",
+        "zh_CN": "符文"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52534?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Vantus Rune: Radiant",
+            "es_MX": "Runa vantus: Radiante",
+            "pt_BR": "Runa Vantus: Resplandecente",
+            "de_DE": "Vantusrune: Strahlend",
+            "en_GB": "Vantus Rune: Radiant",
+            "es_ES": "Runa vantus: Radiante",
+            "fr_FR": "Rune de Vantus : radiance",
+            "it_IT": "Runa Vantus - Radiosità",
+            "ru_RU": "Вантийская руна: сияние",
+            "ko_KR": "반투스 룬: 광휘",
+            "zh_TW": "梵陀符文：聖輝",
+            "zh_CN": "凡图斯符文：光耀"
+          },
+          "id": 52534
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58285?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Vantus Rune: Tides",
+            "es_MX": "Runa vantus: Mareas",
+            "pt_BR": "Runa Vantus: Marés",
+            "de_DE": "Vantusrune: Gezeiten",
+            "en_GB": "Vantus Rune: Tides",
+            "es_ES": "Runa vantus: Mareas",
+            "fr_FR": "Rune de Vantus : marées",
+            "it_IT": "Runa Vantus - Maree",
+            "ru_RU": "Вантийская руна: волны",
+            "ko_KR": "반투스 룬: 해일",
+            "zh_TW": "梵陀符文：海潮",
+            "zh_CN": "凡图斯符文：潮汐"
+          },
+          "id": 58285
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Contracts",
+        "es_MX": "Contratos",
+        "pt_BR": "Contratos",
+        "de_DE": "Verträge",
+        "en_GB": "Contracts",
+        "es_ES": "Contratos",
+        "fr_FR": "Contrats",
+        "it_IT": "Contratti",
+        "ru_RU": "Контракты",
+        "ko_KR": "계약",
+        "zh_TW": "合約",
+        "zh_CN": "合约"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52535?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Contract: The Silvermoon Court",
+            "es_MX": "Contrato: La Corte de Lunargenta",
+            "pt_BR": "Contrato: A Corte de Luaprata",
+            "de_DE": "Vertrag: Der Hof in Silbermond",
+            "en_GB": "Contract: The Silvermoon Court",
+            "es_ES": "Contrato: La Corte de Lunargenta",
+            "fr_FR": "Contrat : la cour de Lune-d’Argent",
+            "it_IT": "Contratto - Corte di Lunargenta",
+            "ru_RU": "Контракт с двором Луносвета",
+            "ko_KR": "계약서: 실버문 궁정",
+            "zh_TW": "合約：銀月城宮廷",
+            "zh_CN": "合约：银月宫廷"
+          },
+          "id": 52535
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52536?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Contract: The Amani Tribe",
+            "es_MX": "Contrato: La tribu Amani",
+            "pt_BR": "Contrato: A Tribo Amani",
+            "de_DE": "Vertrag: Der Amanistamm",
+            "en_GB": "Contract: The Amani Tribe",
+            "es_ES": "Contrato: La Tribu Amani",
+            "fr_FR": "Contrat : tribu des Amani",
+            "it_IT": "Contratto - Tribù Amani",
+            "ru_RU": "Контракт с племенем Амани",
+            "ko_KR": "계약서: 아마니 부족",
+            "zh_TW": "合約：阿曼尼部族",
+            "zh_CN": "合约：阿曼尼部族"
+          },
+          "id": 52536
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52537?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Contract: The Hara'ti",
+            "es_MX": "Contrato: Los Hara'ti",
+            "pt_BR": "Contrato: Os Hara'ti",
+            "de_DE": "Vertrag: Die Hara'ti",
+            "en_GB": "Contract: The Hara'ti",
+            "es_ES": "Contrato: Los Hara'ti",
+            "fr_FR": "Contrat : les Hara’ti",
+            "it_IT": "Contratto - Hara'ti",
+            "ru_RU": "Контракт с хара'ти",
+            "ko_KR": "계약서: 하라티",
+            "zh_TW": "合約：哈拉提",
+            "zh_CN": "合约：哈籁提"
+          },
+          "id": 52537
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52538?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Contract: The Singularity",
+            "es_MX": "Contrato: La Singularidad",
+            "pt_BR": "Contrato: A Singularidade",
+            "de_DE": "Vertrag: Die Singularität",
+            "en_GB": "Contract: The Singularity",
+            "es_ES": "Contrato: La Singularidad",
+            "fr_FR": "Contrat : la Singularité",
+            "it_IT": "Contratto - Singolarità",
+            "ru_RU": "Контракт с Сингулярностью",
+            "ko_KR": "계약서: 특이점",
+            "zh_TW": "合約：奇異點",
+            "zh_CN": "合约：奇点特勤"
+          },
+          "id": 52538
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58838?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Contract: Zul'jarra's Forces",
+            "es_MX": "Contrato: Fuerzas de Zul'jarra",
+            "pt_BR": "Contrato: Forças de Zul'jarra",
+            "de_DE": "Vertrag: Zul'jarras Streitkräfte",
+            "en_GB": "Contract: Zul'jarra's Forces",
+            "es_ES": "Contrato: Fuerzas de Zul'jarra",
+            "fr_FR": "Contrat : forces de Zul’jarra",
+            "it_IT": "Contratto - Forze di Zul'jarra",
+            "ru_RU": "Контракт с силами Зул'джарры",
+            "ko_KR": "계약서: 줄자라의 군대",
+            "zh_TW": "合約：祖爾賈拉的部隊",
+            "zh_CN": "合约：祖尔加拉的部队"
+          },
+          "id": 58838
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Weapons",
+        "es_MX": "Armas",
+        "pt_BR": "Armas",
+        "de_DE": "Waffen",
+        "en_GB": "Weapons",
+        "es_ES": "Armas",
+        "fr_FR": "Armes",
+        "it_IT": "Armi",
+        "ru_RU": "Оружие",
+        "ko_KR": "무기",
+        "zh_TW": "武器",
+        "zh_CN": "武器"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52539?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Faunatender's Baton",
+            "es_MX": "Batuta de cuidafauna",
+            "pt_BR": "Bastão do Faunador",
+            "de_DE": "Baton des Faunahüters",
+            "en_GB": "Faunatender's Baton",
+            "es_ES": "Bordón de cuidado de la fauna",
+            "fr_FR": "Férule de soigne-faune",
+            "it_IT": "Randello del Curafauna",
+            "ru_RU": "Жезл наставника зверей",
+            "ko_KR": "동물지기의 지휘봉",
+            "zh_TW": "動物看管者短棒",
+            "zh_CN": "护花者的指挥棒"
+          },
+          "id": 52539
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52540?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Floratender's Crutch",
+            "es_MX": "Muleta de cuidaflora",
+            "pt_BR": "Bengala do Florador",
+            "de_DE": "Gehstock des Florahüters",
+            "en_GB": "Floratender's Crutch",
+            "es_ES": "Muleta de cuidador de la flora",
+            "fr_FR": "Béquille de soigne-flore",
+            "it_IT": "Stampella del Curaflora",
+            "ru_RU": "Трость ботаника",
+            "ko_KR": "식물지기의 버팀목",
+            "zh_TW": "植物看管者拐杖",
+            "zh_CN": "护花者的腋杖"
+          },
+          "id": 52540
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52541?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Rootwarden's Lamp",
+            "es_MX": "Farol de guardarraíces",
+            "pt_BR": "Lampião do Guardirraiz",
+            "de_DE": "Lampe des Wurzelhüters",
+            "en_GB": "Rootwarden's Lamp",
+            "es_ES": "Lámpara de celador de raíces",
+            "fr_FR": "Lampe de garde-racines",
+            "it_IT": "Lampada del Guardaradici",
+            "ru_RU": "Фонарь корнестража",
+            "ko_KR": "뿌리감시관의 등불",
+            "zh_TW": "根莖守望者油燈",
+            "zh_CN": "护根者的路灯"
+          },
+          "id": 52541
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52542?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Faunatender's Trust",
+            "es_MX": "Confianza de cuidafauna",
+            "pt_BR": "Confiança do Faunador",
+            "de_DE": "Vertrauen des Faunahüters",
+            "en_GB": "Faunatender's Trust",
+            "es_ES": "Confianza de cuidador de la fauna",
+            "fr_FR": "Confiance de soigne-faune",
+            "it_IT": "Fiducia del Curafauna",
+            "ru_RU": "Верный друг наставника зверей",
+            "ko_KR": "동물지기의 신뢰",
+            "zh_TW": "動物看管者的信任",
+            "zh_CN": "护林者的信赖"
+          },
+          "id": 52542
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52543?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Aln'hara Pikestaff",
+            "es_MX": "Bastón de pica de Aln'hara",
+            "pt_BR": "Cajado-pique de Aln'hara",
+            "de_DE": "Pikenstab von Aln'hara",
+            "en_GB": "Aln'hara Pikestaff",
+            "es_ES": "Bastón pica de Aln'hara",
+            "fr_FR": "Bâton à pointes d’Aln’hara",
+            "it_IT": "Picca di Aln'hara",
+            "ru_RU": "Заостренный посох Альн'ары",
+            "ko_KR": "알른하라의 창지팡이",
+            "zh_TW": "艾恩哈拉尖頭杖",
+            "zh_CN": "艾林哈籁刺杖"
+          },
+          "id": 52543
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52544?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Aln'hara Cane",
+            "es_MX": "Bastón de Aln'hara",
+            "pt_BR": "Bengala de Aln'hara",
+            "de_DE": "Stock von Aln'hara",
+            "en_GB": "Aln'hara Cane",
+            "es_ES": "Caña de Aln'hara",
+            "fr_FR": "Canne d’Aln’hara",
+            "it_IT": "Bastone di Aln'hara",
+            "ru_RU": "Трость Альн'ары",
+            "ko_KR": "알른하라의 지팡이",
+            "zh_TW": "艾恩哈拉柺杖",
+            "zh_CN": "艾林哈籁手杖"
+          },
+          "id": 52544
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52545?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Aln'hara Lantern",
+            "es_MX": "Farol de Aln'hara",
+            "pt_BR": "Lanterna de Aln'hara",
+            "de_DE": "Laterne von Aln'hara",
+            "en_GB": "Aln'hara Lantern",
+            "es_ES": "Farol de Aln'hara",
+            "fr_FR": "Lanterne d’Aln’hara",
+            "it_IT": "Lanterna di Aln'hara",
+            "ru_RU": "Светильник Альн'ары",
+            "ko_KR": "알른하라의 등불",
+            "zh_TW": "艾恩哈拉燈籠",
+            "zh_CN": "艾林哈籁灯笼"
+          },
+          "id": 52545
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52546?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Aln'hara Sprigshot",
+            "es_MX": "Tallo fulminante de Aln'hara",
+            "pt_BR": "Ramo Fulminante de Aln'hara",
+            "de_DE": "Zweigbogen von Aln'hara",
+            "en_GB": "Aln'hara Sprigshot",
+            "es_ES": "Tirorrama de Aln'hara",
+            "fr_FR": "Tire-ramille d’Aln’hara",
+            "it_IT": "Scoccaramo di Aln'hara",
+            "ru_RU": "Гибкая ветвь Альн'ары",
+            "ko_KR": "알른하라의 가지화살",
+            "zh_TW": "艾恩哈拉嫩枝弓",
+            "zh_CN": "艾林哈籁蔓枝弓"
+          },
+          "id": 52546
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Competitor's Crafts",
+        "es_MX": "Artesanías de competidor",
+        "pt_BR": "Criações do Competidor",
+        "de_DE": "Handwerk des Wettkämpfers",
+        "en_GB": "Competitor's Crafts",
+        "es_ES": "Creaciones de competidor",
+        "fr_FR": "Fabrications de compétition",
+        "it_IT": "Artigianato del Concorrente",
+        "ru_RU": "Ремесла бойца",
+        "ko_KR": "경쟁자의 제작품",
+        "zh_TW": "競技者工藝品",
+        "zh_CN": "竞争者工艺"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52548?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Lamp",
+            "es_MX": "Lámpara de Competidor thalassiano",
+            "pt_BR": "Lâmpada do Competidor Talassiano",
+            "de_DE": "Lampe des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Lamp",
+            "es_ES": "Lámpara de competidor thalassiano",
+            "fr_FR": "Lampe de compétition thalassienne",
+            "it_IT": "Lampada del Concorrente Thalassiano",
+            "ru_RU": "Фонарь талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 등불",
+            "zh_TW": "薩拉斯競技者油燈",
+            "zh_CN": "萨拉斯竞争者之灯"
+          },
+          "id": 52548
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52549?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Staff",
+            "es_MX": "Bastón de Competidor thalassiano",
+            "pt_BR": "Cajado do Competidor Talassiano",
+            "de_DE": "Stab des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Staff",
+            "es_ES": "Bastón de competidor thalassiano",
+            "fr_FR": "Bâton de compétition thalassienne",
+            "it_IT": "Bastone del Concorrente Thalassiano",
+            "ru_RU": "Посох талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 지팡이",
+            "zh_TW": "薩拉斯競技者法杖",
+            "zh_CN": "萨拉斯竞争者的法杖"
+          },
+          "id": 52549
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52550?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Pillar",
+            "es_MX": "Pilar de Competidor thalassiano",
+            "pt_BR": "Pilar do Competidor Talassiano",
+            "de_DE": "Säule des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Pillar",
+            "es_ES": "Pilar de competidor thalassiano",
+            "fr_FR": "Pilier de compétition thalassienne",
+            "it_IT": "Pilastro del Concorrente Thalassiano",
+            "ru_RU": "Столп талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 기둥",
+            "zh_TW": "薩拉斯競技者之柱",
+            "zh_CN": "萨拉斯竞争者之柱"
+          },
+          "id": 52550
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52551?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Emblem",
+            "es_MX": "Emblema de Competidor thalassiano",
+            "pt_BR": "Emblema do Competidor Talassiano",
+            "de_DE": "Emblem des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Emblem",
+            "es_ES": "Emblema de competidor thalassiano",
+            "fr_FR": "Emblème de compétition thalassienne",
+            "it_IT": "Emblema del Concorrente Thalassiano",
+            "ru_RU": "Эмблема талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 문장",
+            "zh_TW": "薩拉斯競技者紋章",
+            "zh_CN": "萨拉斯竞争者的纹章"
+          },
+          "id": 52551
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52552?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Insignia of Alacrity",
+            "es_MX": "Insignia de prontitud de Competidor thalassiano",
+            "pt_BR": "Insígnia de Diligência do Competidor Talassiano",
+            "de_DE": "Inbrunstinsigne des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Insignia of Alacrity",
+            "es_ES": "Insignia de prontitud de competidor thalassiano",
+            "fr_FR": "Insigne d’empressement de compétition thalassienne",
+            "it_IT": "Fregio dell'Alacrità del Concorrente Thalassiano",
+            "ru_RU": "Знак расторопности талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 기민 계급장",
+            "zh_TW": "薩拉斯競技者矯捷徽記",
+            "zh_CN": "萨拉斯竞争者的活跃徽记"
+          },
+          "id": 52552
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52553?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Medallion",
+            "es_MX": "Medallón de Competidor thalassiano",
+            "pt_BR": "Medalhão do Competidor Talassiano",
+            "de_DE": "Medaillon des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Medallion",
+            "es_ES": "Medallón de competidor thalassiano",
+            "fr_FR": "Médaillon de compétition thalassienne",
+            "it_IT": "Medaglione del Concorrente Thalassiano",
+            "ru_RU": "Медальон талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 메달",
+            "zh_TW": "薩拉斯競技者勳章",
+            "zh_CN": "萨拉斯竞争者的勋章"
+          },
+          "id": 52553
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56029?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Bow",
+            "es_MX": "Arco de Competidor thalassiano",
+            "pt_BR": "Arco do Competidor Talassiano",
+            "de_DE": "Bogen des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Bow",
+            "es_ES": "Arco de competidor thalassiano",
+            "fr_FR": "Arc de compétition thalassienne",
+            "it_IT": "Arco del Concorrente Thalassiano",
+            "ru_RU": "Лук талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 활",
+            "zh_TW": "薩拉斯競技者之弓",
+            "zh_CN": "萨拉斯竞争者之弓"
+          },
+          "id": 56029
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Trinkets",
+        "es_MX": "Abalorios",
+        "pt_BR": "Berloques",
+        "de_DE": "Schmuckstücke",
+        "en_GB": "Trinkets",
+        "es_ES": "Abalorios",
+        "fr_FR": "Bijoux",
+        "it_IT": "Monili",
+        "ru_RU": "Аксессуары",
+        "ko_KR": "장신구",
+        "zh_TW": "飾品",
+        "zh_CN": "饰品"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52554?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Dominion: Blood",
+            "es_MX": "Dominio de la Luna Negra: Sangre",
+            "pt_BR": "Domínio de Negraluna: Sangue",
+            "de_DE": "Dunkelmondherrschaft: Blut",
+            "en_GB": "Darkmoon Dominion: Blood",
+            "es_ES": "Dominio de la Luna Negra: Sangre",
+            "fr_FR": "Domination de Sombrelune : Sang",
+            "it_IT": "Dominio di Lunacupa: Sangue",
+            "ru_RU": "Господство Новолуния \"Кровь\"",
+            "ko_KR": "다크문 지배: 혈기",
+            "zh_TW": "暗月主宰：鮮血",
+            "zh_CN": "暗月统御：鲜血"
+          },
+          "id": 52554
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52555?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Dominion: Rot",
+            "es_MX": "Dominio de la Luna Negra: Podredumbre",
+            "pt_BR": "Domínio de Negraluna: Podridão",
+            "de_DE": "Dunkelmondherrschaft: Fäulnis",
+            "en_GB": "Darkmoon Dominion: Rot",
+            "es_ES": "Dominio de la Luna Negra: Podredumbre",
+            "fr_FR": "Domination de Sombrelune : Putréfaction",
+            "it_IT": "Dominio di Lunacupa: Marciume",
+            "ru_RU": "Господство Новолуния \"Гниль\"",
+            "ko_KR": "다크문 지배: 부식",
+            "zh_TW": "暗月主宰：腐爛",
+            "zh_CN": "暗月统御：腐烂"
+          },
+          "id": 52555
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52556?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Dominion: Hunt",
+            "es_MX": "Dominio de la Luna Negra: Caza",
+            "pt_BR": "Domínio de Negraluna: Caçada",
+            "de_DE": "Dunkelmondherrschaft: Jagd",
+            "en_GB": "Darkmoon Dominion: Hunt",
+            "es_ES": "Dominio de la Luna Negra: Caza",
+            "fr_FR": "Domination de Sombrelune : Chasse",
+            "it_IT": "Dominio di Lunacupa: Caccia",
+            "ru_RU": "Господство Новолуния \"Охота\"",
+            "ko_KR": "다크문 지배: 사냥",
+            "zh_TW": "暗月主宰：狩獵",
+            "zh_CN": "暗月统御：狩猎"
+          },
+          "id": 52556
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52557?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Dominion: Void",
+            "es_MX": "Dominio de la Luna Negra: Vacío",
+            "pt_BR": "Domínio de Negraluna: Caos",
+            "de_DE": "Dunkelmondherrschaft: Leere",
+            "en_GB": "Darkmoon Dominion: Void",
+            "es_ES": "Dominio de la Luna Negra: Vacío",
+            "fr_FR": "Domination de Sombrelune : Vide",
+            "it_IT": "Dominio di Lunacupa: Vuoto",
+            "ru_RU": "Господство Новолуния \"Бездна\"",
+            "ko_KR": "다크문 지배: 공허",
+            "zh_TW": "暗月主宰：虛無",
+            "zh_CN": "暗月统御：虚空"
+          },
+          "id": 52557
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Embellishments",
+        "es_MX": "Ornamentos",
+        "pt_BR": "Ornamentos",
+        "de_DE": "Verzierungen",
+        "en_GB": "Embellishments",
+        "es_ES": "Adornos",
+        "fr_FR": "Embellissements",
+        "it_IT": "Abbellimenti",
+        "ru_RU": "Украшения",
+        "ko_KR": "장식",
+        "zh_TW": "裝飾",
+        "zh_CN": "修饰"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52558?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Sigil: Blood",
+            "es_MX": "Sigilo Luna Negra: Sangre",
+            "pt_BR": "Signo de Negraluna: Sangue",
+            "de_DE": "Dunkelmondsiegel: Blut",
+            "en_GB": "Darkmoon Sigil: Blood",
+            "es_ES": "Sigilo de la Luna Negra: Sangre",
+            "fr_FR": "Cachet de Sombrelune : Sang",
+            "it_IT": "Sigillo di Lunacupa: Sangue",
+            "ru_RU": "Символ Новолуния \"Кровь\"",
+            "ko_KR": "다크문 인장: 혈기",
+            "zh_TW": "暗月符印：鮮血",
+            "zh_CN": "暗月徽记：鲜血"
+          },
+          "id": 52558
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52559?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Sigil: Rot",
+            "es_MX": "Sigilo Luna Negra: Podredumbre",
+            "pt_BR": "Signo de Negraluna: Podridão",
+            "de_DE": "Dunkelmondsiegel: Fäulnis",
+            "en_GB": "Darkmoon Sigil: Rot",
+            "es_ES": "Sigilo de la Luna Negra: Podredumbre",
+            "fr_FR": "Cachet de Sombrelune : Putréfaction",
+            "it_IT": "Sigillo di Lunacupa: Marciume",
+            "ru_RU": "Символ Новолуния \"Гниль\"",
+            "ko_KR": "다크문 인장: 부식",
+            "zh_TW": "暗月符印：腐爛",
+            "zh_CN": "暗月徽记：腐烂"
+          },
+          "id": 52559
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52560?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Sigil: Hunt",
+            "es_MX": "Sigilo Luna Negra: Caza",
+            "pt_BR": "Signo de Negraluna: Caçada",
+            "de_DE": "Dunkelmondsiegel: Jagd",
+            "en_GB": "Darkmoon Sigil: Hunt",
+            "es_ES": "Sigilo de la Luna Negra: Caza",
+            "fr_FR": "Cachet de Sombrelune : Chasse",
+            "it_IT": "Sigillo di Lunacupa: Caccia",
+            "ru_RU": "Символ Новолуния \"Охота\"",
+            "ko_KR": "다크문 인장: 사냥",
+            "zh_TW": "暗月符印：狩獵",
+            "zh_CN": "暗月徽记：狩猎"
+          },
+          "id": 52560
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52561?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Darkmoon Sigil: Void",
+            "es_MX": "Sigilo Luna Negra: Vacío",
+            "pt_BR": "Signo de Negraluna: Caos",
+            "de_DE": "Dunkelmondsiegel: Leere",
+            "en_GB": "Darkmoon Sigil: Void",
+            "es_ES": "Sigilo de la Luna Negra: Vacío",
+            "fr_FR": "Cachet de Sombrelune : Vide",
+            "it_IT": "Sigillo di Lunacupa: Vuoto",
+            "ru_RU": "Символ Новолуния \"Бездна\"",
+            "ko_KR": "다크문 인장: 공허",
+            "zh_TW": "暗月符印：虛無",
+            "zh_CN": "暗月徽记：虚空"
+          },
+          "id": 52561
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Mysteries",
+        "es_MX": "Misterios",
+        "pt_BR": "Mistérios",
+        "de_DE": "Geheimnisse",
+        "en_GB": "Mysteries",
+        "es_ES": "Misterios",
+        "fr_FR": "Mystères",
+        "it_IT": "Misteri",
+        "ru_RU": "Тайны",
+        "ko_KR": "수수께끼",
+        "zh_TW": "秘紋",
+        "zh_CN": "奥秘"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52562?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Transcribe: Void",
+            "es_MX": "Transcribir: Vacío",
+            "pt_BR": "Transcrever: Caos",
+            "de_DE": "Umschreiben: Leere",
+            "en_GB": "Transcribe: Void",
+            "es_ES": "Conversión: Vacío",
+            "fr_FR": "Transcription : Vide",
+            "it_IT": "Trascrizione: Vuoto",
+            "ru_RU": "Превращение: \"Бездна\"",
+            "ko_KR": "필사: 공허",
+            "zh_TW": "抄寫：虛無",
+            "zh_CN": "转写：虚空"
+          },
+          "id": 52562
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52563?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Inscribe: Void",
+            "es_MX": "Inscribir: Vacío",
+            "pt_BR": "Inscrever: Caos",
+            "de_DE": "Schreiben: Leere",
+            "en_GB": "Inscribe: Void",
+            "es_ES": "Inscripción: Vacío",
+            "fr_FR": "Inscription : Vide",
+            "it_IT": "Iscrizione: Vuoto",
+            "ru_RU": "Начертание: \"Бездна\"",
+            "ko_KR": "각인: 공허",
+            "zh_TW": "銘刻：虛無",
+            "zh_CN": "铭刻：虚空"
+          },
+          "id": 52563
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52564?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Transcribe: Rot",
+            "es_MX": "Transcribir: Podredumbre",
+            "pt_BR": "Transcrever: Podridão",
+            "de_DE": "Umschreiben: Fäulnis",
+            "en_GB": "Transcribe: Rot",
+            "es_ES": "Conversión: Podredumbre",
+            "fr_FR": "Transcription : Putréfaction",
+            "it_IT": "Trascrizione: Marciume",
+            "ru_RU": "Превращение: \"Гниль\"",
+            "ko_KR": "필사: 부식",
+            "zh_TW": "抄寫：腐爛",
+            "zh_CN": "转写：腐烂"
+          },
+          "id": 52564
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52565?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Inscribe: Rot",
+            "es_MX": "Inscribir: Podredumbre",
+            "pt_BR": "Inscrever: Podridão",
+            "de_DE": "Schreiben: Fäulnis",
+            "en_GB": "Inscribe: Rot",
+            "es_ES": "Inscripción: Podredumbre",
+            "fr_FR": "Inscription : Putréfaction",
+            "it_IT": "Iscrizione: Marciume",
+            "ru_RU": "Начертание: \"Гниль\"",
+            "ko_KR": "각인: 부식",
+            "zh_TW": "銘刻：腐爛",
+            "zh_CN": "铭刻：腐烂"
+          },
+          "id": 52565
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52566?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Transcribe: Hunt",
+            "es_MX": "Transcribir: Caza",
+            "pt_BR": "Transcrever: Caçada",
+            "de_DE": "Umschreiben: Jagd",
+            "en_GB": "Transcribe: Hunt",
+            "es_ES": "Conversión: Caza",
+            "fr_FR": "Transcription : Chasse",
+            "it_IT": "Trascrizione: Caccia",
+            "ru_RU": "Превращение: \"Охота\"",
+            "ko_KR": "필사: 사냥",
+            "zh_TW": "抄寫：狩獵",
+            "zh_CN": "转写：狩猎"
+          },
+          "id": 52566
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52567?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Inscribe: Hunt",
+            "es_MX": "Inscribir: Caza",
+            "pt_BR": "Inscrever: Caçada",
+            "de_DE": "Schreiben: Jagd",
+            "en_GB": "Inscribe: Hunt",
+            "es_ES": "Inscripción: Caza",
+            "fr_FR": "Inscription : Chasse",
+            "it_IT": "Iscrizione: Caccia",
+            "ru_RU": "Начертание: \"Охота\"",
+            "ko_KR": "각인: 사냥",
+            "zh_TW": "銘刻：狩獵",
+            "zh_CN": "铭刻：狩猎"
+          },
+          "id": 52567
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52568?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Transcribe: Blood",
+            "es_MX": "Transcribir: Sangre",
+            "pt_BR": "Transcrever: Sangue",
+            "de_DE": "Umschreiben: Blut",
+            "en_GB": "Transcribe: Blood",
+            "es_ES": "Conversión: Sangre",
+            "fr_FR": "Transcription : Sang",
+            "it_IT": "Trascrizione: Sangue",
+            "ru_RU": "Превращение: \"Кровь\"",
+            "ko_KR": "필사: 혈기",
+            "zh_TW": "抄寫：鮮血",
+            "zh_CN": "转写：鲜血"
+          },
+          "id": 52568
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52569?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Inscribe: Blood",
+            "es_MX": "Inscribir: Sangre",
+            "pt_BR": "Inscrever: Sangue",
+            "de_DE": "Schreiben: Blut",
+            "en_GB": "Inscribe: Blood",
+            "es_ES": "Inscripción: Sangre",
+            "fr_FR": "Inscription : Sang",
+            "it_IT": "Iscrizione: Sangue",
+            "ru_RU": "Начертание: \"Кровь\"",
+            "ko_KR": "각인: 혈기",
+            "zh_TW": "銘刻：鮮血",
+            "zh_CN": "铭刻：鲜血"
+          },
+          "id": 52569
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "House Decor",
+        "es_MX": "Decoración de casa",
+        "pt_BR": "Decoração de Casa",
+        "de_DE": "Hausdekoration",
+        "en_GB": "House Decor",
+        "es_ES": "Adornos de hogar",
+        "fr_FR": "Élément de décoration",
+        "it_IT": "Decorazioni per la Casa",
+        "ru_RU": "Декор для дома",
+        "ko_KR": "하우징 장식",
+        "zh_TW": "房屋裝飾",
+        "zh_CN": "住宅装饰"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54348?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sturdy Ren'dorei Cask",
+            "es_MX": "Tonel ren'dorei sólido",
+            "pt_BR": "Barril Ren'dorei Resistente",
+            "de_DE": "Stabiles Fass der Ren'dorei",
+            "en_GB": "Sturdy Ren'dorei Cask",
+            "es_ES": "Tonel ren'dorei recio",
+            "fr_FR": "Fût ren’dorei robuste",
+            "it_IT": "Barile Robusto dei Ren'dorei",
+            "ru_RU": "Прочный рен'дорайский бочонок",
+            "ko_KR": "튼튼한 렌도레이 통",
+            "zh_TW": "結實的刃多雷桶子",
+            "zh_CN": "牢固的朗多雷木桶"
+          },
+          "id": 54348
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54367?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Restful Bronze Bench",
+            "es_MX": "Banco de bronce cómodo",
+            "pt_BR": "Banco de Bronze Sereno",
+            "de_DE": "Erholsame Bronzebank",
+            "en_GB": "Restful Bronze Bench",
+            "es_ES": "Banco de bronce para descansar",
+            "fr_FR": "Banc de repos en bronze",
+            "it_IT": "Panca di Bronzo Confortevole",
+            "ru_RU": "Бронзовая скамья для отдыха",
+            "ko_KR": "편안한 긴 청동 의자",
+            "zh_TW": "安穩的青銅長椅",
+            "zh_CN": "宁静的青铜长椅"
+          },
+          "id": 54367
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54368?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Floating Void-Touched Tome",
+            "es_MX": "Tomo flotante tocado por el Vacío",
+            "pt_BR": "Tomo Tocado pelo Caos Flutuante",
+            "de_DE": "Schwebender leerenberührter Foliant",
+            "en_GB": "Floating Void-Touched Tome",
+            "es_ES": "Escrito tocado por el Vacío flotante",
+            "fr_FR": "Tome flottant touché par le Vide",
+            "it_IT": "Tomo Fluttuante Toccato dal Vuoto",
+            "ru_RU": "Парящий меченный Бездной фолиант",
+            "ko_KR": "부유하는 공허에 물든 고서",
+            "zh_TW": "飄浮的虛無之觸秘典",
+            "zh_CN": "漂浮的虚空之触法典"
+          },
+          "id": 54368
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54369?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Homely Sin'dorei Shelf",
+            "es_MX": "Estante sin'dorei casero",
+            "pt_BR": "Prateleira Sin'dorei Caseira",
+            "de_DE": "Heimeliges Regal der Sin'dorei",
+            "en_GB": "Homely Sin'dorei Shelf",
+            "es_ES": "Estante hogareño sin'dorei",
+            "fr_FR": "Étagère simple sin’dorei",
+            "it_IT": "Scaffale Casalingo dei Sin'dorei",
+            "ru_RU": "Син'дорайская уютная полка",
+            "ko_KR": "가정 신도레이 선반",
+            "zh_TW": "家常辛多雷架子",
+            "zh_CN": "家常辛多雷架子"
+          },
+          "id": 54369
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54370?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Lively Songwriter's Quill",
+            "es_MX": "Pluma de compositor vivaz",
+            "pt_BR": "Pena do Compositor Animado",
+            "de_DE": "Federkiel des lebhaften Komponisten",
+            "en_GB": "Lively Songwriter's Quill",
+            "es_ES": "Pluma de compositor animada",
+            "fr_FR": "Calame de composition animée",
+            "it_IT": "Penna del Compositore Vivace",
+            "ru_RU": "Живое перо песенника",
+            "ko_KR": "활기찬 작사가의 깃펜",
+            "zh_TW": "鮮豔的作曲家羽毛筆",
+            "zh_CN": "活泼的作曲家羽毛笔"
+          },
+          "id": 54370
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54371?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Open Sin'dorei Scroll",
+            "es_MX": "Pergamino sin'dorei abierto",
+            "pt_BR": "Pergaminho Sin'dorei Aberto",
+            "de_DE": "Offene Schriftrolle der Sin'dorei",
+            "en_GB": "Open Sin'dorei Scroll",
+            "es_ES": "Pergamino sin'dorei abierto",
+            "fr_FR": "Parchemin sin’dorei ouvert",
+            "it_IT": "Pergamena Aperta dei Sin'dorei",
+            "ru_RU": "Открытый син'дорайский свиток",
+            "ko_KR": "신도레이 두루마리 펼치기",
+            "zh_TW": "打開的辛多雷卷軸",
+            "zh_CN": "摊开的辛多雷卷轴"
+          },
+          "id": 54371
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54372?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Gilded Eversong Book",
+            "es_MX": "Libro dorado de Canción Eterna",
+            "pt_BR": "Livro do Canto Eterno Dourado",
+            "de_DE": "Vergoldetes Buch von Immersang",
+            "en_GB": "Gilded Eversong Book",
+            "es_ES": "Libro de Canción Eterna dorado",
+            "fr_FR": "Livre doré des Chants éternels",
+            "it_IT": "Libro di Cantoeterno Dorato",
+            "ru_RU": "Позолоченная книга Вечной Песни",
+            "ko_KR": "금빛 영원노래 책",
+            "zh_TW": "鍍金永歌書籍",
+            "zh_CN": "镀金永歌之书"
+          },
+          "id": 54372
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54373?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Phoenix Quill",
+            "es_MX": "Pluma de fénix sin'dorei",
+            "pt_BR": "Pena de Fênix Sin'dorei",
+            "de_DE": "Phönixfederkiel der Sin'dorei",
+            "en_GB": "Sin'dorei Phoenix Quill",
+            "es_ES": "Pluma de fénix sin'dorei",
+            "fr_FR": "Plume de phénix sin’dorei",
+            "it_IT": "Piuma di Fenice dei Sin'dorei",
+            "ru_RU": "Син'дорайское перо феникса",
+            "ko_KR": "신도레이 불사조 깃펜",
+            "zh_TW": "辛多雷鳳凰羽毛筆",
+            "zh_CN": "辛多雷凤凰羽毛笔"
+          },
+          "id": 54373
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54374?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Homely Wall Shelves",
+            "es_MX": "Estantes de pared caseros",
+            "pt_BR": "Prateleiras de Parede Caseiras",
+            "de_DE": "Heimelige Wandregale",
+            "en_GB": "Homely Wall Shelves",
+            "es_ES": "Estantes de muro hogareños",
+            "fr_FR": "Étagères murales simples",
+            "it_IT": "Mensole Casalinghe",
+            "ru_RU": "Домашние настенные полки",
+            "ko_KR": "가정 벽 선반",
+            "zh_TW": "樸素壁架",
+            "zh_CN": "家常壁挂搁架"
+          },
+          "id": 54374
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54375?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Wild Hanging Scroll",
+            "es_MX": "Pergamino colgante salvaje",
+            "pt_BR": "Pergaminho Suspenso Selvagem",
+            "de_DE": "Wild hängende Schriftrolle",
+            "en_GB": "Wild Hanging Scroll",
+            "es_ES": "Pergamino colgante salvaje",
+            "fr_FR": "Parchemin sauvage suspendu",
+            "it_IT": "Pergamena a Sospensione Selvaggia",
+            "ru_RU": "Висящий хаотичный свиток",
+            "ko_KR": "야생 벽걸이 두루마리",
+            "zh_TW": "狂野吊掛卷軸",
+            "zh_CN": "狂野悬挂卷轴"
+          },
+          "id": 54375
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54377?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Harandar Signpost",
+            "es_MX": "Letrero de Harandar",
+            "pt_BR": "Placa de Harandar",
+            "de_DE": "Wegweiser von Harandar",
+            "en_GB": "Harandar Signpost",
+            "es_ES": "Letrero de Harandar",
+            "fr_FR": "Panneau d’Harandar",
+            "it_IT": "Cartello di Harandar",
+            "ru_RU": "Харандарский указатель",
+            "ko_KR": "하란다르 표지판",
+            "zh_TW": "哈朗達路標",
+            "zh_CN": "哈籁恩达尔指示牌"
+          },
+          "id": 54377
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54378?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Magnificent Towering Bookcase",
+            "es_MX": "Biblioteca alta y magnífica",
+            "pt_BR": "Estante de Livros Imponente Magnífica",
+            "de_DE": "Prächtiges turmhohes Bücherregal",
+            "en_GB": "Magnificent Towering Bookcase",
+            "es_ES": "Estantería altísima magnífica",
+            "fr_FR": "Superbe bibliothèque monumentale",
+            "it_IT": "Libreria Torreggiante Magnifica",
+            "ru_RU": "Величественный высокий книжный шкаф",
+            "ko_KR": "환상적인 거대 책장",
+            "zh_TW": "華麗的高聳書架",
+            "zh_CN": "华美高耸书柜"
+          },
+          "id": 54378
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58531?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "\"Cursed Gaze of Ula'tek\" Mural",
+            "es_MX": "Mural \"Mirada maldita de Ula'tek\"",
+            "pt_BR": "Mural \"Olhar Amaldiçoado de Ula'tek\"",
+            "de_DE": "Wandbild \"Verfluchter Blick von Ula'tek\"",
+            "en_GB": "\"Cursed Gaze of Ula'tek\" Mural",
+            "es_ES": "Mural \"Mirada maldita de Ula'tek\"",
+            "fr_FR": "Fresque « Regard maudit d’Ula’tek »",
+            "it_IT": "Murale \"Sguardo Maledetto di Ula'tek\"",
+            "ru_RU": "Фреска \"Проклятый взгляд Ула'тек\"",
+            "ko_KR": "\"울라텍의 저주받은 시선\" 벽화",
+            "zh_TW": "「烏拉特克詛咒凝視」壁畫",
+            "zh_CN": "“乌拉特克的诅咒凝视”壁画"
+          },
+          "id": 58531
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58532?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Chiseled Amani Tablet",
+            "es_MX": "Tablilla amani cincelada",
+            "pt_BR": "Tabuleta Amani Cinzelada",
+            "de_DE": "Gemeißelte Schrifttafel der Amani",
+            "en_GB": "Chiseled Amani Tablet",
+            "es_ES": "Tablilla Amani cincelada",
+            "fr_FR": "Tablette amani gravée",
+            "it_IT": "Tavoletta Scolpita degli Amani",
+            "ru_RU": "Вытесанная аманийская скрижаль",
+            "ko_KR": "새겨넣은 아마니 서판",
+            "zh_TW": "鑿刻阿曼尼石板",
+            "zh_CN": "阿曼尼雕纹石板"
+          },
+          "id": 58532
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/59360?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Apple Bobbing Bucket",
+            "es_MX": "Cubo de manzanas",
+            "pt_BR": "Balde de Pegar Maçãs",
+            "de_DE": "Apfeltauchen-Eimer",
+            "en_GB": "Apple Bobbing Bucket",
+            "es_ES": "Cubo de manzanas de Halloween",
+            "fr_FR": "Panier de pommes flottantes",
+            "it_IT": "Secchio da Pesca delle Mele",
+            "ru_RU": "Ведро для ловли яблок",
+            "ko_KR": "사과 건지기 양동이",
+            "zh_TW": "咬蘋果水桶",
+            "zh_CN": "咬苹果桶"
+          },
+          "id": 59360
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix I - Terms",
+        "es_MX": "Apéndice I - Términos",
+        "pt_BR": "Apêndice I - Termos",
+        "de_DE": "Anhang I - Bestimmungen",
+        "en_GB": "Appendix I - Terms",
+        "es_ES": "Apéndice I - Términos",
+        "fr_FR": "Appendice I – termes",
+        "it_IT": "Appendice I - Termini",
+        "ru_RU": "Приложение I – условия",
+        "ko_KR": "부록 I - 조건",
+        "zh_TW": "附錄一 - 條件",
+        "zh_CN": "附录 I - 术语"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56641?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quality",
+            "es_MX": "Calidad",
+            "pt_BR": "Qualidade",
+            "de_DE": "Qualität",
+            "en_GB": "Quality",
+            "es_ES": "Calidad",
+            "fr_FR": "Qualité",
+            "it_IT": "Qualità",
+            "ru_RU": "Качество",
+            "ko_KR": "등급",
+            "zh_TW": "品級",
+            "zh_CN": "品质"
+          },
+          "id": 56641
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56642?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sparks",
+            "es_MX": "Chispas",
+            "pt_BR": "Centelhas",
+            "de_DE": "Funken",
+            "en_GB": "Sparks",
+            "es_ES": "Chispas",
+            "fr_FR": "Étincelles",
+            "it_IT": "Scintille",
+            "ru_RU": "Искры",
+            "ko_KR": "불꽃",
+            "zh_TW": "火花",
+            "zh_CN": "火花"
+          },
+          "id": 56642
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56643?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Artisan Scribe's Moxie",
+            "es_MX": "Energizante de artesano escriba",
+            "pt_BR": "Marra do Escriba Artífice",
+            "de_DE": "Tatkraft des Inschriftenfachmanns",
+            "en_GB": "Artisan Scribe's Moxie",
+            "es_ES": "Arrojo de escriba artesano",
+            "fr_FR": "Aplomb d’artisanat en calligraphie",
+            "it_IT": "Grinta da Runografo Artigianale",
+            "ru_RU": "Пыл искусного начертателя",
+            "ko_KR": "장인 주문각인사의 기개",
+            "zh_TW": "專家級雕銘師的膽量",
+            "zh_CN": "匠人的铭文师之魄"
+          },
+          "id": 56643
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56644?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Concentration",
+            "es_MX": "Concentración",
+            "pt_BR": "Concentração",
+            "de_DE": "Konzentration",
+            "en_GB": "Concentration",
+            "es_ES": "Concentración",
+            "fr_FR": "Concentration",
+            "it_IT": "Concentrazione",
+            "ru_RU": "Концентрация",
+            "ko_KR": "집중력",
+            "zh_TW": "專注",
+            "zh_CN": "专注"
+          },
+          "id": 56644
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56645?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Knowledge",
+            "es_MX": "Conocimiento",
+            "pt_BR": "Conhecimento",
+            "de_DE": "Wissen",
+            "en_GB": "Knowledge",
+            "es_ES": "Conocimiento",
+            "fr_FR": "Connaissance",
+            "it_IT": "Conoscenza",
+            "ru_RU": "Знание",
+            "ko_KR": "지식",
+            "zh_TW": "知識",
+            "zh_CN": "知识"
+          },
+          "id": 56645
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix II - Stats",
+        "es_MX": "Apéndice II - Estadísticas",
+        "pt_BR": "Apêndice II - Atributos",
+        "de_DE": "Anhang II - Werte",
+        "en_GB": "Appendix II - Stats",
+        "es_ES": "Apéndice II - Estadísticas",
+        "fr_FR": "Appendice II – statistiques",
+        "it_IT": "Appendice II - Statistiche",
+        "ru_RU": "Приложение II – характеристики",
+        "ko_KR": "부록 II - 능력치",
+        "zh_TW": "附錄二 - 屬性",
+        "zh_CN": "附录 II - 属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56646?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Skill",
+            "es_MX": "Habilidad",
+            "pt_BR": "Perícia",
+            "de_DE": "Fertigkeit",
+            "en_GB": "Skill",
+            "es_ES": "Habilidad",
+            "fr_FR": "Compétence",
+            "it_IT": "Competenza",
+            "ru_RU": "Навык",
+            "ko_KR": "기술",
+            "zh_TW": "技能",
+            "zh_CN": "技能"
+          },
+          "id": 56646
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56647?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Multicraft",
+            "es_MX": "Fabricación múltiple",
+            "pt_BR": "Multicriação",
+            "de_DE": "Mehrfachherstellung",
+            "en_GB": "Multicraft",
+            "es_ES": "Multifabricación",
+            "fr_FR": "Fabrication multiple",
+            "it_IT": "Creazione Multipla",
+            "ru_RU": "Перепроизводство",
+            "ko_KR": "복수 제작",
+            "zh_TW": "複數製造",
+            "zh_CN": "产能"
+          },
+          "id": 56647
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56648?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Resourcefulness",
+            "es_MX": "Inventiva",
+            "pt_BR": "Desenvoltura",
+            "de_DE": "Einfallsreichtum",
+            "en_GB": "Resourcefulness",
+            "es_ES": "Ingenio",
+            "fr_FR": "Ingéniosité",
+            "it_IT": "Parsimonia",
+            "ru_RU": "Находчивость",
+            "ko_KR": "지혜",
+            "zh_TW": "精明",
+            "zh_CN": "充裕"
+          },
+          "id": 56648
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56649?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Ingenuity",
+            "es_MX": "Ingenio",
+            "pt_BR": "Engenhosidade",
+            "de_DE": "Genialität",
+            "en_GB": "Ingenuity",
+            "es_ES": "Inventiva",
+            "fr_FR": "Inventivité",
+            "it_IT": "Ingegno",
+            "ru_RU": "Изобретательность",
+            "ko_KR": "독창성",
+            "zh_TW": "精妙",
+            "zh_CN": "奇思"
+          },
+          "id": 56649
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Inscription Essentials",
+        "es_MX": "Suministros básicos de inscripción",
+        "pt_BR": "Fundamentos de Escrivania",
+        "de_DE": "Inschriftenkundegrundlagen",
+        "en_GB": "Inscription Essentials",
+        "es_ES": "Esenciales de inscripción",
+        "fr_FR": "Nécessaire de calligraphie",
+        "it_IT": "Oggetti Essenziali per Runografia",
+        "ru_RU": "Основы начертания",
+        "ko_KR": "주문각인의 기본",
+        "zh_TW": "銘文學必需品",
+        "zh_CN": "铭文必需品"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56870?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Midnight Milling",
+            "es_MX": "Molienda de Midnight",
+            "pt_BR": "Trituração de Midnight",
+            "de_DE": "Mahlen von Midnight",
+            "en_GB": "Midnight Milling",
+            "es_ES": "Molienda de Midnight",
+            "fr_FR": "Mouture de Midnight",
+            "it_IT": "Pestatura di Midnight",
+            "ru_RU": "Полуночное измельчение",
+            "ko_KR": "한밤 제분",
+            "zh_TW": "至暗之夜研磨",
+            "zh_CN": "至暗之夜研磨"
+          },
+          "id": 56870
+        }
+      ]
+    }
+  ]
+}

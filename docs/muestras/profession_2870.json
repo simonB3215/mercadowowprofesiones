@@ -1,0 +1,59 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/2870?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2870,
+  "name": {
+    "en_US": "Shipment Prototype",
+    "es_MX": "Prototipo de cargamento",
+    "pt_BR": "Protótipo de Carregamento",
+    "de_DE": "Lieferungs-Prototyp",
+    "en_GB": "Shipment Prototype",
+    "es_ES": "Prototipo de envío",
+    "fr_FR": "Prototype de cargaison",
+    "it_IT": "Prototipo di carico",
+    "ru_RU": "Прототип поставок",
+    "ko_KR": "화물 시험용",
+    "zh_TW": "貨品樣品",
+    "zh_CN": "货物原型"
+  },
+  "description": {
+    "en_US": "Shipping shipment ships!",
+    "es_MX": "¡Cargando cargas del cargamento!",
+    "pt_BR": "Carregando cargas de carregamentos!",
+    "de_DE": "Liefert Liefer-Lieferungen!",
+    "en_GB": "Shipping shipment ships!",
+    "es_ES": "¡Enviando envíos!",
+    "fr_FR": "Cargaison de cargo !",
+    "it_IT": "Navi che consegnano carichi!",
+    "ru_RU": "Доставка кораблей с поставками!",
+    "ko_KR": "화물선 적하 중!",
+    "zh_TW": "發貨了發貨了發貨了！",
+    "zh_CN": "发货！"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/2870?namespace=static-12.1.5_70077-us"
+    },
+    "id": 2870
+  }
+}

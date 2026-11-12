@@ -1,0 +1,59 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/2821?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2821,
+  "name": {
+    "en_US": "Arcana Manipulation",
+    "es_MX": "Manipulación arcana",
+    "pt_BR": "Manipulação Arcana",
+    "de_DE": "Arkanamanipulation",
+    "en_GB": "Arcana Manipulation",
+    "es_ES": "Manipulación Arcana",
+    "fr_FR": "Manipulation des arcanes",
+    "it_IT": "Manipolazione dell'Arcano",
+    "ru_RU": "Чародейское искусство",
+    "ko_KR": "비전 조작",
+    "zh_TW": "秘能操控",
+    "zh_CN": "奥能操控"
+  },
+  "description": {
+    "en_US": "Description here",
+    "es_MX": "Description here",
+    "pt_BR": "Descrição aqui.",
+    "de_DE": "Beschreibung hierher",
+    "en_GB": "Description here",
+    "es_ES": "La descripción va aquí.",
+    "fr_FR": "Description",
+    "it_IT": "Description goes here.",
+    "ru_RU": "Описание",
+    "ko_KR": "설명",
+    "zh_TW": "在此描述",
+    "zh_CN": "描述"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/2821?namespace=static-12.1.5_70077-us"
+    },
+    "id": 2821
+  }
+}

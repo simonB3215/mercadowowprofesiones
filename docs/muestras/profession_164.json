@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/164?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 164,
+  "name": {
+    "en_US": "Blacksmithing",
+    "es_MX": "Herrería",
+    "pt_BR": "Ferraria",
+    "de_DE": "Schmiedekunst",
+    "en_GB": "Blacksmithing",
+    "es_ES": "Herrería",
+    "fr_FR": "Forge",
+    "it_IT": "Forgiatura",
+    "ru_RU": "Кузнечное дело",
+    "ko_KR": "대장기술",
+    "zh_TW": "鍛造",
+    "zh_CN": "锻造"
+  },
+  "description": {
+    "en_US": "Higher smithing skill allows you to learn higher level smithing plans.  Blacksmithing plans can be found on trainers around the world as well as from quests and monsters.",
+    "es_MX": "Con un nivel alto de habilidad en herrería, podrás aprender mejores diseños de herrería. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlos.",
+    "pt_BR": "Um alto nível na perícia ferraria permite aprender instruções de nível mais alto. As instruções podem ser aprendidas ou compradas dos instrutores de ferraria espalhados pelo mundo, bem como saqueadas de monstros e obtidas como recompensa de missões.",
+    "de_DE": "Eine hohe Schmiedefertigkeit ermöglicht es Euch, höherstufigere Schmiedepläne zu benutzen. Pläne könnt Ihr bei Lehrern überall in der Welt erwerben. Tote Gegner hinterlassen manchmal Schmiedepläne oder Ihr erhaltet sie als Questbelohnung.",
+    "en_GB": "Higher smithing skill allows you to learn higher level smithing plans.  Blacksmithing plans can be found on trainers around the world as well as from quests and monsters.",
+    "es_ES": "Con un nivel alto de habilidad en herrería, podrás aprender mejores diseños de herrería. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlos.",
+    "fr_FR": "Un plus haut score dans la compétence forge vous permet d’apprendre des plans plus difficiles. Les plans pour forgerons se trouvent dans le monde entier auprès de maîtres aussi bien qu’en récompense de quêtes ou qu’en butin de monstres.",
+    "it_IT": "Una maggiore competenza in Forgiatura permette di apprendere progetti di livello superiore. I progetti possono essere acquistati da venditori o istruttori in giro per il mondo o essere ottenuti attraverso missioni o uccidendo mostri.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные кузнечные чертежи вы можете использовать. Чертежи можно найти у учителей, а также получить в качестве добычи или награды.",
+    "ko_KR": "대장기술 숙련도가 올라갈수록 고레벨의 대장기술 도면을 배울 수 있습니다. 도면은 전문 대장장이나 퀘스트를 통해 배우거나 몬스터에게서 얻을 수 있습니다.",
+    "zh_TW": "高級的鍛造技能使你可以學習高級的鍛造設計圖。你可以在訓練師那裡學習新的設計圖，也可以通過完成任務或殺死怪物獲得新的設計圖。",
+    "zh_CN": "高级的锻造技能使你可以学习高级的锻造设计图。你可以在训练师那里学习新的设计图，也可以通过完成任务或杀死怪物获得新的设计图。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/164?namespace=static-12.1.5_70077-us"
+    },
+    "id": 164
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2437?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Blacksmithing / Zandalari Blacksmithing",
+        "es_MX": "Herrería kultirana / Herrería zandalari",
+        "pt_BR": "Ferraria de Kul Tiraz / Ferraria de Zandalar",
+        "de_DE": "Schmiedekunst von Kul Tiras / Schmiedekunst von Zandalar",
+        "en_GB": "Kul Tiran Blacksmithing / Zandalari Blacksmithing",
+        "es_ES": "Herrería de Kul Tiras / Herrería Zandalari",
+        "fr_FR": "Forge de Kul Tiras / Forge de Zandalar",
+        "it_IT": "Forgiatura di Kul Tiras / Forgiatura di Zandalar",
+        "ru_RU": "Кул-тирасское кузнечное дело / Зандаларское кузнечное дело",
+        "ko_KR": "쿨 티란 대장기술 / 잔달라 대장기술",
+        "zh_TW": "庫爾提拉斯鍛造 / 贊達拉鍛造",
+        "zh_CN": "库尔提拉斯锻造 / 赞达拉锻造"
+      },
+      "id": 2437
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2454?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Blacksmithing",
+        "es_MX": "Herrería de Legion",
+        "pt_BR": "Ferraria de Legion",
+        "de_DE": "Schmiedekunst der Verheerten Inseln",
+        "en_GB": "Legion Blacksmithing",
+        "es_ES": "Herrería de Legion",
+        "fr_FR": "Forge de Legion",
+        "it_IT": "Forgiatura di Legion",
+        "ru_RU": "Кузнечное дело Legion",
+        "ko_KR": "군단 대장기술",
+        "zh_TW": "軍團鍛造",
+        "zh_CN": "军团锻造"
+      },
+      "id": 2454
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2472?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Blacksmithing",
+        "es_MX": "Herrería de Draenor",
+        "pt_BR": "Ferraria de Draenor",
+        "de_DE": "Schmiedekunst von Draenor",
+        "en_GB": "Draenor Blacksmithing",
+        "es_ES": "Herrería de Draenor",
+        "fr_FR": "Forge de Draenor",
+        "it_IT": "Forgiatura di Draenor",
+        "ru_RU": "Кузнечное дело Дренора",
+        "ko_KR": "드레노어 대장기술",
+        "zh_TW": "德拉諾鍛造",
+        "zh_CN": "德拉诺锻造"
+      },
+      "id": 2472
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2473?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Blacksmithing",
+        "es_MX": "Herrería de Pandaria",
+        "pt_BR": "Ferraria de Pandária",
+        "de_DE": "Schmiedekunst von Pandaria",
+        "en_GB": "Pandaria Blacksmithing",
+        "es_ES": "Herrería de Pandaria",
+        "fr_FR": "Forge de Pandarie",
+        "it_IT": "Forgiatura di Pandaria",
+        "ru_RU": "Кузнечное дело Пандарии",
+        "ko_KR": "판다리아 대장기술",
+        "zh_TW": "潘達利亞鍛造",
+        "zh_CN": "潘达利亚锻造"
+      },
+      "id": 2473
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2474?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Blacksmithing",
+        "es_MX": "Herrería de Cataclysm",
+        "pt_BR": "Ferraria de Cataclysm",
+        "de_DE": "Schmiedekunst des Kataklysmus",
+        "en_GB": "Cataclysm Blacksmithing",
+        "es_ES": "Herrería de Cataclysm",
+        "fr_FR": "Forge de Cataclysm",
+        "it_IT": "Forgiatura di Cataclysm",
+        "ru_RU": "Кузнечное дело времен Катаклизма",
+        "ko_KR": "대격변 대장기술",
+        "zh_TW": "大災變鍛造",
+        "zh_CN": "大地的裂变锻造"
+      },
+      "id": 2474
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2475?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Blacksmithing",
+        "es_MX": "Herrería de Rasganorte",
+        "pt_BR": "Ferraria de Nortúndria",
+        "de_DE": "Schmiedekunst von Nordend",
+        "en_GB": "Northrend Blacksmithing",
+        "es_ES": "Herrería de Rasganorte",
+        "fr_FR": "Forge du Norfendre",
+        "it_IT": "Forgiatura di Nordania",
+        "ru_RU": "Кузнечное дело Нордскола",
+        "ko_KR": "노스렌드 대장기술",
+        "zh_TW": "北裂境鍛造",
+        "zh_CN": "诺森德锻造"
+      },
+      "id": 2475
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2476?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Blacksmithing",
+        "es_MX": "Herrería de Terrallende",
+        "pt_BR": "Ferraria de Terralém",
+        "de_DE": "Schmiedekunst der Scherbenwelt",
+        "en_GB": "Outland Blacksmithing",
+        "es_ES": "Herrería de Terrallende",
+        "fr_FR": "Forge d’Outreterre",
+        "it_IT": "Forgiatura delle Terre Esterne",
+        "ru_RU": "Кузнечное дело Запределья",
+        "ko_KR": "아웃랜드 대장기술",
+        "zh_TW": "外域鍛造",
+        "zh_CN": "外域锻造"
+      },
+      "id": 2476
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2477?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Blacksmithing",
+        "es_MX": "Herrería clásica",
+        "pt_BR": "Ferraria do Classic",
+        "de_DE": "Klassische Schmiedekunst",
+        "en_GB": "Classic Blacksmithing",
+        "es_ES": "Herrería clásica",
+        "fr_FR": "Forge classique",
+        "it_IT": "Forgiatura Classica",
+        "ru_RU": "Классическое кузнечное дело",
+        "ko_KR": "옛 대장기술",
+        "zh_TW": "艾澤拉斯鍛造",
+        "zh_CN": "经典旧世锻造"
+      },
+      "id": 2477
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2751?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Blacksmithing",
+        "es_MX": "Herrería de Shadowlands",
+        "pt_BR": "Ferraria de Shadowlands",
+        "de_DE": "Schmiedekunst der Schattenlande",
+        "en_GB": "Shadowlands Blacksmithing",
+        "es_ES": "Herrería de Shadowlands",
+        "fr_FR": "Forge d’Ombreterre",
+        "it_IT": "Forgiatura di Shadowlands",
+        "ru_RU": "Кузнечное дело Темных Земель",
+        "ko_KR": "어둠땅 대장기술",
+        "zh_TW": "暗影之境鍛造",
+        "zh_CN": "暗影界锻造"
+      },
+      "id": 2751
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2822?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Blacksmithing",
+        "es_MX": "Herrería de las Islas Dragón",
+        "pt_BR": "Ferraria das Ilhas do Dragão",
+        "de_DE": "Schmiedekunst der Dracheninseln",
+        "en_GB": "Dragon Isles Blacksmithing",
+        "es_ES": "Herrería de las Islas Dragón",
+        "fr_FR": "Forge des îles aux Dragons",
+        "it_IT": "Forgiatura delle Isole dei Draghi",
+        "ru_RU": "Кузнечное дело Драконьих островов",
+        "ko_KR": "용의 섬 대장기술",
+        "zh_TW": "巨龍群島鍛造",
+        "zh_CN": "巨龙群岛锻造"
+      },
+      "id": 2822
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2872?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Blacksmithing",
+        "es_MX": "Herrería de Khaz Algar",
+        "pt_BR": "Ferraria de Khaz Algar",
+        "de_DE": "Schmiedekunst von Khaz Algar",
+        "en_GB": "Khaz Algar Blacksmithing",
+        "es_ES": "Herrería de Khaz Algar",
+        "fr_FR": "Forge de Khaz Algar",
+        "it_IT": "Forgiatura di Khaz Algar",
+        "ru_RU": "Кузнечное дело Каз Алгара",
+        "ko_KR": "카즈 알가르 대장기술",
+        "zh_TW": "卡茲阿爾加鍛造",
+        "zh_CN": "卡兹阿加锻造"
+      },
+      "id": 2872
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164/skill-tier/2907?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Blacksmithing",
+        "es_MX": "Herrería de Midnight",
+        "pt_BR": "Ferraria de Midnight",
+        "de_DE": "Schmiedekunst von Midnight",
+        "en_GB": "Midnight Blacksmithing",
+        "es_ES": "Herrería de Midnight",
+        "fr_FR": "Forge de Midnight",
+        "it_IT": "Forgiatura di Midnight",
+        "ru_RU": "Кузнечное дело Midnight",
+        "ko_KR": "한밤 대장기술",
+        "zh_TW": "至暗之夜鍛造",
+        "zh_CN": "至暗之夜锻造"
+      },
+      "id": 2907
+    }
+  ]
+}

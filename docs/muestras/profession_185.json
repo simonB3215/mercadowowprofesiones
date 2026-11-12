@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/185?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 185,
+  "name": {
+    "en_US": "Cooking",
+    "es_MX": "Cocina",
+    "pt_BR": "Culinária",
+    "de_DE": "Kochkunst",
+    "en_GB": "Cooking",
+    "es_ES": "Cocina",
+    "fr_FR": "Cuisine",
+    "it_IT": "Cucina",
+    "ru_RU": "Кулинария",
+    "ko_KR": "요리",
+    "zh_TW": "烹飪",
+    "zh_CN": "烹饪"
+  },
+  "description": {
+    "en_US": "Higher cooking skill allows you to learn higher level cooking recipes.  Recipes can be found on trainers around the world as well as from quests and as drops from monsters.",
+    "es_MX": "Con un nivel alto de habilidad en cocina, aprenderás recetas de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "pt_BR": "Um alto nível na perícia culinária permite aprender receitas de nível mais alto. As receitas podem ser aprendidas ou compradas dos instrutores de culinária espalhados pelo mundo, bem como saqueadas de monstros e obtidas como recompensa de missões.",
+    "de_DE": "Eine hohe Kochfertigkeit ermöglicht es Euch, höherstufigere Rezepte zu benutzen. Rezepte könnt Ihr bei Lehrern überall in der Welt erwerben. Tote Gegner hinterlassen manchmal Kochrezepte oder Ihr erhaltet sie als Questbelohnung.",
+    "en_GB": "Higher cooking skill allows you to learn higher level cooking recipes.  Recipes can be found on trainers around the world as well as from quests and as drops from monsters.",
+    "es_ES": "Con un nivel alto de habilidad en cocina, aprenderás recetas de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "fr_FR": "Un plus haut score dans la compétence cuisine vous permet d’apprendre des recettes plus difficiles. Les recettes de cuisine se trouvent dans le monde entier auprès de maîtres aussi bien qu’en récompense de quêtes ou qu’en butin de monstres.",
+    "it_IT": "Una maggiore competenza in Cucina permette di apprendere ricette di livello superiore. Le ricette possono essere acquistate da venditori o istruttori in giro per il mondo o essere ottenute attraverso missioni o uccidendo mostri.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные кулинарные рецепты вы можете использовать. Рецепты можно найти у учителей, а также получить в качестве добычи или награды.",
+    "ko_KR": "요리 숙련도가 올라갈수록 고레벨의 조리법을 배울 수 있습니다. 조리법은 전문 요리사나 퀘스트를 통해 배우거나 몬스터에게서 얻을 수 있습니다.",
+    "zh_TW": "高級的烹飪技能使你可以學習高級的食譜。你可以在訓練師那裡學習新的食譜，也可以通過完成任務或殺死怪物獲得新的食譜。",
+    "zh_CN": "高级的烹饪技能使你可以学习高级的菜谱。你可以在训练师那里学习新的菜谱，也可以通过完成任务或杀死怪物获得新的菜谱。"
+  },
+  "type": {
+    "type": "SECONDARY",
+    "name": {
+      "en_US": "Secondary",
+      "es_MX": "Secundario",
+      "pt_BR": "Secundário",
+      "de_DE": "Sekundär",
+      "en_GB": "Secondary",
+      "es_ES": "Secundario",
+      "fr_FR": "Secondaires",
+      "it_IT": "Secondario",
+      "ru_RU": "Дополнительное",
+      "ko_KR": "보조",
+      "zh_TW": "次要",
+      "zh_CN": "次要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/185?namespace=static-12.1.5_70077-us"
+    },
+    "id": 185
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2541?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Cooking / Zandalari Cooking",
+        "es_MX": "Cocina kultirana / Cocina zandalari",
+        "pt_BR": "Culinária de Kul Tiraz / Culinária de Zandalar",
+        "de_DE": "Kochkunst von Kul Tiras / Kochkunst von Zandalar",
+        "en_GB": "Kul Tiran Cooking / Zandalari Cooking",
+        "es_ES": "Cocina de Kul Tiras / Cocina Zandalari",
+        "fr_FR": "Cuisine de Kul Tiras / Cuisine de Zandalar",
+        "it_IT": "Cucina di Kul Tiras / Cucina di Zandalar",
+        "ru_RU": "Кул-тирасская кулинария / Зандаларская кулинария",
+        "ko_KR": "쿨 티란 요리 / 잔달라 요리",
+        "zh_TW": "庫爾提拉斯烹飪 / 贊達拉烹飪",
+        "zh_CN": "库尔提拉斯烹饪 / 赞达拉烹饪"
+      },
+      "id": 2541
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2542?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Cooking",
+        "es_MX": "Cocina de Legion",
+        "pt_BR": "Culinária de Legion",
+        "de_DE": "Kochkunst der Verheerten Inseln",
+        "en_GB": "Legion Cooking",
+        "es_ES": "Cocina de Legion",
+        "fr_FR": "Cuisine de Legion",
+        "it_IT": "Cucina di Legion",
+        "ru_RU": "Кулинария Легиона",
+        "ko_KR": "군단 요리",
+        "zh_TW": "軍團烹飪",
+        "zh_CN": "军团烹饪"
+      },
+      "id": 2542
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2543?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Cooking",
+        "es_MX": "Cocina de Draenor",
+        "pt_BR": "Culinária de Draenor",
+        "de_DE": "Kochkunst von Draenor",
+        "en_GB": "Draenor Cooking",
+        "es_ES": "Cocina de Draenor",
+        "fr_FR": "Cuisine de Draenor",
+        "it_IT": "Cucina di Draenor",
+        "ru_RU": "Кулинария Дренора",
+        "ko_KR": "드레노어 요리",
+        "zh_TW": "德拉諾烹飪",
+        "zh_CN": "德拉诺烹饪"
+      },
+      "id": 2543
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2544?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Cooking",
+        "es_MX": "Cocina de Pandaria",
+        "pt_BR": "Culinária de Pandária",
+        "de_DE": "Kochkunst von Pandaria",
+        "en_GB": "Pandaria Cooking",
+        "es_ES": "Cocina de Pandaria",
+        "fr_FR": "Cuisine de Pandarie",
+        "it_IT": "Cucina di Pandaria",
+        "ru_RU": "Кулинария Пандарии",
+        "ko_KR": "판다리아 요리",
+        "zh_TW": "潘達利亞烹飪",
+        "zh_CN": "潘达利亚烹饪"
+      },
+      "id": 2544
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2545?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Cooking",
+        "es_MX": "Cocina de Cataclysm",
+        "pt_BR": "Culinária de Cataclysm",
+        "de_DE": "Kochkunst des Kataklysmus",
+        "en_GB": "Cataclysm Cooking",
+        "es_ES": "Cocina de Cataclysm",
+        "fr_FR": "Cuisine de Cataclysm",
+        "it_IT": "Cucina di Cataclysm",
+        "ru_RU": "Кулинария времен Катаклизма",
+        "ko_KR": "대격변 요리",
+        "zh_TW": "大災變烹飪",
+        "zh_CN": "大地的裂变烹饪"
+      },
+      "id": 2545
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2546?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Cooking",
+        "es_MX": "Cocina de Rasganorte",
+        "pt_BR": "Culinária de Nortúndria",
+        "de_DE": "Kochkunst von Nordend",
+        "en_GB": "Northrend Cooking",
+        "es_ES": "Cocina de Rasganorte",
+        "fr_FR": "Cuisine du Norfendre",
+        "it_IT": "Cucina di Nordania",
+        "ru_RU": "Кулинария Нордскола",
+        "ko_KR": "노스렌드 요리",
+        "zh_TW": "北裂境烹飪",
+        "zh_CN": "诺森德烹饪"
+      },
+      "id": 2546
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2547?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Cooking",
+        "es_MX": "Cocina de Terrallende",
+        "pt_BR": "Culinária de Terralém",
+        "de_DE": "Kochkunst der Scherbenwelt",
+        "en_GB": "Outland Cooking",
+        "es_ES": "Cocina de Terrallende",
+        "fr_FR": "Cuisine d’Outreterre",
+        "it_IT": "Cucina delle Terre Esterne",
+        "ru_RU": "Кулинария Запределья",
+        "ko_KR": "아웃랜드 요리",
+        "zh_TW": "外域烹飪",
+        "zh_CN": "外域烹饪"
+      },
+      "id": 2547
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2548?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Cooking",
+        "es_MX": "Cocina clásica",
+        "pt_BR": "Culinária do Classic",
+        "de_DE": "Klassische Kochkunst",
+        "en_GB": "Classic Cooking",
+        "es_ES": "Cocina clásica",
+        "fr_FR": "Cuisine classique",
+        "it_IT": "Cucina Classica",
+        "ru_RU": "Классическая кулинария",
+        "ko_KR": "옛 요리",
+        "zh_TW": "艾澤拉斯烹飪",
+        "zh_CN": "经典旧世烹饪"
+      },
+      "id": 2548
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2752?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Cooking",
+        "es_MX": "Cocina de Shadowlands",
+        "pt_BR": "Culinária de Shadowlands",
+        "de_DE": "Kochkunst der Schattenlande",
+        "en_GB": "Shadowlands Cooking",
+        "es_ES": "Cocina de Shadowlands",
+        "fr_FR": "Cuisine d’Ombreterre",
+        "it_IT": "Cucina di Shadowlands",
+        "ru_RU": "Кулинария Темных Земель",
+        "ko_KR": "어둠땅 요리",
+        "zh_TW": "暗影之境烹飪",
+        "zh_CN": "暗影界烹饪"
+      },
+      "id": 2752
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2824?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Cooking",
+        "es_MX": "Cocina de las Islas Dragón",
+        "pt_BR": "Culinária das Ilhas do Dragão",
+        "de_DE": "Kochkunst der Dracheninseln",
+        "en_GB": "Dragon Isles Cooking",
+        "es_ES": "Cocina de las Islas Dragón",
+        "fr_FR": "Cuisine des îles aux Dragons",
+        "it_IT": "Cucina delle Isole dei Draghi",
+        "ru_RU": "Кулинария Драконьих островов",
+        "ko_KR": "용의 섬 요리",
+        "zh_TW": "巨龍群島烹飪",
+        "zh_CN": "巨龙群岛烹饪"
+      },
+      "id": 2824
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2873?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Cooking",
+        "es_MX": "Cocina de Khaz Algar",
+        "pt_BR": "Culinária de Khaz Algar",
+        "de_DE": "Kochkunst von Khaz Algar",
+        "en_GB": "Khaz Algar Cooking",
+        "es_ES": "Cocina de Khaz Algar",
+        "fr_FR": "Cuisine de Khaz Algar",
+        "it_IT": "Cucina di Khaz Algar",
+        "ru_RU": "Кулинария Каз Алгара",
+        "ko_KR": "카즈 알가르 요리",
+        "zh_TW": "卡茲阿爾加烹飪",
+        "zh_CN": "卡兹阿加烹饪"
+      },
+      "id": 2873
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2908?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Cooking",
+        "es_MX": "Cocina de Midnight",
+        "pt_BR": "Culinária de Midnight",
+        "de_DE": "Kochkunst von Midnight",
+        "en_GB": "Midnight Cooking",
+        "es_ES": "Cocina de Midnight",
+        "fr_FR": "Cuisine de Midnight",
+        "it_IT": "Cucina di Midnight",
+        "ru_RU": "Кулинария Midnight",
+        "ko_KR": "한밤 요리",
+        "zh_TW": "至暗之夜烹飪",
+        "zh_CN": "至暗之夜烹饪"
+      },
+      "id": 2908
+    }
+  ]
+}

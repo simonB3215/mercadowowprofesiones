@@ -1,0 +1,2214 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2914?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2914,
+  "name": {
+    "en_US": "Midnight Jewelcrafting",
+    "es_MX": "Joyería de Midnight",
+    "pt_BR": "Joalheria de Midnight",
+    "de_DE": "Juwelierskunst von Midnight",
+    "en_GB": "Midnight Jewelcrafting",
+    "es_ES": "Joyería de Midnight",
+    "fr_FR": "Joaillerie de Midnight",
+    "it_IT": "Oreficeria di Midnight",
+    "ru_RU": "Ювелирное дело Midnight",
+    "ko_KR": "한밤 보석세공",
+    "zh_TW": "至暗之夜珠寶設計",
+    "zh_CN": "至暗之夜珠宝加工"
+  },
+  "minimum_skill_level": 1,
+  "maximum_skill_level": 100,
+  "categories": [
+    {
+      "name": {
+        "en_US": "Recrafting",
+        "es_MX": "Refabricación",
+        "pt_BR": "Recriação",
+        "de_DE": "Umfertigen",
+        "en_GB": "Recrafting",
+        "es_ES": "Refabricación",
+        "fr_FR": "Refaçonner",
+        "it_IT": "Nuova Creazione",
+        "ru_RU": "Переделка",
+        "ko_KR": "재제작",
+        "zh_TW": "重新製作",
+        "zh_CN": "再造"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51525?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Recraft Equipment",
+            "es_MX": "Refabricar equipamiento",
+            "pt_BR": "Recriar Equipamento",
+            "de_DE": "Ausrüstung umfertigen",
+            "en_GB": "Recraft Equipment",
+            "es_ES": "Refabricar equipo",
+            "fr_FR": "Refaçonner de l’équipement",
+            "it_IT": "Ricreazione Equipaggiamento",
+            "ru_RU": "Переделка снаряжения",
+            "ko_KR": "장비 재제작",
+            "zh_TW": "重新製作裝備",
+            "zh_CN": "再造装备"
+          },
+          "id": 51525
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Powerful Peridots",
+        "es_MX": "Peridotos poderosos",
+        "pt_BR": "Peridotos Poderosos",
+        "de_DE": "Prächtiger Peridot",
+        "en_GB": "Powerful Peridots",
+        "es_ES": "Peridotos poderosos",
+        "fr_FR": "Olivines puissantes",
+        "it_IT": "Olivine Potenti",
+        "ru_RU": "Хитроумные хризолиты",
+        "ko_KR": "강렬한 감람석",
+        "zh_TW": "強力橄欖石",
+        "zh_CN": "震撼榄石"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52572?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quick Peridot",
+            "es_MX": "Peridoto presto",
+            "pt_BR": "Peridoto Veloz",
+            "de_DE": "Flinker Peridot",
+            "en_GB": "Quick Peridot",
+            "es_ES": "Peridoto rápido",
+            "fr_FR": "Olivine rapide",
+            "it_IT": "Olivina Rapida",
+            "ru_RU": "Хризолит скорости",
+            "ko_KR": "쾌속의 감람석",
+            "zh_TW": "迅速的橄欖石",
+            "zh_CN": "迅捷榄石"
+          },
+          "id": 52572
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52573?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Deadly Peridot",
+            "es_MX": "Peridoto letal",
+            "pt_BR": "Peridoto Mortal",
+            "de_DE": "Tödlicher Peridot",
+            "en_GB": "Deadly Peridot",
+            "es_ES": "Peridoto mortal",
+            "fr_FR": "Olivine mortelle",
+            "it_IT": "Olivina Mortale",
+            "ru_RU": "Хризолит смерти",
+            "ko_KR": "치명적인 감람석",
+            "zh_TW": "致命的橄欖石",
+            "zh_CN": "致命榄石"
+          },
+          "id": 52573
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52574?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterful Peridot",
+            "es_MX": "Peridoto magistral",
+            "pt_BR": "Peridoto Primoroso",
+            "de_DE": "Meisterhafter Peridot",
+            "en_GB": "Masterful Peridot",
+            "es_ES": "Peridoto magistral",
+            "fr_FR": "Olivine magistrale",
+            "it_IT": "Olivina Magistrale",
+            "ru_RU": "Хризолит искусности",
+            "ko_KR": "강력한 감람석",
+            "zh_TW": "精湛的橄欖石",
+            "zh_CN": "精湛榄石"
+          },
+          "id": 52574
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52575?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Versatile Peridot",
+            "es_MX": "Peridoto versátil",
+            "pt_BR": "Peridoto Versátil",
+            "de_DE": "Vielseitiger Peridot",
+            "en_GB": "Versatile Peridot",
+            "es_ES": "Peridoto versátil",
+            "fr_FR": "Olivine polyvalente",
+            "it_IT": "Olivina Versatile",
+            "ru_RU": "Хризолит универсальности",
+            "ko_KR": "유연한 감람석",
+            "zh_TW": "多用途的橄欖石",
+            "zh_CN": "万能榄石"
+          },
+          "id": 52575
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52576?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Quick Peridot",
+            "es_MX": "Peridoto presto perfecto",
+            "pt_BR": "Peridoto Veloz Impecável",
+            "de_DE": "Makelloser flinker Peridot",
+            "en_GB": "Flawless Quick Peridot",
+            "es_ES": "Peridoto rápido impecable",
+            "fr_FR": "Olivine rapide sans défaut",
+            "it_IT": "Olivina Rapida Perfetta",
+            "ru_RU": "Безупречный хризолит скорости",
+            "ko_KR": "무결한 쾌속의 감람석",
+            "zh_TW": "無瑕迅速的橄欖石",
+            "zh_CN": "无瑕迅捷榄石"
+          },
+          "id": 52576
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52577?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Deadly Peridot",
+            "es_MX": "Peridoto letal perfecto",
+            "pt_BR": "Peridoto Mortal Impecável",
+            "de_DE": "Makelloser tödlicher Peridot",
+            "en_GB": "Flawless Deadly Peridot",
+            "es_ES": "Peridoto mortal impecable",
+            "fr_FR": "Olivine mortelle sans défaut",
+            "it_IT": "Olivina Mortale Perfetta",
+            "ru_RU": "Безупречный хризолит смерти",
+            "ko_KR": "무결한 치명적인 감람석",
+            "zh_TW": "無瑕致命的橄欖石",
+            "zh_CN": "无瑕致命榄石"
+          },
+          "id": 52577
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52578?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Masterful Peridot",
+            "es_MX": "Peridoto magistral perfecto",
+            "pt_BR": "Peridoto Primoroso Impecável",
+            "de_DE": "Makelloser meisterhafter Peridot",
+            "en_GB": "Flawless Masterful Peridot",
+            "es_ES": "Peridoto magistral impecable",
+            "fr_FR": "Olivine magistrale sans défaut",
+            "it_IT": "Olivina Magistrale Perfetta",
+            "ru_RU": "Безупречный хризолит искусности",
+            "ko_KR": "무결한 강력한 감람석",
+            "zh_TW": "無瑕精湛的橄欖石",
+            "zh_CN": "无瑕精湛榄石"
+          },
+          "id": 52578
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52579?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Versatile Peridot",
+            "es_MX": "Peridoto versátil perfecto",
+            "pt_BR": "Peridoto Versátil Impecável",
+            "de_DE": "Makelloser vielseitiger Peridot",
+            "en_GB": "Flawless Versatile Peridot",
+            "es_ES": "Peridoto versátil impecable",
+            "fr_FR": "Olivine polyvalente sans défaut",
+            "it_IT": "Olivina Versatile Perfetta",
+            "ru_RU": "Безупречный хризолит универсальности",
+            "ko_KR": "무결한 유연한 감람석",
+            "zh_TW": "無瑕多用途的橄欖石",
+            "zh_CN": "无瑕万能榄石"
+          },
+          "id": 52579
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52614?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Harandar Peridot Prism",
+            "es_MX": "Prisma de peridoto de Harandar",
+            "pt_BR": "Prisma de Peridoto de Harandar",
+            "de_DE": "Peridotprisma von Harandar",
+            "en_GB": "Harandar Peridot Prism",
+            "es_ES": "Prisma de peridoto de Harandar",
+            "fr_FR": "Prisme d’olivines d’Harandar",
+            "it_IT": "Prisma di Olivina di Harandar",
+            "ru_RU": "Харандарская хризолитовая призма",
+            "ko_KR": "하란다르 감람석 분광경",
+            "zh_TW": "哈朗達橄欖石稜柱",
+            "zh_CN": "哈籁恩达尔榄石棱镜"
+          },
+          "id": 52614
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Lustrous Lapis",
+        "es_MX": "Lapislázuli lustroso",
+        "pt_BR": "Lápis Lustroso",
+        "de_DE": "Luxuriöser Lapis",
+        "en_GB": "Lustrous Lapis",
+        "es_ES": "Lapislázulis lustrosos",
+        "fr_FR": "Lapis lustrés",
+        "it_IT": "Lapislazzuli Lucido",
+        "ru_RU": "Лучезарный лазурит",
+        "ko_KR": "반짝이는 청금석",
+        "zh_TW": "閃耀青金石",
+        "zh_CN": "通透青金石"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52580?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quick Lapis",
+            "es_MX": "Lapis presto",
+            "pt_BR": "Lápis Veloz",
+            "de_DE": "Flinker Lapis",
+            "en_GB": "Quick Lapis",
+            "es_ES": "Lapislázuli rápido",
+            "fr_FR": "Lapis rapide",
+            "it_IT": "Lapislazzuli Rapido",
+            "ru_RU": "Лазурит скорости",
+            "ko_KR": "쾌속의 청금석",
+            "zh_TW": "迅速的青金石",
+            "zh_CN": "迅捷青金石"
+          },
+          "id": 52580
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52581?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Deadly Lapis",
+            "es_MX": "Lapis letal",
+            "pt_BR": "Lápis Mortal",
+            "de_DE": "Tödlicher Lapis",
+            "en_GB": "Deadly Lapis",
+            "es_ES": "Lapislázuli mortal",
+            "fr_FR": "Lapis mortel",
+            "it_IT": "Lapislazzuli Mortale",
+            "ru_RU": "Лазурит смерти",
+            "ko_KR": "치명적인 청금석",
+            "zh_TW": "致命的青金石",
+            "zh_CN": "致命青金石"
+          },
+          "id": 52581
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52582?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterful Lapis",
+            "es_MX": "Lapis magistral",
+            "pt_BR": "Lápis Primoroso",
+            "de_DE": "Meisterhafter Lapis",
+            "en_GB": "Masterful Lapis",
+            "es_ES": "Lapislázuli magistral",
+            "fr_FR": "Lapis magistral",
+            "it_IT": "Lapislazzuli Magistrale",
+            "ru_RU": "Лазурит искусности",
+            "ko_KR": "강력한 청금석",
+            "zh_TW": "精湛的青金石",
+            "zh_CN": "精湛青金石"
+          },
+          "id": 52582
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52583?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Versatile Lapis",
+            "es_MX": "Lapis versátil",
+            "pt_BR": "Lápis Versátil",
+            "de_DE": "Vielseitiger Lapis",
+            "en_GB": "Versatile Lapis",
+            "es_ES": "Lapislázuli versátil",
+            "fr_FR": "Lapis polyvalent",
+            "it_IT": "Lapislazzuli Versatile",
+            "ru_RU": "Лазурит универсальности",
+            "ko_KR": "유연한 청금석",
+            "zh_TW": "多用途的青金石",
+            "zh_CN": "万能青金石"
+          },
+          "id": 52583
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52584?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Quick Lapis",
+            "es_MX": "Lapis presto perfecto",
+            "pt_BR": "Lápis Veloz Impecável",
+            "de_DE": "Makelloser flinker Lapis",
+            "en_GB": "Flawless Quick Lapis",
+            "es_ES": "Lapislázuli rápido impecable",
+            "fr_FR": "Lapis rapide sans défaut",
+            "it_IT": "Lapislazzuli Rapido Perfetto",
+            "ru_RU": "Безупречный лазурит скорости",
+            "ko_KR": "무결한 쾌속의 청금석",
+            "zh_TW": "無瑕迅速的青金石",
+            "zh_CN": "无瑕迅捷青金石"
+          },
+          "id": 52584
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52585?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Deadly Lapis",
+            "es_MX": "Lapis letal perfecto",
+            "pt_BR": "Lápis Mortal Impecável",
+            "de_DE": "Makelloser tödlicher Lapis",
+            "en_GB": "Flawless Deadly Lapis",
+            "es_ES": "Lapislázuli mortal impecable",
+            "fr_FR": "Lapis mortel sans défaut",
+            "it_IT": "Lapislazzuli Mortale Perfetto",
+            "ru_RU": "Безупречный лазурит смерти",
+            "ko_KR": "무결한 치명적인 청금석",
+            "zh_TW": "無瑕致命的青金石",
+            "zh_CN": "无瑕致命青金石"
+          },
+          "id": 52585
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52586?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Masterful Lapis",
+            "es_MX": "Lapis magistral perfecto",
+            "pt_BR": "Lápis Primoroso Impecável",
+            "de_DE": "Makelloser meisterhafter Lapis",
+            "en_GB": "Flawless Masterful Lapis",
+            "es_ES": "Lapislázuli magistral impecable",
+            "fr_FR": "Lapis magistral sans défaut",
+            "it_IT": "Lapislazzuli Magistrale Perfetto",
+            "ru_RU": "Безупречный лазурит искусности",
+            "ko_KR": "무결한 강력한 청금석",
+            "zh_TW": "無瑕精湛的青金石",
+            "zh_CN": "无瑕精湛青金石"
+          },
+          "id": 52586
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52587?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Versatile Lapis",
+            "es_MX": "Lapis versátil perfecto",
+            "pt_BR": "Lápis Versátil Impecável",
+            "de_DE": "Makelloser vielseitiger Lapis",
+            "en_GB": "Flawless Versatile Lapis",
+            "es_ES": "Lapislázuli versátil impecable",
+            "fr_FR": "Lapis polyvalent sans défaut",
+            "it_IT": "Lapislazzuli Versatile Perfetto",
+            "ru_RU": "Безупречный лазурит универсальности",
+            "ko_KR": "무결한 유연한 청금석",
+            "zh_TW": "無瑕多用途的青金石",
+            "zh_CN": "无瑕万能青金石"
+          },
+          "id": 52587
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52615?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Amani Lapis Prism",
+            "es_MX": "Prisma de lapislázuli amani",
+            "pt_BR": "Prisma de Lápis Amani",
+            "de_DE": "Amanilapisprisma",
+            "en_GB": "Amani Lapis Prism",
+            "es_ES": "Prisma de lapislázuli Amani",
+            "fr_FR": "Prisme de lapis amani",
+            "it_IT": "Prisma di Lapislazzuli degli Amani",
+            "ru_RU": "Аманийская лазуритовая призма",
+            "ko_KR": "아마니 청금석 분광경",
+            "zh_TW": "阿曼尼青金石稜柱",
+            "zh_CN": "阿曼尼青金石棱镜"
+          },
+          "id": 52615
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Austere Amethysts",
+        "es_MX": "Amatistas austeras",
+        "pt_BR": "Ametistas Austeras",
+        "de_DE": "Asketischer Amethyst",
+        "en_GB": "Austere Amethysts",
+        "es_ES": "Amatistas austeras",
+        "fr_FR": "Améthystes austères",
+        "it_IT": "Ametiste Austere",
+        "ru_RU": "Августейшие аметисты",
+        "ko_KR": "근엄한 자수정",
+        "zh_TW": "嚴峻紫水晶",
+        "zh_CN": "质朴紫晶"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52588?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quick Amethyst",
+            "es_MX": "Amatista presta",
+            "pt_BR": "Ametista Veloz",
+            "de_DE": "Flinker Amethyst",
+            "en_GB": "Quick Amethyst",
+            "es_ES": "Amatista rápida",
+            "fr_FR": "Améthyste rapide",
+            "it_IT": "Ametista Rapida",
+            "ru_RU": "Аметист скорости",
+            "ko_KR": "쾌속의 자수정",
+            "zh_TW": "迅速的紫水晶",
+            "zh_CN": "迅捷紫晶"
+          },
+          "id": 52588
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52589?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Deadly Amethyst",
+            "es_MX": "Amatista letal",
+            "pt_BR": "Ametista Mortal",
+            "de_DE": "Tödlicher Amethyst",
+            "en_GB": "Deadly Amethyst",
+            "es_ES": "Amatista mortal",
+            "fr_FR": "Améthyste mortelle",
+            "it_IT": "Ametista Mortale",
+            "ru_RU": "Аметист смерти",
+            "ko_KR": "치명적인 자수정",
+            "zh_TW": "致命的紫水晶",
+            "zh_CN": "致命紫晶"
+          },
+          "id": 52589
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52590?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterful Amethyst",
+            "es_MX": "Amatista magistral",
+            "pt_BR": "Ametista Primorosa",
+            "de_DE": "Meisterhafter Amethyst",
+            "en_GB": "Masterful Amethyst",
+            "es_ES": "Amatista magistral",
+            "fr_FR": "Améthyste magistrale",
+            "it_IT": "Ametista Magistrale",
+            "ru_RU": "Аметист искусности",
+            "ko_KR": "강력한 자수정",
+            "zh_TW": "精湛的紫水晶",
+            "zh_CN": "精湛紫晶"
+          },
+          "id": 52590
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52591?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Versatile Amethyst",
+            "es_MX": "Amatista versátil",
+            "pt_BR": "Ametista Versátil",
+            "de_DE": "Vielseitiger Amethyst",
+            "en_GB": "Versatile Amethyst",
+            "es_ES": "Amatista versátil",
+            "fr_FR": "Améthyste polyvalente",
+            "it_IT": "Ametista Versatile",
+            "ru_RU": "Аметист универсальности",
+            "ko_KR": "유연한 자수정",
+            "zh_TW": "多用途的紫水晶",
+            "zh_CN": "万能紫晶"
+          },
+          "id": 52591
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52592?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Quick Amethyst",
+            "es_MX": "Amatista presta perfecta",
+            "pt_BR": "Ametista Veloz Impecável",
+            "de_DE": "Makelloser flinker Amethyst",
+            "en_GB": "Flawless Quick Amethyst",
+            "es_ES": "Amatista rápida impecable",
+            "fr_FR": "Améthyste rapide sans défaut",
+            "it_IT": "Ametista Rapida Perfetta",
+            "ru_RU": "Безупречный аметист скорости",
+            "ko_KR": "무결한 쾌속의 자수정",
+            "zh_TW": "無瑕迅速的紫水晶",
+            "zh_CN": "无瑕迅捷紫晶"
+          },
+          "id": 52592
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52593?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Deadly Amethyst",
+            "es_MX": "Amatista letal perfecta",
+            "pt_BR": "Ametista Mortal Impecável",
+            "de_DE": "Makelloser tödlicher Amethyst",
+            "en_GB": "Flawless Deadly Amethyst",
+            "es_ES": "Amatista mortal impecable",
+            "fr_FR": "Améthyste mortelle sans défaut",
+            "it_IT": "Ametista Mortale Perfetta",
+            "ru_RU": "Безупречный аметист смерти",
+            "ko_KR": "무결한 치명적인 자수정",
+            "zh_TW": "無瑕致命的紫水晶",
+            "zh_CN": "无瑕致命紫晶"
+          },
+          "id": 52593
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52594?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Masterful Amethyst",
+            "es_MX": "Amatista magistral perfecta",
+            "pt_BR": "Ametista Primorosa Impecável",
+            "de_DE": "Makelloser meisterhafter Amethyst",
+            "en_GB": "Flawless Masterful Amethyst",
+            "es_ES": "Amatista magistral impecable",
+            "fr_FR": "Améthyste magistrale sans défaut",
+            "it_IT": "Ametista Magistrale Perfetta",
+            "ru_RU": "Безупречный аметист искусности",
+            "ko_KR": "무결한 강력한 자수정",
+            "zh_TW": "無瑕精湛的紫水晶",
+            "zh_CN": "无瑕精湛紫晶"
+          },
+          "id": 52594
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52595?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Versatile Amethyst",
+            "es_MX": "Amatista versátil perfecta",
+            "pt_BR": "Ametista Versátil Impecável",
+            "de_DE": "Makelloser vielseitiger Amethyst",
+            "en_GB": "Flawless Versatile Amethyst",
+            "es_ES": "Amatista versátil impecable",
+            "fr_FR": "Améthyste polyvalente sans défaut",
+            "it_IT": "Ametista Versatile Perfetta",
+            "ru_RU": "Безупречный аметист универсальности",
+            "ko_KR": "무결한 유연한 자수정",
+            "zh_TW": "無瑕多用途的紫水晶",
+            "zh_CN": "无瑕万能紫晶"
+          },
+          "id": 52595
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52616?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Tenebrous Amethyst Prism",
+            "es_MX": "Prisma de amatista tenebrosa",
+            "pt_BR": "Prisma de Ametista Tenebrosa",
+            "de_DE": "Finsteramethystprisma",
+            "en_GB": "Tenebrous Amethyst Prism",
+            "es_ES": "Prisma de amatista tenebrosa",
+            "fr_FR": "Prisme d’améthystes ténébreuses",
+            "it_IT": "Prisma di Ametista Tenebrosa",
+            "ru_RU": "Мрачная аметистовая призма",
+            "ko_KR": "암영 자수정 분광경",
+            "zh_TW": "陰暗紫水晶稜柱",
+            "zh_CN": "晦暗紫晶棱镜"
+          },
+          "id": 52616
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Glorious Garnets",
+        "es_MX": "Granates gloriosos",
+        "pt_BR": "Granadas Gloriosas",
+        "de_DE": "Glorreicher Granat",
+        "en_GB": "Glorious Garnets",
+        "es_ES": "Granates gloriosos",
+        "fr_FR": "Grenats glorieux",
+        "it_IT": "Granati Gloriosi",
+        "ru_RU": "Грандиозные гранаты",
+        "ko_KR": "영광스러운 석류석",
+        "zh_TW": "榮耀石榴石",
+        "zh_CN": "绚丽榴石"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52596?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quick Garnet",
+            "es_MX": "Granate presto",
+            "pt_BR": "Granada Veloz",
+            "de_DE": "Flinker Granat",
+            "en_GB": "Quick Garnet",
+            "es_ES": "Granate rápido",
+            "fr_FR": "Grenat rapide",
+            "it_IT": "Granato Rapido",
+            "ru_RU": "Гранат скорости",
+            "ko_KR": "쾌속의 석류석",
+            "zh_TW": "迅速的石榴石",
+            "zh_CN": "迅捷榴石"
+          },
+          "id": 52596
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52597?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Deadly Garnet",
+            "es_MX": "Granate letal",
+            "pt_BR": "Granada Mortal",
+            "de_DE": "Tödlicher Granat",
+            "en_GB": "Deadly Garnet",
+            "es_ES": "Granate mortal",
+            "fr_FR": "Grenat mortel",
+            "it_IT": "Granato Mortale",
+            "ru_RU": "Гранат смерти",
+            "ko_KR": "치명적인 석류석",
+            "zh_TW": "致命的石榴石",
+            "zh_CN": "致命榴石"
+          },
+          "id": 52597
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52598?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterful Garnet",
+            "es_MX": "Granate magistral",
+            "pt_BR": "Granada Primorosa",
+            "de_DE": "Meisterhafter Granat",
+            "en_GB": "Masterful Garnet",
+            "es_ES": "Granate magistral",
+            "fr_FR": "Grenat magistral",
+            "it_IT": "Granato Magistrale",
+            "ru_RU": "Гранат искусности",
+            "ko_KR": "강력한 석류석",
+            "zh_TW": "精湛的石榴石",
+            "zh_CN": "精湛榴石"
+          },
+          "id": 52598
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52599?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Versatile Garnet",
+            "es_MX": "Granate versátil",
+            "pt_BR": "Granada Versátil",
+            "de_DE": "Vielseitiger Granat",
+            "en_GB": "Versatile Garnet",
+            "es_ES": "Granate versátil",
+            "fr_FR": "Grenat polyvalent",
+            "it_IT": "Granato Versatile",
+            "ru_RU": "Гранат универсальности",
+            "ko_KR": "유연한 석류석",
+            "zh_TW": "多用途的石榴石",
+            "zh_CN": "万能榴石"
+          },
+          "id": 52599
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52600?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Quick Garnet",
+            "es_MX": "Granate presto perfecto",
+            "pt_BR": "Granada Veloz Impecável",
+            "de_DE": "Makelloser flinker Granat",
+            "en_GB": "Flawless Quick Garnet",
+            "es_ES": "Granate rápido impecable",
+            "fr_FR": "Grenat rapide sans défaut",
+            "it_IT": "Granato Rapido Perfetto",
+            "ru_RU": "Безупречный гранат скорости",
+            "ko_KR": "무결한 쾌속의 석류석",
+            "zh_TW": "無瑕迅速的石榴石",
+            "zh_CN": "无瑕迅捷榴石"
+          },
+          "id": 52600
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52601?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Deadly Garnet",
+            "es_MX": "Granate letal perfecto",
+            "pt_BR": "Granada Mortal Impecável",
+            "de_DE": "Makelloser tödlicher Granat",
+            "en_GB": "Flawless Deadly Garnet",
+            "es_ES": "Granate mortal impecable",
+            "fr_FR": "Grenat mortel sans défaut",
+            "it_IT": "Granato Mortale Perfetto",
+            "ru_RU": "Безупречный гранат смерти",
+            "ko_KR": "무결한 치명적인 석류석",
+            "zh_TW": "無瑕致命的石榴石",
+            "zh_CN": "无瑕致命榴石"
+          },
+          "id": 52601
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52602?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Masterful Garnet",
+            "es_MX": "Granate magistral perfecto",
+            "pt_BR": "Granada Primorosa Impecável",
+            "de_DE": "Makelloser meisterhafter Granat",
+            "en_GB": "Flawless Masterful Garnet",
+            "es_ES": "Granate magistral impecable",
+            "fr_FR": "Grenat magistral sans défaut",
+            "it_IT": "Granato Magistrale Perfetto",
+            "ru_RU": "Безупречный гранат искусности",
+            "ko_KR": "무결한 강력한 석류석",
+            "zh_TW": "無瑕精湛的石榴石",
+            "zh_CN": "无瑕精湛榴石"
+          },
+          "id": 52602
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52603?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Versatile Garnet",
+            "es_MX": "Granate versátil perfecto",
+            "pt_BR": "Granada Versátil Impecável",
+            "de_DE": "Makelloser vielseitiger Granat",
+            "en_GB": "Flawless Versatile Garnet",
+            "es_ES": "Granate versátil impecable",
+            "fr_FR": "Grenat polyvalent sans défaut",
+            "it_IT": "Granato Versatile Perfetto",
+            "ru_RU": "Безупречный гранат универсальности",
+            "ko_KR": "무결한 유연한 석류석",
+            "zh_TW": "無瑕多用途的石榴石",
+            "zh_CN": "无瑕万能榴石"
+          },
+          "id": 52603
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52617?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sanguine Garnet Prism",
+            "es_MX": "Prisma de granate sanguíneo",
+            "pt_BR": "Prisma de Granada Sanguínea",
+            "de_DE": "Blutgranatprisma",
+            "en_GB": "Sanguine Garnet Prism",
+            "es_ES": "Prisma de granate sanguino",
+            "fr_FR": "Prisme de grenats hématiques",
+            "it_IT": "Prisma di Granato Rosso Sangue",
+            "ru_RU": "Кровавая гранатовая призма",
+            "ko_KR": "선혈 석류석 분광경",
+            "zh_TW": "血紅石榴石稜柱",
+            "zh_CN": "血色榴石棱镜"
+          },
+          "id": 52617
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Dazzling Diamonds",
+        "es_MX": "Diamantes deslumbrantes",
+        "pt_BR": "Diamantes Ofuscantes",
+        "de_DE": "Schillernder Diamant",
+        "en_GB": "Dazzling Diamonds",
+        "es_ES": "Diamantes deslumbrantes",
+        "fr_FR": "Diamants éblouissants",
+        "it_IT": "Diamanti Scintillanti",
+        "ru_RU": "Ослепительные алмазы",
+        "ko_KR": "휘황찬란한 다이아몬드",
+        "zh_TW": "璀璨鑽石",
+        "zh_CN": "炫目钻石"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52604?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Powerful Eversong Diamond",
+            "es_MX": "Diamante de Canción Eterna poderoso",
+            "pt_BR": "Diamante do Canto Eterno Poderoso",
+            "de_DE": "Mächtiger Immersangdiamant",
+            "en_GB": "Powerful Eversong Diamond",
+            "es_ES": "Diamante de Canción Eterna poderoso",
+            "fr_FR": "Diamant des Chants éternels de puissance",
+            "it_IT": "Diamante di Cantoeterno Potente",
+            "ru_RU": "Могучий алмаз Вечной Песни",
+            "ko_KR": "힘의 영원노래 다이아몬드",
+            "zh_TW": "特強的永歌鑽石",
+            "zh_CN": "强能之永歌钻石"
+          },
+          "id": 52604
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52605?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Telluric Eversong Diamond",
+            "es_MX": "Diamante de Canción Eterna telúrico",
+            "pt_BR": "Diamante do Canto Eterno Telúrico",
+            "de_DE": "Tellurischer Immersangdiamant",
+            "en_GB": "Telluric Eversong Diamond",
+            "es_ES": "Diamante de Canción Eterna telúrico",
+            "fr_FR": "Diamant des Chants éternels tellurique",
+            "it_IT": "Diamante di Cantoeterno Tellurico",
+            "ru_RU": "Теллурический алмаз Вечной Песни",
+            "ko_KR": "대지의 영원노래 다이아몬드",
+            "zh_TW": "大地的永歌鑽石",
+            "zh_CN": "御土之永歌钻石"
+          },
+          "id": 52605
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52606?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Stoic Eversong Diamond",
+            "es_MX": "Diamante de Canción Eterna estoico",
+            "pt_BR": "Diamante do Canto Eterno Estoico",
+            "de_DE": "Stoischer Immersangdiamant",
+            "en_GB": "Stoic Eversong Diamond",
+            "es_ES": "Diamante de Canción Eterna estoico",
+            "fr_FR": "Diamant des Chants éternels stoïque",
+            "it_IT": "Diamante di Cantoeterno Stoico",
+            "ru_RU": "Стоический алмаз Вечной Песни",
+            "ko_KR": "극기의 영원노래 다이아몬드",
+            "zh_TW": "堅忍的永歌鑽石",
+            "zh_CN": "坚韧之永歌钻石"
+          },
+          "id": 52606
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52607?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Indecipherable Eversong Diamond",
+            "es_MX": "Diamante de Canción Eterna indescifrable",
+            "pt_BR": "Diamante do Canto Eterno Indecifrável",
+            "de_DE": "Undurchschaubarer Immersangdiamant",
+            "en_GB": "Indecipherable Eversong Diamond",
+            "es_ES": "Diamante de Canción Eterna indescifrable",
+            "fr_FR": "Diamant des Chants éternels indéchiffrable",
+            "it_IT": "Diamante di Cantoeterno Indecifrabile",
+            "ru_RU": "Непостижимый алмаз Вечной Песни",
+            "ko_KR": "불가해의 영원노래 다이아몬드",
+            "zh_TW": "無解的永歌鑽石",
+            "zh_CN": "费解之永歌钻石"
+          },
+          "id": 52607
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Reagents",
+        "es_MX": "Componentes",
+        "pt_BR": "Reagentes",
+        "de_DE": "Reagenzien",
+        "en_GB": "Reagents",
+        "es_ES": "Componentes",
+        "fr_FR": "Composants",
+        "it_IT": "Reagenti",
+        "ru_RU": "Реагенты",
+        "ko_KR": "재료",
+        "zh_TW": "材料",
+        "zh_CN": "材料"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52608?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Kaleidoscopic Prism",
+            "es_MX": "Prisma caleidoscópico",
+            "pt_BR": "Prisma Caleidoscópico",
+            "de_DE": "Kaleidoskopisches Prisma",
+            "en_GB": "Kaleidoscopic Prism",
+            "es_ES": "Prisma caleidoscópico",
+            "fr_FR": "Prisme kaléidoscopique",
+            "it_IT": "Prisma Caleidoscopico",
+            "ru_RU": "Калейдоскопическая призма",
+            "ko_KR": "만화 분광경",
+            "zh_TW": "萬花筒稜石",
+            "zh_CN": "万花棱镜"
+          },
+          "id": 52608
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52609?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Lens",
+            "es_MX": "Lente sin'dorei",
+            "pt_BR": "Lente Sin'dorei",
+            "de_DE": "Linse der Sin'dorei",
+            "en_GB": "Sin'dorei Lens",
+            "es_ES": "Lente sin'dorei",
+            "fr_FR": "Lentille sin’dorei",
+            "it_IT": "Lenti dei Sin'dorei",
+            "ru_RU": "Син'дорайская линза",
+            "ko_KR": "신도레이 렌즈",
+            "zh_TW": "辛多雷鏡片",
+            "zh_CN": "辛多雷透镜"
+          },
+          "id": 52609
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52610?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sunglass Vial",
+            "es_MX": "Vial de reloj solar",
+            "pt_BR": "Ampola de Vitrissol",
+            "de_DE": "Sonnenglasphiole",
+            "en_GB": "Sunglass Vial",
+            "es_ES": "Frasco de vidriosolar",
+            "fr_FR": "Fiole de verre solaire",
+            "it_IT": "Fiala di Vetro Solare",
+            "ru_RU": "Флакон из солнечного стекла",
+            "ko_KR": "태양유리 약병",
+            "zh_TW": "凸透鏡之瓶",
+            "zh_CN": "墨琉瓶子"
+          },
+          "id": 52610
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52611?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Prismatic Focusing Iris",
+            "es_MX": "Iris de enfoque prismático",
+            "pt_BR": "Íris Focalizadora Prismática",
+            "de_DE": "Prismatische Fokusiris",
+            "en_GB": "Prismatic Focusing Iris",
+            "es_ES": "Iris de enfoque prismático",
+            "fr_FR": "Iris de focalisation prismatique",
+            "it_IT": "Iride Focalizzante Prismatica",
+            "ru_RU": "Призматический фокусирующий радужный кристалл",
+            "ko_KR": "오색 집중의 눈동자",
+            "zh_TW": "稜彩聚源虹膜",
+            "zh_CN": "棱光聚焦之虹"
+          },
+          "id": 52611
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52612?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Stabilizing Gemstone Bandolier",
+            "es_MX": "Bandolera de gemas de estabilización",
+            "pt_BR": "Bandoleira de Gemas Estabilizadora",
+            "de_DE": "Stabilisierender Juwelenschultergürtel",
+            "en_GB": "Stabilizing Gemstone Bandolier",
+            "es_ES": "Bandolera de gemas estabilizadora",
+            "fr_FR": "Cartouchière de gemmes de stabilisation",
+            "it_IT": "Bandoliera di Gemme Stabilizzante",
+            "ru_RU": "Стабилизирующее крепление для самоцветов",
+            "ko_KR": "안정화 보석 사선 주머니",
+            "zh_TW": "穩定寶石彈藥包",
+            "zh_CN": "稳定式宝石弹药带"
+          },
+          "id": 52612
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58297?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Polished Ammolite",
+            "es_MX": "Amolito pulido",
+            "pt_BR": "Amolita Polida",
+            "de_DE": "Polierter Ammolit",
+            "en_GB": "Polished Ammolite",
+            "es_ES": "Amolita pulida",
+            "fr_FR": "Ammolite polie",
+            "it_IT": "Ammolite Lucidata",
+            "ru_RU": "Полированный аммолит",
+            "ko_KR": "정련된 암몰라이트",
+            "zh_TW": "拋光斑彩石",
+            "zh_CN": "抛光斑彩石"
+          },
+          "id": 58297
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Regal Rings",
+        "es_MX": "Anillos reales",
+        "pt_BR": "Anéis Altivos",
+        "de_DE": "Raffinierte Ringe",
+        "en_GB": "Regal Rings",
+        "es_ES": "Anillos astronómicos",
+        "fr_FR": "Anneaux royaux",
+        "it_IT": "Anelli Regali",
+        "ru_RU": "Королевские кольца",
+        "ko_KR": "왕실의 반지",
+        "zh_TW": "莊嚴戒指",
+        "zh_CN": "华贵戒指"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52613?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Loa Worshiper's Band",
+            "es_MX": "Sortija de adorador de loa",
+            "pt_BR": "Elo do Adorador dos Loas",
+            "de_DE": "Ring des Loaanbeters",
+            "en_GB": "Loa Worshiper's Band",
+            "es_ES": "Sortija de adorador de loa",
+            "fr_FR": "Bague d’adoration de Loa",
+            "it_IT": "Vera degli Adoratori dei Loa",
+            "ru_RU": "Кольцо почитателя лоа",
+            "ko_KR": "로아 신봉자의 고리",
+            "zh_TW": "羅亞崇拜者指環",
+            "zh_CN": "神灵崇拜者的指环"
+          },
+          "id": 52613
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52618?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterwork Sin'dorei Band",
+            "es_MX": "Sortija de obra maestra sin'dorei",
+            "pt_BR": "Elo Sin'dorei Magistral",
+            "de_DE": "Meisterlicher Ring der Sin'dorei",
+            "en_GB": "Masterwork Sin'dorei Band",
+            "es_ES": "Sortija sin'dorei magistral",
+            "fr_FR": "Bague sin’dorei ouvragée",
+            "it_IT": "Vera Capolavoro dei Sin'dorei",
+            "ru_RU": "Син'дорайский перстень искусной работы",
+            "ko_KR": "걸작 신도레이 고리",
+            "zh_TW": "精工辛多雷指環",
+            "zh_CN": "精工辛多雷指环"
+          },
+          "id": 52618
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52620?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Signet of Azerothian Blessings",
+            "es_MX": "Sello de bendiciones azerothianas",
+            "pt_BR": "Sinete das Bênçãos Azerothianas",
+            "de_DE": "Signet der Segen von Azeroth",
+            "en_GB": "Signet of Azerothian Blessings",
+            "es_ES": "Sello de bendiciones de Azeroth",
+            "fr_FR": "Chevalière de bénédictions d’Azeroth",
+            "it_IT": "Anello con Sigillo delle Benedizioni Azerothiane",
+            "ru_RU": "Печатка азеротских благословений",
+            "ko_KR": "아제로스의 축복 인장",
+            "zh_TW": "艾澤拉斯祝福璽戒",
+            "zh_CN": "艾泽拉斯祝福印戒"
+          },
+          "id": 52620
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52622?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Gleaming Copper Band",
+            "es_MX": "Sortija de cobre resplandeciente",
+            "pt_BR": "Elo de Cobre Rebrilhante",
+            "de_DE": "Strahlender Kupferring",
+            "en_GB": "Gleaming Copper Band",
+            "es_ES": "Sortija de cobre reluciente",
+            "fr_FR": "Bague en cuivre resplendissante",
+            "it_IT": "Vera di Rame Lucente",
+            "ru_RU": "Блестящий медный перстень",
+            "ko_KR": "번뜩이는 구리 고리",
+            "zh_TW": "發光銅指環",
+            "zh_CN": "辉光熠熠的铜指环"
+          },
+          "id": 52622
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Luxurious Lockets",
+        "es_MX": "Guardapelos lujosos",
+        "pt_BR": "Medalhões Magníficos",
+        "de_DE": "Modische Medaillons",
+        "en_GB": "Luxurious Lockets",
+        "es_ES": "Guardapelos granados",
+        "fr_FR": "Médaillons majestueux",
+        "it_IT": "Ciondoli Lussuosi",
+        "ru_RU": "Модные медальоны",
+        "ko_KR": "호화로운 목걸이",
+        "zh_TW": "奢華墜盒",
+        "zh_CN": "奢华挂坠"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52619?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Masterwork Sin'dorei Amulet",
+            "es_MX": "Amuleto de obra maestra sin'dorei",
+            "pt_BR": "Amuleto Sin'dorei Magistral",
+            "de_DE": "Meisterliches Amulett der Sin'dorei",
+            "en_GB": "Masterwork Sin'dorei Amulet",
+            "es_ES": "Amuleto sin'dorei magistral",
+            "fr_FR": "Amulette sin’dorei ouvragée",
+            "it_IT": "Amuleto Capolavoro dei Sin'dorei",
+            "ru_RU": "Син'дорайский амулет искусной работы",
+            "ko_KR": "걸작 신도레이 아뮬렛",
+            "zh_TW": "精工辛多雷護符",
+            "zh_CN": "精工辛多雷护符"
+          },
+          "id": 52619
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52621?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Phoenix Torque",
+            "es_MX": "Torques de fénix thalassiano",
+            "pt_BR": "Torque de Fênix Talassiana",
+            "de_DE": "Thalassischer Phönixhalsreif",
+            "en_GB": "Thalassian Phoenix Torque",
+            "es_ES": "Torque de fénix thalassiano",
+            "fr_FR": "Torque de phénix thalassien",
+            "it_IT": "Collare di Fenice Thalassiano",
+            "ru_RU": "Ожерелье талассийского феникса",
+            "ko_KR": "탈라시안 불사조 변환 장치",
+            "zh_TW": "薩拉斯鳳凰頸環",
+            "zh_CN": "萨拉斯凤凰饰环"
+          },
+          "id": 52621
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52623?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Nocturnal Charm",
+            "es_MX": "Talismán nocturno",
+            "pt_BR": "Patuá Noturno",
+            "de_DE": "Nächtliches Amulett",
+            "en_GB": "Nocturnal Charm",
+            "es_ES": "Talismán nocturno",
+            "fr_FR": "Charme de noctambule",
+            "it_IT": "Talismano Notturno",
+            "ru_RU": "Ночной оберег",
+            "ko_KR": "야행의 부적",
+            "zh_TW": "夜間符咒",
+            "zh_CN": "夜行护符"
+          },
+          "id": 52623
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54686?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Voidstone Shielding Array",
+            "es_MX": "Arreglo protector de piedra del Vacío",
+            "pt_BR": "Matriz de Proteção de Pedra do Caos",
+            "de_DE": "Leersteinabschirmung",
+            "en_GB": "Voidstone Shielding Array",
+            "es_ES": "Matriz protectora de piedra del Vacío",
+            "fr_FR": "Matrice de protection en pierre du Vide",
+            "it_IT": "Matrice Protettiva della Pietra del Vuoto",
+            "ru_RU": "Защитная матрица камня Бездны",
+            "ko_KR": "공허석 보호막 배열기",
+            "zh_TW": "虛無石防護陣列",
+            "zh_CN": "虚空石护盾阵列"
+          },
+          "id": 54686
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Crafting Couture",
+        "es_MX": "Costura fructífera",
+        "pt_BR": "Criação Classuda",
+        "de_DE": "Handwerksheld",
+        "en_GB": "Crafting Couture",
+        "es_ES": "Confección de alta costura",
+        "fr_FR": "Couture raffinée",
+        "it_IT": "Creazioni alla Moda",
+        "ru_RU": "Модное мастерство",
+        "ko_KR": "상등품 제작",
+        "zh_TW": "製作時裝",
+        "zh_CN": "高定制造"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52624?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Silvermoon Focusing Shard",
+            "es_MX": "Fragmento de enfoque de Lunargenta",
+            "pt_BR": "Estilhaço Focalizador de Luaprata",
+            "de_DE": "Silbermondfokussplitter",
+            "en_GB": "Silvermoon Focusing Shard",
+            "es_ES": "Fragmento de enfoque de Lunargenta",
+            "fr_FR": "Éclat de focalisation de Lune-d’Argent",
+            "it_IT": "Scheggia della Concentrazione di Lunargenta",
+            "ru_RU": "Луносветская линза",
+            "ko_KR": "실버문 집중의 조각",
+            "zh_TW": "銀月聚焦裂片",
+            "zh_CN": "银月城聚焦碎片"
+          },
+          "id": 52624
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52625?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Silvermoon Loupes",
+            "es_MX": "Lupas de Lunargenta",
+            "pt_BR": "Lupas de Luaprata",
+            "de_DE": "Silbermondkopflupe",
+            "en_GB": "Silvermoon Loupes",
+            "es_ES": "Lentes de aumento de Lunargenta",
+            "fr_FR": "Lunettes de joaillerie de Lune-d’Argent",
+            "it_IT": "Lenti d'Ingrandimento di Lunargenta",
+            "ru_RU": "Луносветские увеличительные стекла",
+            "ko_KR": "실버문 확대경",
+            "zh_TW": "銀月放大鏡",
+            "zh_CN": "银月城放大镜"
+          },
+          "id": 52625
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52626?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Fantastic Font Focuser",
+            "es_MX": "Enfocador de fuente fantástico",
+            "pt_BR": "Focalizador de Fonte Fantástico",
+            "de_DE": "Leistungsstarke Letternlupe",
+            "en_GB": "Fantastic Font Focuser",
+            "es_ES": "Foco de fuente fantástica",
+            "fr_FR": "Focalisation fantastique de fonte",
+            "it_IT": "Canalizzatore di Caratteri Chimerico",
+            "ru_RU": "Фантастический фокусировщик истока",
+            "ko_KR": "환상적인 샘 집중 장치",
+            "zh_TW": "夢幻字體調焦器",
+            "zh_CN": "华美字体聚焦器"
+          },
+          "id": 52626
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52627?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Bold Biographer's Bifocals",
+            "es_MX": "Bifocales de biógrafo audaz",
+            "pt_BR": "Bifocais do Biógrafo Audaz",
+            "de_DE": "Zweistärkenbrille des beherzten Biographen",
+            "en_GB": "Bold Biographer's Bifocals",
+            "es_ES": "Bifocales bonitas de biógrafo",
+            "fr_FR": "Verres bifocaux de biographe intrépide",
+            "it_IT": "Bifocali del Biografo Ardito",
+            "ru_RU": "Бифокальные очки отважного биографа",
+            "ko_KR": "대담한 전기 작가의 다초점 탐지경",
+            "zh_TW": "無畏傳記家雙焦鏡",
+            "zh_CN": "神勇传记作者的两用镜"
+          },
+          "id": 52627
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52628?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Enchanter's Crystal",
+            "es_MX": "Cristal de encantador sin'dorei",
+            "pt_BR": "Cristal do Encantador Sin'dorei",
+            "de_DE": "Sin'doreikristall des Verzauberers",
+            "en_GB": "Sin'dorei Enchanter's Crystal",
+            "es_ES": "Cristal de encantador sin'dorei",
+            "fr_FR": "Cristal d’enchantement sin’dorei",
+            "it_IT": "Cristallo dell'Incantatore dei Sin'dorei",
+            "ru_RU": "Син'дорайский кристалл зачарователя",
+            "ko_KR": "신도레이 마법부여사의 수정",
+            "zh_TW": "辛多雷附魔師水晶",
+            "zh_CN": "辛多雷附魔师的水晶"
+          },
+          "id": 52628
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52629?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Jeweler's Loupes",
+            "es_MX": "Lupas de joyero sin'dorei",
+            "pt_BR": "Lupas do Joalheiro Sin'dorei",
+            "de_DE": "Juwelierskopflupe der Sin'dorei",
+            "en_GB": "Sin'dorei Jeweler's Loupes",
+            "es_ES": "Lentes de aumento de joyero sin'dorei",
+            "fr_FR": "Lunettes de joaillerie sin’dorei",
+            "it_IT": "Lenti d'Ingrandimento dell'Orefice dei Sin'dorei",
+            "ru_RU": "Увеличительные стекла син'дорайского ювелира",
+            "ko_KR": "신도레이 보석세공인의 확대경",
+            "zh_TW": "辛多雷珠寶匠放大鏡",
+            "zh_CN": "辛多雷珠宝匠的两用镜"
+          },
+          "id": 52629
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52630?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Improved Right-Handed Magnifying Glass",
+            "es_MX": "Lupa para diestros mejorada",
+            "pt_BR": "Lupa para Destros Aprimorada",
+            "de_DE": "Verbesserte Rechtshänderlupe",
+            "en_GB": "Improved Right-Handed Magnifying Glass",
+            "es_ES": "Lupa para mano derecha mejorada",
+            "fr_FR": "Loupe pour droitier améliorée",
+            "it_IT": "Lente d'Ingrandimento per Destrimani Migliorata",
+            "ru_RU": "Улучшенная лупа для правшей",
+            "ko_KR": "개선된 오른손잡이용 확대경",
+            "zh_TW": "改良版右手放大鏡",
+            "zh_CN": "强化版右手用的放大镜"
+          },
+          "id": 52630
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52631?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sin'dorei Scribe's Spectacles",
+            "es_MX": "Gafas de escriba sin'dorei",
+            "pt_BR": "Óculos do Escriba Sin'dorei",
+            "de_DE": "Brille des Sin'doreischreibers",
+            "en_GB": "Sin'dorei Scribe's Spectacles",
+            "es_ES": "Anteojos de escriba sin'dorei",
+            "fr_FR": "Lunettes de scribe sin’dorei",
+            "it_IT": "Occhiali del Runografo dei Sin'dorei",
+            "ru_RU": "Очки син'дорайского начертателя",
+            "ko_KR": "신도레이 주문각인사의 안경",
+            "zh_TW": "辛多雷雕銘師眼鏡",
+            "zh_CN": "辛多雷铭文师的眼镜"
+          },
+          "id": 52631
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54152?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Attuned Thalassian Rune-Prism",
+            "es_MX": "Prisma rúnico thalassiano armonizado",
+            "pt_BR": "Prisma Rúnico Talassiano Harmonizado",
+            "de_DE": "Eingestimmtes thalassisches Runenprisma",
+            "en_GB": "Attuned Thalassian Rune-Prism",
+            "es_ES": "Prisma rúnico thalassiano armonizado",
+            "fr_FR": "Prisme runique thalassien harmonisé",
+            "it_IT": "Prismaruna Thalassiana Sintonizzata",
+            "ru_RU": "Настроенная талассийская рунная призма",
+            "ko_KR": "조율된 탈라시안 룬 분광경",
+            "zh_TW": "同調薩拉斯符文稜石",
+            "zh_CN": "调谐的萨拉斯符文棱镜"
+          },
+          "id": 54152
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54153?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flawless Text Scrutinizers",
+            "es_MX": "Escrutinadores de texto impecables",
+            "pt_BR": "Analisadores de Texto Impecáveis",
+            "de_DE": "Makellose Textuntersucher",
+            "en_GB": "Flawless Text Scrutinizers",
+            "es_ES": "Examinadoras de texto impecables",
+            "fr_FR": "Scruteuses de texte sans défaut",
+            "it_IT": "Scrutatori di Testo Impeccabili",
+            "ru_RU": "Безупречные анализаторы текста",
+            "ko_KR": "무결한 문헌 검토기",
+            "zh_TW": "無瑕文字解讀器",
+            "zh_CN": "无暇的文本审阅镜"
+          },
+          "id": 54153
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54154?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Scribe's Crystalline Lens",
+            "es_MX": "Lente cristalino de escriba thalassiano",
+            "pt_BR": "Lentes Cristalinas do Escriba Talassiano",
+            "de_DE": "Kristalllinse des thalassischen Schreibers",
+            "en_GB": "Thalassian Scribe's Crystalline Lens",
+            "es_ES": "Lente cristalina de escriba thalassiano",
+            "fr_FR": "Lentille cristalline de scribe thalassien",
+            "it_IT": "Lente Cristallina dello Scriba Thalassiano",
+            "ru_RU": "Кристаллическая линза талассийского начертателя",
+            "ko_KR": "탈라시안 주문각인사의 수정 렌즈",
+            "zh_TW": "薩拉斯雕銘師的晶化鏡片",
+            "zh_CN": "萨拉斯抄写员的水晶焦镜"
+          },
+          "id": 54154
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54155?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Mage-Eye Precision Loupes",
+            "es_MX": "Lupas de precisión Ojo de mago",
+            "pt_BR": "Lupas de Precisão Olho de Mago",
+            "de_DE": "Präzisionskopflupe des Magierauges",
+            "en_GB": "Mage-Eye Precision Loupes",
+            "es_ES": "Lentes de precisión de ojo de mago",
+            "fr_FR": "Lunettes de précision œil-de-mage",
+            "it_IT": "Lenti d'Ingrandimento di Precisione dell'Occhio Magico",
+            "ru_RU": "Увеличительные стекла магической зоркости",
+            "ko_KR": "거대 시야 정밀 확대경",
+            "zh_TW": "法師之眼精準放大鏡",
+            "zh_CN": "法师之眼精准放大镜"
+          },
+          "id": 54155
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Jeweler's Jests",
+        "es_MX": "Bromas de joyero",
+        "pt_BR": "Gracejos do Joalheiro",
+        "de_DE": "Jux des Juweliers",
+        "en_GB": "Jeweler's Jests",
+        "es_ES": "Jocosidades de joyero",
+        "fr_FR": "Joyeusetés de joaillerie",
+        "it_IT": "Arguzie da Orefice",
+        "ru_RU": "Юмор ювелира",
+        "ko_KR": "보석세공인의 희롱",
+        "zh_TW": "珠寶匠之譏",
+        "zh_CN": "珠宝匠的趣物"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52632?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Monologuer's Chalice",
+            "es_MX": "Cáliz del monologuista",
+            "pt_BR": "Cálice do Monologuista",
+            "de_DE": "Kelch des Monologs",
+            "en_GB": "Monologuer's Chalice",
+            "es_ES": "Cáliz de monologuista",
+            "fr_FR": "Calice de monologue",
+            "it_IT": "Calice del Monologante",
+            "ru_RU": "Кубок для монологов",
+            "ko_KR": "독백가의 성배",
+            "zh_TW": "獨白者酒杯",
+            "zh_CN": "独白大师的酒杯"
+          },
+          "id": 52632
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Competitor's Crafts (PvP)",
+        "es_MX": "Artesanías de competidor (JcJ)",
+        "pt_BR": "Criações do Competidor (JxJ)",
+        "de_DE": "Handwerk des Wettkämpfers (PvP)",
+        "en_GB": "Competitor's Crafts (PvP)",
+        "es_ES": "Creaciones de competidor (JcJ)",
+        "fr_FR": "Fabrications de compétition (JcJ)",
+        "it_IT": "Artigianato del Concorrente (PvP)",
+        "ru_RU": "Ремесла бойца (PvP)",
+        "ko_KR": "경쟁자의 제작품 (플레이어 간 전투)",
+        "zh_TW": "競技者工藝品（PvP）",
+        "zh_CN": "竞争者工艺（PvP）"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52633?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Determined Heliotrope",
+            "es_MX": "Heliotropo decidido",
+            "pt_BR": "Heliotropo Determinado",
+            "de_DE": "Entschlossener Heliotrop",
+            "en_GB": "Determined Heliotrope",
+            "es_ES": "Heliotropo decidido",
+            "fr_FR": "Héliotrope déterminé",
+            "it_IT": "Eliotropio Determinato",
+            "ru_RU": "Гелиотроп решительности",
+            "ko_KR": "결의의 머위",
+            "zh_TW": "堅定的雞血石",
+            "zh_CN": "决心鸡血石"
+          },
+          "id": 52633
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52634?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Cognitive Heliotrope",
+            "es_MX": "Heliotropo cognitivo",
+            "pt_BR": "Heliotropo Cognitivo",
+            "de_DE": "Kognitiver Heliotrop",
+            "en_GB": "Cognitive Heliotrope",
+            "es_ES": "Heliotropo cognitivo",
+            "fr_FR": "Héliotrope cognitif",
+            "it_IT": "Eliotropio Cognitivo",
+            "ru_RU": "Когнитивный гелиотроп",
+            "ko_KR": "인지의 머위",
+            "zh_TW": "認知的雞血石",
+            "zh_CN": "感知鸡血石"
+          },
+          "id": 52634
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52635?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Enduring Heliotrope",
+            "es_MX": "Heliotropo duradero",
+            "pt_BR": "Heliotropo Perpétuo",
+            "de_DE": "Ausdauernder Heliotrop",
+            "en_GB": "Enduring Heliotrope",
+            "es_ES": "Heliotropo imperecedero",
+            "fr_FR": "Héliotrope endurant",
+            "it_IT": "Eliotropio Resistente",
+            "ru_RU": "Гелиотроп стойкости",
+            "ko_KR": "인내하는 머위",
+            "zh_TW": "耐久的雞血石",
+            "zh_CN": "坚韧鸡血石"
+          },
+          "id": 52635
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52636?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Signet",
+            "es_MX": "Arganeo de Competidor thalassiano",
+            "pt_BR": "Sinete do Competidor Talassiano",
+            "de_DE": "Siegelring des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Signet",
+            "es_ES": "Sello de competidor thalassiano",
+            "fr_FR": "Chevalière de compétition thalassienne",
+            "it_IT": "Anello con Sigillo del Concorrente Thalassiano",
+            "ru_RU": "Печатка талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 인장 반지",
+            "zh_TW": "薩拉斯競技者璽戒",
+            "zh_CN": "萨拉斯竞争者的玺戒"
+          },
+          "id": 52636
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52637?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Competitor's Amulet",
+            "es_MX": "Amuleto de Competidor thalassiano",
+            "pt_BR": "Amuleto do Competidor Talassiano",
+            "de_DE": "Amulett des thalassischen Wettkämpfers",
+            "en_GB": "Thalassian Competitor's Amulet",
+            "es_ES": "Amuleto de competidor thalassiano",
+            "fr_FR": "Amulette de compétition thalassienne",
+            "it_IT": "Amuleto del Concorrente Thalassiano",
+            "ru_RU": "Амулет талассийского бойца",
+            "ko_KR": "탈라시안 경쟁자의 아뮬렛",
+            "zh_TW": "薩拉斯競技者護符",
+            "zh_CN": "萨拉斯竞争者的护符"
+          },
+          "id": 52637
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Crushing & Prospecting",
+        "es_MX": "Demolición y prospección",
+        "pt_BR": "Triturar e Prospectar",
+        "de_DE": "Zermahlen und Sondieren",
+        "en_GB": "Crushing & Prospecting",
+        "es_ES": "Trituración y prospección",
+        "fr_FR": "Broyage et prospection",
+        "it_IT": "Frantumazione e Prospezione",
+        "ru_RU": "Измельчение и просеивание",
+        "ko_KR": "분쇄 및 보석 추출",
+        "zh_TW": "碾碎與勘探",
+        "zh_CN": "碾碎与选矿"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52724?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Midnight Prospecting",
+            "es_MX": "Prospección de Midnight",
+            "pt_BR": "Prospecção de Midnight",
+            "de_DE": "Sondieren von Midnight",
+            "en_GB": "Midnight Prospecting",
+            "es_ES": "Prospección de Midnight",
+            "fr_FR": "Prospection de minuit",
+            "it_IT": "Prospezione di Midnight",
+            "ru_RU": "Полуночное просеивание",
+            "ko_KR": "한밤 보석 추출",
+            "zh_TW": "至暗之夜勘探",
+            "zh_CN": "至暗之夜选矿"
+          },
+          "id": 52724
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52725?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Midnight Crushing",
+            "es_MX": "Pulverización de Midnight",
+            "pt_BR": "Trituramento de Midnight",
+            "de_DE": "Zermahlen von Midnight",
+            "en_GB": "Midnight Crushing",
+            "es_ES": "Trituración de Midnight",
+            "fr_FR": "Broyage de minuit",
+            "it_IT": "Frantumazione di Midnight",
+            "ru_RU": "Полуночное измельчение",
+            "ko_KR": "한밤 분쇄",
+            "zh_TW": "至暗之夜磨碎",
+            "zh_CN": "至暗之夜研磨"
+          },
+          "id": 52725
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/59081?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Refine Crystalline Glass |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "es_MX": "Refinar vidrio cristalino |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "pt_BR": "Refinar Vidro Cristalino |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "de_DE": "Kristallglas |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a aufbereiten",
+            "en_GB": "Refine Crystalline Glass |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "es_ES": "Refinar vidrio cristalino |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "fr_FR": "Raffinage de verre cristallin |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "it_IT": "Raffinamento Vetro Cristallino |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "ru_RU": "Обработка кристаллического стекла |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "ko_KR": "결정 유리 |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a 가공",
+            "zh_TW": "精煉晶化玻璃|A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "zh_CN": "提炼结晶玻璃|A:Professions-ChatIcon-Quality-12-Tier2:20:20|a"
+          },
+          "id": 59081
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/59082?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Refine Dusk-Shrouded Stone |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "es_MX": "Refinar piedra ocasovelada |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "pt_BR": "Refinar Pedra Crepusculada |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "de_DE": "Dämmerschleierstein |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a aufbereiten",
+            "en_GB": "Refine Dusk-Shrouded Stone |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "es_ES": "Refinar piedra velocrepúsculo |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "fr_FR": "Raffinage de pierre voile-de-brune |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "it_IT": "Raffinamento Pietra Ammantata di Vespro |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "ru_RU": "Обработка затененного камня |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "ko_KR": "어스름장막 돌 |A:Professions-ChatIcon-Quality-12-Tier2:20:20|a 가공",
+            "zh_TW": "精煉暮罩石|A:Professions-ChatIcon-Quality-12-Tier2:20:20|a",
+            "zh_CN": "提炼暮胧石|A:Professions-ChatIcon-Quality-12-Tier2:20:20|a"
+          },
+          "id": 59082
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "House Decor",
+        "es_MX": "Decoración de casa",
+        "pt_BR": "Decoração de Casa",
+        "de_DE": "Hausdekoration",
+        "en_GB": "House Decor",
+        "es_ES": "Adornos de hogar",
+        "fr_FR": "Élément de décoration",
+        "it_IT": "Decorazioni per la Casa",
+        "ru_RU": "Декор для дома",
+        "ko_KR": "하우징 장식",
+        "zh_TW": "房屋裝飾",
+        "zh_CN": "住宅装饰"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54248?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Bejeweled Sin'dorei Lyre",
+            "es_MX": "Lira sin'dorei enjoyada",
+            "pt_BR": "Lira Sin'dorei Adornada com Joias",
+            "de_DE": "Juwelenbesetzte Lyra der Sin'dorei",
+            "en_GB": "Bejeweled Sin'dorei Lyre",
+            "es_ES": "Lira sin'dorei enjoyada",
+            "fr_FR": "Lyre sin’dorei ornée de joyaux",
+            "it_IT": "Lira dei Sin'dorei Ingioiellata",
+            "ru_RU": "Инкрустированная син'дорайская лира",
+            "ko_KR": "보석 장식 신도레이 수금",
+            "zh_TW": "珠寶綴飾辛多雷七弦琴",
+            "zh_CN": "宝石辛多雷七弦琴"
+          },
+          "id": 54248
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54249?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Brilliant Phoenix Harp",
+            "es_MX": "Arpa de fénix brillante",
+            "pt_BR": "Harpa Brilhante de Águia Fênix",
+            "de_DE": "Glänzende Phönixharfe",
+            "en_GB": "Brilliant Phoenix Harp",
+            "es_ES": "Arpa de fénix brillante",
+            "fr_FR": "Harpe de phénix brillante",
+            "it_IT": "Arpa a Fenice Sfavillante",
+            "ru_RU": "Сверкающая арфа феникса",
+            "ko_KR": "찬란한 불사조 하프",
+            "zh_TW": "亮麗鳳凰豎琴",
+            "zh_CN": "璀璨凤凰竖琴"
+          },
+          "id": 54249
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54250?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Tenebrous Ren'dorei Armillary",
+            "es_MX": "Armilar ren'dorei tenebrosa",
+            "pt_BR": "Armilaria Ren'dorei Tenebrosa",
+            "de_DE": "Schattenhafte Amillarsphäre der Ren'dorei",
+            "en_GB": "Tenebrous Ren'dorei Armillary",
+            "es_ES": "Armilla ren'dorei tenebrosa",
+            "fr_FR": "Sphère armillaire ren’dorei ténébreuse",
+            "it_IT": "Armilla dei Ren'dorei Tenebrosa",
+            "ru_RU": "Сумрачная рен'дорайская армиллярная сфера",
+            "ko_KR": "암영 렌도레이 팔찌",
+            "zh_TW": "陰暗刃多雷圓環",
+            "zh_CN": "晦暗朗多雷浑天仪"
+          },
+          "id": 54250
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54251?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Replica Haranir Mural",
+            "es_MX": "Réplica de mural haranir",
+            "pt_BR": "Réplica de Mural Haranir",
+            "de_DE": "Nachbildung: Wandbild der Haranir",
+            "en_GB": "Replica Haranir Mural",
+            "es_ES": "Réplica de mural haranir",
+            "fr_FR": "Réplique de fresque haranir",
+            "it_IT": "Replica del Murale degli Haranir",
+            "ru_RU": "Копия харанирской фрески",
+            "ko_KR": "하라니르 벽화 복제품",
+            "zh_TW": "哈拉尼爾壁畫複製品",
+            "zh_CN": "哈籁尼尔壁画复制品"
+          },
+          "id": 54251
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54252?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Resplendent Highborne Statue",
+            "es_MX": "Estatua altonata resplandeciente",
+            "pt_BR": "Estátua Altaneira Resplandecente",
+            "de_DE": "Funkelnde Hochgeborenenstatue",
+            "en_GB": "Resplendent Highborne Statue",
+            "es_ES": "Estatua de los Altonato esplendoroso",
+            "fr_FR": "Statue bien-née resplendissante",
+            "it_IT": "Statua degli Alti Nobili Risplendente",
+            "ru_RU": "Великолепная статуя высокорожденных",
+            "ko_KR": "휘황찬란한 명가 조각상",
+            "zh_TW": "璀璨精靈貴族雕像",
+            "zh_CN": "耀辉上层精灵雕像"
+          },
+          "id": 54252
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54253?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Shining Sin'dorei Hourglass",
+            "es_MX": "Reloj de arena sin'dorei brillante",
+            "pt_BR": "Ampulheta Sin'dorei Rutilante",
+            "de_DE": "Leuchtendes Stundenglas der Sin'dorei",
+            "en_GB": "Shining Sin'dorei Hourglass",
+            "es_ES": "Reloj de arena sin'dorei brillante",
+            "fr_FR": "Sablier sin’dorei brillant",
+            "it_IT": "Clessidra dei Sin'dorei Lucente",
+            "ru_RU": "Сияющие син'дорайские песочные часы",
+            "ko_KR": "빛나는 신도레이 모래시계",
+            "zh_TW": "閃耀辛多雷沙漏",
+            "zh_CN": "闪亮辛多雷沙漏"
+          },
+          "id": 54253
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58611?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Opalescent Amani Peridot",
+            "es_MX": "Peridoto amani opalescente",
+            "pt_BR": "Peridoto Amani Opalescente",
+            "de_DE": "Schillernder Amaniperidot",
+            "en_GB": "Opalescent Amani Peridot",
+            "es_ES": "Peridoto Amani opalescente",
+            "fr_FR": "Olivine amani opalescente",
+            "it_IT": "Olivina degli Amani Opalescente",
+            "ru_RU": "Опаловый аманийский хризолит",
+            "ko_KR": "오팔색 아마니 감람석",
+            "zh_TW": "乳白阿曼尼橄欖石",
+            "zh_CN": "乳光阿曼尼榄石"
+          },
+          "id": 58611
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58612?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Piercing Amani Lapis",
+            "es_MX": "Lapislázuli amani penetrante",
+            "pt_BR": "Lápis Amani Perfurante",
+            "de_DE": "Durchdringender Amanilapis",
+            "en_GB": "Piercing Amani Lapis",
+            "es_ES": "Lapislázuli Amani penetrante",
+            "fr_FR": "Lapis amani perçant",
+            "it_IT": "Lapislazzuli degli Amani Penetrante",
+            "ru_RU": "Пронзительный аманийский лазурит",
+            "ko_KR": "꿰뚫는 아마니 청금석",
+            "zh_TW": "穿透阿曼尼青金石",
+            "zh_CN": "穿刺阿曼尼青金石"
+          },
+          "id": 58612
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58613?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Roaring Amani Garnet",
+            "es_MX": "Granate amani furioso",
+            "pt_BR": "Granada Amani Urrante",
+            "de_DE": "Lodernder Amanigranat",
+            "en_GB": "Roaring Amani Garnet",
+            "es_ES": "Granate Amani rugidor",
+            "fr_FR": "Grenat amani grondant",
+            "it_IT": "Granato degli Amani Ruggente",
+            "ru_RU": "Ревущий аманийский гранат",
+            "ko_KR": "포효하는 아마니 석류석",
+            "zh_TW": "咆哮阿曼尼石榴石",
+            "zh_CN": "咆哮阿曼尼榴石"
+          },
+          "id": 58613
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix I - Terms",
+        "es_MX": "Apéndice I - Términos",
+        "pt_BR": "Apêndice I - Termos",
+        "de_DE": "Anhang I - Bestimmungen",
+        "en_GB": "Appendix I - Terms",
+        "es_ES": "Apéndice I - Términos",
+        "fr_FR": "Appendice I – termes",
+        "it_IT": "Appendice I - Termini",
+        "ru_RU": "Приложение I – условия",
+        "ko_KR": "부록 I - 조건",
+        "zh_TW": "附錄一 - 條件",
+        "zh_CN": "附录 I - 术语"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56650?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quality",
+            "es_MX": "Calidad",
+            "pt_BR": "Qualidade",
+            "de_DE": "Qualität",
+            "en_GB": "Quality",
+            "es_ES": "Calidad",
+            "fr_FR": "Qualité",
+            "it_IT": "Qualità",
+            "ru_RU": "Качество",
+            "ko_KR": "등급",
+            "zh_TW": "品級",
+            "zh_CN": "品质"
+          },
+          "id": 56650
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56651?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sparks",
+            "es_MX": "Chispas",
+            "pt_BR": "Centelhas",
+            "de_DE": "Funken",
+            "en_GB": "Sparks",
+            "es_ES": "Chispas",
+            "fr_FR": "Étincelles",
+            "it_IT": "Scintille",
+            "ru_RU": "Искры",
+            "ko_KR": "불꽃",
+            "zh_TW": "火花",
+            "zh_CN": "火花"
+          },
+          "id": 56651
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56652?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Artisan Jewelcrafter's Moxie",
+            "es_MX": "Energizante de artesano joyero",
+            "pt_BR": "Marra do Joalheiro Artífice",
+            "de_DE": "Tatkraft des Juwelierfachmanns",
+            "en_GB": "Artisan Jewelcrafter's Moxie",
+            "es_ES": "Arrojo de joyero artesano",
+            "fr_FR": "Aplomb d’artisanat en joaillerie",
+            "it_IT": "Grinta da Orefice Artigianale",
+            "ru_RU": "Пыл искусного ювелира",
+            "ko_KR": "장인 보석세공인의 기개",
+            "zh_TW": "專家級珠寶設計師的膽量",
+            "zh_CN": "匠人的珠宝匠之魄"
+          },
+          "id": 56652
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56653?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Concentration",
+            "es_MX": "Concentración",
+            "pt_BR": "Concentração",
+            "de_DE": "Konzentration",
+            "en_GB": "Concentration",
+            "es_ES": "Concentración",
+            "fr_FR": "Concentration",
+            "it_IT": "Concentrazione",
+            "ru_RU": "Концентрация",
+            "ko_KR": "집중력",
+            "zh_TW": "專注",
+            "zh_CN": "专注"
+          },
+          "id": 56653
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56654?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Knowledge",
+            "es_MX": "Conocimiento",
+            "pt_BR": "Conhecimento",
+            "de_DE": "Wissen",
+            "en_GB": "Knowledge",
+            "es_ES": "Conocimiento",
+            "fr_FR": "Connaissance",
+            "it_IT": "Conoscenza",
+            "ru_RU": "Знание",
+            "ko_KR": "지식",
+            "zh_TW": "知識",
+            "zh_CN": "知识"
+          },
+          "id": 56654
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix II - Stats",
+        "es_MX": "Apéndice II - Estadísticas",
+        "pt_BR": "Apêndice II - Atributos",
+        "de_DE": "Anhang II - Werte",
+        "en_GB": "Appendix II - Stats",
+        "es_ES": "Apéndice II - Estadísticas",
+        "fr_FR": "Appendice II – statistiques",
+        "it_IT": "Appendice II - Statistiche",
+        "ru_RU": "Приложение II – характеристики",
+        "ko_KR": "부록 II - 능력치",
+        "zh_TW": "附錄二 - 屬性",
+        "zh_CN": "附录 II - 属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56655?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Skill",
+            "es_MX": "Habilidad",
+            "pt_BR": "Perícia",
+            "de_DE": "Fertigkeit",
+            "en_GB": "Skill",
+            "es_ES": "Habilidad",
+            "fr_FR": "Compétence",
+            "it_IT": "Competenza",
+            "ru_RU": "Навык",
+            "ko_KR": "기술",
+            "zh_TW": "技能",
+            "zh_CN": "技能"
+          },
+          "id": 56655
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56656?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Multicraft",
+            "es_MX": "Fabricación múltiple",
+            "pt_BR": "Multicriação",
+            "de_DE": "Mehrfachherstellung",
+            "en_GB": "Multicraft",
+            "es_ES": "Multifabricación",
+            "fr_FR": "Fabrication multiple",
+            "it_IT": "Creazione Multipla",
+            "ru_RU": "Перепроизводство",
+            "ko_KR": "복수 제작",
+            "zh_TW": "複數製造",
+            "zh_CN": "产能"
+          },
+          "id": 56656
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56657?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Resourcefulness",
+            "es_MX": "Inventiva",
+            "pt_BR": "Desenvoltura",
+            "de_DE": "Einfallsreichtum",
+            "en_GB": "Resourcefulness",
+            "es_ES": "Ingenio",
+            "fr_FR": "Ingéniosité",
+            "it_IT": "Parsimonia",
+            "ru_RU": "Находчивость",
+            "ko_KR": "지혜",
+            "zh_TW": "精明",
+            "zh_CN": "充裕"
+          },
+          "id": 56657
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56658?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Ingenuity",
+            "es_MX": "Ingenio",
+            "pt_BR": "Engenhosidade",
+            "de_DE": "Genialität",
+            "en_GB": "Ingenuity",
+            "es_ES": "Inventiva",
+            "fr_FR": "Inventivité",
+            "it_IT": "Ingegno",
+            "ru_RU": "Изобретательность",
+            "ko_KR": "독창성",
+            "zh_TW": "精妙",
+            "zh_CN": "奇思"
+          },
+          "id": 56658
+        }
+      ]
+    }
+  ]
+}

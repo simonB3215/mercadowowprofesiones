@@ -194,7 +194,13 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   }
   const outItem = outId !== null ? items.get(outId) : undefined;
   if (outId !== null && (!outItem || outItem.fetch_error)) notes.push('Faltan los detalles del objeto resultante en el catálogo.');
-  const sell = sellability(outItem, outId, snap);
+  // Verificado con muestras reales (docs/muestras): en Dragonflight y posteriores la API de Blizzard
+  // omite crafted_item y crafted_quantity. Eso no significa que la receta sea un servicio.
+  const outputUnpublished = outId === null && r.qty_min === null && QUALITY_SYSTEM_EXPANSIONS.has(r.expansion);
+  const sell = outputUnpublished
+    ? { channel: 'desconocido' as const, reason: `La API de Blizzard no publica el objeto resultante de las recetas de ${r.expansion}.` }
+    : sellability(outItem, outId, snap);
+  if (outputUnpublished) blockers.push(`La API de Blizzard no indica qué objeto produce esta receta de ${r.expansion} ni cuántas unidades; no se puede calcular el precio de venta.`);
 
   // Rendimiento
   let unitsPerRun: number | null = r.qty_min !== null && r.qty_min === r.qty_max ? r.qty_min : null;
@@ -249,8 +255,11 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
 
   let additional = Q.zero;
   if (ov.additionalCost) { additional = g(ov.additionalCost) ?? Q.zero; manual = true; }
-  const cost = yieldKnown ? computeCost(lines, unitsPerRun!, additional, runs) : computeCost(lines, 1, additional, runs);
-  if (cost.errors.length) blockers.push(...cost.errors);
+  const rawCost = yieldKnown ? computeCost(lines, unitsPerRun!, additional, runs) : computeCost(lines, 1, additional, runs);
+  if (rawCost.errors.length) blockers.push(...rawCost.errors);
+  // Lista de ingredientes ausente o con cantidades desconocidas: el costo es desconocido, nunca 0 ni parcial.
+  const reagentsComplete = rlist.length > 0 && !r.fetch_error && reagents.every((x) => x.quantity !== null);
+  const cost = reagentsComplete ? rawCost : { ...rawCost, materials: null, batch: null, unit: null, outOfPocket: null };
 
   // Precio de venta
   if (ov.sellPrice !== undefined && ov.sellPrice !== '') manual = true;

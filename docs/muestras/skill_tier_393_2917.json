@@ -1,0 +1,632 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2917?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2917,
+  "name": {
+    "en_US": "Midnight Skinning",
+    "es_MX": "Desuello de Midnight",
+    "pt_BR": "Esfolamento de Midnight",
+    "de_DE": "Kürschnerei von Midnight",
+    "en_GB": "Midnight Skinning",
+    "es_ES": "Desuello de Midnight",
+    "fr_FR": "Dépeçage de Midnight",
+    "it_IT": "Scuoiatura di Midnight",
+    "ru_RU": "Cнятие шкур Midnight",
+    "ko_KR": "한밤 무두질",
+    "zh_TW": "至暗之夜剝皮",
+    "zh_CN": "至暗之夜剥皮"
+  },
+  "minimum_skill_level": 1,
+  "maximum_skill_level": 100,
+  "categories": [
+    {
+      "name": {
+        "en_US": "Skinning Details",
+        "es_MX": "Detalles de desuello",
+        "pt_BR": "Detalhes do Esfolamento",
+        "de_DE": "Kürschnereidetails",
+        "en_GB": "Skinning Details",
+        "es_ES": "Detalles sobre el desuello",
+        "fr_FR": "Dépeçage – détails",
+        "it_IT": "Dettagli di Scuoiatura",
+        "ru_RU": "Тонкости снятия шкур",
+        "ko_KR": "무두질 세부 정보",
+        "zh_TW": "剝皮詳情",
+        "zh_CN": "剥皮细节"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52022?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void-Tempered Scales",
+            "es_MX": "Escamas templadas por el Vacío",
+            "pt_BR": "Escamas Revenidas pelo Caos",
+            "de_DE": "Leerengehärtete Schuppen",
+            "en_GB": "Void-Tempered Scales",
+            "es_ES": "Escamas templadas por el Vacío",
+            "fr_FR": "Écailles altérées par le Vide",
+            "it_IT": "Scaglie Temprate dal Vuoto",
+            "ru_RU": "Закаленная Бездной чешуя",
+            "ko_KR": "공허로 단련된 비늘",
+            "zh_TW": "虛無淬鍊鱗片",
+            "zh_CN": "虚空淬炼鳞片"
+          },
+          "id": 52022
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52023?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void-Tempered Leather",
+            "es_MX": "Cuero templado por el Vacío",
+            "pt_BR": "Couro Revenido pelo Caos",
+            "de_DE": "Leerengehärtetes Leder",
+            "en_GB": "Void-Tempered Leather",
+            "es_ES": "Cuero templado por el Vacío",
+            "fr_FR": "Cuir tanné par le Vide",
+            "it_IT": "Cuoio Temprato dal Vuoto",
+            "ru_RU": "Закаленная Бездной кожа",
+            "ko_KR": "공허로 단련된 가죽",
+            "zh_TW": "虛無淬鍊皮革",
+            "zh_CN": "虚空淬炼皮革"
+          },
+          "id": 52023
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52024?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void-Tempered Hide",
+            "es_MX": "Pellejo templado por el Vacío",
+            "pt_BR": "Pelego Revenido pelo Caos",
+            "de_DE": "Leerengehärteter Balg",
+            "en_GB": "Void-Tempered Hide",
+            "es_ES": "Pellejo templado por el Vacío",
+            "fr_FR": "Peau tannée par le Vide",
+            "it_IT": "Pelle Temprata dal Vuoto",
+            "ru_RU": "Закаленная Бездной шкура",
+            "ko_KR": "공허로 단련된 생가죽",
+            "zh_TW": "虛無淬鍊獸皮",
+            "zh_CN": "虚空淬炼皮毛"
+          },
+          "id": 52024
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52025?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void-Tempered Plating",
+            "es_MX": "Blindaje templado por el Vacío",
+            "pt_BR": "Blindagem Revenida pelo Caos",
+            "de_DE": "Leerengehärtete Panzerung",
+            "en_GB": "Void-Tempered Plating",
+            "es_ES": "Blindaje templado por el Vacío",
+            "fr_FR": "Plaque trempée par le Vide",
+            "it_IT": "Rivestimento Temprato dal Vuoto",
+            "ru_RU": "Закаленная Бездной пластина",
+            "ko_KR": "공허로 단련된 장갑판",
+            "zh_TW": "虛無淬鍊裝甲",
+            "zh_CN": "虚空淬炼甲片"
+          },
+          "id": 52025
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52026?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Fine Void-Tempered Hide",
+            "es_MX": "Cuero templado por el Vacío refinado",
+            "pt_BR": "Pelego Revenido pelo Caos Refinado",
+            "de_DE": "Edler leerengehärteter Balg",
+            "en_GB": "Fine Void-Tempered Hide",
+            "es_ES": "Pellejo delicado templado por el Vacío",
+            "fr_FR": "Peau tannée par le Vide raffinée",
+            "it_IT": "Pelle Temprata dal Vuoto Fine",
+            "ru_RU": "Отличная закаленная Бездной шкура",
+            "ko_KR": "고급 공허로 단련된 생가죽",
+            "zh_TW": "上好虛無淬鍊獸皮",
+            "zh_CN": "精良虚空淬炼皮毛"
+          },
+          "id": 52026
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Majestic Beast Lures",
+        "es_MX": "Cebos de bestia majestuosa",
+        "pt_BR": "Iscas de Feras Majestosas",
+        "de_DE": "Köder für majestätisches Wildtier",
+        "en_GB": "Majestic Beast Lures",
+        "es_ES": "Cebos de bestia majestuosa",
+        "fr_FR": "Leurres à bêtes majestueuses",
+        "it_IT": "Esca per Bestie Maestosa",
+        "ru_RU": "Приманки на величественных зверей",
+        "ko_KR": "위엄 넘치는 야수 미끼",
+        "zh_TW": "珍獸誘餌",
+        "zh_CN": "威风野兽诱饵"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52027?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Majestic Eversong Lure",
+            "es_MX": "Cebo majestuoso de Canción Eterna",
+            "pt_BR": "Isca de Canto Eterno Majestosa",
+            "de_DE": "Majestätischer Immersangköder",
+            "en_GB": "Majestic Eversong Lure",
+            "es_ES": "Cebo de Canción Eterna majestuoso",
+            "fr_FR": "Appât majestueux des Chants éternels",
+            "it_IT": "Esca Maestosa di Cantoeterno",
+            "ru_RU": "Величественная приманка Вечной Песни",
+            "ko_KR": "위엄 넘치는 영원노래 미끼",
+            "zh_TW": "永歌珍獸誘餌",
+            "zh_CN": "威风永歌诱饵"
+          },
+          "id": 52027
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52028?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Majestic Zul'Aman Lure",
+            "es_MX": "Cebo majestuoso de Zul'Aman",
+            "pt_BR": "Isca de Zul'Aman Majestosa",
+            "de_DE": "Majestätischer Zul'Amanköder",
+            "en_GB": "Majestic Zul'Aman Lure",
+            "es_ES": "Cebo de Zul'Aman majestuoso",
+            "fr_FR": "Appât majestueux de Zul’Aman",
+            "it_IT": "Esca Maestosa di Zul'aman",
+            "ru_RU": "Величественная зул'аманская приманка",
+            "ko_KR": "위엄 넘치는 줄아만 미끼",
+            "zh_TW": "祖阿曼珍獸誘餌",
+            "zh_CN": "威风祖阿曼诱饵"
+          },
+          "id": 52028
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52029?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Majestic Harandar Lure",
+            "es_MX": "Cebo majestuoso de Harandar",
+            "pt_BR": "Isca de Harandar Majestosa",
+            "de_DE": "Majestätischer Harandarköder",
+            "en_GB": "Majestic Harandar Lure",
+            "es_ES": "Cebo de Harandar majestuoso",
+            "fr_FR": "Appât majestueux d’Harandar",
+            "it_IT": "Esca Maestosa di Harandar",
+            "ru_RU": "Величественная харандарская приманка",
+            "ko_KR": "위엄 넘치는 하란다르 미끼",
+            "zh_TW": "哈朗達珍獸誘餌",
+            "zh_CN": "威风哈籁恩达尔诱饵"
+          },
+          "id": 52029
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52030?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Majestic Voidstorm Lure",
+            "es_MX": "Cebo majestuoso de Tormenta del Vacío",
+            "pt_BR": "Isca de Tempestade do Caos Majestosa",
+            "de_DE": "Majestätischer Leerensturmköder",
+            "en_GB": "Majestic Voidstorm Lure",
+            "es_ES": "Cebo de la Tormenta del Vacío majestuoso",
+            "fr_FR": "Appât majestueux de la tempête du Vide",
+            "it_IT": "Esca Maestosa della Tempesta del Vuoto",
+            "ru_RU": "Величественная приманка Бури Бездны",
+            "ko_KR": "위엄 넘치는 공허폭풍 미끼",
+            "zh_TW": "虛無風暴珍獸誘餌",
+            "zh_CN": "威风虚影风暴诱饵"
+          },
+          "id": 52030
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52031?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Grand Beast Lure",
+            "es_MX": "Cebo de gran bestia",
+            "pt_BR": "Isca de Fera Grandiosa",
+            "de_DE": "Großer Wildtierköder",
+            "en_GB": "Grand Beast Lure",
+            "es_ES": "Cebo de gran bestia",
+            "fr_FR": "Appât de bête grandiose",
+            "it_IT": "Esca per Bestie Superba",
+            "ru_RU": "Приманка на великого зверя",
+            "ko_KR": "위대한 야수 미끼",
+            "zh_TW": "巨獸誘餌",
+            "zh_CN": "究极兽饵"
+          },
+          "id": 52031
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Diffusers",
+        "es_MX": "Difusores",
+        "pt_BR": "Difusores",
+        "de_DE": "Diffusoren",
+        "en_GB": "Diffusers",
+        "es_ES": "Difusores",
+        "fr_FR": "Diffuseurs",
+        "it_IT": "Diffusori",
+        "ru_RU": "Распылители",
+        "ko_KR": "확산기",
+        "zh_TW": "擴散器",
+        "zh_CN": "扩散器"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52032?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Lightbloom Diffuser",
+            "es_MX": "Difusor de floraluz",
+            "pt_BR": "Difusor de Floraluz",
+            "de_DE": "Lichtblütendiffusor",
+            "en_GB": "Lightbloom Diffuser",
+            "es_ES": "Difusor de flor de Luz",
+            "fr_FR": "Diffuseur de luméclat",
+            "it_IT": "Diffusore della Fioritura di Luce",
+            "ru_RU": "Светоцветный распылитель",
+            "ko_KR": "빛만개 확산기",
+            "zh_TW": "光綻擴散器",
+            "zh_CN": "光绽扩散器"
+          },
+          "id": 52032
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52033?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Primal Diffuser",
+            "es_MX": "Difusor primigenio",
+            "pt_BR": "Difusor Primevo",
+            "de_DE": "Urtümlicher Diffusor",
+            "en_GB": "Primal Diffuser",
+            "es_ES": "Difusor primigenio",
+            "fr_FR": "Diffuseur primordial",
+            "it_IT": "Diffusore Primordiale",
+            "ru_RU": "Изначальный распылитель",
+            "ko_KR": "원시 확산기",
+            "zh_TW": "原始擴散器",
+            "zh_CN": "原始扩散器"
+          },
+          "id": 52033
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52034?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Wild Diffuser",
+            "es_MX": "Difusor salvaje",
+            "pt_BR": "Difusor Selvagem",
+            "de_DE": "Wilder Diffusor",
+            "en_GB": "Wild Diffuser",
+            "es_ES": "Difusor salvaje",
+            "fr_FR": "Diffuseur sauvage",
+            "it_IT": "Diffusore Selvaggio",
+            "ru_RU": "Дикий распылитель",
+            "ko_KR": "야생 확산기",
+            "zh_TW": "狂野擴散器",
+            "zh_CN": "狂野扩散器"
+          },
+          "id": 52034
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52035?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void Diffuser",
+            "es_MX": "Difusor de Vacío",
+            "pt_BR": "Difusor do Caos",
+            "de_DE": "Leerendiffusor",
+            "en_GB": "Void Diffuser",
+            "es_ES": "Difusor de Vacío",
+            "fr_FR": "Diffuseur du Vide",
+            "it_IT": "Diffusore del Vuoto",
+            "ru_RU": "Распылитель Бездны",
+            "ko_KR": "공허 확산기",
+            "zh_TW": "虛無擴散器",
+            "zh_CN": "虚空扩散器"
+          },
+          "id": 52035
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Tracking",
+        "es_MX": "Rastreo",
+        "pt_BR": "Rastreamento",
+        "de_DE": "Aufspüren",
+        "en_GB": "Tracking",
+        "es_ES": "Rastrear",
+        "fr_FR": "Pistage",
+        "it_IT": "Tracciamento",
+        "ru_RU": "Отслеживание",
+        "ko_KR": "추적",
+        "zh_TW": "追蹤",
+        "zh_CN": "追踪"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54586?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Find High-Value Beasts",
+            "es_MX": "Buscar bestias de gran valor",
+            "pt_BR": "Encontre Feras de Alto Valor",
+            "de_DE": "Hochwertige Wildtiere suchen",
+            "en_GB": "Find High-Value Beasts",
+            "es_ES": "Buscar bestias de gran valor",
+            "fr_FR": "Trouver des bêtes précieuses",
+            "it_IT": "Individua Bestie di Alto Valore",
+            "ru_RU": "Поиск ценных зверей",
+            "ko_KR": "고가치 야수 찾기",
+            "zh_TW": "尋找高價值野獸",
+            "zh_CN": "寻找珍稀野兽"
+          },
+          "id": 54586
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/57126?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Carve Meat",
+            "es_MX": "Cortar carne",
+            "pt_BR": "Trinchar Carne",
+            "de_DE": "Fleisch schneiden",
+            "en_GB": "Carve Meat",
+            "es_ES": "Trinchar carne",
+            "fr_FR": "Découper la viande",
+            "it_IT": "Strappacarne",
+            "ru_RU": "Отрезание мяса",
+            "ko_KR": "고기 베어내기",
+            "zh_TW": "切肉",
+            "zh_CN": "割肉"
+          },
+          "id": 57126
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix I - Terms",
+        "es_MX": "Apéndice I - Términos",
+        "pt_BR": "Apêndice I - Termos",
+        "de_DE": "Anhang I - Bestimmungen",
+        "en_GB": "Appendix I - Terms",
+        "es_ES": "Apéndice I - Términos",
+        "fr_FR": "Appendice I – termes",
+        "it_IT": "Appendice I - Termini",
+        "ru_RU": "Приложение I – условия",
+        "ko_KR": "부록 I - 조건",
+        "zh_TW": "附錄一 - 條件",
+        "zh_CN": "附录 I - 术语"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56584?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quality",
+            "es_MX": "Calidad",
+            "pt_BR": "Qualidade",
+            "de_DE": "Qualität",
+            "en_GB": "Quality",
+            "es_ES": "Calidad",
+            "fr_FR": "Qualité",
+            "it_IT": "Qualità",
+            "ru_RU": "Качество",
+            "ko_KR": "등급",
+            "zh_TW": "品級",
+            "zh_CN": "品质"
+          },
+          "id": 56584
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56585?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Knowledge",
+            "es_MX": "Conocimiento",
+            "pt_BR": "Conhecimento",
+            "de_DE": "Wissen",
+            "en_GB": "Knowledge",
+            "es_ES": "Conocimiento",
+            "fr_FR": "Connaissance",
+            "it_IT": "Conoscenza",
+            "ru_RU": "Знание",
+            "ko_KR": "지식",
+            "zh_TW": "知識",
+            "zh_CN": "知识"
+          },
+          "id": 56585
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56679?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Artisan Skinner's Moxie",
+            "es_MX": "Energizante de artesano desollador",
+            "pt_BR": "Marra do Esfolador Artífice",
+            "de_DE": "Tatkraft des Kürschnereifachmanns",
+            "en_GB": "Artisan Skinner's Moxie",
+            "es_ES": "Arrojo de desollador artesano",
+            "fr_FR": "Aplomb d’artisanat en dépeçage",
+            "it_IT": "Grinta da Scuoiatore Artigianale",
+            "ru_RU": "Пыл искусного шкуродера",
+            "ko_KR": "장인 무두장이의 기개",
+            "zh_TW": "專家級剝皮師的膽量",
+            "zh_CN": "匠人的剥皮师之魄"
+          },
+          "id": 56679
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix III - Stats",
+        "es_MX": "Apéndice III - Estadísticas",
+        "pt_BR": "Apêndice III – Atributos",
+        "de_DE": "Anhang III - Werte",
+        "en_GB": "Appendix III - Stats",
+        "es_ES": "Apéndice III - Estadísticas",
+        "fr_FR": "Appendice III – statistiques",
+        "it_IT": "Appendice III - Statistiche",
+        "ru_RU": "Приложение III – характеристики",
+        "ko_KR": "부록 III - 능력치",
+        "zh_TW": "附錄三 - 屬性",
+        "zh_CN": "附录 III - 属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56586?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Skill",
+            "es_MX": "Habilidad",
+            "pt_BR": "Perícia",
+            "de_DE": "Fertigkeit",
+            "en_GB": "Skill",
+            "es_ES": "Habilidad",
+            "fr_FR": "Compétence",
+            "it_IT": "Competenza",
+            "ru_RU": "Навык",
+            "ko_KR": "기술",
+            "zh_TW": "技能",
+            "zh_CN": "技能"
+          },
+          "id": 56586
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56587?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Finesse",
+            "es_MX": "Delicadeza",
+            "pt_BR": "Finesse",
+            "de_DE": "Finesse",
+            "en_GB": "Finesse",
+            "es_ES": "Sutileza",
+            "fr_FR": "Finesse",
+            "it_IT": "Precisione",
+            "ru_RU": "Точность",
+            "ko_KR": "기교",
+            "zh_TW": "技法",
+            "zh_CN": "精细"
+          },
+          "id": 56587
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56588?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Perception",
+            "es_MX": "Percepción",
+            "pt_BR": "Percepção",
+            "de_DE": "Wahrnehmung",
+            "en_GB": "Perception",
+            "es_ES": "Percepción",
+            "fr_FR": "Perception",
+            "it_IT": "Percezione",
+            "ru_RU": "Внимательность",
+            "ko_KR": "인지력",
+            "zh_TW": "感知",
+            "zh_CN": "感知"
+          },
+          "id": 56588
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56589?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Deftness",
+            "es_MX": "Destreza",
+            "pt_BR": "Destreza",
+            "de_DE": "Gewandtheit",
+            "en_GB": "Deftness",
+            "es_ES": "Destreza",
+            "fr_FR": "Adresse",
+            "it_IT": "Destrezza",
+            "ru_RU": "Сноровка",
+            "ko_KR": "능숙함",
+            "zh_TW": "純熟",
+            "zh_CN": "熟练"
+          },
+          "id": 56589
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix II - Notes",
+        "es_MX": "Apéndice II - Notas",
+        "pt_BR": "Apêndice II - Observações",
+        "de_DE": "Anhang II - Anmerkungen",
+        "en_GB": "Appendix II - Notes",
+        "es_ES": "Apéndice II - Notas",
+        "fr_FR": "Appendice II – notes",
+        "it_IT": "Appendice II - Note",
+        "ru_RU": "Приложение II – примечания",
+        "ko_KR": "부록 II - 기록",
+        "zh_TW": "附錄二 - 說明",
+        "zh_CN": "附录 II - 笔记"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/57127?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "High-Value Beasts",
+            "es_MX": "Bestias valiosas",
+            "pt_BR": "Feras de Alto Valor",
+            "de_DE": "Hochwertige Wildtiere",
+            "en_GB": "High-Value Beasts",
+            "es_ES": "Bestias de gran valor",
+            "fr_FR": "Bêtes précieuses",
+            "it_IT": "Bestie di Alto Valore",
+            "ru_RU": "Ценные звери",
+            "ko_KR": "고가치 야수",
+            "zh_TW": "高價值野獸",
+            "zh_CN": "珍稀野兽"
+          },
+          "id": 57127
+        }
+      ]
+    }
+  ]
+}

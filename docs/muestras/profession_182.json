@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/182?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 182,
+  "name": {
+    "en_US": "Herbalism",
+    "es_MX": "Herboristería",
+    "pt_BR": "Herborismo",
+    "de_DE": "Kräuterkunde",
+    "en_GB": "Herbalism",
+    "es_ES": "Herboristería",
+    "fr_FR": "Herboristerie",
+    "it_IT": "Erbalismo",
+    "ru_RU": "Травничество",
+    "ko_KR": "약초채집",
+    "zh_TW": "草藥學",
+    "zh_CN": "草药学"
+  },
+  "description": {
+    "en_US": "Higher herbalism skill allows you to harvest more difficult herbs around the world.  If you cannot harvest a specific herb, then increase your skill by harvesting easier to gather herbs in lower level areas.",
+    "es_MX": "Con un nivel alto de habilidad en herboristería podrás recolectar hierbas difíciles de encontrar por el mundo. Si no puedes conseguir una hierba en particular, aumenta tu habilidad recolectando hierbas más fáciles de conseguir en áreas de nivel inferior.",
+    "pt_BR": "Um alto nível na perícia herborismo permite coletar plantas mais raras pelo mundo. Se você não puder coletar um tipo específico de planta, deverá aumentar o seu nível de perícia coletando plantas menos raras em áreas de nível mais baixo.",
+    "de_DE": "Eine hohe Kräuterkundefertigkeit ermöglicht es Euch, schwierigere Kräuter zu ernten. Wenn Ihr ein bestimmtes Kraut nicht ernten könnt, steigert Eure Kräuterkundefertigkeit, indem Ihr in niedrigstufigeren Gebieten leichtere Kräuter erntet.",
+    "en_GB": "Higher herbalism skill allows you to harvest more difficult herbs around the world.  If you cannot harvest a specific herb, then increase your skill by harvesting easier to gather herbs in lower level areas.",
+    "es_ES": "Con un nivel alto de habilidad en herboristería podrás recolectar hierbas difíciles de encontrar por el mundo. Si no puedes conseguir una hierba en particular, aumenta tu habilidad recolectando hierbas más fáciles de conseguir en áreas de nivel inferior.",
+    "fr_FR": "Un plus haut score dans la compétence herboristerie vous permet de récolter des herbes plus difficiles. Si vous ne pouvez pas récolter une herbe donnée, augmentez votre score en récoltant des herbes plus accessibles dans des zones de niveau inférieur.",
+    "it_IT": "Una maggiore competenza in Erbalismo permette di raccogliere piante di livello superiore. Se non puoi raccogliere una specifica pianta, aumenta la tua competenza raccogliendo piante in aree di livello più basso.",
+    "ru_RU": "Чем лучше развит этот навык, тем больше различных видов растений вы можете собирать. Если вам не удается собрать какое-либо растение, потренируйтесь на простых травах, растущих в областях более низкого уровня.",
+    "ko_KR": "약초채집 숙련도가 올라갈수록 좀더 희귀한 약초를 채집할 수 있습니다. 특정한 약초을 채집할 수 없다면 그 전 단계의 쉬운 약초를 채집하여 숙련도를 올리십시오.",
+    "zh_TW": "高級的草藥學技能使你可以採集高級的草藥。如果你不能採集某種草藥，請先在較低等級的地區採集低等級草藥，以此提高你的草藥學技能。",
+    "zh_CN": "高级的草药学技能使你可以采集高级的草药。如果你不能采集某种草药，请先在较低等级的地区采集低等级草药，以此提高你的草药学技能。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/182?namespace=static-12.1.5_70077-us"
+    },
+    "id": 182
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2549?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Herbalism / Zandalari Herbalism",
+        "es_MX": "Herboristería kultirana / Herboristería zandalari",
+        "pt_BR": "Herborismo de Kul Tiraz / Herborismo de Zandalar",
+        "de_DE": "Kräuterkunde von Kul Tiras / Kräuterkunde von Zandalar",
+        "en_GB": "Kul Tiran Herbalism / Zandalari Herbalism",
+        "es_ES": "Herboristería de Kul Tiras / Herboristería Zandalari",
+        "fr_FR": "Herboristerie de Kul Tiras / Herboristerie de Zandalar",
+        "it_IT": "Erbalismo di Kul Tiras / Erbalismo di Zandalar",
+        "ru_RU": "Кул-тирасское травничество / Зандаларское травничество",
+        "ko_KR": "쿨 티란 약초채집 / 잔달라 약초채집",
+        "zh_TW": "庫爾提拉斯草藥學 / 贊達拉草藥學",
+        "zh_CN": "库尔提拉斯草药学 / 赞达拉草药学"
+      },
+      "id": 2549
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2550?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Herbalism",
+        "es_MX": "Herboristería de Legion",
+        "pt_BR": "Herborismo de Legion",
+        "de_DE": "Kräuterkunde der Verheerten Inseln",
+        "en_GB": "Legion Herbalism",
+        "es_ES": "Herboristería de Legion",
+        "fr_FR": "Herboristerie de Legion",
+        "it_IT": "Erbalismo di Legion",
+        "ru_RU": "Травничество Legion",
+        "ko_KR": "군단 약초채집",
+        "zh_TW": "軍團草藥學",
+        "zh_CN": "军团草药学"
+      },
+      "id": 2550
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2551?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Herbalism",
+        "es_MX": "Herboristería de Draenor",
+        "pt_BR": "Herborismo de Draenor",
+        "de_DE": "Kräuterkunde von Draenor",
+        "en_GB": "Draenor Herbalism",
+        "es_ES": "Herboristería de Draenor",
+        "fr_FR": "Herboristerie de Draenor",
+        "it_IT": "Erbalismo di Draenor",
+        "ru_RU": "Травничество Дренора",
+        "ko_KR": "드레노어 약초채집",
+        "zh_TW": "德拉諾草藥學",
+        "zh_CN": "德拉诺草药学"
+      },
+      "id": 2551
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2552?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Herbalism",
+        "es_MX": "Herboristería de Pandaria",
+        "pt_BR": "Herborismo de Pandária",
+        "de_DE": "Kräuterkunde von Pandaria",
+        "en_GB": "Pandaria Herbalism",
+        "es_ES": "Herboristería de Pandaria",
+        "fr_FR": "Herboristerie de Pandarie",
+        "it_IT": "Erbalismo di Pandaria",
+        "ru_RU": "Травничество Пандарии",
+        "ko_KR": "판다리아 약초채집",
+        "zh_TW": "潘達利亞草藥學",
+        "zh_CN": "潘达利亚草药学"
+      },
+      "id": 2552
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2553?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Herbalism",
+        "es_MX": "Herboristería de Cataclysm",
+        "pt_BR": "Herborismo de Cataclysm",
+        "de_DE": "Kräuterkunde des Kataklysmus",
+        "en_GB": "Cataclysm Herbalism",
+        "es_ES": "Herboristería de Cataclysm",
+        "fr_FR": "Herboristerie de Cataclysm",
+        "it_IT": "Erbalismo di Cataclysm",
+        "ru_RU": "Травничество времен Катаклизма",
+        "ko_KR": "대격변 약초채집",
+        "zh_TW": "大災變草藥學",
+        "zh_CN": "大地的裂变草药学"
+      },
+      "id": 2553
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2554?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Herbalism",
+        "es_MX": "Herboristería de Rasganorte",
+        "pt_BR": "Herborismo de Nortúndria",
+        "de_DE": "Kräuterkunde von Nordend",
+        "en_GB": "Northrend Herbalism",
+        "es_ES": "Herboristería de Rasganorte",
+        "fr_FR": "Herboristerie du Norfendre",
+        "it_IT": "Erbalismo di Nordania",
+        "ru_RU": "Травничество Нордскола",
+        "ko_KR": "노스렌드 약초채집",
+        "zh_TW": "北裂境草藥學",
+        "zh_CN": "诺森德草药学"
+      },
+      "id": 2554
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2555?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Herbalism",
+        "es_MX": "Herboristería de Terrallende",
+        "pt_BR": "Herborismo de Terralém",
+        "de_DE": "Kräuterkunde der Scherbenwelt",
+        "en_GB": "Outland Herbalism",
+        "es_ES": "Herboristería de Terrallende",
+        "fr_FR": "Herboristerie d’Outreterre",
+        "it_IT": "Erbalismo delle Terre Esterne",
+        "ru_RU": "Травничество Запределья",
+        "ko_KR": "아웃랜드 약초채집",
+        "zh_TW": "外域草藥學",
+        "zh_CN": "外域草药学"
+      },
+      "id": 2555
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2556?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Herbalism",
+        "es_MX": "Herboristería clásica",
+        "pt_BR": "Herborismo do Classic",
+        "de_DE": "Klassische Kräuterkunde",
+        "en_GB": "Classic Herbalism",
+        "es_ES": "Herboristería clásica",
+        "fr_FR": "Herboristerie classique",
+        "it_IT": "Erbalismo Classico",
+        "ru_RU": "Классическое травничество",
+        "ko_KR": "옛 약초채집",
+        "zh_TW": "艾澤拉斯草藥學",
+        "zh_CN": "经典旧世草药学"
+      },
+      "id": 2556
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2760?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Herbalism",
+        "es_MX": "Herboristería de Shadowlands",
+        "pt_BR": "Herborismo de Shadowlands",
+        "de_DE": "Kräuterkunde der Schattenlande",
+        "en_GB": "Shadowlands Herbalism",
+        "es_ES": "Herboristería de Shadowlands",
+        "fr_FR": "Herboristerie d’Ombreterre",
+        "it_IT": "Erbalismo di Shadowlands",
+        "ru_RU": "Травничество Темных Земель",
+        "ko_KR": "어둠땅 약초채집",
+        "zh_TW": "暗影之境草藥學",
+        "zh_CN": "暗影界草药学"
+      },
+      "id": 2760
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2832?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Herbalism",
+        "es_MX": "Herboristería de las Islas Dragón",
+        "pt_BR": "Herborismo das Ilhas do Dragão",
+        "de_DE": "Kräuterkunde der Dracheninseln",
+        "en_GB": "Dragon Isles Herbalism",
+        "es_ES": "Herboristería de las Islas Dragón",
+        "fr_FR": "Herboristerie des îles aux Dragons",
+        "it_IT": "Erbalismo delle Isole dei Draghi",
+        "ru_RU": "Травничество Драконьих островов",
+        "ko_KR": "용의 섬 약초채집",
+        "zh_TW": "巨龍群島草藥學",
+        "zh_CN": "巨龙群岛草药学"
+      },
+      "id": 2832
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2877?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Herbalism",
+        "es_MX": "Herboristería de Khaz Algar",
+        "pt_BR": "Herborismo de Khaz Algar",
+        "de_DE": "Kräuterkunde von Khaz Algar",
+        "en_GB": "Khaz Algar Herbalism",
+        "es_ES": "Herboristería de Khaz Algar",
+        "fr_FR": "Herboristerie de Khaz Algar",
+        "it_IT": "Erbalismo di Khaz Algar",
+        "ru_RU": "Травничество Каз Алгара",
+        "ko_KR": "카즈 알가르 약초채집",
+        "zh_TW": "卡茲阿爾加草藥學",
+        "zh_CN": "卡兹阿加草药学"
+      },
+      "id": 2877
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182/skill-tier/2912?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Herbalism",
+        "es_MX": "Herboristería de Midnight",
+        "pt_BR": "Herborismo de Midnight",
+        "de_DE": "Kräuterkunde von Midnight",
+        "en_GB": "Midnight Herbalism",
+        "es_ES": "Herboristería de Midnight",
+        "fr_FR": "Herboristerie de Midnight",
+        "it_IT": "Erbalismo di Midnight",
+        "ru_RU": "Травничество Midnight",
+        "ko_KR": "한밤 약초채집",
+        "zh_TW": "至暗之夜草藥學",
+        "zh_CN": "至暗之夜草药学"
+      },
+      "id": 2912
+    }
+  ]
+}

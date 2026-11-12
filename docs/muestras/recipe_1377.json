@@ -1,0 +1,122 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/1377?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 1377,
+  "name": {
+    "en_US": "Minor Healing Potion",
+    "es_MX": "Poción de sanación menor",
+    "pt_BR": "Poção Menor de Cura",
+    "de_DE": "Schwacher Heiltrank",
+    "en_GB": "Minor Healing Potion",
+    "es_ES": "Poción de sanación menor",
+    "fr_FR": "Potion de soins mineure",
+    "it_IT": "Pozione Minore di Cura",
+    "ru_RU": "Крохотный флакон с лечебным зельем",
+    "ko_KR": "최하급 치유 물약",
+    "zh_TW": "初級治療藥水",
+    "zh_CN": "初级治疗药水"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/1377?namespace=static-12.1.5_70077-us"
+    },
+    "id": 1377
+  },
+  "crafted_item": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/item/118?namespace=static-12.1.5_70077-us"
+    },
+    "name": {
+      "en_US": "Minor Healing Potion",
+      "es_MX": "Poción de sanación menor",
+      "pt_BR": "Poção Menor de Cura",
+      "de_DE": "Schwacher Heiltrank",
+      "en_GB": "Minor Healing Potion",
+      "es_ES": "Poción de sanación menor",
+      "fr_FR": "Potion de soins mineure",
+      "it_IT": "Pozione Minore di Cura",
+      "ru_RU": "Крохотный флакон с лечебным зельем",
+      "ko_KR": "최하급 치유 물약",
+      "zh_TW": "初級治療藥水",
+      "zh_CN": "初级治疗药水"
+    },
+    "id": 118
+  },
+  "reagents": [
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/2447?namespace=static-12.1.5_70077-us"
+        },
+        "name": {
+          "en_US": "Peacebloom",
+          "es_MX": "Flor de paz",
+          "pt_BR": "Botão-da-paz",
+          "de_DE": "Friedensblume",
+          "en_GB": "Peacebloom",
+          "es_ES": "Flor de paz",
+          "fr_FR": "Pacifique",
+          "it_IT": "Sbocciapace",
+          "ru_RU": "Мироцвет",
+          "ko_KR": "평온초 꽃잎",
+          "zh_TW": "寧神花",
+          "zh_CN": "宁神花"
+        },
+        "id": 2447
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/765?namespace=static-12.1.5_70077-us"
+        },
+        "name": {
+          "en_US": "Silverleaf",
+          "es_MX": "Hojaplata",
+          "pt_BR": "Folha-prata",
+          "de_DE": "Silberblatt",
+          "en_GB": "Silverleaf",
+          "es_ES": "Hojaplata",
+          "fr_FR": "Feuillargent",
+          "it_IT": "Fogliargenta",
+          "ru_RU": "Сребролист",
+          "ko_KR": "은엽수잎",
+          "zh_TW": "銀葉草",
+          "zh_CN": "银叶草"
+        },
+        "id": 765
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/3371?namespace=static-12.1.5_70077-us"
+        },
+        "name": {
+          "en_US": "Crystal Vial",
+          "es_MX": "Vial de cristal",
+          "pt_BR": "Ampola de Cristal",
+          "de_DE": "Kristallphiole",
+          "en_GB": "Crystal Vial",
+          "es_ES": "Vial de cristal",
+          "fr_FR": "Fiole de cristal",
+          "it_IT": "Ampolla di Cristallo",
+          "ru_RU": "Хрустальная колба",
+          "ko_KR": "수정 약병",
+          "zh_TW": "水晶瓶",
+          "zh_CN": "水晶瓶"
+        },
+        "id": 3371
+      },
+      "quantity": 1
+    }
+  ],
+  "crafted_quantity": {
+    "value": 1
+  }
+}

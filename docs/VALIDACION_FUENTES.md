@@ -31,7 +31,7 @@ Hechos comprobados:
 
 Evidencia: las muestras están en `tests/fixtures/`. Las pruebas de `tests/market.test.ts` usan esas filas reales. La sincronización real con US/Area 52 se comprobó en la aplicación local: los tres archivos quedaron en estado `ok`.
 
-## Blizzard: Game Data API (documentación verificada; respuestas pendientes)
+## Blizzard: Game Data API (verificado con respuestas reales el 12-11-2026)
 
 Comprobado en el portal oficial con un navegador, porque la página es dinámica:
 
@@ -48,16 +48,30 @@ Comprobado en el portal oficial con un navegador, porque la página es dinámica
   - `/data/wow/realm/index`
   - `/data/wow/connected-realm/index`
 
-**Sin verificar (requiere credenciales):** los campos exactos de las respuestas, como `crafted_item`, `crafted_quantity`, `reagents`, `modified_crafting_slots`, `preview_item.binding` o `categories[].recipes[]`. Por eso:
+**Verificado con respuestas reales** (región US, namespace `static-12.1.5_70077-us`, muestras en `docs/muestras/`):
 
-- `src/server/catalog/sync.ts` usa parsers tolerantes. Un campo no reconocido marca la receta como incompleta, con su motivo en `recipe.fetch_error`, y nunca se rellena con un supuesto.
-- `npm run probe:blizzard -- us` guarda respuestas reales en `docs/muestras/` para cerrar esta validación.
+- Sin parámetro `locale`, los nombres llegan como objeto con todos los idiomas (`en_US`, `es_MX`, `es_ES`…).
+- `profession/index` devuelve 26 profesiones, incluidas varias que no son de fabricación normal (por ejemplo, Arqueología o Soul Cyphering).
+- `skill-tier` incluye `minimum_skill_level`, `maximum_skill_level` y `categories[].recipes[]` con `id` y `name`.
+- Recetas **anteriores a Dragonflight** (comprobado en Classic): `crafted_item`, `crafted_quantity.value` y `reagents[].{reagent.id, quantity}` presentes. Son evaluables.
+- Recetas de **Dragonflight, The War Within y Midnight** (muestreo de Alquimia: 1 de 8, 0 de 8 y 0 de 8):
+  - casi nunca traen `crafted_item` ni `crafted_quantity`;
+  - los reactivos con calidad aparecen en `modified_crafting_slots` (tipo de ranura, sin objeto ni cantidad).
+
+  **La API no permite saber qué producen ni cuánto cuestan.** Se marcan como «datos insuficientes» con ese motivo, nunca como servicio ni con costo parcial.
+- Algunas recetas antiguas no incluyen `reagents`. Su costo queda como desconocido, no como 0.
+- Sincronización real de Alquimia: 868 recetas y 809 objetos en 8,6 min, 1 objeto con error.
+
+  Resultado en US/Area 52:
+  - 57 candidatas, 86 con demanda incierta, 22 con margen insuficiente y 364 no rentables;
+  - 231 con datos insuficientes, entre ellas las 177 recetas modernas;
+  - 108 no vendibles (ligadas o sin observaciones).
 
 ## Lo que falta y cómo afecta al cálculo
 
 | Laguna | Efecto |
 |---|---|
-| Campos de Blizzard sin verificar | Catálogo Retail vacío hasta configurar credenciales. Las recetas mal interpretadas aparecen como incompletas y sin recomendación. |
+| Resultado y cantidades de recetas de Dragonflight o posteriores | La API de Blizzard no los publica. Esas recetas no se pueden evaluar automáticamente; haría falta otra fuente verificada (por ejemplo, datos extraídos del cliente del juego). |
 | Calidad del equipo (bonus IDs) en TSM | Las recetas de Dragonflight o posteriores, y los resultados con variantes del mismo nombre, quedan como «datos insuficientes» salvo que el usuario asuma la calidad manualmente. |
 | Profundidad de mercado | El costo siempre se marca como estimado; no se supone disponibilidad ilimitada. |
 | Disponibilidad en vendedor | `purchase_price` de Blizzard no prueba que un vendedor venda el objeto. No se usa automáticamente; se puede introducir un precio manual. |

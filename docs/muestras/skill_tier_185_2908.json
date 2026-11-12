@@ -1,0 +1,1288 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/185/skill-tier/2908?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2908,
+  "name": {
+    "en_US": "Midnight Cooking",
+    "es_MX": "Cocina de Midnight",
+    "pt_BR": "Culinária de Midnight",
+    "de_DE": "Kochkunst von Midnight",
+    "en_GB": "Midnight Cooking",
+    "es_ES": "Cocina de Midnight",
+    "fr_FR": "Cuisine de Midnight",
+    "it_IT": "Cucina di Midnight",
+    "ru_RU": "Кулинария Midnight",
+    "ko_KR": "한밤 요리",
+    "zh_TW": "至暗之夜烹飪",
+    "zh_CN": "至暗之夜烹饪"
+  },
+  "minimum_skill_level": 1,
+  "maximum_skill_level": 100,
+  "categories": [
+    {
+      "name": {
+        "en_US": "Hearty Meals",
+        "es_MX": "Comidas abundantes",
+        "pt_BR": "Refeições Substanciais",
+        "de_DE": "Herzhafte Mahlzeiten",
+        "en_GB": "Hearty Meals",
+        "es_ES": "Comidas suculentas",
+        "fr_FR": "Repas copieux",
+        "it_IT": "Pasti Abbondanti",
+        "ru_RU": "Сытные блюда",
+        "ko_KR": "푸짐한 식사",
+        "zh_TW": "澎湃大餐",
+        "zh_CN": "美味大餐"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52044?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hearty Feast",
+            "es_MX": "Festín suculento",
+            "pt_BR": "Banquete Substancial",
+            "de_DE": "Herzhaftes Festmahl",
+            "en_GB": "Hearty Feast",
+            "es_ES": "Festín suculento",
+            "fr_FR": "Festin copieux",
+            "it_IT": "Banchetto Abbondante",
+            "ru_RU": "Обильное угощение",
+            "ko_KR": "훈훈한 잔칫상",
+            "zh_TW": "澎湃盛宴",
+            "zh_CN": "丰盛大餐"
+          },
+          "id": 52044
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52046?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hearty Food",
+            "es_MX": "Comida abundante",
+            "pt_BR": "Comida Substancial",
+            "de_DE": "Herzhaftes Essen",
+            "en_GB": "Hearty Food",
+            "es_ES": "Comida suculenta",
+            "fr_FR": "Repas copieux",
+            "it_IT": "Cibo Abbondante",
+            "ru_RU": "Сытная пища",
+            "ko_KR": "든든한 요리",
+            "zh_TW": "澎湃食物",
+            "zh_CN": "丰盛食物"
+          },
+          "id": 52046
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Starter",
+        "es_MX": "Inicial",
+        "pt_BR": "Iniciante",
+        "de_DE": "Starter",
+        "en_GB": "Starter",
+        "es_ES": "Principiante",
+        "fr_FR": "Hors-d’œuvre",
+        "it_IT": "Novizio",
+        "ru_RU": "Закуски",
+        "ko_KR": "초심자",
+        "zh_TW": "入門",
+        "zh_CN": "新手"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52045?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Farstrider Rations",
+            "es_MX": "Raciones de errante",
+            "pt_BR": "Rações de Andarilho",
+            "de_DE": "Weltenwandererration",
+            "en_GB": "Farstrider Rations",
+            "es_ES": "Raciones de errante",
+            "fr_FR": "Rations de pérégrin",
+            "it_IT": "Razioni dei Lungopasso",
+            "ru_RU": "Пайки Странника",
+            "ko_KR": "원정순찰대 식량",
+            "zh_TW": "遠行者乾糧",
+            "zh_CN": "远行者军粮"
+          },
+          "id": 52045
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52077?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Bloom Skewers",
+            "es_MX": "Brochetas de flor",
+            "pt_BR": "Espetinhos Florais",
+            "de_DE": "Blütenspieße",
+            "en_GB": "Bloom Skewers",
+            "es_ES": "Pinchos de floración",
+            "fr_FR": "Brochettes de fleurs",
+            "it_IT": "Spiedini di Boccioli",
+            "ru_RU": "Цветы на шпажке",
+            "ko_KR": "꽃송이 꼬챙이",
+            "zh_TW": "綻放串燒",
+            "zh_CN": "绽放串烧"
+          },
+          "id": 52077
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52078?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Mana-Infused Stew",
+            "es_MX": "Estofado imbuido de maná",
+            "pt_BR": "Ensopado Imbuído de Mana",
+            "de_DE": "Manaerfüllter Eintopf",
+            "en_GB": "Mana-Infused Stew",
+            "es_ES": "Estofado imbuido de maná",
+            "fr_FR": "Ragoût imprégné de mana",
+            "it_IT": "Zuppa Infusa di Mana",
+            "ru_RU": "Похлебка с мана-приправой",
+            "ko_KR": "마나 주입 스튜",
+            "zh_TW": "法力灌注燉肉",
+            "zh_CN": "法力注能炖煮"
+          },
+          "id": 52078
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52079?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Spiced Biscuits",
+            "es_MX": "Bizcochos especiados",
+            "pt_BR": "Biscoitos Condimentados",
+            "de_DE": "Gewürzkekse",
+            "en_GB": "Spiced Biscuits",
+            "es_ES": "Galletas especiadas",
+            "fr_FR": "Biscuits d’épices",
+            "it_IT": "Biscotti Speziati",
+            "ru_RU": "Пряные бисквиты",
+            "ko_KR": "양념한 비스킷",
+            "zh_TW": "香料餅乾",
+            "zh_CN": "香料饼干"
+          },
+          "id": 52079
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52080?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Silvermoon Standard",
+            "es_MX": "Estándar de Lunargenta",
+            "pt_BR": "Petisco de Luaprata",
+            "de_DE": "Silbermondmahl",
+            "en_GB": "Silvermoon Standard",
+            "es_ES": "Plato combinado de Lunargenta",
+            "fr_FR": "Classique de Lune-d’Argent",
+            "it_IT": "Piatto Tradizionale di Lunargenta",
+            "ru_RU": "Луносветская классика",
+            "ko_KR": "실버문 일반식",
+            "zh_TW": "銀月小吃",
+            "zh_CN": "银月家常菜"
+          },
+          "id": 52080
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52081?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Forager's Medley",
+            "es_MX": "Mezcla de recolector",
+            "pt_BR": "Mix do Forrageador",
+            "de_DE": "Sammlerpotpourri",
+            "en_GB": "Forager's Medley",
+            "es_ES": "Mezcla de batidor",
+            "fr_FR": "Assortiment de la fourrageuse",
+            "it_IT": "Assortimento del Raccoglitore",
+            "ru_RU": "Ассорти добытчика",
+            "ko_KR": "채집꾼의 잡탕",
+            "zh_TW": "採獵者總匯",
+            "zh_CN": "觅食者的拼盘"
+          },
+          "id": 52081
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52082?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quick Sandwich",
+            "es_MX": "Sandwich rápido",
+            "pt_BR": "Sanduíche Rápido",
+            "de_DE": "Kleines Sandwich",
+            "en_GB": "Quick Sandwich",
+            "es_ES": "Bocadillo rápido",
+            "fr_FR": "Sandwich rapide",
+            "it_IT": "Panino Veloce",
+            "ru_RU": "Быстрый бутерброд",
+            "ko_KR": "간단 샌드위치",
+            "zh_TW": "快捷三明治",
+            "zh_CN": "简易三明治"
+          },
+          "id": 52082
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52083?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Portable Snack",
+            "es_MX": "Aperitivo portátil",
+            "pt_BR": "Lanchinho para Viagem",
+            "de_DE": "Tragbarer Snack",
+            "en_GB": "Portable Snack",
+            "es_ES": "Aperitivo portátil",
+            "fr_FR": "En-cas portable",
+            "it_IT": "Spuntino da Viaggio",
+            "ru_RU": "Переносная закуска",
+            "ko_KR": "휴대 간식",
+            "zh_TW": "隨身點心",
+            "zh_CN": "随身小点心"
+          },
+          "id": 52083
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Feast",
+        "es_MX": "Festín",
+        "pt_BR": "Banquetes",
+        "de_DE": "Festmahl",
+        "en_GB": "Feast",
+        "es_ES": "Festín",
+        "fr_FR": "Festin",
+        "it_IT": "Banchetto",
+        "ru_RU": "Пиршество",
+        "ko_KR": "잔칫상",
+        "zh_TW": "盛宴",
+        "zh_CN": "盛宴"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52047?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Quel'dorei Medley",
+            "es_MX": "Mezcla quel'dorei",
+            "pt_BR": "Mix Quel'dorei",
+            "de_DE": "Potpourri der Quel'dorei",
+            "en_GB": "Quel'dorei Medley",
+            "es_ES": "Mezcla quel'dorei",
+            "fr_FR": "Farandole quel’dorei",
+            "it_IT": "Assortimento dei Quel'dorei",
+            "ru_RU": "Кель'дорайское ассорти",
+            "ko_KR": "쿠엘도레이 잡탕",
+            "zh_TW": "奎爾多雷總匯",
+            "zh_CN": "奎尔多雷拼盘"
+          },
+          "id": 52047
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52048?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Blooming Feast",
+            "es_MX": "Festín floreciente",
+            "pt_BR": "Banquete Desabrochante",
+            "de_DE": "Blühendes Festmahl",
+            "en_GB": "Blooming Feast",
+            "es_ES": "Festín floreciente",
+            "fr_FR": "Festin fleuri",
+            "it_IT": "Banchetto Fiorente",
+            "ru_RU": "Пир расцвета",
+            "ko_KR": "만개하는 잔칫상",
+            "zh_TW": "綻放饗宴",
+            "zh_CN": "盛放筵席"
+          },
+          "id": 52048
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52054?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Harandar Celebration",
+            "es_MX": "Celebración de Harandar",
+            "pt_BR": "Comemoração de Harandar",
+            "de_DE": "Harandarfeier",
+            "en_GB": "Harandar Celebration",
+            "es_ES": "Celebración de Harandar",
+            "fr_FR": "Célébration d’Harandar",
+            "it_IT": "Celebrazione di Harandar",
+            "ru_RU": "Празднество Харандара",
+            "ko_KR": "하란다르 기념상",
+            "zh_TW": "哈朗達慶典",
+            "zh_CN": "哈籁恩达尔庆典大餐"
+          },
+          "id": 52054
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/55586?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Silvermoon Parade",
+            "es_MX": "Desfile de Lunargenta",
+            "pt_BR": "Parada de Luaprata",
+            "de_DE": "Silbermondparade",
+            "en_GB": "Silvermoon Parade",
+            "es_ES": "Desfile de Lunargenta",
+            "fr_FR": "Étalage de Lune-d’Argent",
+            "it_IT": "Ostentazione di Lunargenta",
+            "ru_RU": "Парад Луносвета",
+            "ko_KR": "실버문 대연회상",
+            "zh_TW": "銀月城遊行",
+            "zh_CN": "银月城浮华大餐"
+          },
+          "id": 55586
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58464?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Amani Cornucopia",
+            "es_MX": "Cornucopia amani",
+            "pt_BR": "Cornucópia Amani",
+            "de_DE": "Füllhorn der Amani",
+            "en_GB": "Amani Cornucopia",
+            "es_ES": "Cornucopia Amani",
+            "fr_FR": "Corne d’abondance amani",
+            "it_IT": "Cornucopia degli Amani",
+            "ru_RU": "Аманийское изобилие",
+            "ko_KR": "아마니 풍요의 뿔",
+            "zh_TW": "阿曼尼豐饒盛宴",
+            "zh_CN": "阿曼尼丰饶角"
+          },
+          "id": 58464
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58465?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Loa's Gathering",
+            "es_MX": "Congregación de los loa",
+            "pt_BR": "Coleta dos Loas",
+            "de_DE": "Sammlung des Loas",
+            "en_GB": "Loa's Gathering",
+            "es_ES": "Cosecha de loa",
+            "fr_FR": "Cueillette des Loas",
+            "it_IT": "Raccolto dei Loa",
+            "ru_RU": "Собрание лоа",
+            "ko_KR": "로아의 모둠상",
+            "zh_TW": "羅亞集結",
+            "zh_CN": "神灵聚会"
+          },
+          "id": 58465
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58466?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Feast of Knowledge",
+            "es_MX": "Festín del conocimiento",
+            "pt_BR": "Banquete de Conhecimento",
+            "de_DE": "Festmahl des Wissens",
+            "en_GB": "Feast of Knowledge",
+            "es_ES": "Festín de conocimiento",
+            "fr_FR": "Festin de connaissance",
+            "it_IT": "Banchetto della Conoscenza",
+            "ru_RU": "Пир знаний",
+            "ko_KR": "지식의 잔칫상",
+            "zh_TW": "知識盛宴",
+            "zh_CN": "知识盛宴"
+          },
+          "id": 58466
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Master",
+        "es_MX": "Maestro",
+        "pt_BR": "Mestre",
+        "de_DE": "Meisterhaft",
+        "en_GB": "Master",
+        "es_ES": "Maestro",
+        "fr_FR": "Maîtrise",
+        "it_IT": "Maestro",
+        "ru_RU": "Основные блюда",
+        "ko_KR": "대가",
+        "zh_TW": "大師級",
+        "zh_CN": "大师"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52049?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Champion's Bento",
+            "es_MX": "Bento de adalid",
+            "pt_BR": "Marmita do Campeão",
+            "de_DE": "Bento des Champions",
+            "en_GB": "Champion's Bento",
+            "es_ES": "Bento de campeón",
+            "fr_FR": "Bento de champion",
+            "it_IT": "Bento da Campione",
+            "ru_RU": "Обед защитника",
+            "ko_KR": "용사의 도시락",
+            "zh_TW": "勇士便當",
+            "zh_CN": "勇士便当"
+          },
+          "id": 52049
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52050?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Royal Roast",
+            "es_MX": "Asado real",
+            "pt_BR": "Assado Real",
+            "de_DE": "Königlicher Braten",
+            "en_GB": "Royal Roast",
+            "es_ES": "Asado real",
+            "fr_FR": "Rôti royal",
+            "it_IT": "Arrosto Reale",
+            "ru_RU": "Королевское жаркое",
+            "ko_KR": "왕실 구이",
+            "zh_TW": "皇家燒烤",
+            "zh_CN": "皇家烤肉"
+          },
+          "id": 52050
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/55787?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Impossibly Royal Roast",
+            "es_MX": "Asado increíblemente real",
+            "pt_BR": "Assado Real Impossível",
+            "de_DE": "Unglaublicher königlicher Braten",
+            "en_GB": "Impossibly Royal Roast",
+            "es_ES": "Asado real imposible",
+            "fr_FR": "Rôti incroyablement royal",
+            "it_IT": "Arrosto Incredibilmente Reale",
+            "ru_RU": "Невообразимое королевское жаркое",
+            "ko_KR": "초월적인 왕실 구이",
+            "zh_TW": "超凡皇家燒烤",
+            "zh_CN": "异乎寻常的皇家烤肉"
+          },
+          "id": 55787
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/55789?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Flora Frenzy",
+            "es_MX": "Frenesí floral",
+            "pt_BR": "Frenesi da Flora",
+            "de_DE": "Furiose Flora",
+            "en_GB": "Flora Frenzy",
+            "es_ES": "Frenesí de flora",
+            "fr_FR": "Frénésie florale",
+            "it_IT": "Frenesia Floreale",
+            "ru_RU": "Флорофуршет",
+            "ko_KR": "식물 대난리",
+            "zh_TW": "植物狂歡",
+            "zh_CN": "植物狂宴"
+          },
+          "id": 55789
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58467?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Venom-Spiced Cutlets",
+            "es_MX": "Chuletas al veneno",
+            "pt_BR": "Costeletas Temperadas com Peçonha",
+            "de_DE": "Giftgewürzte Schnitzel",
+            "en_GB": "Venom-Spiced Cutlets",
+            "es_ES": "Chuletas especiadas con veneno",
+            "fr_FR": "Côtelettes épicées au venin",
+            "it_IT": "Cotolette Speziate di Veleno",
+            "ru_RU": "Приправленные ядом отбивные",
+            "ko_KR": "맹독 양념 튀김",
+            "zh_TW": "毒液調味肉排",
+            "zh_CN": "毒香肉排"
+          },
+          "id": 58467
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58509?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Puffer Plate",
+            "es_MX": "Plato de pez globo",
+            "pt_BR": "Prato de Baiacu",
+            "de_DE": "Kugelfischplatte",
+            "en_GB": "Puffer Plate",
+            "es_ES": "Plato de pez globo",
+            "fr_FR": "Plat de poisson-globe",
+            "it_IT": "Piatto di Pesce Palla",
+            "ru_RU": "Блюдо из иглобрюхов",
+            "ko_KR": "복어 요리",
+            "zh_TW": "河豚拼盤",
+            "zh_CN": "河豚拼盘"
+          },
+          "id": 58509
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58510?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sweet-And-Sour Skewers",
+            "es_MX": "Brochetas agridulces",
+            "pt_BR": "Espetinhos Agridoces",
+            "de_DE": "Süßsaure Spieße",
+            "en_GB": "Sweet-And-Sour Skewers",
+            "es_ES": "Pinchos agridulces",
+            "fr_FR": "Brochettes aigres-douces",
+            "it_IT": "Spiedini Agrodolci",
+            "ru_RU": "Кисло-сладкое мясо на вертеле",
+            "ko_KR": "새콤달콤 꼬치",
+            "zh_TW": "酸甜烤肉串",
+            "zh_CN": "酸甜烤串"
+          },
+          "id": 58510
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Advanced",
+        "es_MX": "Avanzada",
+        "pt_BR": "Avançado",
+        "de_DE": "Erweitert",
+        "en_GB": "Advanced",
+        "es_ES": "Avanzado",
+        "fr_FR": "Avancé",
+        "it_IT": "Avanzata",
+        "ru_RU": "Сложный уровень",
+        "ko_KR": "고급",
+        "zh_TW": "進階",
+        "zh_CN": "高级"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52051?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Braised Blood Hunter",
+            "es_MX": "Cazador de sangre cocido",
+            "pt_BR": "Caçadora Sangrenta na Brasa",
+            "de_DE": "Geschmorter Blutjäger",
+            "en_GB": "Braised Blood Hunter",
+            "es_ES": "Cazador de sangre estofado",
+            "fr_FR": "Traque-sang braisé",
+            "it_IT": "Cacciatrice del Sangue Brasata",
+            "ru_RU": "Тушеный кровавый охотник",
+            "ko_KR": "혈사냥꾼 조림",
+            "zh_TW": "血獵人燉菜",
+            "zh_CN": "红烧鲜血猎手"
+          },
+          "id": 52051
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52052?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Crimson Calamari",
+            "es_MX": "Calamares carmesí",
+            "pt_BR": "Lula Carmesim",
+            "de_DE": "Purpurrote Calamares",
+            "en_GB": "Crimson Calamari",
+            "es_ES": "Calamares carmesíes",
+            "fr_FR": "Calamar cramoisi",
+            "it_IT": "Calamari Cremisi",
+            "ru_RU": "Багровый кальмар",
+            "ko_KR": "진홍빛 칼라마리",
+            "zh_TW": "赤紅花枝",
+            "zh_CN": "赤红炸鱿鱼"
+          },
+          "id": 52052
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52053?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Tasty Smoked Tetra",
+            "es_MX": "Tetra ahumado sabroso",
+            "pt_BR": "Tetra Defumado Delicioso",
+            "de_DE": "Schmackhafter geräucherter Tetra",
+            "en_GB": "Tasty Smoked Tetra",
+            "es_ES": "Tetra ahumado sabroso",
+            "fr_FR": "Délicieux tétra fumé",
+            "it_IT": "Tetra Affumicata Saporita",
+            "ru_RU": "Вкусная копченая тетра",
+            "ko_KR": "맛있는 훈연 열대어",
+            "zh_TW": "美味煙燻燈魚",
+            "zh_CN": "美味熏脂鲤"
+          },
+          "id": 52053
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52055?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Buttered Root Crab",
+            "es_MX": "Cangrejo raíz a la mantequilla",
+            "pt_BR": "Caranguejo de Raiz Amanteigado",
+            "de_DE": "Butterwurzelkrabbe",
+            "en_GB": "Buttered Root Crab",
+            "es_ES": "Cangrejo de las raíces con mantequilla",
+            "fr_FR": "Crabe des racines au beurre",
+            "it_IT": "Granchio Radicale Imburrato",
+            "ru_RU": "Корнекраб с маслом",
+            "ko_KR": "버터 바른 뿌리 게",
+            "zh_TW": "奶油樹根蟹",
+            "zh_CN": "黄油根须蟹"
+          },
+          "id": 52055
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52056?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Glitter Skewers",
+            "es_MX": "Brochetas brillantes",
+            "pt_BR": "Espetinhos Brilhantes",
+            "de_DE": "Glitzerspieße",
+            "en_GB": "Glitter Skewers",
+            "es_ES": "Pinchos relumbrantes",
+            "fr_FR": "Brochettes scintillantes",
+            "it_IT": "Spiedini Luccicanti",
+            "ru_RU": "Мерцающее мясо на вертеле",
+            "ko_KR": "반짝이 꼬챙이",
+            "zh_TW": "閃耀串燒",
+            "zh_CN": "闪光烤串"
+          },
+          "id": 52056
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52057?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Null and Void Plate",
+            "es_MX": "Plato de nulidad y Vacío",
+            "pt_BR": "Prato de Nulidade e Caos",
+            "de_DE": "Null-und-Nichtig Spezial",
+            "en_GB": "Null and Void Plate",
+            "es_ES": "Plato de horror al Vacío",
+            "fr_FR": "Assiette Néant-et-Vide",
+            "it_IT": "Piatto di Nulla e Vuoto",
+            "ru_RU": "Нуль-блюдо Бездны",
+            "ko_KR": "무위와 공허 접시",
+            "zh_TW": "空無虛無拼盤",
+            "zh_CN": "虚无空盘餐"
+          },
+          "id": 52057
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52058?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sun-Seared Lumifin",
+            "es_MX": "Lumialeta abrasado por el sol",
+            "pt_BR": "Lumitana Dourado ao Sol",
+            "de_DE": "Sonnengebratene Leuchtfinne",
+            "en_GB": "Sun-Seared Lumifin",
+            "es_ES": "Luminileta abrasado por el sol",
+            "fr_FR": "Luminageoire brûlé par le soleil",
+            "it_IT": "Lumipinna Scottato dal Sole",
+            "ru_RU": "Светоплав солнечной обжарки",
+            "ko_KR": "태양불길 빛지느러미",
+            "zh_TW": "日灼亮鰭魚",
+            "zh_CN": "阳灼光鳍鱼"
+          },
+          "id": 52058
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52059?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Void-Kissed Fish Rolls",
+            "es_MX": "Rollitos de pescado con leves notas de Vacío",
+            "pt_BR": "Rolinhos de Peixe Beijados pelo Caos",
+            "de_DE": "Leerengeküsste Fischröllchen",
+            "en_GB": "Void-Kissed Fish Rolls",
+            "es_ES": "Rollos de pescado besados por el Vacío",
+            "fr_FR": "Roulés de poisson touchés par le Vide",
+            "it_IT": "Involtini di Pesce Baciati dal Vuoto",
+            "ru_RU": "Рыбные рулетики под соусом Бездны",
+            "ko_KR": "공허의 입맞춤 생선말이",
+            "zh_TW": "虛無之吻魚肉卷",
+            "zh_CN": "虚吻鱼肉卷"
+          },
+          "id": 52059
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52060?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Warped Wise Wings",
+            "es_MX": "Alas de sabio transposicionado",
+            "pt_BR": "Cortes de Sábio da Distorção",
+            "de_DE": "Verdrehte Weisenflügel",
+            "en_GB": "Warped Wise Wings",
+            "es_ES": "Alitas de sabio de distorsión",
+            "fr_FR": "Sageailes déformées",
+            "it_IT": "Ali di Saggiola Distorte",
+            "ru_RU": "Искаженные крылья мудрости",
+            "ko_KR": "뒤틀린 지혜 날개",
+            "zh_TW": "扭曲聰魚鰭翼",
+            "zh_CN": "迁跃睿心鱼翅"
+          },
+          "id": 52060
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52061?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Fel-Kissed Filet",
+            "es_MX": "Filete besado por la vileza",
+            "pt_BR": "Filé Beijado pela Vileza",
+            "de_DE": "Teufelsgeküsstes Filet",
+            "en_GB": "Fel-Kissed Filet",
+            "es_ES": "Filete rozado por la vileza",
+            "fr_FR": "Filet touché par la gangrène",
+            "it_IT": "Filetto Vilbaciato",
+            "ru_RU": "Филе под соусом Скверны",
+            "ko_KR": "지옥의 입맞춤 순살",
+            "zh_TW": "魔化之吻肉片",
+            "zh_CN": "邪吻肉柳"
+          },
+          "id": 52061
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52062?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Arcano Cutlets",
+            "es_MX": "Chuletas arcanas",
+            "pt_BR": "Costeletas Arcanas",
+            "de_DE": "Arkanoschnitzel",
+            "en_GB": "Arcano Cutlets",
+            "es_ES": "Chuletas Arcanas",
+            "fr_FR": "Côtelettes d’arcano",
+            "it_IT": "Cotolette Arcane",
+            "ru_RU": "Чародейские отбивные",
+            "ko_KR": "비전 튀김",
+            "zh_TW": "秘能肉排",
+            "zh_CN": "奥能肉饼"
+          },
+          "id": 52062
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Intermediate",
+        "es_MX": "Intermedia",
+        "pt_BR": "Intermediário",
+        "de_DE": "Fortgeschritten",
+        "en_GB": "Intermediate",
+        "es_ES": "Intermedio",
+        "fr_FR": "Intermédiaire",
+        "it_IT": "Intermedia",
+        "ru_RU": "Средний уровень",
+        "ko_KR": "중급",
+        "zh_TW": "中級",
+        "zh_CN": "中等"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52063?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Twilight Angler's Medley",
+            "es_MX": "Mezcla de pescador crepuscular",
+            "pt_BR": "Mix de Peixe do Crepúsculo",
+            "de_DE": "Potpourri des Zwielichtanglers",
+            "en_GB": "Twilight Angler's Medley",
+            "es_ES": "Mezcla de pescador crepuscular",
+            "fr_FR": "Assortiment de pêche du Crépuscule",
+            "it_IT": "Assortimento del Pescatore del Crepuscolo",
+            "ru_RU": "Ассорти сумеречного рыбака",
+            "ko_KR": "황혼의 강태공 잡탕",
+            "zh_TW": "暮光釣手總匯",
+            "zh_CN": "暮光渔夫的拼盘"
+          },
+          "id": 52063
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52064?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Spellfire Filet",
+            "es_MX": "Filete piroarcano",
+            "pt_BR": "Filé de Fogo Místico",
+            "de_DE": "Zauberfeuerfilet",
+            "en_GB": "Spellfire Filet",
+            "es_ES": "Filete Piroarcano",
+            "fr_FR": "Filet au feu-sorcier",
+            "it_IT": "Filetto al Fuocoincanto",
+            "ru_RU": "Филе на чародейском огне",
+            "ko_KR": "주문불꽃 살코기",
+            "zh_TW": "魔焰肉片",
+            "zh_CN": "魔焰肉柳"
+          },
+          "id": 52064
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52065?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Wise Tails",
+            "es_MX": "Colas de sabio",
+            "pt_BR": "Cauda de Sábio",
+            "de_DE": "Weisenfinne",
+            "en_GB": "Wise Tails",
+            "es_ES": "Colas de sabio",
+            "fr_FR": "Sagequeues",
+            "it_IT": "Code di Saggiola",
+            "ru_RU": "Хвосты мудрости",
+            "ko_KR": "지혜의 꼬리",
+            "zh_TW": "聰魚尾",
+            "zh_CN": "睿心尾"
+          },
+          "id": 52065
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52066?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Fried Bloomtail",
+            "es_MX": "Colaflor frito",
+            "pt_BR": "Caudaflora Frita",
+            "de_DE": "Gebratene Blütenfinne",
+            "en_GB": "Fried Bloomtail",
+            "es_ES": "Colaflora frito",
+            "fr_FR": "Florequeue grillé",
+            "it_IT": "Fiorcoda Fritta",
+            "ru_RU": "Жареный цветохвост",
+            "ko_KR": "튀긴 만개꼬리",
+            "zh_TW": "油炸花尾",
+            "zh_CN": "油炸绽尾鱼"
+          },
+          "id": 52066
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52067?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Eversong Pudding",
+            "es_MX": "Pudín Canción Eterna",
+            "pt_BR": "Pudim de Canto Eterno",
+            "de_DE": "Immersangpudding",
+            "en_GB": "Eversong Pudding",
+            "es_ES": "Budin de Canción Eterna",
+            "fr_FR": "Entremets des Chants éternels",
+            "it_IT": "Budino di Cantoeterno",
+            "ru_RU": "Пудинг Вечной Песни",
+            "ko_KR": "영원노래 푸딩",
+            "zh_TW": "永歌布丁",
+            "zh_CN": "永歌布丁"
+          },
+          "id": 52067
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52068?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sunwell Delight",
+            "es_MX": "Delicia de Fuente del Sol",
+            "pt_BR": "Delícia da Nascente do Sol",
+            "de_DE": "Sonnenbrunnen Supreme",
+            "en_GB": "Sunwell Delight",
+            "es_ES": "Delicia de La Fuente del Sol",
+            "fr_FR": "Délice du Puits de soleil",
+            "it_IT": "Delizia del Pozzo Solare",
+            "ru_RU": "Солнечное лакомство",
+            "ko_KR": "태양샘 별미",
+            "zh_TW": "太陽之井點心",
+            "zh_CN": "太阳之井特餐"
+          },
+          "id": 52068
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52069?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Felberry Figs",
+            "es_MX": "Higos bayavil",
+            "pt_BR": "Figo de Moranvil",
+            "de_DE": "Teufelsbeerenfeigen",
+            "en_GB": "Felberry Figs",
+            "es_ES": "Higos bayavil",
+            "fr_FR": "Figues gangrebaies",
+            "it_IT": "Fichi di Vilbacca",
+            "ru_RU": "Инжир со скверноягодами",
+            "ko_KR": "지옥열매 무화과",
+            "zh_TW": "魔莓無花果",
+            "zh_CN": "邪梅鲜果"
+          },
+          "id": 52069
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52070?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Hearthflame Supper",
+            "es_MX": "Bocado de llamahogar",
+            "pt_BR": "Ceia Calor-caseiro",
+            "de_DE": "Herdflammenschmaus",
+            "en_GB": "Hearthflame Supper",
+            "es_ES": "Cena al calor del hogar",
+            "fr_FR": "Souper au feu de cheminée",
+            "it_IT": "Zuppa Calda del Focolare",
+            "ru_RU": "Ужин из очага",
+            "ko_KR": "화덕불길 만찬",
+            "zh_TW": "爐焰晚餐",
+            "zh_CN": "炉焰晚餐"
+          },
+          "id": 52070
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52071?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Bloodthistle-Wrapped Cutlets",
+            "es_MX": "Chuletas envueltas en cardos de sangre",
+            "pt_BR": "Costeletas Embrulhadas em Cardossangue",
+            "de_DE": "In Blutdisteln gewickelte Schnitzel",
+            "en_GB": "Bloodthistle-Wrapped Cutlets",
+            "es_ES": "Chuletas envueltas en cardos de sangre",
+            "fr_FR": "Côtelettes enroulées de chardon sanglant",
+            "it_IT": "Cotolette Avvolte nei Cardosangue",
+            "ru_RU": "Отбивные в обертке из кровопийки",
+            "ko_KR": "피엉겅퀴로 감싼 튀김",
+            "zh_TW": "血薊包肉排",
+            "zh_CN": "血蓟裹肉饼"
+          },
+          "id": 52071
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Tea",
+        "es_MX": "Té",
+        "pt_BR": "Chá",
+        "de_DE": "Tee",
+        "en_GB": "Tea",
+        "es_ES": "Té",
+        "fr_FR": "Thé",
+        "it_IT": "Tè",
+        "ru_RU": "Чай",
+        "ko_KR": "차",
+        "zh_TW": "茶",
+        "zh_CN": "茶"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52072?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Mana Lily Tea",
+            "es_MX": "Té de lirio de maná",
+            "pt_BR": "Chá de Lírio de Mana",
+            "de_DE": "Manalilientee",
+            "en_GB": "Mana Lily Tea",
+            "es_ES": "Té de lirio de maná",
+            "fr_FR": "Thé de lys de mana",
+            "it_IT": "Tè di Giglio di Mana",
+            "ru_RU": "Чай из маналилии",
+            "ko_KR": "마나 백합 차",
+            "zh_TW": "法力百合茶",
+            "zh_CN": "法力百合茶"
+          },
+          "id": 52072
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52073?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Argentleaf Tea",
+            "es_MX": "Té de hojargenta",
+            "pt_BR": "Chá de Folhargêntea",
+            "de_DE": "Argentumblatttee",
+            "en_GB": "Argentleaf Tea",
+            "es_ES": "Té de hojargenta",
+            "fr_FR": "Thé de feuille-d’argent",
+            "it_IT": "Tè di Argentemo",
+            "ru_RU": "Чай из сребревицы",
+            "ko_KR": "은빛잎사귀 차",
+            "zh_TW": "鉑葉草茶",
+            "zh_CN": "白银叶茶"
+          },
+          "id": 52073
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52074?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Sanguithorn Tea",
+            "es_MX": "Té de sangrespina",
+            "pt_BR": "Chá de Sanguispinho",
+            "de_DE": "Rotdorntee",
+            "en_GB": "Sanguithorn Tea",
+            "es_ES": "Té de sanguispino",
+            "fr_FR": "Thé de sanguironce",
+            "it_IT": "Tè di Rovosangue",
+            "ru_RU": "Чай из кровотерна",
+            "ko_KR": "핏빛찔레 차",
+            "zh_TW": "血棘茶",
+            "zh_CN": "血艳蓟茶"
+          },
+          "id": 52074
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52075?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Tranquility Bloom Tea",
+            "es_MX": "Té de flor de tranquilidad",
+            "pt_BR": "Chá de Floração da Tranquilidade",
+            "de_DE": "Harmonieblumentee",
+            "en_GB": "Tranquility Bloom Tea",
+            "es_ES": "Té de flor de tranquilidad",
+            "fr_FR": "Thé de tranquillette",
+            "it_IT": "Tè di Bocciolo Tranquillo",
+            "ru_RU": "Чай из тихоцвета",
+            "ko_KR": "평온의 꽃송이 차",
+            "zh_TW": "靜心花茶",
+            "zh_CN": "宁心花茶"
+          },
+          "id": 52075
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52076?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Azeroot Tea",
+            "es_MX": "Té de azerraíz",
+            "pt_BR": "Chá de Raizeroth",
+            "de_DE": "Azerwurztee",
+            "en_GB": "Azeroot Tea",
+            "es_ES": "Té de azerraíz",
+            "fr_FR": "Thé d’azeracine",
+            "it_IT": "Tè di Azeradice",
+            "ru_RU": "Чай из азефита",
+            "ko_KR": "아제뿌리 차",
+            "zh_TW": "杜根草茶",
+            "zh_CN": "艾泽之根茶"
+          },
+          "id": 52076
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Prepared Ingredients",
+        "es_MX": "Ingredientes preparados",
+        "pt_BR": "Ingredientes Preparados",
+        "de_DE": "Vorbereitete Zutaten",
+        "en_GB": "Prepared Ingredients",
+        "es_ES": "Ingredientes preparados",
+        "fr_FR": "Ingrédients préparés",
+        "it_IT": "Ingredienti Preparati",
+        "ru_RU": "Подготовленные ингредиенты",
+        "ko_KR": "준비된 재료",
+        "zh_TW": "準備好的食材",
+        "zh_CN": "准备好的食材"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/55788?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Thalassian Fillet",
+            "es_MX": "Filete thalassiano",
+            "pt_BR": "Filé Talassiano",
+            "de_DE": "Thalassisches Filet",
+            "en_GB": "Thalassian Fillet",
+            "es_ES": "Filete thalassiano",
+            "fr_FR": "Filet thalassien",
+            "it_IT": "Filetto Thalassiano",
+            "ru_RU": "Кель'таласское филе",
+            "ko_KR": "탈라시안 생선살",
+            "zh_TW": "薩拉斯魚排",
+            "zh_CN": "萨拉斯鱼柳"
+          },
+          "id": 55788
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58518?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Practically Pork",
+            "es_MX": "Casi cerdo",
+            "pt_BR": "Carne Mais ou Menos Suína",
+            "de_DE": "Quasischweinefleisch",
+            "en_GB": "Practically Pork",
+            "es_ES": "Casi cerdo",
+            "fr_FR": "Presque du porc",
+            "it_IT": "Praticamente Maiale",
+            "ru_RU": "Почти свинина",
+            "ko_KR": "사실상 돼지고기",
+            "zh_TW": "組合豬肉",
+            "zh_CN": "赛猪肉"
+          },
+          "id": 58518
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58519?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Plant Protein",
+            "es_MX": "Proteína de plantas",
+            "pt_BR": "Proteína Vegetal",
+            "de_DE": "Pflanzenprotein",
+            "en_GB": "Plant Protein",
+            "es_ES": "Proteína vegetal",
+            "fr_FR": "Protéine végétale",
+            "it_IT": "Proteina Vegetale",
+            "ru_RU": "Растительный белок",
+            "ko_KR": "식물성 단백질",
+            "zh_TW": "植物蛋白",
+            "zh_CN": "植物蛋白"
+          },
+          "id": 58519
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Appendix I - Stats",
+        "es_MX": "Apéndice I - Estadísticas",
+        "pt_BR": "Apêndice I – Atributos",
+        "de_DE": "Anhang I - Werte",
+        "en_GB": "Appendix I - Stats",
+        "es_ES": "Apéndice I - Estadísticas",
+        "fr_FR": "Appendice I – statistiques",
+        "it_IT": "Appendice I - Statistiche",
+        "ru_RU": "Приложение I – характеристики",
+        "ko_KR": "부록 I - 능력치",
+        "zh_TW": "附錄一 - 屬性",
+        "zh_CN": "附录 I - 属性"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56620?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Skill",
+            "es_MX": "Habilidad",
+            "pt_BR": "Perícia",
+            "de_DE": "Fertigkeit",
+            "en_GB": "Skill",
+            "es_ES": "Habilidad",
+            "fr_FR": "Compétence",
+            "it_IT": "Competenza",
+            "ru_RU": "Навык",
+            "ko_KR": "기술",
+            "zh_TW": "技能",
+            "zh_CN": "技能"
+          },
+          "id": 56620
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56621?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Multicraft",
+            "es_MX": "Fabricación múltiple",
+            "pt_BR": "Multicriação",
+            "de_DE": "Mehrfachherstellung",
+            "en_GB": "Multicraft",
+            "es_ES": "Multifabricación",
+            "fr_FR": "Fabrication multiple",
+            "it_IT": "Creazione Multipla",
+            "ru_RU": "Перепроизводство",
+            "ko_KR": "복수 제작",
+            "zh_TW": "複數製造",
+            "zh_CN": "产能"
+          },
+          "id": 56621
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/56622?namespace=static-12.1.5_70077-us"
+          },
+          "name": {
+            "en_US": "Resourcefulness",
+            "es_MX": "Inventiva",
+            "pt_BR": "Desenvoltura",
+            "de_DE": "Einfallsreichtum",
+            "en_GB": "Resourcefulness",
+            "es_ES": "Ingenio",
+            "fr_FR": "Ingéniosité",
+            "it_IT": "Parsimonia",
+            "ru_RU": "Находчивость",
+            "ko_KR": "지혜",
+            "zh_TW": "精明",
+            "zh_CN": "充裕"
+          },
+          "id": 56622
+        }
+      ]
+    }
+  ]
+}

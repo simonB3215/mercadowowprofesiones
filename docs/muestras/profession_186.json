@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/186?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 186,
+  "name": {
+    "en_US": "Mining",
+    "es_MX": "Minería",
+    "pt_BR": "Mineração",
+    "de_DE": "Bergbau",
+    "en_GB": "Mining",
+    "es_ES": "Minería",
+    "fr_FR": "Minage",
+    "it_IT": "Estrazione",
+    "ru_RU": "Горное дело",
+    "ko_KR": "채광",
+    "zh_TW": "採礦",
+    "zh_CN": "采矿"
+  },
+  "description": {
+    "en_US": "Higher mining skill allows you to harvest more difficult minerals nodes around the world.  If you cannot harvest a specific mineral, then increase your skill by mining easier to mine minerals in lower level areas.",
+    "es_MX": "Con un alto nivel de habilidad en minería, podrás obtener minerales de vetas más complejas. Si no puedes obtener un mineral específico, intenta subir tu nivel de habilidad primero en zonas más fáciles.",
+    "pt_BR": "Um alto nível na perícia mineração permite coletar minérios mais raros pelo mundo. Se você não puder coletar um tipo específico de minério, deverá aumentar o seu nível de perícia coletando minérios menos raros em áreas de nível mais baixo.",
+    "de_DE": "Eine hohe Bergbaufertigkeit ermöglicht es Euch, schwierigere Erzvorkommen abzubauen. Wenn Ihr ein bestimmtes Erzvorkommen nicht abbauen könnt, steigert Eure Bergbaufertigkeit, indem Ihr in niedrigstufigeren Gebieten leichtere Erzvorkommen abbaut.",
+    "en_GB": "Higher mining skill allows you to harvest more difficult minerals nodes around the world.  If you cannot harvest a specific mineral, then increase your skill by mining easier to mine minerals in lower level areas.",
+    "es_ES": "Con un alto nivel de habilidad en minería, podrás obtener minerales de vetas más complejas. Si no puedes obtener un mineral específico, intenta subir tu nivel de habilidad primero en zonas más fáciles.",
+    "fr_FR": "Un plus haut score dans la compétence minage vous permet de récolter des minerais plus difficiles. Si vous ne pouvez pas récolter un minerai donné, augmentez votre score en récoltant des minerais plus accessibles dans des zones de niveau inférieur.",
+    "it_IT": "Una maggiore competenza in Estrazione permette di raccogliere minerali di livello superiore. Se non puoi picconare uno specifico deposito, aumenta la tua competenza picconando depositi in aree di livello più basso.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные залежи вы можете разрабатывать. Если вам не удается добыть какой-либо минерал, потренируйтесь на простых месторождениях, доступных в областях более низкого уровня.",
+    "ko_KR": "채광 숙련도가 올라갈수록 좀더 희귀한 광석을 채집할 수 있습니다. 특정한 광맥을 채광할 수 없다면 그 전 단계의 쉬운 광맥을 채광하여 숙련도를 올리십시오.",
+    "zh_TW": "高級的採礦技能使你可以採集高級的礦石。如果你不能採集某種礦石，請先在較低等級的地區採集低等級礦石，以此提高你的採礦技能。",
+    "zh_CN": "高级的采矿技能使你可以采集高级的矿石。如果你不能采集某种矿石，请先在较低等级的地区采集低等级矿石，以此提高你的采矿技能。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/186?namespace=static-12.1.5_70077-us"
+    },
+    "id": 186
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2565?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Mining / Zandalari Mining",
+        "es_MX": "Minería kultirana / Minería zandalari",
+        "pt_BR": "Mineração de Kul Tiraz / Mineração de Zandalar",
+        "de_DE": "Bergbau von Kul Tiras / Bergbau von Zandalar",
+        "en_GB": "Kul Tiran Mining / Zandalari Mining",
+        "es_ES": "Minería de Kul Tiras / Minería Zandalari",
+        "fr_FR": "Minage de Kul Tiras / Minage de Zandalar",
+        "it_IT": "Estrazione di Kul Tiras / Estrazione di Zandalar",
+        "ru_RU": "Кул-тирасское горное дело / Зандаларское горное дело",
+        "ko_KR": "쿨 티란 채광 / 잔달라 채광",
+        "zh_TW": "庫爾提拉斯採礦 / 贊達拉採礦",
+        "zh_CN": "库尔提拉斯采矿 / 赞达拉采矿"
+      },
+      "id": 2565
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2566?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Mining",
+        "es_MX": "Minería de Legion",
+        "pt_BR": "Mineração de Legion",
+        "de_DE": "Bergbau der Verheerten Inseln",
+        "en_GB": "Legion Mining",
+        "es_ES": "Minería de Legion",
+        "fr_FR": "Minage de Legion",
+        "it_IT": "Estrazione di Legion",
+        "ru_RU": "Горное дело Legion",
+        "ko_KR": "군단 채광",
+        "zh_TW": "軍團採礦",
+        "zh_CN": "军团采矿"
+      },
+      "id": 2566
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2567?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Mining",
+        "es_MX": "Minería de Draenor",
+        "pt_BR": "Mineração de Draenor",
+        "de_DE": "Bergbau von Draenor",
+        "en_GB": "Draenor Mining",
+        "es_ES": "Minería de Draenor",
+        "fr_FR": "Minage de Draenor",
+        "it_IT": "Estrazione di Draenor",
+        "ru_RU": "Горное дело Дренора",
+        "ko_KR": "드레노어 채광",
+        "zh_TW": "德拉諾採礦",
+        "zh_CN": "德拉诺采矿"
+      },
+      "id": 2567
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2568?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Mining",
+        "es_MX": "Minería de Pandaria",
+        "pt_BR": "Mineração de Pandária",
+        "de_DE": "Bergbau von Pandaria",
+        "en_GB": "Pandaria Mining",
+        "es_ES": "Minería de Pandaria",
+        "fr_FR": "Minage de Pandarie",
+        "it_IT": "Estrazione di Pandaria",
+        "ru_RU": "Горное дело Пандарии",
+        "ko_KR": "판다리아 채광",
+        "zh_TW": "潘達利亞採礦",
+        "zh_CN": "潘达利亚采矿"
+      },
+      "id": 2568
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2569?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Mining",
+        "es_MX": "Minería de Cataclysm",
+        "pt_BR": "Mineração de Cataclysm",
+        "de_DE": "Bergbau des Kataklysmus",
+        "en_GB": "Cataclysm Mining",
+        "es_ES": "Minería de Cataclysm",
+        "fr_FR": "Minage de Cataclysm",
+        "it_IT": "Estrazione di Cataclysm",
+        "ru_RU": "Горное дело времен Катаклизма",
+        "ko_KR": "대격변 채광",
+        "zh_TW": "大災變採礦",
+        "zh_CN": "大地的裂变采矿"
+      },
+      "id": 2569
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2570?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Mining",
+        "es_MX": "Minería de Rasganorte",
+        "pt_BR": "Mineração de Nortúndria",
+        "de_DE": "Bergbau von Nordend",
+        "en_GB": "Northrend Mining",
+        "es_ES": "Minería de Rasganorte",
+        "fr_FR": "Minage du Norfendre",
+        "it_IT": "Estrazione di Nordania",
+        "ru_RU": "Горное дело Нордскола",
+        "ko_KR": "노스렌드 채광",
+        "zh_TW": "北裂境採礦",
+        "zh_CN": "诺森德采矿"
+      },
+      "id": 2570
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2571?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Mining",
+        "es_MX": "Minería de Terrallende",
+        "pt_BR": "Mineração de Terralém",
+        "de_DE": "Bergbau der Scherbenwelt",
+        "en_GB": "Outland Mining",
+        "es_ES": "Minería de Terrallende",
+        "fr_FR": "Minage d’Outreterre",
+        "it_IT": "Estrazione delle Terre Esterne",
+        "ru_RU": "Горное дело Запределья",
+        "ko_KR": "아웃랜드 채광",
+        "zh_TW": "外域採礦",
+        "zh_CN": "外域采矿"
+      },
+      "id": 2571
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2572?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Mining",
+        "es_MX": "Minería clásica",
+        "pt_BR": "Mineração do Classic",
+        "de_DE": "Klassischer Bergbau",
+        "en_GB": "Classic Mining",
+        "es_ES": "Minería clásica",
+        "fr_FR": "Minage classique",
+        "it_IT": "Estrazione Classica",
+        "ru_RU": "Классическое горное дело",
+        "ko_KR": "옛 채광",
+        "zh_TW": "艾澤拉斯採礦",
+        "zh_CN": "经典旧世采矿"
+      },
+      "id": 2572
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2761?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Mining",
+        "es_MX": "Minería de Shadowlands",
+        "pt_BR": "Mineração de Shadowlands",
+        "de_DE": "Bergbau der Schattenlande",
+        "en_GB": "Shadowlands Mining",
+        "es_ES": "Minería de Shadowlands",
+        "fr_FR": "Minage d’Ombreterre",
+        "it_IT": "Estrazione di Shadowlands",
+        "ru_RU": "Горное дело Темных Земель",
+        "ko_KR": "어둠땅 채광",
+        "zh_TW": "暗影之境採礦",
+        "zh_CN": "暗影界采矿"
+      },
+      "id": 2761
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2833?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Mining",
+        "es_MX": "Minería de las Islas Dragón",
+        "pt_BR": "Mineração das Ilhas do Dragão",
+        "de_DE": "Bergbau der Dracheninseln",
+        "en_GB": "Dragon Isles Mining",
+        "es_ES": "Minería de las Islas Dragón",
+        "fr_FR": "Minage des îles aux Dragons",
+        "it_IT": "Estrazione delle Isole dei Draghi",
+        "ru_RU": "Горное дело Драконьих островов",
+        "ko_KR": "용의 섬 채광",
+        "zh_TW": "巨龍群島採礦",
+        "zh_CN": "巨龙群岛采矿"
+      },
+      "id": 2833
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2881?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Mining",
+        "es_MX": "Minería de Khaz Algar",
+        "pt_BR": "Mineração de Khaz Algar",
+        "de_DE": "Bergbau von Khaz Algar",
+        "en_GB": "Khaz Algar Mining",
+        "es_ES": "Minería de Khaz Algar",
+        "fr_FR": "Minage de Khaz Algar",
+        "it_IT": "Estrazione di Khaz Algar",
+        "ru_RU": "Горное дело Каз Алгара",
+        "ko_KR": "카즈 알가르 채광",
+        "zh_TW": "卡茲阿爾加採礦",
+        "zh_CN": "卡兹阿加采矿"
+      },
+      "id": 2881
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186/skill-tier/2916?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Mining",
+        "es_MX": "Minería de Midnight",
+        "pt_BR": "Mineração de Midnight",
+        "de_DE": "Bergbau von Midnight",
+        "en_GB": "Midnight Mining",
+        "es_ES": "Minería de Midnight",
+        "fr_FR": "Minage de Midnight",
+        "it_IT": "Estrazione di Midnight",
+        "ru_RU": "Горное дело Midnight",
+        "ko_KR": "한밤 채광",
+        "zh_TW": "至暗之夜採礦",
+        "zh_CN": "至暗之夜采矿"
+      },
+      "id": 2916
+    }
+  ]
+}

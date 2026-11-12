@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/755?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 755,
+  "name": {
+    "en_US": "Jewelcrafting",
+    "es_MX": "Joyería",
+    "pt_BR": "Joalheria",
+    "de_DE": "Juwelierskunst",
+    "en_GB": "Jewelcrafting",
+    "es_ES": "Joyería",
+    "fr_FR": "Joaillerie",
+    "it_IT": "Oreficeria",
+    "ru_RU": "Ювелирное дело",
+    "ko_KR": "보석세공",
+    "zh_TW": "珠寶設計",
+    "zh_CN": "珠宝加工"
+  },
+  "description": {
+    "en_US": "Higher jewelcrafting skill allows you to learn higher level jewelcrafting plans.  Jewelcrafting plans can be found on trainers around the world as well as from quests and monsters.",
+    "es_MX": "Con un nivel alto de habilidad en joyería, aprenderás diseños de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlos.",
+    "pt_BR": "Um alto nível na perícia joalheria permite aprender instruções de nível mais alto.  As instruções podem ser aprendidas ou compradas dos instrutores de joalheria espalhados pelo mundo, bem como saqueadas de monstros e obtidas como recompensa de missões.",
+    "de_DE": "Eine hohe Juweliersfertigkeit ermöglicht es Euch, höherstufigere Vorlagen zu benutzen. Vorlagen bekommt Ihr bei allen Juwelierskunstlehrern, von toten Gegnern und als Questbelohnung.",
+    "en_GB": "Higher jewelcrafting skill allows you to learn higher level jewelcrafting plans.  Jewelcrafting plans can be found on trainers around the world as well as from quests and monsters.",
+    "es_ES": "Con un nivel alto de habilidad en joyería, aprenderás diseños de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlos.",
+    "fr_FR": "Un plus haut score dans la compétence joaillerie vous permet d'apprendre des dessins de joaillier plus difficiles. Ces dessins peuvent être trouvés auprès de maîtres un peu partout dans le monde, sur des monstres ou en récompense de quêtes.",
+    "it_IT": "Una maggiore competenza in Oreficeria permette di apprendere progetti di livello superiore. I progetti possono essere acquistati da venditori o istruttori in giro per il mondo o essere ottenuti attraverso missioni o uccidendo mostri.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные эскизы вы можете использовать. Эскизы можно найти у учителей, а также получить в качестве добычи или награды.",
+    "ko_KR": "보석세공 숙련도가 올라갈수록 고급 세공술을 배울 수 있습니다. 보석세공은 전문 보석세공인이나 퀘스트로 배울 수 있습니다.",
+    "zh_TW": "高級的珠寶設計技能使你可以學習高級的珠寶設計。你可以在訓練師那裡學習新的圖樣，也可以通過完成任務或殺死怪物獲得新的圖樣。",
+    "zh_CN": "高级的珠宝加工技能使你可以学习高级的珠宝加工图鉴。你可以在训练师那里学习新的图鉴，也可以通过完成任务或杀死怪物获得新的图鉴。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/755?namespace=static-12.1.5_70077-us"
+    },
+    "id": 755
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2517?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Jewelcrafting / Zandalari Jewelcrafting",
+        "es_MX": "Joyería kultirana / Joyería zandalari",
+        "pt_BR": "Joalheria de Kul Tiraz / Joalheria de Zandalar",
+        "de_DE": "Juwelierskunst von Kul Tiras / Juwelierskunst von Zandalar",
+        "en_GB": "Kul Tiran Jewelcrafting / Zandalari Jewelcrafting",
+        "es_ES": "Joyería de Kul Tiras / Joyería Zandalari",
+        "fr_FR": "Joaillerie de Kul Tiras / Joaillerie de Zandalar",
+        "it_IT": "Oreficeria di Kul Tiras / Oreficeria di Zandalar",
+        "ru_RU": "Кул-тирасское ювелирное дело / Зандаларское ювелирное дело",
+        "ko_KR": "쿨 티란 보석세공 / 잔달라 보석세공",
+        "zh_TW": "庫爾提拉斯珠寶設計 / 贊達拉珠寶設計",
+        "zh_CN": "库尔提拉斯珠宝加工 / 赞达拉珠宝加工"
+      },
+      "id": 2517
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2518?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Jewelcrafting",
+        "es_MX": "Joyería de Legion",
+        "pt_BR": "Joalheria de Legion",
+        "de_DE": "Juwelierskunst der Verheerten Inseln",
+        "en_GB": "Legion Jewelcrafting",
+        "es_ES": "Joyería de Legion",
+        "fr_FR": "Joaillerie de Legion",
+        "it_IT": "Oreficeria di Legion",
+        "ru_RU": "Ювелирное дело Legion",
+        "ko_KR": "군단 보석세공",
+        "zh_TW": "軍團珠寶設計",
+        "zh_CN": "军团珠宝加工"
+      },
+      "id": 2518
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2519?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Jewelcrafting",
+        "es_MX": "Joyería de Draenor",
+        "pt_BR": "Joalheria de Draenor",
+        "de_DE": "Juwelierskunst von Draenor",
+        "en_GB": "Draenor Jewelcrafting",
+        "es_ES": "Joyería de Draenor",
+        "fr_FR": "Joaillerie de Draenor",
+        "it_IT": "Oreficeria di Draenor",
+        "ru_RU": "Ювелирное дело Дренора",
+        "ko_KR": "드레노어 보석세공",
+        "zh_TW": "德拉諾珠寶學",
+        "zh_CN": "德拉诺珠宝加工"
+      },
+      "id": 2519
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2520?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Jewelcrafting",
+        "es_MX": "Joyería de Pandaria",
+        "pt_BR": "Joalheria de Pandária",
+        "de_DE": "Juwelierskunst von Pandaria",
+        "en_GB": "Pandaria Jewelcrafting",
+        "es_ES": "Joyería de Pandaria",
+        "fr_FR": "Joaillerie de Pandarie",
+        "it_IT": "Oreficeria di Pandaria",
+        "ru_RU": "Ювелирное дело Пандарии",
+        "ko_KR": "판다리아 보석세공",
+        "zh_TW": "潘達利亞珠寶設計",
+        "zh_CN": "潘达利亚珠宝加工"
+      },
+      "id": 2520
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2521?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Jewelcrafting",
+        "es_MX": "Joyería de Cataclysm",
+        "pt_BR": "Joalheria de Cataclysm",
+        "de_DE": "Juwelierskunst des Kataklysmus",
+        "en_GB": "Cataclysm Jewelcrafting",
+        "es_ES": "Joyería de Cataclysm",
+        "fr_FR": "Joaillerie de Cataclysm",
+        "it_IT": "Oreficeria di Cataclysm",
+        "ru_RU": "Ювелирное дело времен Катаклизма",
+        "ko_KR": "대격변 보석세공",
+        "zh_TW": "大災變珠寶設計",
+        "zh_CN": "大地的裂变珠宝加工"
+      },
+      "id": 2521
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2522?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Jewelcrafting",
+        "es_MX": "Joyería de Rasganorte",
+        "pt_BR": "Joalheria de Nortúndria",
+        "de_DE": "Juwelierskunst von Nordend",
+        "en_GB": "Northrend Jewelcrafting",
+        "es_ES": "Joyería de Rasganorte",
+        "fr_FR": "Joaillerie du Norfendre",
+        "it_IT": "Oreficeria di Nordania",
+        "ru_RU": "Ювелирное дело Нордскола",
+        "ko_KR": "노스렌드 보석세공",
+        "zh_TW": "北裂境珠寶設計",
+        "zh_CN": "诺森德珠宝加工"
+      },
+      "id": 2522
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2523?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Jewelcrafting",
+        "es_MX": "Joyería de Terrallende",
+        "pt_BR": "Joalheria de Terralém",
+        "de_DE": "Juwelierskunst der Scherbenwelt",
+        "en_GB": "Outland Jewelcrafting",
+        "es_ES": "Joyería de Terrallende",
+        "fr_FR": "Joaillerie d’Outreterre",
+        "it_IT": "Oreficeria delle Terre Esterne",
+        "ru_RU": "Ювелирное дело Запределья",
+        "ko_KR": "아웃랜드 보석세공",
+        "zh_TW": "外域珠寶設計",
+        "zh_CN": "外域珠宝加工"
+      },
+      "id": 2523
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2524?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Jewelcrafting",
+        "es_MX": "Joyería clásica",
+        "pt_BR": "Joalheria do Classic",
+        "de_DE": "Klassische Juwelierskunst",
+        "en_GB": "Classic Jewelcrafting",
+        "es_ES": "Joyería clásica",
+        "fr_FR": "Joaillerie classique",
+        "it_IT": "Oreficeria Classica",
+        "ru_RU": "Классическое ювелирное дело",
+        "ko_KR": "옛 보석세공",
+        "zh_TW": "艾澤拉斯珠寶設計",
+        "zh_CN": "经典旧世珠宝加工"
+      },
+      "id": 2524
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2757?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Jewelcrafting",
+        "es_MX": "Joyería de Shadowlands",
+        "pt_BR": "Joalheria de Shadowlands",
+        "de_DE": "Juwelierskunst der Schattenlande",
+        "en_GB": "Shadowlands Jewelcrafting",
+        "es_ES": "Joyería de Shadowlands",
+        "fr_FR": "Joaillerie d’Ombreterre",
+        "it_IT": "Oreficeria di Shadowlands",
+        "ru_RU": "Ювелирное дело Темных Земель",
+        "ko_KR": "어둠땅 보석세공",
+        "zh_TW": "暗影之境珠寶設計",
+        "zh_CN": "暗影界珠宝加工"
+      },
+      "id": 2757
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2829?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Jewelcrafting",
+        "es_MX": "Joyería de las Islas Dragón",
+        "pt_BR": "Joalheria das Ilhas do Dragão",
+        "de_DE": "Juwelierskunst der Dracheninseln",
+        "en_GB": "Dragon Isles Jewelcrafting",
+        "es_ES": "Joyería de las Islas Dragón",
+        "fr_FR": "Joaillerie des îles aux Dragons",
+        "it_IT": "Oreficeria delle Isole dei Draghi",
+        "ru_RU": "Ювелирное дело Драконьих островов",
+        "ko_KR": "용의 섬 보석세공",
+        "zh_TW": "巨龍群島珠寶設計",
+        "zh_CN": "巨龙群岛珠宝加工"
+      },
+      "id": 2829
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2879?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Jewelcrafting",
+        "es_MX": "Joyería de Khaz Algar",
+        "pt_BR": "Joalheria de Khaz Algar",
+        "de_DE": "Juwelierskunst von Khaz Algar",
+        "en_GB": "Khaz Algar Jewelcrafting",
+        "es_ES": "Joyería de Khaz Algar",
+        "fr_FR": "Joaillerie de Khaz Algar",
+        "it_IT": "Oreficeria di Khaz Algar",
+        "ru_RU": "Ювелирное дело Каз Алгара",
+        "ko_KR": "카즈 알가르 보석세공",
+        "zh_TW": "卡茲阿爾加珠寶設計",
+        "zh_CN": "卡兹阿加珠宝加工"
+      },
+      "id": 2879
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/755/skill-tier/2914?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Jewelcrafting",
+        "es_MX": "Joyería de Midnight",
+        "pt_BR": "Joalheria de Midnight",
+        "de_DE": "Juwelierskunst von Midnight",
+        "en_GB": "Midnight Jewelcrafting",
+        "es_ES": "Joyería de Midnight",
+        "fr_FR": "Joaillerie de Midnight",
+        "it_IT": "Oreficeria di Midnight",
+        "ru_RU": "Ювелирное дело Midnight",
+        "ko_KR": "한밤 보석세공",
+        "zh_TW": "至暗之夜珠寶設計",
+        "zh_CN": "至暗之夜珠宝加工"
+      },
+      "id": 2914
+    }
+  ]
+}

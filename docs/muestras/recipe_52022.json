@@ -1,0 +1,42 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/52022?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 52022,
+  "name": {
+    "en_US": "Void-Tempered Scales",
+    "es_MX": "Escamas templadas por el Vacío",
+    "pt_BR": "Escamas Revenidas pelo Caos",
+    "de_DE": "Leerengehärtete Schuppen",
+    "en_GB": "Void-Tempered Scales",
+    "es_ES": "Escamas templadas por el Vacío",
+    "fr_FR": "Écailles altérées par le Vide",
+    "it_IT": "Scaglie Temprate dal Vuoto",
+    "ru_RU": "Закаленная Бездной чешуя",
+    "ko_KR": "공허로 단련된 비늘",
+    "zh_TW": "虛無淬鍊鱗片",
+    "zh_CN": "虚空淬炼鳞片"
+  },
+  "description": {
+    "en_US": "Where there isn't leather there's scales. Between fish, snakes, dragonhawks, and monstrous void creatures, there is plenty of material to make toughened scale armor.",
+    "es_MX": "Cuando no hay cuero, hay escamas. Entre peces, serpientes, dracohalcones y criaturas del Vacío monstruosas, hay muchísimo material para fabricar armaduras de escamas reforzadas.",
+    "pt_BR": "Onde não há couro, há escamas. O que não falta entre peixes, cobras, falcostruzes e criaturas do caos são materiais para fortalecer armaduras com escamas.",
+    "de_DE": "Wo es kein Leder gibt, werden Schuppen verwendet. Fische, Schlangen, Drachenfalken und sogar Kreaturen der Leere liefern jede Menge Material zur Herstellung von widerstandsfähigen Schuppenrüstungen.",
+    "en_GB": "Where there isn't leather there's scales. Between fish, snakes, dragonhawks, and monstrous void creatures, there is plenty of material to make toughened scale armor.",
+    "es_ES": "Donde no hay cuero, hay escamas. Entre peces, serpientes, dracohalcones y monstruosas criaturas del Vacío, hay material de sobra para fabricar armaduras de escamas endurecidas.",
+    "fr_FR": "Quand il n’y a pas de cuir, il y a des écailles. Entre les poissons, les serpents, les faucons-dragons et les créatures monstrueuses du Vide, il existe bien assez de matériaux pour fabriquer des armures d’écailles renforcées.",
+    "it_IT": "Dove non c'è cuoio, ci sono scaglie. Tra pesci, serpenti, draghifalco e mostruose creature del Vuoto, il materiale per creare delle armature di scaglie indurite non manca di certo.",
+    "ru_RU": "Если не кожа, то чешуя. Рыбы, змеи, дракондоры и чудовищные создания Бездны – для изготовления прочных чешуйчатых доспехов есть много годных материалов.",
+    "ko_KR": "가죽이 없다면 비늘이 있습니다. 물고기, 뱀, 용매, 그리고 흉측한 공허의 피조물들에 이르기까지, 단단한 미늘 갑옷을 제작할 재료는 차고 넘칩니다.",
+    "zh_TW": "沒有皮革，也有鱗片。魚類、蛇類、龍鷹和恐怖的虛無生物身上也有豐富材料，可用來製作韌化鱗甲。",
+    "zh_CN": "缺少皮革的地方必有鳞片可取。从鱼类、蛇类、龙鹰到巨型虚空生物，有充足的材料可供制作坚固的鳞甲装备。"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/52022?namespace=static-12.1.5_70077-us"
+    },
+    "id": 52022
+  }
+}

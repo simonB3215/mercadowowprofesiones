@@ -1,0 +1,59 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/2791?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 2791,
+  "name": {
+    "en_US": "Ascension Crafting",
+    "es_MX": "Creación de ascensión",
+    "pt_BR": "Criação da Ascensão",
+    "de_DE": "Aufstiegshandwerk",
+    "en_GB": "Ascension Crafting",
+    "es_ES": "Fabricación de ascensión",
+    "fr_FR": "Artisanat de l’Ascension",
+    "it_IT": "Creazioni dell'Ascensione",
+    "ru_RU": "Путь перерождения",
+    "ko_KR": "승천 제작",
+    "zh_TW": "晉升工藝",
+    "zh_CN": "晋升工艺"
+  },
+  "description": {
+    "en_US": "Recipes can be obtained through the Path of Ascension feature.",
+    "es_MX": "Las recetas se pueden obtener a través de la función de la Senda de Ascensión.",
+    "pt_BR": "Receitas podem ser obtidas pelo Caminho da Ascensão.",
+    "de_DE": "Ihr könnt Rezepte über den Pfad des Aufstiegs erhalten.",
+    "en_GB": "Recipes can be obtained through the Path of Ascension feature.",
+    "es_ES": "Las recetas se pueden conseguir en el camino de la ascensión.",
+    "fr_FR": "Les recettes peuvent être obtenues en suivant la voie de l’Ascension.",
+    "it_IT": "Le ricette possono essere ottenute tramite la Via dell'Ascensione.",
+    "ru_RU": "Рецепты можно получить с помощью Пути Перерождения.",
+    "ko_KR": "승천의 길 기능을 통해 제조법을 획득할 수 있습니다.",
+    "zh_TW": "可從晉升之路獲得配方或設計圖。",
+    "zh_CN": "可以通过晋升之路获得图纸。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/2791?namespace=static-12.1.5_70077-us"
+    },
+    "id": 2791
+  }
+}

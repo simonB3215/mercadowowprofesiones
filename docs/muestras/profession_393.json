@@ -1,0 +1,301 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/393?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 393,
+  "name": {
+    "en_US": "Skinning",
+    "es_MX": "Desuello",
+    "pt_BR": "Esfolamento",
+    "de_DE": "Kürschnerei",
+    "en_GB": "Skinning",
+    "es_ES": "Desuello",
+    "fr_FR": "Dépeçage",
+    "it_IT": "Scuoiatura",
+    "ru_RU": "Снятие шкур",
+    "ko_KR": "무두질",
+    "zh_TW": "剝皮",
+    "zh_CN": "剥皮"
+  },
+  "description": {
+    "en_US": "Higher skinning skill allows you to skin hides from higher level monsters around the world.",
+    "es_MX": "Con un nivel alto de habilidad en desuello podrás desollar monstruos de nivel superior en todo el mundo.",
+    "pt_BR": "Uma perícia de esfolamento mais avançada permite a você esfolar monstros de níveis mais altos pelo mundo.",
+    "de_DE": "Eine hohe Kürschnerfertigkeit ermöglicht es Euch, höherstufigere Monster zu häuten.",
+    "en_GB": "Higher skinning skill allows you to skin hides from higher level monsters around the world.",
+    "es_ES": "Con un nivel alto de habilidad en desuello podrás desollar pellejos de monstruos de nivel superior por todo el mundo.",
+    "fr_FR": "Un plus haut score dans la compétence dépeçage vous permet de dépecer des monstres de plus haut niveau un peu partout dans le monde.",
+    "it_IT": "Una maggiore competenza in Scuoiatura permette di raccogliere pelli da mostri di livello superiore.",
+    "ru_RU": "Чем лучше развит ваш навык снятия шкур, тем выше максимальный уровень монстров, с трупов которых вы можете снимать шкуры.",
+    "ko_KR": "무두질 숙련도가 올라갈수록 고레벨 몬스터의 가죽을 채집할 수 있습니다.",
+    "zh_TW": "高級的剝皮技能使你可以從高級怪物身上剝取毛皮。",
+    "zh_CN": "高级的剥皮技能使你可以从高等级怪物身上剥取毛皮。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principaux",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/393?namespace=static-12.1.5_70077-us"
+    },
+    "id": 393
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2557?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Kul Tiran Skinning / Zandalari Skinning",
+        "es_MX": "Desuello kultirano / Desuello zandalari",
+        "pt_BR": "Esfolamento de Kul Tiraz / Esfolamento de Zandalar",
+        "de_DE": "Kürschnerei von Kul Tiras / Kürschnerei von Zandalar",
+        "en_GB": "Kul Tiran Skinning / Zandalari Skinning",
+        "es_ES": "Desuello de Kul Tiras / Desuello Zandalari",
+        "fr_FR": "Dépeçage de Kul Tiras / Dépeçage de Zandalar",
+        "it_IT": "Scuoiatura di Kul Tiras / Scuoiatura di Zandalar",
+        "ru_RU": "Кул-тирасское снятие шкур / Зандаларское снятие шкур",
+        "ko_KR": "쿨 티란 무두질 / 잔달라 무두질",
+        "zh_TW": "庫爾提拉斯剝皮 / 贊達拉剝皮",
+        "zh_CN": "库尔提拉斯剥皮 / 赞达拉剥皮"
+      },
+      "id": 2557
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2558?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Legion Skinning",
+        "es_MX": "Desuello de Legion",
+        "pt_BR": "Esfolamento de Legion",
+        "de_DE": "Kürschnerei der Verheerten Inseln",
+        "en_GB": "Legion Skinning",
+        "es_ES": "Desuello de Legion",
+        "fr_FR": "Dépeçage de Legion",
+        "it_IT": "Scuoiatura di Legion",
+        "ru_RU": "Снятие шкур Legion",
+        "ko_KR": "군단 무두질",
+        "zh_TW": "軍團剝皮",
+        "zh_CN": "军团剥皮"
+      },
+      "id": 2558
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2559?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Draenor Skinning",
+        "es_MX": "Desuello de Draenor",
+        "pt_BR": "Esfolamento de Draenor",
+        "de_DE": "Kürschnerei von Draenor",
+        "en_GB": "Draenor Skinning",
+        "es_ES": "Desuello de Draenor",
+        "fr_FR": "Dépeçage de Draenor",
+        "it_IT": "Scuoiatura di Draenor",
+        "ru_RU": "Снятие шкур на Дреноре",
+        "ko_KR": "드레노어 무두질",
+        "zh_TW": "德拉諾剝皮",
+        "zh_CN": "德拉诺剥皮"
+      },
+      "id": 2559
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2560?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Pandaria Skinning",
+        "es_MX": "Desuello de Pandaria",
+        "pt_BR": "Esfolamento de Pandária",
+        "de_DE": "Kürschnerei von Pandaria",
+        "en_GB": "Pandaria Skinning",
+        "es_ES": "Desuello de Pandaria",
+        "fr_FR": "Dépeçage de Pandarie",
+        "it_IT": "Scuoiatura di Pandaria",
+        "ru_RU": "Снятие шкур в Пандарии",
+        "ko_KR": "판다리아 무두질",
+        "zh_TW": "潘達利亞剝皮",
+        "zh_CN": "潘达利亚剥皮"
+      },
+      "id": 2560
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2561?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Cataclysm Skinning",
+        "es_MX": "Desuello de Cataclysm",
+        "pt_BR": "Esfolamento de Cataclysm",
+        "de_DE": "Kürschnerei des Kataklysmus",
+        "en_GB": "Cataclysm Skinning",
+        "es_ES": "Desuello de Cataclysm",
+        "fr_FR": "Dépeçage de Cataclysm",
+        "it_IT": "Scuoiatura di Cataclysm",
+        "ru_RU": "Снятие шкур времен Катаклизма",
+        "ko_KR": "대격변 무두질",
+        "zh_TW": "大災變剝皮",
+        "zh_CN": "大地的裂变剥皮"
+      },
+      "id": 2561
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2562?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Northrend Skinning",
+        "es_MX": "Desuello de Rasganorte",
+        "pt_BR": "Esfolamento de Nortúndria",
+        "de_DE": "Kürschnerei von Nordend",
+        "en_GB": "Northrend Skinning",
+        "es_ES": "Desuello de Rasganorte",
+        "fr_FR": "Dépeçage du Norfendre",
+        "it_IT": "Scuoiatura di Nordania",
+        "ru_RU": "Снятие шкур в Нордсколе",
+        "ko_KR": "노스렌드 무두질",
+        "zh_TW": "北裂境剝皮",
+        "zh_CN": "诺森德剥皮"
+      },
+      "id": 2562
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2563?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Outland Skinning",
+        "es_MX": "Desuello de Terrallende",
+        "pt_BR": "Esfolamento de Terralém",
+        "de_DE": "Kürschnerei der Scherbenwelt",
+        "en_GB": "Outland Skinning",
+        "es_ES": "Desuello de Terrallende",
+        "fr_FR": "Dépeçage d’Outreterre",
+        "it_IT": "Scuoiatura delle Terre Esterne",
+        "ru_RU": "Снятие шкур в Запределье",
+        "ko_KR": "아웃랜드 무두질",
+        "zh_TW": "外域剝皮",
+        "zh_CN": "外域剥皮"
+      },
+      "id": 2563
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2564?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Classic Skinning",
+        "es_MX": "Desuello clásico",
+        "pt_BR": "Esfolamento do Classic",
+        "de_DE": "Klassische Kürschnerei",
+        "en_GB": "Classic Skinning",
+        "es_ES": "Desuello clásico",
+        "fr_FR": "Dépeçage classique",
+        "it_IT": "Scuoiatura Classica",
+        "ru_RU": "Классическое снятие шкур",
+        "ko_KR": "옛 무두질",
+        "zh_TW": "艾澤拉斯剝皮",
+        "zh_CN": "经典旧世剥皮"
+      },
+      "id": 2564
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2762?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Shadowlands Skinning",
+        "es_MX": "Desuello de Shadowlands",
+        "pt_BR": "Esfolamento de Shadowlands",
+        "de_DE": "Kürschnerei der Schattenlande",
+        "en_GB": "Shadowlands Skinning",
+        "es_ES": "Desuello de Shadowlands",
+        "fr_FR": "Dépeçage d’Ombreterre",
+        "it_IT": "Scuoiatura di Shadowlands",
+        "ru_RU": "Снятие шкур Темных Земель",
+        "ko_KR": "어둠땅 무두질",
+        "zh_TW": "暗影之境剝皮",
+        "zh_CN": "暗影界剥皮"
+      },
+      "id": 2762
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2834?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Dragon Isles Skinning",
+        "es_MX": "Desuello de las Islas Dragón",
+        "pt_BR": "Esfolamento das Ilhas do Dragão",
+        "de_DE": "Kürschnerei der Dracheninseln",
+        "en_GB": "Dragon Isles Skinning",
+        "es_ES": "Desuello de las Islas Dragón",
+        "fr_FR": "Dépeçage des îles aux Dragons",
+        "it_IT": "Scuoiatura delle Isole dei Draghi",
+        "ru_RU": "Снятие шкур Драконьих островов",
+        "ko_KR": "용의 섬 무두질",
+        "zh_TW": "巨龍群島剝皮",
+        "zh_CN": "巨龙群岛剥皮"
+      },
+      "id": 2834
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2882?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Khaz Algar Skinning",
+        "es_MX": "Desuello de Khaz Algar",
+        "pt_BR": "Esfolamento de Khaz Algar",
+        "de_DE": "Kürschnerei von Khaz Algar",
+        "en_GB": "Khaz Algar Skinning",
+        "es_ES": "Desuello de Khaz Algar",
+        "fr_FR": "Dépeçage de Khaz Algar",
+        "it_IT": "Scuoiatura di Khaz Algar",
+        "ru_RU": "Снятие шкур Каз Алгара",
+        "ko_KR": "카즈 알가르 무두질",
+        "zh_TW": "卡茲阿爾加剝皮",
+        "zh_CN": "卡兹阿加剥皮"
+      },
+      "id": 2882
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393/skill-tier/2917?namespace=static-12.1.5_70077-us"
+      },
+      "name": {
+        "en_US": "Midnight Skinning",
+        "es_MX": "Desuello de Midnight",
+        "pt_BR": "Esfolamento de Midnight",
+        "de_DE": "Kürschnerei von Midnight",
+        "en_GB": "Midnight Skinning",
+        "es_ES": "Desuello de Midnight",
+        "fr_FR": "Dépeçage de Midnight",
+        "it_IT": "Scuoiatura di Midnight",
+        "ru_RU": "Cнятие шкур Midnight",
+        "ko_KR": "한밤 무두질",
+        "zh_TW": "至暗之夜剝皮",
+        "zh_CN": "至暗之夜剥皮"
+      },
+      "id": 2917
+    }
+  ]
+}

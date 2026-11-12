@@ -1,16 +1,16 @@
 # Estado del proyecto
 
-Última actualización: 11 de noviembre de 2026.
+Última actualización: 12 de noviembre de 2026.
 
 ## Resumen
 
-La aplicación está implementada y funciona en local con PostgreSQL embebido. Comprobado:
-- 59 pruebas automáticas en verde.
+La aplicación está implementada y conectada a **Supabase** (migraciones aplicadas, precios reales de TSM de US/Area 52 cargados). El código está en GitHub (repositorio privado `simonB3215/mercadowowprofesiones`). Comprobado:
+- 63 pruebas automáticas en verde.
 - La interfaz se revisó en el navegador en escritorio y en móvil.
 - La sincronización real de precios de TSM (US / Area 52) funciona.
 - La función de Vercel, compilada a JS archivo por archivo, responde correctamente con Node.
 
-**No está desplegada todavía** y **el catálogo real de Retail está vacío**. Para lo segundo faltan las credenciales de Blizzard.
+**No está desplegada todavía.** Las credenciales de Blizzard funcionan y el catálogo real se sincroniza en Supabase. **Limitación verificada:** la API de Blizzard no publica el objeto resultante ni la cantidad de las recetas de Dragonflight, The War Within y Midnight. Esas recetas aparecen como «datos insuficientes»; las de expansiones anteriores sí se evalúan.
 
 ## Funciones terminadas (verificadas)
 
@@ -45,7 +45,7 @@ La aplicación está implementada y funciona en local con PostgreSQL embebido. C
 
 | Elemento | Situación | Qué hace falta |
 |---|---|---|
-| Catálogo real de Retail (PB-01, PB-06, PB-07) | Código listo; **bloqueado** | Credenciales de Blizzard en `.env`. Después: `npm run probe:blizzard -- us`, revisar `docs/muestras/` y ajustar los parsers si algún campo difiere; luego `npm run sync:catalog -- us --realms`. |
+| Recetas de Dragonflight o posteriores (PB-01, PB-06, PB-07) | **Bloqueado por la fuente** | La API de Blizzard no da el objeto resultante ni la cantidad (verificado con muestras reales en `docs/muestras/`). Haría falta otra fuente verificada. Las recetas anteriores sí están completas. |
 | Despliegue (PB-28) | Configuración lista (`vercel.json`, migraciones); **no desplegado** | Proyecto de Supabase, cuenta de Vercel y variables de entorno. El despliegue lo tiene que autorizar y ejecutar el usuario. |
 | Calidades, especialización y habilidad (PB-20) | **Bloqueado** | Reglas verificadas por receta y parche. Hoy: la habilidad se guarda y hay una suposición manual de calidad, etiquetada. |
 | Producción adicional y ahorro (PB-21) | **Bloqueado** | Reglas verificadas. Hoy: rendimiento manual etiquetado. |
@@ -67,9 +67,9 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 
 ## Siguientes pasos
 
-1. Configurar `BLIZZARD_CLIENT_ID` y `BLIZZARD_CLIENT_SECRET` y ejecutar la sonda (`npm run probe:blizzard -- us`) para validar los campos reales.
-2. Ajustar `parseRecipe` y el mapeo de objetos en `src/server/catalog/sync.ts` según las muestras; sincronizar el catálogo y revisar la cobertura en «Calidad de datos».
-3. Crear el proyecto de Supabase, aplicar las migraciones y desplegar en Vercel con sus variables.
+1. Revisar la cobertura del catálogo completo en «Calidad de datos».
+2. Decidir una fuente verificada para el resultado y las cantidades de las recetas de Dragonflight o posteriores.
+3. Desplegar en Vercel con las variables de entorno (`DATABASE_URL`, `BLIZZARD_CLIENT_ID`, `BLIZZARD_CLIENT_SECRET`, `CRON_SECRET`).
 4. Decidir la autenticación antes de compartir la URL.
 5. Verificar la comisión de subasta de cada mercado y ajustar los umbrales en «Ajustes».
 

@@ -1,0 +1,42 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/52044?namespace=static-12.1.5_70077-us"
+    }
+  },
+  "id": 52044,
+  "name": {
+    "en_US": "Hearty Feast",
+    "es_MX": "Festín suculento",
+    "pt_BR": "Banquete Substancial",
+    "de_DE": "Herzhaftes Festmahl",
+    "en_GB": "Hearty Feast",
+    "es_ES": "Festín suculento",
+    "fr_FR": "Festin copieux",
+    "it_IT": "Banchetto Abbondante",
+    "ru_RU": "Обильное угощение",
+    "ko_KR": "훈훈한 잔칫상",
+    "zh_TW": "澎湃盛宴",
+    "zh_CN": "丰盛大餐"
+  },
+  "description": {
+    "en_US": "Condense 10 of a given feast to create a version that is sure to keep your whole party satisfied! \r\n\r\nHearty food persists through death and is able to be shared amongst your Warband.",
+    "es_MX": "¡Condensa 10 piezas de un festín en particular para crear una versión que te saciará a ti y a todo tu grupo! \r\n\r\nLa comida abundante persiste aun después de morir y se puede compartir con tu tropa.",
+    "pt_BR": "Condensa 10 de um determinado banquete para criar uma versão que com certeza vai saciar todo o seu grupo!\r\n\r\nRefeição Substancial perdura após a morte e pode ser compartilhada entre o Bando de Guerra.",
+    "de_DE": "Kondensiert 10 Portionen eines bestimmten Festmahls, um eine Version zu erschaffen, die Eure ganze Gruppe zufriedenstellt!\r\n\r\nHerzhaftes Essen überdauert den Tod und kann mit Eurer Kriegsmeute geteilt werden.",
+    "en_GB": "Condense 10 of a given feast to create a version that is sure to keep your whole party satisfied! \r\n\r\nHearty food persists through death and is able to be shared amongst your Warband.",
+    "es_ES": "¡Condensa 10 raciones de un festín determinado para crear una versión que sin duda saciará a todo tu grupo! \r\n\r\nLa comida suculenta persiste más allá de la muerte y se puede compartir con tu banda guerrera.",
+    "fr_FR": "Constitue 10 repas d’un festin donné pour créer une version qui ne manquera pas de satisfaire tout votre groupe !\r\n\r\nLes repas copieux persistent malgré la mort et peuvent être partagés entre les membres de votre bataillon.",
+    "it_IT": "Condensa 10 pezzi di un banchetto per crearne una versione che di certo soddisferà tutto il gruppo!\r\n\r\nGli effetti dei pasti abbondanti persistono dopo la morte e possono essere condivisi dalla Brigata.",
+    "ru_RU": "Объединяет 10 порций выбранного пира и создает его новую версию, которой можно накормить целую группу! \r\n\r\nЭффект сытных блюд сохраняется после смерти, и их можно передать другим персонажам в вашем отряде.",
+    "ko_KR": "해당 잔칫상 10개를 응축하여 파티 전체를 확실하게 만족시킬 잔칫상을 만들어 냅니다.\r\n\r\n든든한 요리는 사망 후에도 효과가 지속되며 전투부대와 공유할 수 있습니다.",
+    "zh_TW": "濃縮10份盛宴，製造出一定能讓你小隊吃飽喝足的大餐！\r\n\r\n澎湃食物的效果在死亡之後仍然有效，且能夠由戰隊共享。",
+    "zh_CN": "浓缩10份任意大餐，制作出一道令你的全队饱腹意满的大餐！\r\n\r\n丰盛食物的效果可以在死后继续存在，并且可以在战团中分享。"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/52044?namespace=static-12.1.5_70077-us"
+    },
+    "id": 52044
+  }
+}
