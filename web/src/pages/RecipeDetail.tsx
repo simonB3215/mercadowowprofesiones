@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta } from '../lib.js';
+import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta, Money } from '../lib.js';
 import { ItemLabel, WowIcon, useAsset } from '../icons.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks } from '@phosphor-icons/react';
 
@@ -18,23 +18,23 @@ function Breakdown({ e, title }: { e: any; title: string }) {
       <dl className="kv">
         <dt>Ejecuciones</dt><dd>{e.runs}</dd>
         <dt>Unidades producidas</dt><dd>{e.unitsPerRun !== null ? `${e.unitsPerRun * e.runs} (${e.unitsPerRun} por ejecución)` : 'desconocido'}</dd>
-        <dt>Costo de materiales</dt><dd>{money(c.materials)}</dd>
-        <dt>Costo del lote (C)</dt><dd>{money(c.batch)}</dd>
-        <dt>Costo por unidad</dt><dd>{money(c.unit)}</dd>
-        <dt>Desembolso por faltantes</dt><dd>{money(c.outOfPocket)} <span className="small muted">(reposición ≠ desembolso)</span></dd>
-        <dt>Precio de venta utilizado (P)</dt><dd>{money(e.sellPrice.copper)} <span className="small muted">{e.sellPrice.field} · {e.sellPrice.scope}</span></dd>
-        <dt>Ingreso neto del lote</dt><dd>{money(p.netRevenue)}</dd>
+        <dt>Costo de materiales</dt><dd><Money v={c.materials} /></dd>
+        <dt>Costo del lote (C)</dt><dd><Money v={c.batch} /></dd>
+        <dt>Costo por unidad</dt><dd><Money v={c.unit} /></dd>
+        <dt>Desembolso por faltantes</dt><dd><Money v={c.outOfPocket} /> <span className="small muted">(reposición ≠ desembolso)</span></dd>
+        <dt>Precio de venta utilizado (P)</dt><dd><Money v={e.sellPrice.copper} /> <span className="small muted">{e.sellPrice.field} · {e.sellPrice.scope}</span></dd>
+        <dt>Ingreso neto del lote</dt><dd><Money v={p.netRevenue} /></dd>
         <dt>Ganancia estimada por lote</dt><dd><Delta v={p.profitBatch} /></dd>
         <dt>Ganancia estimada por unidad</dt><dd><Delta v={p.profitUnit} /></dd>
         <dt>ROI</dt><dd>{p.roiUndefined ? 'no definido (costo cero)' : pct(p.roiPct)}</dd>
         <dt>Precio de equilibrio</dt><dd>{exactGold(toQ(p.breakEven))}</dd>
         <dt>Precio para el objetivo</dt><dd>{exactGold(toQ(p.targetPrice))}</dd>
         <dt>Mínimo publicable</dt><dd>{p.minListPrice ? `${formatMoney(Q.of(BigInt(p.minListPrice)))} (redondeado al cobre superior)` : '—'}</dd>
-        <dt>Capital necesario</dt><dd>{money(p.capitalRequired)} <span className="small muted">(costo + depósitos)</span></dd>
+        <dt>Capital necesario</dt><dd><Money v={p.capitalRequired} /> <span className="small muted">(costo + depósitos)</span></dd>
       </dl>
       {e.dropScenario && (
         <div className="alert info" style={{ marginTop: 10 }}>
-          <p><strong>Con caída del {e.dropScenario.drop} %:</strong> precio {money(e.dropScenario.price)} → ganancia por lote {money(e.dropScenario.profit.profitBatch)}, por unidad {money(e.dropScenario.profit.profitUnit)}.</p>
+          <p><strong>Con caída del {e.dropScenario.drop} %:</strong> precio <Money v={e.dropScenario.price} /> → ganancia por lote <Money v={e.dropScenario.profit.profitBatch} />, por unidad <Money v={e.dropScenario.profit.profitUnit} />.</p>
         </div>
       )}
       {e.notes.length > 0 && <details style={{ marginTop: 8 }}><summary>Notas y limitaciones ({e.notes.length})</summary><ul className="reasons small">{e.notes.map((n: string, i: number) => <li key={i}>{n}</li>)}</ul></details>}
@@ -45,8 +45,8 @@ function Breakdown({ e, title }: { e: any; title: string }) {
 function SourcingNode({ n, depth = 0 }: { n: any; depth?: number }) {
   return (
     <div style={{ marginLeft: depth * 14 }} className="small">
-      <strong>{n.choice === 'fabricar' ? 'Fabricar' : n.choice === 'comprar' ? 'Comprar' : 'Sin datos'}</strong> · {money(n.unitCost)} /unid.
-      {' '}<span className="muted">(compra {money(n.buyPrice)} · fabricación {money(n.craftCost)})</span>
+      <strong>{n.choice === 'fabricar' ? 'Fabricar' : n.choice === 'comprar' ? 'Comprar' : 'Sin datos'}</strong> · <Money v={n.unitCost} /> /unid.
+      {' '}<span className="muted">(compra <Money v={n.buyPrice} /> · fabricación <Money v={n.craftCost} />)</span>
       {n.cycle && <span className="badge b-warn" style={{ marginLeft: 6 }}>Ciclo detectado</span>}
       {n.note && <span className="muted"> — {n.note}</span>}
       {n.choice === 'fabricar' && (n.children ?? []).map((c: any, i: number) => (
@@ -150,7 +150,7 @@ export function RecipeDetail({ id }: { id: number }) {
                 <dl className="kv">
                   <dt>Tasa de venta</dt><dd>{e.demand.saleRate ?? '—'}</dd>
                   <dt>Vendidos por día</dt><dd>{e.demand.soldPerDay ?? '—'}</dd>
-                  <dt>Precio medio de venta</dt><dd>{money(e.demand.avgSalePrice)}</dd>
+                  <dt>Precio medio de venta</dt><dd><Money v={e.demand.avgSalePrice} /></dd>
                   <dt>Escaneo</dt><dd>{dt(e.demand.sourceTime)} ({age(hoursSince(e.demand.sourceTime))})</dd>
                 </dl>
                 <p className="small muted">Señales regionales comparativas: no son la probabilidad de vender hoy ni las ventas de tu personaje.</p>
@@ -170,9 +170,9 @@ export function RecipeDetail({ id }: { id: number }) {
                 <tr key={r.itemId}>
                   <td data-label="Material" className="cell-main"><ItemLabel id={r.itemId} href={`#/materiales/${r.itemId}`} name={r.name ?? `Objeto ${r.itemId}`} sub={`ID ${r.itemId}${r.variants.length ? ` · otros IDs con el mismo nombre: ${r.variants.join(', ')}` : ''}`} /></td>
                   <td data-label="Cantidad" className="num">{r.quantity === null ? '—' : r.quantity * e.runs}</td>
-                  <td data-label="Precio usado" className="num">{money(r.price.copper)}</td>
+                  <td data-label="Precio usado" className="num"><Money v={r.price.copper} /></td>
                   <td data-label="Procedencia" className="small">{r.price.field} · {r.price.scope}{r.price.sourceTime ? ` · ${dt(r.price.sourceTime)}` : ''}</td>
-                  <td data-label="Subtotal" className="num">{money(r.subtotal)}</td>
+                  <td data-label="Subtotal" className="num"><Money v={r.subtotal} /></td>
                   <td data-label="Inventario" className="num">{r.owned}</td>
                   <td data-label="A comprar" className="num">{r.toBuy}</td>
                   <td data-label="Precio manual">

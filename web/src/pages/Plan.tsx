@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, Delta, PageHead, dt, type DraftEntry } from '../lib.js';
+import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, Delta, PageHead, dt, type DraftEntry, Money } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { Calculator, Trash, FloppyDisk, Info, ListChecks, WarningCircle } from '@phosphor-icons/react';
 
@@ -78,9 +78,9 @@ export function PlanPage() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Resumen</h2>
             <dl className="kv">
-              <dt>Costo de reposición total</dt><dd>{money(result.plan.replacementCost)}{result.plan.incomplete.length ? ' (incompleto)' : ''}</dd>
-              <dt>Desembolso (compras pendientes)</dt><dd><strong>{money(result.plan.outOfPocket)}</strong></dd>
-              <dt>Ingreso neto estimado</dt><dd>{money(result.plan.netRevenue)} <span className="small muted">(comisión {result.commission})</span></dd>
+              <dt>Costo de reposición total</dt><dd><Money v={result.plan.replacementCost} />{result.plan.incomplete.length ? ' (incompleto)' : ''}</dd>
+              <dt>Desembolso (compras pendientes)</dt><dd><strong><Money v={result.plan.outOfPocket} /></strong></dd>
+              <dt>Ingreso neto estimado</dt><dd><Money v={result.plan.netRevenue} /> <span className="small muted">(comisión {result.commission})</span></dd>
               <dt>Ganancia estimada (no realizada)</dt><dd><Delta v={result.plan.estimatedProfit} /></dd>
             </dl>
             {result.plan.incomplete.length > 0 && <p className="small" style={{ color: 'var(--color-bad)' }}>Total incompleto: faltan precios de {result.plan.incomplete.join(', ')}.</p>}
@@ -99,8 +99,8 @@ export function PlanPage() {
                       <td data-label="Ejecuciones" className="num">{e.runs}</td>
                       <td data-label="Unidades" className="num">{e.unitsProduced}</td>
                       <td data-label="Excedente" className="num">{e.surplus}</td>
-                      <td data-label="Costo" className="num">{money(e.cost)}</td>
-                      <td data-label="Ingreso neto" className="num">{money(e.netRevenue)}</td>
+                      <td data-label="Costo" className="num"><Money v={e.cost} /></td>
+                      <td data-label="Ingreso neto" className="num"><Money v={e.netRevenue} /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -120,9 +120,9 @@ export function PlanPage() {
                       <td data-label="Inventario" className="num">{m.owned}</td>
                       <td data-label="Usado" className="num">{m.used}</td>
                       <td data-label="A comprar" className="num"><strong>{m.toBuy}</strong></td>
-                      <td data-label="Precio" className="num">{money(m.unitPrice)}</td>
-                      <td data-label="Reposición" className="num">{money(m.replacementCost)}</td>
-                      <td data-label="Desembolso" className="num">{money(m.outOfPocket)}</td>
+                      <td data-label="Precio" className="num"><Money v={m.unitPrice} /></td>
+                      <td data-label="Reposición" className="num"><Money v={m.replacementCost} /></td>
+                      <td data-label="Desembolso" className="num"><Money v={m.outOfPocket} /></td>
                     </tr>
                   ))}
                 </tbody>

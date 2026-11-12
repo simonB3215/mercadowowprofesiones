@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status } from '../lib.js';
+import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight } from '@phosphor-icons/react';
@@ -184,8 +184,8 @@ export function Comparator() {
                   </td>
                   <td data-label="Profesión"><span className="icon-inline"><WowIcon kind="profession" id={i.professionId} px={20} />{i.profession}</span></td>
                   <td data-label="Unid./lote" className="num">{i.unitsPerRun ?? (i.yieldRange[0] !== null ? `${i.yieldRange[0]}–${i.yieldRange[1]}` : '—')}</td>
-                  <td data-label="Costo/unid." className="num">{money(i.costUnit)}</td>
-                  <td data-label="Precio venta" className="num">{money(i.sellPrice)}<div className="small muted">{i.sellScope}</div></td>
+                  <td data-label="Costo/unid." className="num"><Money v={i.costUnit} /></td>
+                  <td data-label="Precio venta" className="num"><Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div></td>
                   <td data-label="Ganancia est./unid." className="num"><Delta v={i.profitUnit} /></td>
                   <td data-label="Ganancia est./lote" className="num"><Delta v={i.profitBatch} tag={false} /></td>
                   <td data-label="ROI" className="num">{i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</td>

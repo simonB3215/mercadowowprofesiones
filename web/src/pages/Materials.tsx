@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q } from '../lib.js';
+import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q, Money } from '../lib.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
 
@@ -40,8 +40,8 @@ function MaterialDetail({ itemId }: { itemId: number }) {
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Vender el material</h2>
         <dl className="kv">
-          <dt>Precio utilizado</dt><dd>{money(x.price.copper)} <span className="small muted">{x.price.field} · {x.price.scope}</span></dd>
-          <dt>Valor neto de venta por unidad</dt><dd><strong>{money(x.sellNet)}</strong> <span className="small muted">(tras comisión {x.commission})</span></dd>
+          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{x.price.field} · {x.price.scope}</span></dd>
+          <dt>Valor neto de venta por unidad</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(tras comisión {x.commission})</span></dd>
         </dl>
       </section>
       <section className="card">

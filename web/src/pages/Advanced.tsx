@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api, money, ErrorBox, GoldInput } from '../lib.js';
+import { api, money, ErrorBox, GoldInput, Money } from '../lib.js';
 
 export function Advanced() {
   const [rows, setRows] = useState([{ label: 'Resultado A', probability: '', netRevenueGold: '' }, { label: 'Resultado B', probability: '', netRevenueGold: '' }]);
@@ -38,7 +38,7 @@ export function Advanced() {
         {ev && (
           <div style={{ marginTop: 8 }}>
             {ev.errors.length ? <div className="alert bad">{ev.errors.map((e: string, i: number) => <p key={i}>{e}</p>)}</div> : (
-              <p>Ingreso esperado: <strong>{money(ev.expected)}</strong> · Ganancia esperada: <strong>{money(ev.expectedProfit)}</strong> <span className="badge b-info">Manual</span></p>
+              <p>Ingreso esperado: <strong><Money v={ev.expected} /></strong> · Ganancia esperada: <strong><Money v={ev.expectedProfit} /></strong> <span className="badge b-info">Manual</span></p>
             )}
             <p className="small muted">El valor esperado no está garantizado en cada ejecución.</p>
           </div>

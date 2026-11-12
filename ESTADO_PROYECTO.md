@@ -8,7 +8,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 - 80 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto.
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
-- Rediseño visual (12-11-2026): tema claro con vidrio esmerilado e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
+- Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
 
 ## Funciones terminadas (verificadas)
 
@@ -38,7 +38,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Ajustes.
   - Calculadoras manuales avanzadas.
 - **Sistema visual** (`docs/SISTEMA_VISUAL.md`):
-  - Generado con la skill UI UX Pro Max (`design-system/mercado-wow/MASTER.md`): tema claro, paneles de vidrio con respaldo sólido, Fira Sans y Fira Code, iconos de interfaz Phosphor, sin emojis.
+  - Generado con la skill UI UX Pro Max (`design-system/mercado-wow/MASTER.md`): estilo del juego: paneles oscuros translúcidos con respaldo sólido, títulos dorados en Cinzel, botón principal rojo con borde dorado, Fira Sans y Fira Code, iconos de interfaz Phosphor, sin emojis.
   - Barra lateral y encabezado con el selector de mercado; tarjetas de indicadores con recuentos reales en el comparador.
   - Ganancia, pérdida, equilibrio y «sin datos» con icono, texto y color; las cifras del comparador y del detalle son **estimadas** y lo indican.
   - Estados de carga (esqueleto), error (con «Reintentar») y vacío en todas las páginas.
@@ -61,7 +61,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
 | Consultas colgadas con el pooler | Mitigado (límite de 30 s y renovación del pool) | Si se repite en producción, probar el pooler de sesión (puerto 5432) para el servidor local. Causa exacta sin confirmar. |
 | Iconos de objetos nuevos | Hay que ejecutar `npm run sync:icons` tras cada `sync:catalog` | Los objetos sin resolver se muestran con un marcador neutro. |
-| Tema oscuro | Retirado en el rediseño (la dirección visual pedía tema claro) | Añadirlo con los mismos tokens si se quiere. |
+| Tema claro | Sustituido por el estilo del juego (oscuro) a petición del usuario | Recuperable con los tokens de la primera iteración (historial de git). |
 
 ## Decisiones
 

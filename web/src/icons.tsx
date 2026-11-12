@@ -116,8 +116,10 @@ export function WowIcon({ kind = 'item', id, px = 28, quality, className = '' }:
 /** Nombre con icono: el texto siempre está presente aunque la imagen falle. */
 export function ItemLabel({ id, name, quality, href, px = 28, sub }: { id: number | null | undefined; name: React.ReactNode; quality?: string | null; href?: string; px?: number; sub?: React.ReactNode }) {
   const label = href ? <a href={href}>{name}</a> : <span>{name}</span>;
+  // Como en el juego, el nombre toma el color de la calidad del objeto (si se conoce).
+  const q = quality ? QUALITY_CLASS[quality] ?? '' : '';
   return (
-    <span className="item-label">
+    <span className={`item-label ${q}`.trim()}>
       <WowIcon id={id} px={px} quality={quality} />
       <span className="item-label-text">
         {label}

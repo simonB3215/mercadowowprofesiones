@@ -37,6 +37,22 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
 /** Convierte {n,d} del servidor a Q; null se mantiene. */
 export const toQ = (j: any): Q | null => (j && typeof j === 'object' && 'n' in j ? Q.fromJSON(j) : null);
 export const money = (j: any) => formatMoney(toQ(j));
+/**
+ * Importe con las monedas del juego: «o» oro, «p» plata, «c» cobre. Las letras se mantienen como texto
+ * (el color es un refuerzo, no la única pista) y el valor es el mismo que devuelve `formatMoney`.
+ */
+export function CoinText({ text }: { text: string }) {
+  const parts = text.split(/ ([opc])(?=\s|$)/);
+  if (parts.length === 1) return <>{text}</>;
+  return (
+    <span className="coins">
+      {parts.map((p, i) => (i % 2 === 1 ? <React.Fragment key={i}>{' '}<span className={`coin coin-${p}`}>{p}</span></React.Fragment> : p ? <React.Fragment key={i}>{p}</React.Fragment> : null))}
+    </span>
+  );
+}
+export function Money({ v }: { v: any }) {
+  return <CoinText text={money(v)} />;
+}
 export const pct = (j: any) => formatPct(toQ(j));
 /** ROI corto para tablas: aproximado, con el valor exacto en el título. */
 export function PctShort({ v }: { v: any }) {
@@ -169,7 +185,7 @@ export function Delta({ v, tag = true }: { v: any; tag?: boolean }) {
   return (
     <span className={`delta ${cls}`}>
       <I size={14} weight="bold" aria-hidden="true" />
-      <span>{formatMoney(q)}{tag && <span className="delta-tag">{sgn > 0 ? 'ganancia' : sgn < 0 ? 'pérdida' : 'equilibrio'}</span>}</span>
+      <span><CoinText text={formatMoney(q)} />{tag && <span className="delta-tag">{sgn > 0 ? 'ganancia' : sgn < 0 ? 'pérdida' : 'equilibrio'}</span>}</span>
     </span>
   );
 }
