@@ -5,9 +5,9 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 74 pruebas automáticas en verde y `tsc` sin errores.
+- 75 pruebas automáticas en verde y `tsc` sin errores.
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
-- Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM.
+- Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - La interfaz se revisó en el navegador.
 
 ## Funciones terminadas (verificadas)
@@ -46,7 +46,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Comisiones | Supuestos: 5 % (facción) y 15 % (Aguasnegras) | Comprobarlas en el juego y ajustarlas en «Ajustes». |
 | Objetos sin ficha en Blizzard | 345 objetos devuelven 404 (sobre todo recetas de «Temporada de descubrimiento») | Aparecen sin nombre; sus precios se usan por id. |
 | Desencantado y transformaciones aleatorias (PB-23) | Parcial | Calculadora manual de valor esperado; faltan tablas verificadas. |
-| Cron | Diario (plan Hobby) y solo de las casas usadas recientemente | Con Pro se puede pasar a cada hora en `vercel.json`. |
+| Cron horario | Workflow de GitHub Actions listo | Añadir el secreto `CRON_SECRET` en GitHub (*Settings → Secrets and variables → Actions*). |
+| Historial | En marcha desde el 12-11-2026 para JcJ — Horda | `historical` gana fiabilidad a partir de unos 7–14 días. |
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
 
 ## Decisiones

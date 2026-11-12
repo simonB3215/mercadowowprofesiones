@@ -91,7 +91,8 @@ Las pruebas cubren:
    - `CRON_SECRET`
    - opcionales: `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`, para guardar los CSV originales en Storage.
 4. **Catálogo:** se sincroniza desde tu equipo apuntando `DATABASE_URL` a Supabase (`npm run sync:catalog -- us`). No se hace desde Vercel por el límite de tiempo de las funciones.
-5. **Cron:** `/api/cron/sync-prices` se ejecuta a diario (límite del plan Hobby) y actualiza los mercados usados recientemente. Entre ejecuciones, el botón «Actualizar precios» descarga bajo demanda, como máximo una vez por hora y archivo.
+5. **Cron:** `/api/cron/sync-prices` actualiza las casas de subastas usadas recientemente. Vercel lo llama a diario (límite del plan Hobby) y GitHub Actions cada hora (`.github/workflows/sync-prices.yml`, necesita el secreto de repositorio `CRON_SECRET`, con el mismo valor que en Vercel). Las casas se descargan como máximo cada 50 min y las estadísticas regionales de TSM cada 6 h. El botón «Actualizar precios» descarga bajo demanda.
+6. **Historial:** cada foto de Blizzard se suma al día en `price_history`; el campo `historical` de la casa es la media de los promedios diarios de los últimos 14 días (se guardan 60). Los primeros días refleja pocos datos.
 
 ## Estructura
 

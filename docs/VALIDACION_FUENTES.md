@@ -53,7 +53,7 @@ La API no nombra el modo de cada grupo de casas. Se asignó comparando el `minBu
 | 123 / 124 / 125 | Rol JcJ | por descarte; TSM `roleplay-pvp-alliance` existe |
 | 112 / 115 / 118 | — | vacías (¿Hardcore, aún sin lanzar?) |
 
-Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = precio unitario mínimo; `marketValue` = media ponderada por cantidad del 15 % más barato del volumen publicado; sin `historical` (Blizzard solo da la foto actual). Las subastas sin compra inmediata se ignoran. Las variantes con `bonus_lists` del mismo `item.id` se agrupan.
+Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = precio unitario mínimo; `marketValue` = media ponderada por cantidad del 15 % más barato del volumen publicado; `historical` sale del historial propio (media de los promedios diarios de 14 días). Las subastas sin compra inmediata se ignoran. Las variantes con `bonus_lists` del mismo `item.id` se agrupan.
 - Otros namespaces probados (`static-classic-forever-us`, `static-forever1x-us`…) → 403.
 
 ## Lo que falta y cómo afecta al cálculo
@@ -61,7 +61,7 @@ Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = p
 | Laguna | Efecto |
 |---|---|
 | Comisión de subasta | 5 % en Alianza y Horda y 15 % en Aguasnegras (los valores de Classic) son supuestos configurables en «Ajustes». No están verificados para Forever. |
-| Historial en Aguasnegras | Blizzard solo da la foto actual: el campo `historical` queda vacío y TSM no publica la casa neutral. |
+| Historial | Blizzard solo da la foto actual y TSM no publica Aguasnegras: `historical` se calcula con el historial propio (`price_history`) y los primeros días se basa en pocas fotos. |
 | Profundidad de mercado | El costo siempre se marca como estimado; no se supone disponibilidad ilimitada. |
 | Disponibilidad en vendedor | `purchase_price` de Blizzard no prueba que un vendedor venda el objeto. No se usa automáticamente; se puede introducir un precio manual. |
 | Depósitos | No vienen en las fuentes; los introduce el usuario (perdidos o recuperables). |

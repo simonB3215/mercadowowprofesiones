@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { marketValue, summarize, toCsv, fetchHouseCsv } from '../src/server/providers/blizzardAuctions.js';
 import { parseTsmCsv } from '../src/server/providers/tsm.js';
 import { openDb, migrate } from '../src/server/db.js';
-import { ingest, loadSnapshot } from '../src/server/market.js';
+import { ingest, loadSnapshot, recordHistory } from '../src/server/market.js';
 import { FOREVER_REALMS, commissionFor, DEFAULT_SETTINGS, findHouse } from '../src/server/config.js';
 import type { BlizzardClient } from '../src/server/providers/blizzard.js';
 
@@ -64,5 +64,29 @@ describe('Casas de subastas de WoW Forever', () => {
     expect(s.runs.realm_items!.provider).toBe('blizzard');
     expect(s.runs.realm_items!.sourceTime).toBe('2026-11-12T10:05:00.000Z');
     expect(s.local.get(2589)!.minBuyout).toBe(25n);
+  });
+});
+
+describe('Historial propio de la casa de subastas', () => {
+  const ctx = { version: 'forever', region: 'us', realm: 'pvp-horde' };
+  const csv = (rows: Array<[number, number]>, at: string) =>
+    'itemId,name,marketValue,minBuyout,recent,historical,updatedAt\n' + rows.map(([id, mv]) => `${id},,${mv},${mv},${mv},,${at}`).join('\n') + '\n';
+  const load = async (db: any, rows: Array<[number, number]>, at: string) => {
+    const r = await ingest(db, ctx, 'realm_items', { text: csv(rows, at), provider: 'blizzard' });
+    return { r, h: await recordHistory(db, ctx, r.runId) };
+  };
+
+  it('promedia por día, no cuenta dos veces la misma foto y rellena historical', async () => {
+    const db = await openDb('pglite:memory');
+    await migrate(db);
+    await load(db, [[1, 100]], '2026-11-10T10:00:00Z');
+    await load(db, [[1, 300]], '2026-11-10T11:00:00Z'); // día 10: media 200
+    const again = await load(db, [[1, 300]], '2026-11-10T11:00:00Z'); // misma foto: no suma
+    expect(again.h.recorded).toBe(false);
+    const { h } = await load(db, [[1, 500], [2, 70]], '2026-11-11T09:00:00Z'); // día 11: 500
+    expect(h).toEqual({ recorded: true, days: 2 });
+    const s = await loadSnapshot(db, ctx);
+    expect(s.local.get(1)!.historical).toBe(350n); // (200 + 500) / 2
+    expect(s.local.get(2)!.historical).toBe(70n);
   });
 });

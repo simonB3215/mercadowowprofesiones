@@ -15,7 +15,7 @@
 | D11 | Resultado con otro objeto del mismo nombre → bloqueo salvo que el usuario asuma la variante manualmente | No se puede saber cuál se obtiene. |
 | D12 | Sin expansiones: todo el catálogo es «WoW Forever» | Forever tiene un único rango por profesión. |
 | D13 | El catálogo de Blizzard se sincroniza con un **script local** (`npm run sync:catalog`), no desde Vercel | Son miles de peticiones y superan el límite de tiempo de una función. Es reanudable. |
-| D14 | Precios: sincronización bajo demanda (botón, sin repetir en menos de 60 min) más **Vercel Cron diario** | El plan Hobby de Vercel solo permite cron diario. Con Pro se puede cambiar a cada 3 h en `vercel.json`. |
+| D14 | Precios: sincronización bajo demanda (botón, sin repetir en menos de 50 min la casa y 6 h la región) más **Vercel Cron diario** y GitHub Actions cada hora (D24) | El plan Hobby de Vercel solo permite cron diario. Con Pro se puede cambiar a cada 3 h en `vercel.json`. |
 | D15 | Se conservan como máximo 2 lotes con filas por archivo y contexto; los intentos fallidos se registran sin filas | Mantiene la base de datos dentro del plan gratuito de Supabase y permite reproducir resultados recientes. |
 | D16 | Sin modo demo en la aplicación. Los datos ficticios solo existen en las pruebas automáticas (`tests/helpers/seed.ts`, PGlite en memoria) | El usuario pidió que solo exista WoW Forever. |
 | D17 | Acceso con una contraseña compartida (`APP_PASSWORD`) | Aplicación de un solo usuario; ver `src/server/auth.ts`. |
@@ -24,3 +24,5 @@
 | D20 | Parámetros jsonb con `$n::text::jsonb` | Con postgres.js un `JSON.stringify` en una columna jsonb se guardaba como cadena (doble codificación). La migración `20261112000000` corrige las filas existentes. |
 | D21 | Precios de la casa de subastas desde la **API de Blizzard**; TSM como respaldo y para la demanda regional | Blizzard publica las 15 casas de Forever, incluida la neutral de Aguasnegras, que TSM no tiene. Su foto se resume por objeto en el formato CSV de TSM para reutilizar la ingesta. El modo de cada grupo de casas se verificó contra TSM (`docs/VALIDACION_FUENTES.md`). |
 | D22 | Comisión de Aguasnegras separada (`commissionNeutral`, 15 %) | Las casas neutrales cobran más en Classic. Supuesto configurable, no verificado en Forever. |
+| D23 | Historial propio en `price_history` (un registro por objeto y día); `historical` = media de los promedios diarios de 14 días | Blizzard solo da la foto actual y TSM no publica Aguasnegras. Una misma foto (mismo `Last-Modified`) cuenta una sola vez. |
+| D24 | Sincronización horaria con GitHub Actions además del cron diario de Vercel | El plan Hobby solo permite cron diario. El cron solo sigue la casa del usuario (`pvp-horde`) para no pasar de los 60 s de la función. |

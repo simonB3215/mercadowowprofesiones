@@ -140,6 +140,57 @@ async function prune(db: Db, ctx: MarketContext, kind: FileKind, realm: string |
   );
 }
 
+export const HISTORY_DAYS = 14;
+const HISTORY_KEEP_DAYS = 60;
+
+/**
+ * Historial propio (casas cargadas desde Blizzard, que solo dan la foto actual):
+ * suma la carga al día UTC de su escaneo y rellena `historical` del lote con la media
+ * de los promedios diarios de los últimos 14 días. Una misma foto (mismo escaneo) cuenta una sola vez.
+ */
+export async function recordHistory(db: Db, ctx: MarketContext, runId: number): Promise<{ recorded: boolean; days: number }> {
+  if (!ctx.realm) return { recorded: false, days: 0 };
+  const [run] = await db.query<{ source_time: string | null }>(`select source_time from ingestion_run where id=$1`, [runId]);
+  if (!run?.source_time) return { recorded: false, days: 0 };
+  const dup = await db.query(
+    `select 1 from ingestion_run where id<>$1 and status='ok' and game_version=$2 and region=$3 and realm=$4
+       and file_kind='realm_items' and provider='blizzard' and source_time=$5 limit 1`,
+    [runId, ctx.version, ctx.region, ctx.realm, run.source_time],
+  );
+  const recorded = dup.length === 0;
+  await db.tx(async (t) => {
+    if (recorded) {
+      await t.query(
+        `insert into price_history (game_version, region, realm, item_id, day, samples, market_value_sum, min_buyout_min)
+         select $2, $3, $4, p.item_id, (r.source_time at time zone 'UTC')::date, 1, p.market_value, p.min_buyout
+         from price_row p join ingestion_run r on r.id = p.run_id
+         where p.run_id = $1 and p.market_value is not null
+         on conflict (game_version, region, realm, item_id, day) do update set
+           samples = price_history.samples + 1,
+           market_value_sum = price_history.market_value_sum + excluded.market_value_sum,
+           min_buyout_min = least(price_history.min_buyout_min, excluded.min_buyout_min)`,
+        [runId, ctx.version, ctx.region, ctx.realm],
+      );
+    }
+    await t.query(
+      `update price_row p set historical = h.v from (
+         select item_id, floor(avg(market_value_sum / samples))::bigint as v from price_history
+         where game_version=$2 and region=$3 and realm=$4
+           and day > (select (source_time at time zone 'UTC')::date from ingestion_run where id=$1) - $5::int
+         group by item_id) h
+       where p.run_id = $1 and p.item_id = h.item_id`,
+      [runId, ctx.version, ctx.region, ctx.realm, HISTORY_DAYS],
+    );
+    await t.query(`delete from price_history where game_version=$1 and region=$2 and realm=$3 and day < current_date - $4::int`,
+      [ctx.version, ctx.region, ctx.realm, HISTORY_KEEP_DAYS]);
+  });
+  const [d] = await db.query<{ c: number }>(
+    `select count(distinct day)::int as c from price_history where game_version=$1 and region=$2 and realm=$3`,
+    [ctx.version, ctx.region, ctx.realm],
+  );
+  return { recorded, days: Number(d?.c ?? 0) };
+}
+
 export interface RunInfo {
   id: number;
   kind: FileKind;

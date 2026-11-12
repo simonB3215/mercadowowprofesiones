@@ -4,7 +4,7 @@
  */
 import { getDb, type Db } from './db.js';
 import { VERSIONS, REGION_LABEL, DEFAULT_SETTINGS, PRICE_FIELD_LABEL, findHouse, commissionFor, type Settings } from './config.js';
-import { HttpError, ingest, loadSnapshot, validateContext, ageHours, type MarketContext } from './market.js';
+import { HttpError, ingest, recordHistory, loadSnapshot, validateContext, ageHours, type MarketContext } from './market.js';
 import { tsmUrl, type FileKind } from './providers/tsm.js';
 import { hasBlizzardCredentials, createBlizzardClient } from './providers/blizzard.js';
 import { fetchHouseCsv } from './providers/blizzardAuctions.js';
@@ -141,7 +141,9 @@ async function marketStatus(db: Db, ctx: MarketContext) {
 
 route('GET', '/api/market/status', async (_r, _p, u, db) => marketStatus(db, ctxFrom(u)));
 
-const MIN_REFETCH_MIN = 60;
+/** Blizzard renueva la foto cada hora; con 50 min el cron horario no se salta ninguna. */
+const MIN_REFETCH_MIN = 50;
+const REGION_REFETCH_MIN = 6 * 60;
 
 /**
  * Precios de la casa de subastas: Blizzard (foto actual de la casa, incluida Aguasnegras) si hay credenciales;
@@ -153,7 +155,9 @@ async function ingestHouse(db: Db, ctx: MarketContext) {
   if (house && hasBlizzardCredentials()) {
     try {
       const { text, url } = await fetchHouseCsv(createBlizzardClient(ctx.region), house.blizzardHouseId);
-      return await ingest(db, ctx, 'realm_items', { text, provider: 'blizzard', sourceUrl: url, storeRaw });
+      const r = await ingest(db, ctx, 'realm_items', { text, provider: 'blizzard', sourceUrl: url, storeRaw });
+      if (r.status !== 'ok') return r;
+      return { ...r, history: await recordHistory(db, ctx, r.runId) };
     } catch (e) {
       blizzardError = (e as Error).message;
     }
@@ -174,7 +178,8 @@ export async function syncPrices(db: Db, ctx: MarketContext, force = false) {
       [ctx.version, ctx.region, k, k === 'realm_items' ? ctx.realm : null],
     );
     const mins = last[0] ? (Date.now() - new Date(last[0].finished_at).getTime()) / 60000 : Infinity;
-    if (!force && mins < MIN_REFETCH_MIN) {
+    // Las estadísticas regionales de TSM cambian como mucho unas veces al día: no se piden cada hora.
+    if (!force && mins < (k === 'region_items' ? REGION_REFETCH_MIN : MIN_REFETCH_MIN)) {
       results[k] = { status: 'omitido', reason: `Descargado hace ${Math.round(mins)} min; las fuentes se actualizan cada hora o más.` };
       continue;
     }

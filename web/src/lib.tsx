@@ -42,6 +42,8 @@ export function PctShort({ v }: { v: any }) {
   return <span title={`Exacto: ${formatPct(q)}`}>{q.isTerminating() ? '' : '≈ '}{q.toDecimal(1)} %</span>;
 }
 
+/** Casa de subastas por defecto: la del usuario (JcJ, Horda). */
+export const DEFAULT_REALM = 'pvp-horde';
 export interface Ctx { version: string; region: string; realm: string | null }
 
 interface AppState {
@@ -73,7 +75,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Solo WoW Forever. Un contexto guardado de otra versión (Retail, demo) se descarta.
   const [ctx, setCtxS] = useState<Ctx>(() => {
     const c = stored<Ctx | null>('ctx', null);
-    return c && c.version === 'forever' ? c : { version: 'forever', region: 'us', realm: null };
+    return c && c.version === 'forever' ? { ...c, realm: c.realm ?? DEFAULT_REALM } : { version: 'forever', region: 'us', realm: DEFAULT_REALM };
   });
   const [profileId, setPid] = useState<string | null>(() => stored('profileId', null));
   const [meta, setMeta] = useState<any>(null);
