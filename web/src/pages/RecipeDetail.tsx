@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q } from '../lib.js';
+import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta } from '../lib.js';
+import { ItemLabel, WowIcon, useAsset } from '../icons.js';
+import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks } from '@phosphor-icons/react';
 
 function backHref() {
   try { return sessionStorage.getItem('lastComparator') ?? '#/'; } catch { return '#/'; }
@@ -22,8 +24,8 @@ function Breakdown({ e, title }: { e: any; title: string }) {
         <dt>Desembolso por faltantes</dt><dd>{money(c.outOfPocket)} <span className="small muted">(reposición ≠ desembolso)</span></dd>
         <dt>Precio de venta utilizado (P)</dt><dd>{money(e.sellPrice.copper)} <span className="small muted">{e.sellPrice.field} · {e.sellPrice.scope}</span></dd>
         <dt>Ingreso neto del lote</dt><dd>{money(p.netRevenue)}</dd>
-        <dt>Ganancia por lote</dt><dd><strong>{money(p.profitBatch)}</strong></dd>
-        <dt>Ganancia por unidad</dt><dd><strong>{money(p.profitUnit)}</strong></dd>
+        <dt>Ganancia estimada por lote</dt><dd><Delta v={p.profitBatch} /></dd>
+        <dt>Ganancia estimada por unidad</dt><dd><Delta v={p.profitUnit} /></dd>
         <dt>ROI</dt><dd>{p.roiUndefined ? 'no definido (costo cero)' : pct(p.roiPct)}</dd>
         <dt>Precio de equilibrio</dt><dd>{exactGold(toQ(p.breakEven))}</dd>
         <dt>Precio para el objetivo</dt><dd>{exactGold(toQ(p.targetPrice))}</dd>
@@ -48,8 +50,29 @@ function SourcingNode({ n, depth = 0 }: { n: any; depth?: number }) {
       {n.cycle && <span className="badge b-warn" style={{ marginLeft: 6 }}>Ciclo detectado</span>}
       {n.note && <span className="muted"> — {n.note}</span>}
       {n.choice === 'fabricar' && (n.children ?? []).map((c: any, i: number) => (
-        <div key={i}><span className="muted">{c.quantity} × objeto {c.node.itemKey}:</span> <SourcingNode n={c.node} depth={depth + 1} /></div>
+        <div key={i}><span className="muted icon-inline"><WowIcon id={Number(c.node.itemKey) || null} px={18} />{c.quantity} × objeto {c.node.itemKey}:</span> <SourcingNode n={c.node} depth={depth + 1} /></div>
       ))}
+    </div>
+  );
+}
+
+/** Encabezado del detalle: icono grande del resultado y enlace a su ficha de Wowhead (si está verificada). */
+function RecipeHeader({ e }: { e: any }) {
+  const a = useAsset('item', e.output?.itemId, 'large');
+  return (
+    <div className="card title-with-icon" style={{ alignItems: 'center' }}>
+      <WowIcon id={e.output?.itemId} px={56} quality={e.output?.quality} />
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <h1 style={{ margin: 0 }}>{e.name}</h1>
+        <p className="muted small icon-inline" style={{ margin: '4px 0 0', flexWrap: 'wrap' }}>
+          <WowIcon kind="profession" id={e.professionId} px={18} />
+          {e.profession}{e.tier ? ` · ${e.tier}` : ''}{e.category ? ` · ${e.category}` : ''} · receta {e.recipeId}
+        </p>
+      </div>
+      <div className="row" style={{ alignItems: 'center' }}>
+        <StatusBadge s={e.status} />
+        {a?.page && <a className="icon-inline small" href={a.page} target="_blank" rel="noopener noreferrer">Ficha en Wowhead<ArrowSquareOut size={14} aria-hidden="true" /><span className="sr-only">(se abre en otra pestaña)</span></a>}
+      </div>
     </div>
   );
 }
@@ -70,7 +93,7 @@ export function RecipeDetail({ id }: { id: number }) {
   useEffect(() => { setOv({ prices: {} }); setScenario(null); }, [id, ctxQuery]);
 
   if (!Number.isInteger(id)) return <ErrorBox error="Identificador de receta inválido." />;
-  if (d.loading) return <Loading />;
+  if (d.loading) return <Loading rows={5} />;
   if (d.error) return <ErrorBox error={d.error} onRetry={d.reload} />;
   const e = d.data.evaluation;
 
@@ -104,9 +127,8 @@ export function RecipeDetail({ id }: { id: number }) {
 
   return (
     <div>
-      <p><a href={backHref()}>← Volver al comparador</a></p>
-      <h1>{e.name}</h1>
-      <p className="muted">{e.profession}{e.tier ? ` · ${e.tier}` : ''}{e.category ? ` · ${e.category}` : ''} · receta {e.recipeId}</p>
+      <p><a className="icon-inline" href={backHref()}><ArrowLeft size={16} aria-hidden="true" />Volver al comparador</a></p>
+      <RecipeHeader e={e} />
 
       <div className="grid grid-2">
         <Breakdown e={e} title="Escenario base (datos de origen)" />
@@ -114,7 +136,7 @@ export function RecipeDetail({ id }: { id: number }) {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Resultado y canal de venta</h2>
             <dl className="kv">
-              <dt>Objeto</dt><dd>{e.output ? `${e.output.name ?? 'Sin nombre'} (ID ${e.output.itemId})` : 'No produce objeto'}</dd>
+              <dt>Objeto</dt><dd>{e.output ? <ItemLabel id={e.output.itemId} quality={e.output.quality} px={24} name={e.output.name ?? 'Sin nombre'} sub={`ID ${e.output.itemId}`} /> : 'No produce objeto'}</dd>
               <dt>Calidad</dt><dd>{e.output?.quality ?? 'desconocida'}</dd>
               <dt>Vinculación</dt><dd>{e.output?.binding ?? 'desconocida'}</dd>
               <dt>Canal</dt><dd>{e.channel === 'subasta' ? 'Subasta' : e.channel === 'vinculado' ? 'Vinculado (no vendible)' : e.channel === 'servicio' ? 'Servicio / efecto aplicado' : 'Desconocido'}</dd>
@@ -146,7 +168,7 @@ export function RecipeDetail({ id }: { id: number }) {
             <tbody>
               {e.reagents.map((r: any) => (
                 <tr key={r.itemId}>
-                  <td data-label="Material"><a href={`#/materiales/${r.itemId}`}>{r.name ?? `Objeto ${r.itemId}`}</a><div className="small muted">ID {r.itemId}{r.variants.length ? ` · otros IDs con el mismo nombre: ${r.variants.join(', ')}` : ''}</div></td>
+                  <td data-label="Material" className="cell-main"><ItemLabel id={r.itemId} href={`#/materiales/${r.itemId}`} name={r.name ?? `Objeto ${r.itemId}`} sub={`ID ${r.itemId}${r.variants.length ? ` · otros IDs con el mismo nombre: ${r.variants.join(', ')}` : ''}`} /></td>
                   <td data-label="Cantidad" className="num">{r.quantity === null ? '—' : r.quantity * e.runs}</td>
                   <td data-label="Precio usado" className="num">{money(r.price.copper)}</td>
                   <td data-label="Procedencia" className="small">{r.price.field} · {r.price.scope}{r.price.sourceTime ? ` · ${dt(r.price.sourceTime)}` : ''}</td>
@@ -158,7 +180,7 @@ export function RecipeDetail({ id }: { id: number }) {
                   </td>
                 </tr>
               ))}
-              {!e.reagents.length && <tr><td colSpan={8} className="empty">La receta no tiene ingredientes registrados.</td></tr>}
+              {!e.reagents.length && <tr><td colSpan={8} className="empty">La receta no tiene ingredientes registrados: el costo queda como desconocido.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -188,9 +210,9 @@ export function RecipeDetail({ id }: { id: number }) {
           Asumir manualmente que el precio corresponde al objeto obtenido aunque haya otro con el mismo nombre (excluye la recomendación automática)
         </label>
         <div className="row" style={{ marginTop: 10 }}>
-          <button className="primary" onClick={calc} disabled={busy}>{busy ? 'Calculando…' : 'Recalcular escenario'}</button>
-          <button onClick={reset}>Restaurar escenario base</button>
-          <button onClick={saveScenario}>Guardar escenario</button>
+          <button className="primary" onClick={calc} disabled={busy}><Calculator size={18} aria-hidden="true" />{busy ? 'Calculando…' : 'Recalcular escenario'}</button>
+          <button onClick={reset}><ArrowCounterClockwise size={18} aria-hidden="true" />Restaurar escenario base</button>
+          <button onClick={saveScenario}><FloppyDisk size={18} aria-hidden="true" />Guardar escenario</button>
           {(saved.data?.scenarios ?? []).length > 0 && (
             <label className="field">Escenarios guardados
               <select onChange={(ev) => { const s = saved.data.scenarios.find((x: any) => x.id === ev.target.value); if (s) setOv(s.data); }} defaultValue="">
@@ -218,8 +240,8 @@ Precio_equilibrio = (C + D) / (Q × (1 − t)) = ${exactGold(toQ(e.profit.breakE
         <h2 style={{ marginTop: 0 }}>Comprar o fabricar componentes</h2>
         <p className="small muted">Solo se consideran recetas del catálogo con datos completos{profileId ? ' que el perfil conoce' : '; sin perfil, la accesibilidad está sin confirmar'}. Los ciclos se cortan y se marcan.</p>
         {d.data.sourcing.map((s: any) => (
-          <div key={s.itemId} style={{ borderTop: '1px solid var(--border)', padding: '6px 0' }}>
-            <strong>{s.name ?? `Objeto ${s.itemId}`}</strong> <span className="small muted">({s.recipesAvailable} receta(s) lo producen)</span>
+          <div key={s.itemId} style={{ borderTop: '1px solid var(--color-border)', padding: '8px 0' }}>
+            <span className="icon-inline"><WowIcon id={s.itemId} px={22} /><strong>{s.name ?? `Objeto ${s.itemId}`}</strong></span> <span className="small muted">({s.recipesAvailable} receta(s) lo producen)</span>
             <SourcingNode n={s.node} />
           </div>
         ))}
@@ -235,8 +257,8 @@ Precio_equilibrio = (C + D) / (Q × (1 − t)) = ${exactGold(toQ(e.profit.breakE
               <option value="unidades">unidades del resultado</option>
             </select>
           </label>
-          <button onClick={addPlan}>Añadir</button>
-          <a href="#/plan">Ver lista</a>
+          <button onClick={addPlan}><Plus size={18} aria-hidden="true" />Añadir</button>
+          <a className="icon-inline" href="#/plan"><ListChecks size={18} aria-hidden="true" />Ver lista</a>
         </div>
         {planMsg && <p className="small" role="status">{planMsg}</p>}
       </section>

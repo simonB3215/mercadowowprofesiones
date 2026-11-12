@@ -167,7 +167,7 @@ function sellability(output: ItemRow | undefined, itemId: number | null, snap: M
   if (b && /ON_ACQUIRE|ON_PICKUP|QUEST/i.test(b)) return { channel: 'vinculado', reason: `El resultado se liga al recogerlo (${b}).` };
   if (b && /ACCOUNT|WARBOUND|BNET/i.test(b) && !/EQUIP/i.test(b)) return { channel: 'vinculado', reason: `El resultado está ligado a la cuenta (${b}).` };
   const observed = snap.local.has(itemId) || snap.region.has(itemId);
-  if (observed) return { channel: 'subasta', reason: 'Observado en los datos de subasta de TSM para este mercado.' };
+  if (observed) return { channel: 'subasta', reason: 'Observado en los precios de la casa de subastas o en las estadísticas regionales.' };
   if (b) return { channel: 'desconocido', reason: `Vinculación "${b}" sin observaciones en subasta para este mercado.` };
   return { channel: 'desconocido', reason: 'No hay datos de vinculación ni observaciones en subasta.' };
 }

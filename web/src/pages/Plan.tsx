@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, dt, type DraftEntry } from '../lib.js';
+import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, Delta, PageHead, dt, type DraftEntry } from '../lib.js';
+import { ItemLabel } from '../icons.js';
+import { Calculator, Trash, FloppyDisk, Info, ListChecks, WarningCircle } from '@phosphor-icons/react';
 
 export function PlanPage() {
   const { ctx, profileId } = useApp();
@@ -24,12 +26,11 @@ export function PlanPage() {
 
   return (
     <div>
-      <h1>Lista de fabricación y compras</h1>
-      <p className="muted small">Agrupa materiales de varias recetas, aplica el inventario del perfil una sola vez y muestra el capital necesario antes de fabricar. Las cantidades no garantizan ventas.</p>
-      {!profileId && <div className="alert info"><p>Sin perfil seleccionado: no se descuenta inventario.</p></div>}
+      <PageHead title="Lista de fabricación y compras">Agrupa materiales de varias recetas, aplica el inventario del perfil una sola vez y muestra el capital necesario antes de fabricar. Las cantidades no garantizan ventas.</PageHead>
+      {!profileId && <div className="alert info"><Info size={20} aria-hidden="true" /><div><p>Sin perfil seleccionado: no se descuenta inventario.</p></div></div>}
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Recetas del plan</h2>
-        {!entries.length && <p className="empty">La lista está vacía. Añade recetas desde su página de detalle.</p>}
+        {!entries.length && <div className="empty"><ListChecks size={32} aria-hidden="true" /><div>La lista está vacía. Añade recetas desde su página de detalle.</div></div>}
         {entries.length > 0 && (
           <div className="table-wrap">
             <table className="responsive">
@@ -47,7 +48,7 @@ export function PlanPage() {
                         <option value="ejecuciones">ejecuciones</option><option value="unidades">unidades del resultado</option>
                       </select>
                     </td>
-                    <td><button className="link danger" onClick={() => update(entries.filter((_, j) => j !== i))}>Quitar</button></td>
+                    <td><button className="link danger icon-inline" onClick={() => update(entries.filter((_, j) => j !== i))}><Trash size={16} aria-hidden="true" />Quitar</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -55,10 +56,10 @@ export function PlanPage() {
           </div>
         )}
         <div className="row" style={{ marginTop: 10 }}>
-          <button className="primary" onClick={compute} disabled={!entries.length || busy}>{busy ? 'Calculando…' : 'Calcular plan'}</button>
-          <button onClick={() => update([])} disabled={!entries.length}>Vaciar</button>
+          <button className="primary" onClick={compute} disabled={!entries.length || busy}><Calculator size={18} aria-hidden="true" />{busy ? 'Calculando…' : 'Calcular plan'}</button>
+          <button onClick={() => update([])} disabled={!entries.length}><Trash size={18} aria-hidden="true" />Vaciar</button>
           <label className="field">Nombre del plan<input type="text" value={planName} onChange={(e) => setPlanName(e.target.value)} placeholder="Plan" /></label>
-          <button onClick={savePlan} disabled={!entries.length}>Guardar plan</button>
+          <button onClick={savePlan} disabled={!entries.length}><FloppyDisk size={18} aria-hidden="true" />Guardar plan</button>
           {(plans.data?.plans ?? []).length > 0 && (
             <label className="field">Planes guardados
               <select defaultValue="" onChange={(e) => { const p = plans.data.plans.find((x: any) => x.id === e.target.value); if (p) update(p.data.entries ?? []); }}>
@@ -72,17 +73,17 @@ export function PlanPage() {
       {err && <ErrorBox error={err} />}
       {result && (
         <>
-          {result.warnings.length > 0 && <div className="alert warn">{result.warnings.map((w: string, i: number) => <p key={i}>{w}</p>)}</div>}
-          {result.plan.errors.length > 0 && <div className="alert bad">{result.plan.errors.map((w: string, i: number) => <p key={i}>{w}</p>)}</div>}
+          {result.warnings.length > 0 && <div className="alert warn"><WarningCircle size={20} aria-hidden="true" /><div>{result.warnings.map((w: string, i: number) => <p key={i}>{w}</p>)}</div></div>}
+          {result.plan.errors.length > 0 && <div className="alert bad" role="alert"><WarningCircle size={20} aria-hidden="true" /><div>{result.plan.errors.map((w: string, i: number) => <p key={i}>{w}</p>)}</div></div>}
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Resumen</h2>
             <dl className="kv">
               <dt>Costo de reposición total</dt><dd>{money(result.plan.replacementCost)}{result.plan.incomplete.length ? ' (incompleto)' : ''}</dd>
               <dt>Desembolso (compras pendientes)</dt><dd><strong>{money(result.plan.outOfPocket)}</strong></dd>
               <dt>Ingreso neto estimado</dt><dd>{money(result.plan.netRevenue)} <span className="small muted">(comisión {result.commission})</span></dd>
-              <dt>Ganancia estimada</dt><dd>{money(result.plan.estimatedProfit)}</dd>
+              <dt>Ganancia estimada (no realizada)</dt><dd><Delta v={result.plan.estimatedProfit} /></dd>
             </dl>
-            {result.plan.incomplete.length > 0 && <p className="small" style={{ color: 'var(--bad)' }}>Total incompleto: faltan precios de {result.plan.incomplete.join(', ')}.</p>}
+            {result.plan.incomplete.length > 0 && <p className="small" style={{ color: 'var(--color-bad)' }}>Total incompleto: faltan precios de {result.plan.incomplete.join(', ')}.</p>}
             <p className="small muted">{result.note}</p>
           </section>
           <section className="card">
@@ -114,7 +115,7 @@ export function PlanPage() {
                 <tbody>
                   {result.plan.materials.map((m: any) => (
                     <tr key={m.itemKey}>
-                      <td data-label="Material">{m.name} <span className="small muted">ID {m.itemKey}</span></td>
+                      <td data-label="Material" className="cell-main"><ItemLabel id={Number(m.itemKey) || null} href={`#/materiales/${m.itemKey}`} name={m.name ?? `Objeto ${m.itemKey}`} sub={`ID ${m.itemKey}`} /></td>
                       <td data-label="Necesario" className="num">{m.need}</td>
                       <td data-label="Inventario" className="num">{m.owned}</td>
                       <td data-label="Usado" className="num">{m.used}</td>

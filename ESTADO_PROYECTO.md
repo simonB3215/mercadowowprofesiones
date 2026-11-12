@@ -5,10 +5,10 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 75 pruebas automáticas en verde y `tsc` sin errores.
+- 80 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto.
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
-- La interfaz se revisó en el navegador.
+- Rediseño visual (12-11-2026): tema claro con vidrio esmerilado e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
 
 ## Funciones terminadas (verificadas)
 
@@ -37,6 +37,16 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Registro real con correcciones sin duplicar.
   - Ajustes.
   - Calculadoras manuales avanzadas.
+- **Sistema visual** (`docs/SISTEMA_VISUAL.md`):
+  - Generado con la skill UI UX Pro Max (`design-system/mercado-wow/MASTER.md`): tema claro, paneles de vidrio con respaldo sólido, Fira Sans y Fira Code, iconos de interfaz Phosphor, sin emojis.
+  - Barra lateral y encabezado con el selector de mercado; tarjetas de indicadores con recuentos reales en el comparador.
+  - Ganancia, pérdida, equilibrio y «sin datos» con icono, texto y color; las cifras del comparador y del detalle son **estimadas** y lo indican.
+  - Estados de carga (esqueleto), error (con «Reintentar») y vacío en todas las páginas.
+  - Tableta: barra lateral solo con iconos. Móvil: navegación horizontal y tablas convertidas en tarjetas.
+  - Teclado con foco visible, contraste AA medido y `prefers-reduced-motion`.
+  - Páginas secundarias cargadas bajo demanda: paquete inicial de 269 kB (81 kB comprimido).
+- **Iconos de WoW:** tabla `visual_asset`, `GET /api/assets` y `npm run sync:icons`. 2 452 recursos de Wowhead Forever (12 profesiones + 2 440 objetos) y 263 objetos con el icono oficial de Blizzard; ninguno sin icono. Si una imagen falla: Blizzard y, después, un marcador neutro.
+- **Robustez de la base de datos:** las lecturas de más de 30 s fallan con un error visible y renuevan el pool (D26).
 - **Acceso:** contraseña compartida (`APP_PASSWORD`), cookie HttpOnly firmada; el cron usa `CRON_SECRET`.
 
 ## En curso o bloqueado
@@ -49,6 +59,9 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Cron horario | Workflow de GitHub Actions listo | Añadir el secreto `CRON_SECRET` en GitHub (*Settings → Secrets and variables → Actions*). |
 | Historial | En marcha desde el 12-11-2026 para JcJ — Horda | `historical` gana fiabilidad a partir de unos 7–14 días. |
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
+| Consultas colgadas con el pooler | Mitigado (límite de 30 s y renovación del pool) | Si se repite en producción, probar el pooler de sesión (puerto 5432) para el servidor local. Causa exacta sin confirmar. |
+| Iconos de objetos nuevos | Hay que ejecutar `npm run sync:icons` tras cada `sync:catalog` | Los objetos sin resolver se muestran con un marcador neutro. |
+| Tema oscuro | Retirado en el rediseño (la dirección visual pedía tema claro) | Añadirlo con los mismos tokens si se quiere. |
 
 ## Decisiones
 
@@ -60,6 +73,7 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26).
 
 ## Siguientes pasos
 

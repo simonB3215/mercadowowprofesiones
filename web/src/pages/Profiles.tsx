@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, dt } from '../lib.js';
+import { ItemLabel } from '../icons.js';
 
 const empty = { name: '', faction: '', professions: [] as any[], knownRecipes: [] as number[], inventory: {} as Record<string, number> };
 
@@ -84,7 +85,9 @@ export function Profiles() {
           </label>
         </div>
         <h2>Profesiones</h2>
-        {!profs.data?.professions?.length && <p className="small muted">No hay profesiones en el catálogo de esta versión.</p>}
+        {profs.loading && <Loading label="Cargando profesiones…" />}
+        {profs.error && <ErrorBox error={profs.error} onRetry={profs.reload} />}
+        {!profs.loading && !profs.error && !profs.data?.professions?.length && <p className="small muted">No hay profesiones en el catálogo de esta versión.</p>}
         <div className="grid grid-3">
           {(profs.data?.professions ?? []).map((p: any) => {
             const mine = form.professions.find((x: any) => x.professionId === p.id);
@@ -128,9 +131,9 @@ export function Profiles() {
             setForm({ ...form, inventory: { ...form.inventory, [invId]: n } }); setInvId(''); setInvQty('');
           }}>Añadir / actualizar</button>
         </div>
-        <ul className="small">
+        <ul className="small" style={{ listStyle: 'none', paddingLeft: 0 }}>
           {Object.entries(form.inventory).map(([k, v]) => (
-            <li key={k}>Objeto {k}: {String(v)} unid. <button className="link danger" onClick={() => { const inv = { ...form.inventory }; delete inv[k]; setForm({ ...form, inventory: inv }); }}>Quitar</button></li>
+            <li key={k} style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '6px 0' }}><ItemLabel id={Number(k)} px={24} href={`#/materiales/${k}`} name={`Objeto ${k}`} sub={`${String(v)} unid.`} /> <button className="link danger" onClick={() => { const inv = { ...form.inventory }; delete inv[k]; setForm({ ...form, inventory: inv }); }}>Quitar</button></li>
           ))}
           {!Object.keys(form.inventory).length && <li className="muted">Sin inventario registrado.</li>}
         </ul>

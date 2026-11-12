@@ -2,6 +2,9 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { Q } from '../../src/engine/rational.js';
 import { formatMoney, exactGold, formatPct } from '../../src/engine/format.js';
 import { STATUS_LABEL, type Status } from '../../src/engine/calc.js';
+import {
+  CheckCircle, Question, WarningCircle, TrendDown, MinusCircle, Prohibit, Storefront, TrendUp, Warning, ArrowClockwise, Tray, type Icon,
+} from '@phosphor-icons/react';
 
 export { Q, formatMoney, exactGold, formatPct, STATUS_LABEL };
 export type { Status };
@@ -138,18 +141,68 @@ const STATUS_CLASS: Record<Status, string> = {
   no_fabricable: 'b-neutral',
   no_vendible: 'b-neutral',
 };
+const STATUS_ICON: Record<Status, Icon> = {
+  candidato: CheckCircle,
+  demanda_incierta: Question,
+  margen_insuficiente: WarningCircle,
+  no_rentable: TrendDown,
+  datos_insuficientes: MinusCircle,
+  no_fabricable: Prohibit,
+  no_vendible: Storefront,
+};
+/** Estado con texto + icono + color (nunca solo color). */
 export function StatusBadge({ s }: { s: Status }) {
-  return <span className={`badge ${STATUS_CLASS[s]}`}>{STATUS_LABEL[s]}</span>;
+  const I = STATUS_ICON[s];
+  return <span className={`badge ${STATUS_CLASS[s]}`}><I size={14} weight="bold" aria-hidden="true" />{STATUS_LABEL[s]}</span>;
 }
 
-export function Loading({ label = 'Cargando…' }: { label?: string }) {
-  return <p role="status" className="muted"><span className="spinner" aria-hidden="true" /> {label}</p>;
+/**
+ * Ganancia o pérdida ESTIMADA: icono + etiqueta de texto + color. «Sin datos» si el valor es desconocido
+ * (nunca 0). El beneficio realizado solo existe en el registro real.
+ */
+export function Delta({ v, tag = true }: { v: any; tag?: boolean }) {
+  const q = toQ(v);
+  if (!q) return <span className="delta none"><span>—</span>{tag && <span className="delta-tag">sin datos</span>}</span>;
+  const sgn = q.sign();
+  const cls = sgn > 0 ? 'pos' : sgn < 0 ? 'neg' : 'zero';
+  const I = sgn > 0 ? TrendUp : sgn < 0 ? TrendDown : MinusCircle;
+  return (
+    <span className={`delta ${cls}`}>
+      <I size={14} weight="bold" aria-hidden="true" />
+      <span>{formatMoney(q)}{tag && <span className="delta-tag">{sgn > 0 ? 'ganancia' : sgn < 0 ? 'pérdida' : 'equilibrio'}</span>}</span>
+    </span>
+  );
+}
+
+export function Loading({ label = 'Cargando…', rows = 0 }: { label?: string; rows?: number }) {
+  return (
+    <div role="status" aria-live="polite">
+      <p className="muted"><span className="spinner" aria-hidden="true" /> {label}</p>
+      {rows > 0 && <div className="skeleton-rows card" aria-hidden="true">{Array.from({ length: rows }, (_, i) => <span key={i} />)}</div>}
+    </div>
+  );
 }
 export function ErrorBox({ error, onRetry }: { error: string; onRetry?: () => void }) {
   return (
     <div className="alert bad" role="alert">
-      <p><strong>Error:</strong> {error}</p>
-      {onRetry && <button onClick={onRetry}>Reintentar</button>}
+      <Warning size={20} weight="bold" aria-hidden="true" />
+      <div>
+        <p><strong>Error:</strong> {error}</p>
+        {onRetry && <button onClick={onRetry}><ArrowClockwise size={16} aria-hidden="true" />Reintentar</button>}
+      </div>
+    </div>
+  );
+}
+export function Empty({ children, icon: I = Tray }: { children: React.ReactNode; icon?: Icon }) {
+  return <div className="empty card"><I size={32} aria-hidden="true" /><div>{children}</div></div>;
+}
+export function PageHead({ title, children, icon }: { title: React.ReactNode; children?: React.ReactNode; icon?: React.ReactNode }) {
+  return (
+    <div className="page-head">
+      <div>
+        <h1 className={icon ? 'title-with-icon' : undefined}>{icon}{title}</h1>
+        {children && <p className="muted small">{children}</p>}
+      </div>
     </div>
   );
 }
@@ -173,7 +226,7 @@ export function GoldInput({ label, value, onChange, placeholder, hint }: { label
     <label className="field">
       {label}
       <input type="text" inputMode="decimal" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} aria-invalid={invalid} />
-      {invalid ? <span style={{ color: 'var(--bad)' }}>Número inválido</span> : hint ? <span className="small">{hint}</span> : null}
+      {invalid ? <span style={{ color: 'var(--color-bad)' }}>Número inválido</span> : hint ? <span className="small">{hint}</span> : null}
     </label>
   );
 }

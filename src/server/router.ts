@@ -13,6 +13,7 @@ import { requiredProfessions, PROFESSION_ES } from './catalog/rules.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
 import { storeRaw } from './storage.js';
+import { loadAssets, type IconSize } from './assets.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
@@ -68,6 +69,13 @@ const int = (v: string | null | undefined, def?: number) => {
 // ---------------------------------------------------------------------------
 // Metadatos, mercado y sincronización
 // ---------------------------------------------------------------------------
+
+/** Iconos verificados por id (capa central de recursos visuales, ver src/server/assets.ts). */
+route('GET', '/api/assets', async (_r, _p, u, db) => {
+  const ids = (k: string) => (u.searchParams.get(k) ?? '').split(',').map(Number).filter((n) => Number.isInteger(n) && n > 0).slice(0, 300);
+  const size = (['small', 'medium', 'large'] as IconSize[]).find((x) => x === u.searchParams.get('size')) ?? 'medium';
+  return loadAssets(db, 'forever', ids('items'), ids('professions'), size);
+});
 
 route('GET', '/api/meta', async (_r, _p, _u, db) => {
   const settings = await loadSettings(db);
@@ -317,7 +325,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     market: { runs: ectx.snap.runs },
     profile: profile ? { id: profile.id, name: profile.name } : null,
     items: slice.map((e) => ({
-      recipeId: e.recipeId, name: e.name, profession: e.profession, expansion: e.expansion, output: e.output,
+      recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined,
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,

@@ -24,7 +24,8 @@ export function getDb(): Promise<Db> {
       url = 'pglite:./data/pglite';
       console.warn('[db] DATABASE_URL no definido: usando PostgreSQL embebido (PGlite) en ./data/pglite para desarrollo.');
     }
-    shared = openDb(url).then(async (db) => {
+    // Si una consulta se queda colgada, se descarta el pool y la siguiente petición abre uno nuevo.
+    shared = openDb(url, { onStuck: () => { shared = null; } }).then(async (db) => {
       if (db.kind === 'pglite') await migrate(db);
       return db;
     });
@@ -32,7 +33,10 @@ export function getDb(): Promise<Db> {
   return shared;
 }
 
-export async function openDb(url: string): Promise<Db> {
+/** Tiempo máximo de una lectura fuera de transacción (las ingestas en transacción no se limitan). */
+const QUERY_TIMEOUT_MS = Number(process.env.DATABASE_QUERY_TIMEOUT_MS ?? 30000);
+
+export async function openDb(url: string, opts: { onStuck?: () => void } = {}): Promise<Db> {
   if (!url) {
     throw new Error('Falta DATABASE_URL. Usa la cadena de conexión de Supabase o "pglite:./data/pglite" para desarrollo local.');
   }
@@ -45,11 +49,31 @@ export async function openDb(url: string): Promise<Db> {
     types: { bigint: postgres.BigInt },
     onnotice: () => {},
   });
-  const wrap = (s: any): Db => ({
+  // Con el pooler de transacciones se observaron consultas que nunca terminan (el servidor queda en
+  // ClientRead esperando el resto del mensaje). Sin límite, ocupan el pool para siempre y la API deja de
+  // responder; con él, la petición falla con un error visible y el pool se reemplaza.
+  let stuck = false;
+  const timed = <T>(p: Promise<T>): Promise<T> =>
+    new Promise<T>((resolve, reject) => {
+      const t = setTimeout(() => {
+        reject(new Error(`La base de datos no respondió en ${QUERY_TIMEOUT_MS / 1000} s. Vuelve a intentarlo.`));
+        if (!stuck) {
+          stuck = true;
+          console.error('[db] consulta colgada: se descarta el pool de conexiones');
+          opts.onStuck?.();
+          sql.end({ timeout: 0 }).catch(() => {});
+        }
+      }, QUERY_TIMEOUT_MS);
+      p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+    });
+  const wrap = (s: any, inTx = false): Db => ({
     kind: 'postgres',
-    query: async (text, params = []) => (await s.unsafe(text, params as any[])) as any,
+    query: async (text, params = []) => {
+      const q = s.unsafe(text, params as any[]) as Promise<any>;
+      return (inTx ? await q : await timed(q)) as any;
+    },
     exec: async (text) => { await s.unsafe(text); },
-    tx: (fn) => sql.begin((t: any) => fn(wrap(t))) as any,
+    tx: (fn) => sql.begin((t: any) => fn(wrap(t, true))) as any,
     close: () => sql.end(),
   });
   return wrap(sql);

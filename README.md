@@ -62,6 +62,12 @@ npm run migrate
    npm run sync:catalog -- us --prof=171 --limit=50
    ```
 
+   Por último, resuelve los iconos de objetos y profesiones (Wowhead, entorno WoW Forever, con respaldo de Blizzard; ver `docs/SISTEMA_VISUAL.md`). Omite los ya resueltos; `--refresh` los vuelve a comprobar y `--limit=N` hace una prueba corta:
+
+   ```bash
+   npm run sync:icons
+   ```
+
 ## Pruebas
 
 ```bash
