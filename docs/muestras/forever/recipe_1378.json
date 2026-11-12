@@ -1,0 +1,121 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/1378?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "id": 1378,
+  "name": {
+    "en_US": "Elixir of Minor Strength",
+    "es_MX": "Elixir de fuerza menor",
+    "pt_BR": "Elixir de Força Menor",
+    "de_DE": "Elixier der schwachen Stärke",
+    "en_GB": "Elixir of Minor Strength",
+    "es_ES": "Elixir de fuerza menor",
+    "fr_FR": "Élixir de Force mineure",
+    "it_IT": "Elisir della Forza del Leone",
+    "ru_RU": "Малый эликсир силы",
+    "ko_KR": "최하급 힘의 비약",
+    "zh_TW": "初級力量藥劑",
+    "zh_CN": "初级力量药剂"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/1378?namespace=static-1.60.1_70399-forever-us"
+    },
+    "id": 1378
+  },
+  "crafted_item": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/item/2454?namespace=static-1.60.1_70399-forever-us"
+    },
+    "name": {
+      "en_US": "Elixir of Minor Strength",
+      "es_MX": "Elixir de fuerza menor",
+      "pt_BR": "Elixir de Força Menor",
+      "de_DE": "Elixier der schwachen Stärke",
+      "en_GB": "Elixir of Minor Strength",
+      "es_ES": "Elixir de fuerza menor",
+      "fr_FR": "Élixir de Force mineure",
+      "it_IT": "Elisir della Forza del Leone",
+      "ru_RU": "Малый эликсир силы",
+      "ko_KR": "최하급 힘의 비약",
+      "zh_TW": "初級力量藥劑",
+      "zh_CN": "初级力量药剂"
+    },
+    "id": 2454
+  },
+  "reagents": [
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/2449?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Earthroot",
+          "es_MX": "Raíz de tierra",
+          "pt_BR": "Raiz-telúrica",
+          "de_DE": "Erdwurzel",
+          "en_GB": "Earthroot",
+          "es_ES": "Raíz de tierra",
+          "fr_FR": "Terrestrine",
+          "it_IT": "Bulboterro",
+          "ru_RU": "Землекорень",
+          "ko_KR": "뱀뿌리",
+          "zh_TW": "地根草",
+          "zh_CN": "地根草"
+        },
+        "id": 2449
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/765?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Silverleaf",
+          "es_MX": "Hojaplata",
+          "pt_BR": "Folha-prata",
+          "de_DE": "Silberblatt",
+          "en_GB": "Silverleaf",
+          "es_ES": "Hojaplata",
+          "fr_FR": "Feuillargent",
+          "it_IT": "Fogliargenta",
+          "ru_RU": "Сребролист",
+          "ko_KR": "은엽수잎",
+          "zh_TW": "銀葉草",
+          "zh_CN": "银叶草"
+        },
+        "id": 765
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/3371?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Empty Vial",
+          "es_MX": "Vial vacío",
+          "pt_BR": "Ampola Vazia",
+          "de_DE": "Leere Phiole",
+          "en_GB": "Empty Vial",
+          "es_ES": "Vial vacío",
+          "fr_FR": "Fiole vide",
+          "ru_RU": "Пустая колба",
+          "ko_KR": "유리 약병",
+          "zh_TW": "空瓶",
+          "zh_CN": "空瓶"
+        },
+        "id": 3371
+      },
+      "quantity": 1
+    }
+  ],
+  "crafted_quantity": {
+    "value": 1
+  }
+}

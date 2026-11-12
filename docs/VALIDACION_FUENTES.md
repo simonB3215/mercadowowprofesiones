@@ -1,81 +1,70 @@
-# Validación de fuentes (PB-01)
+# Validación de fuentes (PB-01): World of Warcraft: Forever
 
-Fecha: 11 de noviembre de 2026.
+Fecha: 12 de noviembre de 2026. La aplicación trabaja **solo con WoW Forever**.
 
-## TSM: CSV públicos (verificado con descargas reales)
+World of Warcraft: Forever se lanzó el 4 de noviembre de 2026. No tiene reinos: cada personaje elige un modo de juego (Normal, JcJ, Rol, Rol-JcJ; Hardcore más adelante), con un mundo por región.
 
-Base: `https://public-data.tradeskillmaster.com`. No requiere clave, inicio de sesión ni tiene límite de peticiones según su documentación.
+## TSM: CSV públicos
 
-| Ruta | Estado | Cabecera real |
+Base: `https://public-data.tradeskillmaster.com/forever/…`. No requiere clave, pero aplica un límite de peticiones (Cloudflare 429 / error 1015) si se hacen muchas seguidas.
+
+| Ruta | Estado | Cabecera |
 |---|---|---|
-| `/retail/us/commodities.csv` | 200, 10 905 filas | `itemId,name,marketValue,minBuyout,recent,historical,updatedAt` |
-| `/retail/us/realm/area-52/items.csv` | 200, 18 147 filas | `itemId,name,marketValue,minBuyout,recent,historical,updatedAt` |
-| `/retail/us/region/items.csv` | 200, 29 901 filas | `itemId,name,marketValue,historical,avgSalePrice,saleRate,soldPerDay,updatedAt` |
-| `/retail/us/region/pets.csv` | 200 | `petSpeciesId,name,marketValue,historical,avgSalePrice,saleRate,soldPerDay,updatedAt` |
-| `/retail/{eu,kr,tw}/…` | 200 | iguales |
-| `/classic/us/…`, `/classic-progression/us/…`, `/forever/us/…` | 200 | no integrados (PB-26) |
-| `/retail/us/realm/area52/items.csv` (slug sin guion) | 404 | el slug debe coincidir exactamente con el de TSM |
-| Índice de reinos o regiones | 404 | TSM no publica una lista: el slug se copia de la URL del reino en tradeskillmaster.com |
+| `/forever/us/region/items.csv` | 200, 6 653 objetos | `itemId,name,marketValue,historical,avgSalePrice,saleRate,soldPerDay,updatedAt` |
+| `/forever/us/realm/{normal,pvp,roleplay,roleplay-pvp}-{alliance,horde}/items.csv` | 200 | `itemId,name,marketValue,minBuyout,recent,historical,updatedAt` |
+| `/forever/us/commodities.csv` | 404 | no hay commodities |
+| `/forever/us/realm/{normal,pvp,roleplaying,rp}/items.csv` (sin facción); `rp-*`, `rppvp-*`, `roleplaying-*` | 404 | |
+| Casas de Aguasnegras (neutral) | no publicadas | solo están en la API de Blizzard |
+| Regiones EU, KR y TW | sin verificar | TSM devolvió 429 durante la prueba |
 
-Hechos comprobados:
+- Cada «casa de subastas» de TSM es un modo de juego más una facción. La lista fija está en `src/server/config.ts` (`FOREVER_REALMS`), y la facción se usa en las recetas con resultado distinto por facción. TSM es el respaldo de Blizzard para las casas de facción.
+- Importes en cobre (1 oro = 10 000 cobre). `updatedAt` corresponde al escaneo de origen.
+- Los nombres pueden ir entrecomillados con comas, así que hace falta un parser CSV.
+- `minBuyout` = 0 con `marketValue` > 0 se interpreta como «sin publicación actual» y se guarda como `null`.
+- `saleRate` y `soldPerDay` solo existen en el archivo regional: no hay demanda por casa de subastas.
 
-- Importes en cobre (1 oro = 10 000 cobre). `updatedAt` es el mismo en todo el archivo y corresponde al escaneo de origen.
-- Hay nombres con comas y comillas entrecomillados (por ejemplo `"Vantus Rune: Aberrus, the Shadowed Crucible"`), así que hace falta un parser CSV.
-- Un commodity aparece solo en `commodities.csv` y nunca en el archivo de reino: hubo 0 coincidencias entre los 10 905 commodities y los 18 147 objetos de Area 52.
-- `region/items.csv` sí incluye commodities (10 901 de 10 905) con su tasa y su volumen.
-- **Las calidades de reactivo tienen `itemId` propios con el mismo nombre.** Ejemplo: `Bismuth` aparece con los IDs 210930, 210931 y 210932. La aplicación nunca une precios por nombre.
-- **El equipo con calidad de fabricación no se distingue:** cada `itemId` tiene una sola fila, sin bonus IDs ni rango de calidad.
-- `minBuyout` = 0 aparece en filas con `marketValue` > 0. Se interpreta como «sin publicación actual» y se guarda como `null`.
-- Las columnas `saleRate` y `soldPerDay` solo existen en el archivo regional. No hay demanda por reino.
-- Frecuencia según TSM: reino y commodities cada pocas horas, región a diario. Lo observado: commodities con 5 h y región con 22 h en el momento de la prueba.
+Evidencia: las muestras reales están en `tests/fixtures/forever_*.csv` y las usa `tests/market.test.ts`.
 
-Evidencia: las muestras están en `tests/fixtures/`. Las pruebas de `tests/market.test.ts` usan esas filas reales. La sincronización real con US/Area 52 se comprobó en la aplicación local: los tres archivos quedaron en estado `ok`.
+## Blizzard Game Data API
 
-## Blizzard: Game Data API (verificado con respuestas reales el 12-11-2026)
+- Token: `POST https://oauth.battle.net/token` con `grant_type=client_credentials` y autenticación básica. Uso: `Authorization: Bearer <token>`. Host `{región}.api.blizzard.com`.
+- **Namespace `static-forever-us`**, verificado con respuestas reales (`docs/muestras/forever/`):
+  - 13 profesiones: Alquimia, Herrería, Encantamiento, Ingeniería, Peletería, Sastrería, Cocina, Primeros auxilios, Minería, Herboristería, Desuello, Pesca y una interna «Test Profession [DNT]», que se omite. No hay Inscripción ni Joyería.
+  - Un único rango por profesión (p. ej. «Alchemy», 196 recetas), sin expansiones.
+  - Las recetas traen `crafted_item`, `crafted_quantity.value` y `reagents[].{reagent.id, quantity}` completos. Por ejemplo, la 1378 («Elixir of Minor Strength») produce 1 × objeto 2454 con los reactivos 2449 × 1, 765 × 1 y 3371 × 1.
+  - Sin `locale`, los nombres llegan con todos los idiomas; se usa `es_ES` o `es_MX` y, si falta, `en_US`.
+- `dynamic-forever-us` no tiene índice de reinos ni de reinos conectados (404): Forever no tiene reinos. Solo existe `region/index`.
 
-Comprobado en el portal oficial con un navegador, porque la página es dinámica:
+### Casas de subastas (`dynamic-forever-us`, no documentado; verificado el 12-11-2026)
 
-- Token: `POST https://oauth.battle.net/token` con `grant_type=client_credentials` y autenticación básica `client_id:client_secret`. La respuesta incluye `expires_in` (≈ 86 399 s).
-- Uso del token: cabecera `Authorization: Bearer <token>`.
-- Host: `{region}.api.blizzard.com`, con `region` = us | eu | kr | tw. China usa `gateway.battlenet.com.cn`, que no está soportado.
-- Namespace obligatorio en cada petición, como parámetro o como cabecera `Battlenet-Namespace`. Profesiones, recetas y objetos usan `static-{region}`; los reinos, `dynamic-{region}`.
-- Rutas confirmadas:
-  - `/data/wow/profession/index`
-  - `/data/wow/profession/{id}`
-  - `/data/wow/profession/{id}/skill-tier/{skillTierId}`
-  - `/data/wow/recipe/{id}`
-  - `/data/wow/item/{id}`
-  - `/data/wow/realm/index`
-  - `/data/wow/connected-realm/index`
+- `/data/wow/ruleset/index` → ids 1 (JcJ), 2 (Normal), 3 (Rol), 15 (Rol JcJ).
+- `/data/wow/ruleset/{r}/auctions/` → las mismas 15 casas para cualquier `r` («Casa de subastas: Alianza / Horda / Aguasnegras»). El contenido de cada casa tampoco depende de `r`.
+- `/data/wow/ruleset/{r}/auctions/{casa}` → `auctions[].{item.id, buyout, quantity, bid?, bonus_lists?}` (≈ 12–15 MB; `quantity` = 1 en todas las de la muestra).
+- `/data/wow/ruleset/{r}/auctions/{casa}/commodities` → `auctions[].{item.id, unit_price, quantity}`.
+- La cabecera `Last-Modified` da el momento de la foto (≈ cada hora).
 
-**Verificado con respuestas reales** (región US, namespace `static-12.1.5_70077-us`, muestras en `docs/muestras/`):
+La API no nombra el modo de cada grupo de casas. Se asignó comparando el `minBuyout` de cada casa con los CSV de TSM (coincidencias exactas entre objetos comunes):
 
-- Sin parámetro `locale`, los nombres llegan como objeto con todos los idiomas (`en_US`, `es_MX`, `es_ES`…).
-- `profession/index` devuelve 26 profesiones, incluidas varias que no son de fabricación normal (por ejemplo, Arqueología o Soul Cyphering).
-- `skill-tier` incluye `minimum_skill_level`, `maximum_skill_level` y `categories[].recipes[]` con `id` y `name`.
-- Recetas **anteriores a Dragonflight** (comprobado en Classic): `crafted_item`, `crafted_quantity.value` y `reagents[].{reagent.id, quantity}` presentes. Son evaluables.
-- Recetas de **Dragonflight, The War Within y Midnight** (muestreo de Alquimia: 1 de 8, 0 de 8 y 0 de 8):
-  - casi nunca traen `crafted_item` ni `crafted_quantity`;
-  - los reactivos con calidad aparecen en `modified_crafting_slots` (tipo de ranura, sin objeto ni cantidad).
+| Casas Alianza / Horda / Aguasnegras | Modo | Evidencia |
+|---|---|---|
+| 111 / 114 / 117 | Normal | 111 ↔ `normal-alliance`: 61 % (con `pvp-alliance`: 11 %) |
+| 110 / 113 / 116 | JcJ | 110 ↔ `pvp-alliance`: 60 % (con `normal-alliance`: 10 %) |
+| 119 / 120 / 121 | Rol | 119 ↔ `roleplay-alliance`: 76 % (123: 10 %) |
+| 123 / 124 / 125 | Rol JcJ | por descarte; TSM `roleplay-pvp-alliance` existe |
+| 112 / 115 / 118 | — | vacías (¿Hardcore, aún sin lanzar?) |
 
-  **La API no permite saber qué producen ni cuánto cuestan.** Se marcan como «datos insuficientes» con ese motivo, nunca como servicio ni con costo parcial.
-- Algunas recetas antiguas no incluyen `reagents`. Su costo queda como desconocido, no como 0.
-- Sincronización real de Alquimia: 868 recetas y 809 objetos en 8,6 min, 1 objeto con error.
-
-  Resultado en US/Area 52:
-  - 57 candidatas, 86 con demanda incierta, 22 con margen insuficiente y 364 no rentables;
-  - 231 con datos insuficientes, entre ellas las 177 recetas modernas;
-  - 108 no vendibles (ligadas o sin observaciones).
+Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = precio unitario mínimo; `marketValue` = media ponderada por cantidad del 15 % más barato del volumen publicado; sin `historical` (Blizzard solo da la foto actual). Las subastas sin compra inmediata se ignoran. Las variantes con `bonus_lists` del mismo `item.id` se agrupan.
+- Otros namespaces probados (`static-classic-forever-us`, `static-forever1x-us`…) → 403.
 
 ## Lo que falta y cómo afecta al cálculo
 
 | Laguna | Efecto |
 |---|---|
-| Resultado y cantidades de recetas de Dragonflight o posteriores | La API de Blizzard no los publica. Esas recetas no se pueden evaluar automáticamente; haría falta otra fuente verificada (por ejemplo, datos extraídos del cliente del juego). |
-| Calidad del equipo (bonus IDs) en TSM | Las recetas de Dragonflight o posteriores, y los resultados con variantes del mismo nombre, quedan como «datos insuficientes» salvo que el usuario asuma la calidad manualmente. |
+| Comisión de subasta | 5 % en Alianza y Horda y 15 % en Aguasnegras (los valores de Classic) son supuestos configurables en «Ajustes». No están verificados para Forever. |
+| Historial en Aguasnegras | Blizzard solo da la foto actual: el campo `historical` queda vacío y TSM no publica la casa neutral. |
 | Profundidad de mercado | El costo siempre se marca como estimado; no se supone disponibilidad ilimitada. |
 | Disponibilidad en vendedor | `purchase_price` de Blizzard no prueba que un vendedor venda el objeto. No se usa automáticamente; se puede introducir un precio manual. |
-| Comisión de subasta | El 5 % es un supuesto configurable que hay que verificar para cada mercado. |
 | Depósitos | No vienen en las fuentes; los introduce el usuario (perdidos o recuperables). |
 | Habilidad requerida por receta | No se valida el nivel del personaje; se indica en las notas. |
-| Reglas de calidad, producción adicional, ahorro y concentración | Sin reglas verificadas: solo hay calculadoras manuales etiquetadas. |
+| Desencantado y otros resultados aleatorios | Sin tablas verificadas: solo hay una calculadora manual de valor esperado. |
+| Objetos con el mismo nombre y distinto ID | Se marcan como «datos insuficientes» salvo que el usuario asuma la variante manualmente. Nunca se unen precios por nombre. |

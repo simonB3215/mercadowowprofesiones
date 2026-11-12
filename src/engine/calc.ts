@@ -447,10 +447,3 @@ export function expectedRevenue(scenarios: OutcomeScenario[]): { expected: Maybe
   if (!sum.eq(Q.one)) errors.push(`Las probabilidades de escenarios excluyentes deben sumar 1 (suman ${sum.toFraction()}).`);
   return { expected: errors.length ? null : exp, errors };
 }
-
-export function concentrationEfficiency(profitWithout: Maybe<Q>, profitWith: Maybe<Q>, concentrationSpent: number): { perPoint: Maybe<Q>; incremental: Maybe<Q>; error?: string } {
-  if (!profitWithout || !profitWith) return { perPoint: null, incremental: null, error: 'Faltan datos de una de las alternativas.' };
-  const incremental = profitWith.sub(profitWithout);
-  if (!Number.isFinite(concentrationSpent) || concentrationSpent <= 0) return { perPoint: null, incremental, error: 'El consumo de concentración debe ser mayor que 0.' };
-  return { perPoint: incremental.div(Q.parse(concentrationSpent)), incremental };
-}

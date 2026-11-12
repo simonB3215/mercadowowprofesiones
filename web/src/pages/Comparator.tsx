@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, DemoBanner, hashQuery, setHashQuery, age, hoursSince, type Status } from '../lib.js';
+import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, hashQuery, setHashQuery, age, hoursSince, type Status } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 
 const SORTS: Array<[string, string]> = [['profitUnit', 'Ganancia por unidad'], ['profitBatch', 'Ganancia por lote'], ['roi', 'ROI'], ['cost', 'Costo por unidad']];
@@ -60,18 +60,16 @@ export function Comparator() {
 
   return (
     <div>
-      <DemoBanner />
       <h1>Comparador de recetas</h1>
       <p className="muted small">Costo de fabricación frente a ingreso neto de venta. Los valores ausentes se muestran como «—» y nunca se tratan como cero.</p>
       <MarketStatus />
-      {ctx.version !== 'demo' && recipesInCatalog === 0 && (
+      {recipesInCatalog === 0 && (
         <div className="alert warn" role="note">
-          <p><strong>El catálogo de recetas de Retail está vacío.</strong></p>
+          <p><strong>El catálogo de recetas de WoW Forever está vacío.</strong></p>
           <p>{meta?.blizzardConfigured
             ? 'Las credenciales de Blizzard están configuradas. Ejecuta «npm run sync:catalog -- us» desde el proyecto para descargar profesiones, recetas y objetos.'
             : 'Faltan las credenciales de la API de Blizzard (BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET). Sin catálogo verificable no se muestran recetas reales.'}
           </p>
-          <p>Mientras tanto puedes probar la aplicación con la versión <strong>«DEMO — datos ficticios»</strong> del selector.</p>
         </div>
       )}
       <section className="card" aria-label="Filtros">
@@ -83,12 +81,6 @@ export function Comparator() {
             <select value={f.professionId} onChange={(e) => set('professionId', e.target.value)}>
               <option value="">Todas</option>
               {(profs.data?.professions ?? []).map((p: any) => <option key={p.id} value={p.id}>{p.name} ({p.recipes})</option>)}
-            </select>
-          </label>
-          <label className="field">Expansión
-            <select value={f.expansion} onChange={(e) => set('expansion', e.target.value)}>
-              <option value="">Todas</option>
-              {(profs.data?.expansions ?? []).map((x: any) => <option key={x.expansion} value={x.expansion}>{x.expansion}</option>)}
             </select>
           </label>
           <label className="field">Estado
@@ -125,7 +117,7 @@ export function Comparator() {
       {data.loading && <Loading label="Calculando oportunidades…" />}
       {data.error && <ErrorBox error={data.error} onRetry={data.reload} />}
       {data.data && !data.loading && total === 0 && (
-        <div className="empty card">No hay recetas que coincidan con los filtros{recipesInCatalog === 0 && ctx.version !== 'demo' ? ' (el catálogo está vacío)' : ''}.</div>
+        <div className="empty card">No hay recetas que coincidan con los filtros{recipesInCatalog === 0 ? ' (el catálogo está vacío)' : ''}.</div>
       )}
       {data.data && total > 0 && (
         <div className="table-wrap" style={{ opacity: data.loading ? 0.5 : 1 }}>
@@ -153,7 +145,7 @@ export function Comparator() {
                     <a href={`#/receta/${i.recipeId}`}>{i.name}</a>
                     {i.output?.name && i.output.name !== i.name && <div className="small muted">{i.output.name}{i.output.quality ? ` · ${i.output.quality}` : ''}</div>}
                   </td>
-                  <td data-label="Profesión">{i.profession}<div className="small muted">{i.expansion}</div></td>
+                  <td data-label="Profesión">{i.profession}</td>
                   <td data-label="Unid./lote" className="num">{i.unitsPerRun ?? (i.yieldRange[0] !== null ? `${i.yieldRange[0]}–${i.yieldRange[1]}` : '—')}</td>
                   <td data-label="Costo/unid." className="num">{money(i.costUnit)}</td>
                   <td data-label="Precio venta" className="num">{money(i.sellPrice)}<div className="small muted">{i.sellScope}</div></td>

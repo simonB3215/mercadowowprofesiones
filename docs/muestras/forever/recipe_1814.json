@@ -1,0 +1,121 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/1814?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "id": 1814,
+  "name": {
+    "en_US": "Elixir of Wisdom",
+    "es_MX": "Elixir de sabiduría",
+    "pt_BR": "Elixir de Sabedoria",
+    "de_DE": "Elixier der Weisheit",
+    "en_GB": "Elixir of Wisdom",
+    "es_ES": "Elixir de sabiduría",
+    "fr_FR": "Elixir de Sagesse",
+    "it_IT": "Elisir della Saggezza",
+    "ru_RU": "Эликсир мудрости",
+    "ko_KR": "지혜의 비약",
+    "zh_TW": "智慧藥劑",
+    "zh_CN": "智慧药剂"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/1814?namespace=static-1.60.1_70399-forever-us"
+    },
+    "id": 1814
+  },
+  "crafted_item": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/item/3383?namespace=static-1.60.1_70399-forever-us"
+    },
+    "name": {
+      "en_US": "Elixir of Wisdom",
+      "es_MX": "Elixir de sabiduría",
+      "pt_BR": "Elixir de Sabedoria",
+      "de_DE": "Elixier der Weisheit",
+      "en_GB": "Elixir of Wisdom",
+      "es_ES": "Elixir de sabiduría",
+      "fr_FR": "Elixir de Sagesse",
+      "it_IT": "Elisir della Saggezza",
+      "ru_RU": "Эликсир мудрости",
+      "ko_KR": "지혜의 비약",
+      "zh_TW": "智慧藥劑",
+      "zh_CN": "智慧药剂"
+    },
+    "id": 3383
+  },
+  "reagents": [
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/785?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Mageroyal",
+          "es_MX": "Marregal",
+          "pt_BR": "Magi-real",
+          "de_DE": "Maguskönigskraut",
+          "en_GB": "Mageroyal",
+          "es_ES": "Marregal",
+          "fr_FR": "Mage royal",
+          "it_IT": "Magareale",
+          "ru_RU": "Магороза",
+          "ko_KR": "마법초 꽃잎",
+          "zh_TW": "魔皇草",
+          "zh_CN": "魔皇草"
+        },
+        "id": 785
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/2450?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Briarthorn",
+          "es_MX": "Brezospina",
+          "pt_BR": "Cravespinho",
+          "de_DE": "Wilddornrose",
+          "en_GB": "Briarthorn",
+          "es_ES": "Brezospina",
+          "fr_FR": "Eglantine",
+          "it_IT": "Grandespina",
+          "ru_RU": "Остротерн",
+          "ko_KR": "찔레가시",
+          "zh_TW": "石南草",
+          "zh_CN": "石南草"
+        },
+        "id": 2450
+      },
+      "quantity": 2
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/3371?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Empty Vial",
+          "es_MX": "Vial vacío",
+          "pt_BR": "Ampola Vazia",
+          "de_DE": "Leere Phiole",
+          "en_GB": "Empty Vial",
+          "es_ES": "Vial vacío",
+          "fr_FR": "Fiole vide",
+          "ru_RU": "Пустая колба",
+          "ko_KR": "유리 약병",
+          "zh_TW": "空瓶",
+          "zh_CN": "空瓶"
+        },
+        "id": 3371
+      },
+      "quantity": 1
+    }
+  ],
+  "crafted_quantity": {
+    "value": 1
+  }
+}

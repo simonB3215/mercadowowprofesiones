@@ -1,7 +1,7 @@
 /**
  * Adaptador de los CSV públicos de TSM.
  * Contrato verificado con muestras reales el 2026-11-11 (ver docs/VALIDACION_FUENTES.md):
- *  - realm/{slug}/items.csv y commodities.csv: itemId,name,marketValue,minBuyout,recent,historical,updatedAt
+ *  - forever/{región}/realm/{modo}-{facción}/items.csv: itemId,name,marketValue,minBuyout,recent,historical,updatedAt
  *  - region/items.csv: itemId,name,marketValue,historical,avgSalePrice,saleRate,soldPerDay,updatedAt
  * Importes en cobre. updatedAt es igual en todas las filas (escaneo de origen).
  */
@@ -9,10 +9,10 @@ import { createHash } from 'node:crypto';
 import { parse } from 'csv-parse/sync';
 import { TSM_BASE } from '../config.js';
 
-export type FileKind = 'commodities' | 'realm_items' | 'region_items';
+/** WoW Forever no tiene archivo de commodities: solo casa de subastas (realm_items) y región. */
+export type FileKind = 'realm_items' | 'region_items';
 
 export const EXPECTED_HEADERS: Record<FileKind, string[]> = {
-  commodities: ['itemId', 'name', 'marketValue', 'minBuyout', 'recent', 'historical', 'updatedAt'],
   realm_items: ['itemId', 'name', 'marketValue', 'minBuyout', 'recent', 'historical', 'updatedAt'],
   region_items: ['itemId', 'name', 'marketValue', 'historical', 'avgSalePrice', 'saleRate', 'soldPerDay', 'updatedAt'],
 };
@@ -23,7 +23,6 @@ export function tsmUrl(gameType: string, region: string, kind: FileKind, realm?:
     if (!realm || !/^[a-z0-9-]+$/.test(realm)) throw new Error('Slug de reino inválido');
     return `${TSM_BASE}/${gameType}/${region}/realm/${realm}/items.csv`;
   }
-  if (kind === 'commodities') return `${TSM_BASE}/${gameType}/${region}/commodities.csv`;
   return `${TSM_BASE}/${gameType}/${region}/region/items.csv`;
 }
 

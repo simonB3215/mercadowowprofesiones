@@ -1,65 +1,93 @@
 /** Contextos de mercado soportados y parámetros configurables. */
 
-export type GameVersion = 'retail' | 'demo';
+export type GameVersion = 'forever';
+
+export type HouseFaction = 'alliance' | 'horde' | 'neutral';
+
+export interface FixedRealm {
+  slug: string;
+  name: string;
+  faction: HouseFaction;
+  /** Id de la casa en /data/wow/ruleset/{r}/auctions/{id} (namespace dynamic-forever-{región}). */
+  blizzardHouseId: number;
+  /** TSM publica esta casa (/forever/{región}/realm/{slug}/items.csv). */
+  tsm: boolean;
+}
 
 export interface VersionInfo {
-  id: string;
+  id: GameVersion;
   label: string;
   enabled: boolean;
-  reason?: string;
   regions: string[];
-  tsmGameType?: string;
-  blizzardNamespace?: (region: string) => string;
+  tsmGameType: string;
+  blizzardNamespace: (region: string) => string;
+  /** Casas de subastas (WoW Forever no tiene reinos: una por modo de juego y facción). */
+  fixedRealms: FixedRealm[];
+  realmLabel: string;
 }
 
 /**
- * Retail es la única versión habilitada (PB-26). Las demás existen en TSM
- * (comprobado: classic, classic-progression, forever devuelven 200) pero falta
- * validar su catálogo de recetas, mercados y comisiones.
+ * La aplicación trabaja solo con World of Warcraft: Forever (decisión del usuario, 12-11-2026).
+ * Verificado con datos reales (ver docs/VALIDACION_FUENTES.md):
+ * - TSM: /forever/us/region/items.csv y /forever/us/realm/{modo}-{facción}/items.csv; no hay commodities.
+ * - Blizzard: namespace static-forever-us con profesiones, recetas y objetos completos;
+ *   no hay índice de reinos (Forever no tiene reinos).
  */
-export const VERSIONS: VersionInfo[] = [
-  {
-    id: 'retail',
-    label: 'Retail',
-    enabled: true,
-    regions: ['us', 'eu', 'kr', 'tw'],
-    tsmGameType: 'retail',
-    blizzardNamespace: (r) => `static-${r}`,
-  },
-  {
-    id: 'classic',
-    label: 'Classic (Era)',
-    enabled: false,
-    regions: [],
-    reason: 'TSM publica datos, pero el catálogo de recetas, las facciones y las comisiones de Classic no están validados (PB-26).',
-  },
-  {
-    id: 'classic-progression',
-    label: 'Classic progresión (Mists of Pandaria)',
-    enabled: false,
-    regions: [],
-    reason: 'Pendiente de validar catálogo y reglas propias (PB-26).',
-  },
-  {
-    id: 'demo',
-    label: 'DEMO — datos ficticios',
-    enabled: true,
-    regions: ['demo'],
-    reason: 'Modo de demostración con objetos y precios inventados. Nunca son resultados reales.',
-  },
+/*
+ * Casas de subastas de Blizzard (dynamic-forever-us): 15 casas en 5 grupos de Alianza / Horda / Aguasnegras
+ * (neutral). El grupo 112/115/118 está vacío (¿Hardcore, aún sin lanzar?). La API no nombra el modo de cada
+ * grupo; se verificó el 12-11-2026 comparando el minBuyout de cada casa con los CSV de TSM: 111↔normal-alliance
+ * 61 % de coincidencias exactas (frente a 11 % con pvp), 110↔pvp-alliance 60 %, 119↔roleplay-alliance 76 %.
+ * Los slugs coinciden con los de TSM; TSM no publica Aguasnegras.
+ */
+type Mode = { key: string; label: string; ids: [number, number, number]; tsm: boolean };
+const MODES: Mode[] = [
+  { key: 'normal', label: 'Normal', ids: [111, 114, 117], tsm: true },
+  { key: 'pvp', label: 'JcJ', ids: [110, 113, 116], tsm: true },
+  { key: 'roleplay', label: 'Rol', ids: [119, 120, 121], tsm: true },
+  { key: 'roleplay-pvp', label: 'Rol JcJ', ids: [123, 124, 125], tsm: true },
 ];
+const SIDES: Array<{ key: string; label: string; faction: HouseFaction }> = [
+  { key: 'alliance', label: 'Alianza', faction: 'alliance' },
+  { key: 'horde', label: 'Horda', faction: 'horde' },
+  { key: 'aguasnegras', label: 'Aguasnegras (neutral)', faction: 'neutral' },
+];
+export const FOREVER_REALMS: FixedRealm[] = MODES.flatMap((m) =>
+  SIDES.map((s, i) => ({
+    slug: `${m.key}-${s.key}`,
+    name: `${m.label} — ${s.label}`,
+    faction: s.faction,
+    blizzardHouseId: m.ids[i],
+    tsm: m.tsm && s.faction !== 'neutral',
+  })),
+);
+
+export function findHouse(slug: string | null | undefined): FixedRealm | undefined {
+  return FOREVER_REALMS.find((r) => r.slug === slug);
+}
+
+export const FOREVER: VersionInfo = {
+  id: 'forever',
+  label: 'WoW Forever',
+  enabled: true,
+  regions: ['us'],
+  tsmGameType: 'forever',
+  blizzardNamespace: (r) => `static-forever-${r}`,
+  fixedRealms: FOREVER_REALMS,
+  realmLabel: 'Casa de subastas',
+};
+
+export const VERSIONS: VersionInfo[] = [FOREVER];
 
 export const REGION_LABEL: Record<string, string> = {
-  us: 'Norteamérica / Oceanía (US)',
-  eu: 'Europa (EU)',
-  kr: 'Corea (KR)',
-  tw: 'Taiwán (TW)',
-  demo: 'Demo',
+  us: 'Américas y Oceanía (US)',
 };
 
 export interface Settings {
-  /** Comisión de subasta como decimal (supuesto configurable; verificar por mercado). */
+  /** Comisión de subasta de las casas de facción, como decimal (supuesto configurable). */
   commission: string;
+  /** Comisión de la casa neutral de Aguasnegras (supuesto configurable). */
+  commissionNeutral: string;
   /** Fuente de precio para materiales. */
   buySource: PriceField;
   /** Fuente de precio para la venta del resultado. */
@@ -68,7 +96,7 @@ export interface Settings {
   minRoiPct: string;
   minSaleRate: number;
   minSoldPerDay: number;
-  /** Antigüedad máxima (horas) de precios de reino y commodities. */
+  /** Antigüedad máxima (horas) de precios de la casa de subastas. */
   maxAgeHoursRealm: number;
   /** Antigüedad máxima (horas) de estadísticas regionales. */
   maxAgeHoursRegion: number;
@@ -77,16 +105,17 @@ export interface Settings {
 export type PriceField = 'marketValue' | 'minBuyout' | 'recent' | 'historical' | 'regionMarketValue' | 'regionAvgSalePrice';
 
 export const PRICE_FIELD_LABEL: Record<PriceField, string> = {
-  marketValue: 'marketValue (reino/commodity)',
-  minBuyout: 'minBuyout (reino/commodity)',
-  recent: 'recent (reino/commodity)',
-  historical: 'historical (reino/commodity)',
+  marketValue: 'marketValue (casa de subastas)',
+  minBuyout: 'minBuyout (casa de subastas)',
+  recent: 'recent (casa de subastas)',
+  historical: 'historical (casa de subastas)',
   regionMarketValue: 'marketValue regional',
   regionAvgSalePrice: 'avgSalePrice regional',
 };
 
 export const DEFAULT_SETTINGS: Settings = {
   commission: '0.05',
+  commissionNeutral: '0.15',
   buySource: 'marketValue',
   sellSource: 'marketValue',
   minProfitUnitGold: '1',
@@ -98,3 +127,8 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 export const TSM_BASE = process.env.TSM_BASE_URL ?? 'https://public-data.tradeskillmaster.com';
+
+/** Comisión que corresponde a la casa de subastas del contexto. */
+export function commissionFor(settings: Settings, realm: string | null | undefined): string {
+  return findHouse(realm)?.faction === 'neutral' ? settings.commissionNeutral : settings.commission;
+}

@@ -1,9 +1,10 @@
-# Mercado de profesiones (WoW)
+# Mercado de profesiones (WoW Forever)
 
-Web en español para consultar los crafteables de las profesiones de World of Warcraft y decidir si conviene fabricarlos para vender. Compara materiales, costo de fabricación, precio de venta, comisión, ganancia neta, ROI y señales de demanda.
+Web en español para consultar los crafteables de las profesiones de **World of Warcraft: Forever** (solo esta versión) y decidir si conviene fabricarlos para vender. Compara materiales, costo de fabricación, precio de venta, comisión, ganancia neta, ROI y señales de demanda.
 
-- **Precios:** CSV públicos de [TradeSkillMaster](https://tradeskillmaster.com/public-data). No necesitan clave.
-- **Catálogo:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis). Necesita credenciales.
+- **Precios de la casa de subastas:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis) (`dynamic-forever-us`, foto de cada casa, incluida la neutral de Aguasnegras). Si falla o no hay credenciales, los CSV públicos de [TradeSkillMaster](https://tradeskillmaster.com/public-data) (`/forever/…`), que no publican Aguasnegras.
+- **Demanda:** estadísticas regionales de TSM (tasa de venta y ventas por día).
+- **Catálogo:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis), namespace `static-forever-us`. Necesita credenciales.
 - **Base de datos:** Supabase (PostgreSQL). **Despliegue:** Vercel.
 
 Especificación: [Documentacion_Web_Crafteo_TSM.md](Documentacion_Web_Crafteo_TSM.md) · Backlog: [Product_Backlog_Web_Crafteo_TSM.md](Product_Backlog_Web_Crafteo_TSM.md) · Estado: [ESTADO_PROYECTO.md](ESTADO_PROYECTO.md)
@@ -26,7 +27,6 @@ npm run dev
 
 - Interfaz: http://localhost:5173. API: http://127.0.0.1:8787 (Vite le reenvía `/api`).
 - Si no hay `DATABASE_URL`, se usa **PostgreSQL embebido (PGlite)** en `./data/pglite` y las migraciones se aplican solas.
-- Para probar sin credenciales, elige la versión **«DEMO — datos ficticios»** en el selector y pulsa «Recargar datos demo».
 
 Con Supabase en local: copia `.env.example` a `.env`, rellena `DATABASE_URL` y aplica las migraciones:
 
@@ -36,10 +36,10 @@ npm run migrate
 
 ## Datos reales
 
-1. **Precios de TSM.** En la interfaz, elige región, añade el slug de tu reino (el que aparece en la URL del reino en tradeskillmaster.com, por ejemplo `area-52`) y pulsa «Actualizar precios». Desde la terminal:
+1. **Precios.** WoW Forever no tiene reinos. En la interfaz elige la **casa de subastas**: modo de juego (Normal, JcJ, Rol, Rol JcJ) y lado (Alianza, Horda o Aguasnegras), con slugs como `normal-alliance`, `pvp-horde`, `roleplay-aguasnegras` o `roleplay-pvp-alliance`. Pulsa «Actualizar precios»: la casa se descarga de Blizzard (o de TSM si falla) y las estadísticas regionales de TSM. Desde la terminal:
 
    ```bash
-   npm run sync:prices -- us area-52
+   npm run sync:prices -- us normal-alliance
    ```
 
 2. **Catálogo de Blizzard.** Necesita `BLIZZARD_CLIENT_ID` y `BLIZZARD_CLIENT_SECRET` en `.env`.
@@ -50,10 +50,10 @@ npm run migrate
    npm run probe:blizzard -- us
    ```
 
-   Después sincroniza la lista de reinos y el catálogo completo. Es reanudable y tarda bastante:
+   Después sincroniza el catálogo de WoW Forever (namespace `static-forever-us`). Es reanudable:
 
    ```bash
-   npm run sync:catalog -- us --realms
+   npm run sync:catalog -- us
    ```
 
    Para una prueba corta de una sola profesión:
@@ -74,8 +74,9 @@ npm run typecheck
 
 Las pruebas cubren:
 - **Motor exacto:** caso de referencia de 80 oro, varias unidades, precio ausente, costo cero, cantidades inválidas, ciclos, plan con inventario compartido.
-- **Ingesta de TSM con filas reales:** cabeceras, comillas, fallo de sincronización que conserva el último lote, aislamiento por región y reino.
-- **API completa sobre PGlite con el catálogo demo.**
+- **Ingesta de TSM con filas reales de WoW Forever:** cabeceras, comillas, fallo de sincronización que conserva el último lote, aislamiento por casa de subastas y región.
+- **API completa sobre PGlite** con un catálogo de prueba ficticio que solo existe en las pruebas (`tests/helpers/seed.ts`).
+- **Acceso con contraseña** (`APP_PASSWORD`).
 
 ## Despliegue en Supabase y Vercel
 
@@ -97,7 +98,7 @@ Las pruebas cubren:
 ```
 api/index.ts                 Función de Vercel (todas las rutas /api/*)
 src/engine/                  Motor puro: racionales exactos, costos, ganancia, clasificación, plan, comprar/fabricar
-src/server/providers/        Adaptadores TSM (CSV) y Blizzard (OAuth + Game Data)
+src/server/providers/        Adaptadores TSM (CSV), Blizzard (OAuth + Game Data) y subastas de Blizzard
 src/server/catalog/          Reglas versionadas y sincronización del catálogo
 src/server/market.ts         Ingesta atómica de precios y lectura del lote activo
 src/server/evaluate.ts       Evaluación de recetas contra un mercado
@@ -114,10 +115,10 @@ docs/                        Validación de fuentes y decisiones técnicas
 | Método | Ruta | Uso |
 |---|---|---|
 | GET/POST | `/api/auth/status`, `/api/auth/login`, `/api/auth/logout` | Acceso con `APP_PASSWORD` (cookie HttpOnly; el resto de rutas devuelve 401 sin sesión) |
-| GET | `/api/meta` | Versiones, regiones, ajustes, estado del catálogo |
-| GET/POST | `/api/realms` | Reinos conocidos; añadir un slug validado contra TSM |
+| GET | `/api/meta` | Versión (WoW Forever), regiones, ajustes, estado del catálogo |
+| GET/POST | `/api/realms` | Casas de subastas de WoW Forever; añadir otra validada contra TSM |
 | GET | `/api/market/status` | Lotes activos, antigüedad y último intento |
-| POST | `/api/sync/prices` | Sincronizar precios de TSM del contexto |
+| POST | `/api/sync/prices` | Sincronizar precios del contexto (casa: Blizzard, o TSM de respaldo; región: TSM) |
 | GET | `/api/cron/sync-prices` | Cron de Vercel (requiere `CRON_SECRET`) |
 | GET | `/api/professions`, `/api/coverage` | Catálogo y cobertura |
 | GET | `/api/opportunities` | Comparador con filtros, orden y paginación |
@@ -126,5 +127,4 @@ docs/                        Validación de fuentes y decisiones técnicas
 | POST | `/api/crafting-plan` | Lista de fabricación y compras |
 | GET | `/api/materials`, `/api/materials/{id}` | Vender un material frente a usarlo |
 | CRUD | `/api/profiles`, `/api/scenarios`, `/api/plans`, `/api/ledger`, `/api/settings` | Datos del usuario |
-| POST | `/api/tools/expected` | Calculadoras manuales (valor esperado, concentración) |
-| POST | `/api/demo/seed` | Cargar datos ficticios |
+| POST | `/api/tools/expected` | Calculadora manual de valor esperado |

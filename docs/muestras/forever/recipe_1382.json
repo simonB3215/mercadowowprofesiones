@@ -1,0 +1,121 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/recipe/1382?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "id": 1382,
+  "name": {
+    "en_US": "Elixir of Minor Fortitude",
+    "es_MX": "Elixir de entereza menor",
+    "pt_BR": "Elixir de Fortitude Menor",
+    "de_DE": "Elixier der schwachen Seelenstärke",
+    "en_GB": "Elixir of Minor Fortitude",
+    "es_ES": "Elixir de entereza menor",
+    "fr_FR": "Elixir de Robustesse mineure",
+    "it_IT": "Elisir della Fermezza Minore",
+    "ru_RU": "Слабый эликсир стойкости",
+    "ko_KR": "최하급 인내의 비약",
+    "zh_TW": "初級堅韌藥劑",
+    "zh_CN": "初级坚韧药剂"
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/recipe/1382?namespace=static-1.60.1_70399-forever-us"
+    },
+    "id": 1382
+  },
+  "crafted_item": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/item/2458?namespace=static-1.60.1_70399-forever-us"
+    },
+    "name": {
+      "en_US": "Elixir of Minor Fortitude",
+      "es_MX": "Elixir de entereza menor",
+      "pt_BR": "Elixir de Fortitude Menor",
+      "de_DE": "Elixier der schwachen Seelenstärke",
+      "en_GB": "Elixir of Minor Fortitude",
+      "es_ES": "Elixir de entereza menor",
+      "fr_FR": "Elixir de Robustesse mineure",
+      "it_IT": "Elisir della Fermezza Minore",
+      "ru_RU": "Слабый эликсир стойкости",
+      "ko_KR": "최하급 인내의 비약",
+      "zh_TW": "初級堅韌藥劑",
+      "zh_CN": "初级坚韧药剂"
+    },
+    "id": 2458
+  },
+  "reagents": [
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/2449?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Earthroot",
+          "es_MX": "Raíz de tierra",
+          "pt_BR": "Raiz-telúrica",
+          "de_DE": "Erdwurzel",
+          "en_GB": "Earthroot",
+          "es_ES": "Raíz de tierra",
+          "fr_FR": "Terrestrine",
+          "it_IT": "Bulboterro",
+          "ru_RU": "Землекорень",
+          "ko_KR": "뱀뿌리",
+          "zh_TW": "地根草",
+          "zh_CN": "地根草"
+        },
+        "id": 2449
+      },
+      "quantity": 2
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/2447?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Peacebloom",
+          "es_MX": "Flor de paz",
+          "pt_BR": "Botão-da-paz",
+          "de_DE": "Friedensblume",
+          "en_GB": "Peacebloom",
+          "es_ES": "Flor de paz",
+          "fr_FR": "Pacifique",
+          "it_IT": "Sbocciapace",
+          "ru_RU": "Мироцвет",
+          "ko_KR": "평온초",
+          "zh_TW": "寧神花",
+          "zh_CN": "宁神花"
+        },
+        "id": 2447
+      },
+      "quantity": 1
+    },
+    {
+      "reagent": {
+        "key": {
+          "href": "https://us.api.blizzard.com/data/wow/item/3371?namespace=static-1.60.1_70399-forever-us"
+        },
+        "name": {
+          "en_US": "Empty Vial",
+          "es_MX": "Vial vacío",
+          "pt_BR": "Ampola Vazia",
+          "de_DE": "Leere Phiole",
+          "en_GB": "Empty Vial",
+          "es_ES": "Vial vacío",
+          "fr_FR": "Fiole vide",
+          "ru_RU": "Пустая колба",
+          "ko_KR": "유리 약병",
+          "zh_TW": "空瓶",
+          "zh_CN": "空瓶"
+        },
+        "id": 3371
+      },
+      "quantity": 1
+    }
+  ],
+  "crafted_quantity": {
+    "value": 1
+  }
+}

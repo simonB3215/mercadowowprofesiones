@@ -4,81 +4,82 @@ import { openDb, migrate, type Db } from '../src/server/db.js';
 import { ingest, loadSnapshot } from '../src/server/market.js';
 import { parseTsmCsv } from '../src/server/providers/tsm.js';
 
+// Muestras reales de WoW Forever descargadas de TSM (ver docs/VALIDACION_FUENTES.md).
 const fx = (f: string) => fs.readFileSync(`tests/fixtures/${f}`, 'utf8');
+const REALM = 'forever_realm_normal-alliance_sample.csv';
+const REGION = 'forever_region_sample.csv';
 let db: Db;
-const us = { version: 'retail', region: 'us', realm: 'area-52' };
+const na = { version: 'forever', region: 'us', realm: 'normal-alliance' };
 
 beforeAll(async () => {
   db = await openDb('pglite:memory');
   await migrate(db);
 });
 
-describe('Parser TSM (muestras reales)', () => {
-  it('lee nombres entrecomillados con comas y comillas', () => {
-    const p = parseTsmCsv('commodities', fx('tsm_commodities_sample.csv'));
-    const vantus = p.rows.find((r) => r.itemId === 204860)!;
-    expect(vantus.name).toBe('Vantus Rune: Aberrus, the Shadowed Crucible');
-    expect(p.rows.find((r) => r.itemId === 168310)!.name).toBe('Mech-Dowel\'s "Big Mech"');
+describe('Parser TSM (muestras reales de WoW Forever)', () => {
+  it('lee la casa de subastas: cobre entero, fecha de escaneo y sin rechazos', () => {
+    const p = parseTsmCsv('realm_items', fx(REALM));
     expect(p.rejected).toBe(0);
+    expect(p.rows.length).toBeGreaterThan(20);
     expect(p.sourceTime).toMatch(/^2026-/);
+    expect(p.rows.every((r) => r.marketValue === null || typeof r.marketValue === 'bigint')).toBe(true);
   });
-  it('rangos de calidad tienen itemId propios con el mismo nombre', () => {
-    const p = parseTsmCsv('commodities', fx('tsm_commodities_sample.csv'));
-    const bismuth = p.rows.filter((r) => r.name === 'Bismuth').map((r) => r.itemId).sort();
-    expect(bismuth).toEqual([210930, 210931, 210932]);
+  it('lee nombres entrecomillados con comas', () => {
+    const p = parseTsmCsv('region_items', fx(REGION));
+    expect(p.rejected).toBe(0);
+    expect(p.rows.some((r) => (r.name ?? '').includes(','))).toBe(true);
   });
   it('rechaza cabeceras inesperadas', () => {
-    expect(() => parseTsmCsv('region_items', fx('tsm_commodities_sample.csv'))).toThrow(/Cabecera inesperada/);
+    expect(() => parseTsmCsv('region_items', fx(REALM))).toThrow(/Cabecera inesperada/);
   });
   it('minBuyout 0 se guarda como null, no como precio gratuito', () => {
-    const p = parseTsmCsv('commodities', 'itemId,name,marketValue,minBuyout,recent,historical,updatedAt\n5,X,100,0,0,90,2026-11-11T00:00:00Z\n');
+    const p = parseTsmCsv('realm_items', 'itemId,name,marketValue,minBuyout,recent,historical,updatedAt\n5,X,100,0,0,90,2026-11-11T00:00:00Z\n');
     expect(p.rows[0].minBuyout).toBeNull();
     expect(p.rows[0].marketValue).toBe(100n);
   });
 });
 
 describe('Ingesta atómica', () => {
-  it('importa y activa los tres archivos', async () => {
-    expect((await ingest(db, us, 'commodities', { text: fx('tsm_commodities_sample.csv') })).status).toBe('ok');
-    expect((await ingest(db, us, 'realm_items', { text: fx('tsm_realm_sample.csv') })).status).toBe('ok');
-    expect((await ingest(db, us, 'region_items', { text: fx('tsm_region_sample.csv') })).status).toBe('ok');
-    const s = await loadSnapshot(db, us);
-    expect(s.local.get(210930)!.kind).toBe('commodities');
-    expect(s.region.get(210930)!.saleRate).toBeGreaterThan(0);
-    expect(s.runs.realm_items!.scope).toBe('reino');
+  it('importa y activa casa de subastas y región', async () => {
+    expect((await ingest(db, na, 'realm_items', { text: fx(REALM) })).status).toBe('ok');
+    expect((await ingest(db, na, 'region_items', { text: fx(REGION) })).status).toBe('ok');
+    const s = await loadSnapshot(db, na);
+    expect(s.local.size).toBeGreaterThan(0);
+    expect(s.region.size).toBeGreaterThan(0);
+    expect(s.runs.realm_items!.scope).toBe('casa de subastas');
   });
 
   it('un fallo de sincronización conserva el último lote válido', async () => {
-    const before = await loadSnapshot(db, us);
+    const before = await loadSnapshot(db, na);
     const failing = (async () => new Response('x', { status: 503 })) as unknown as typeof fetch;
-    const r = await ingest(db, us, 'commodities', { fetchImpl: failing });
+    const r = await ingest(db, na, 'realm_items', { fetchImpl: failing });
     expect(r.status).toBe('failed');
-    const after = await loadSnapshot(db, us);
-    expect(after.runs.commodities!.id).toBe(before.runs.commodities!.id);
-    expect(after.lastAttempt.commodities!.status).toBe('failed');
+    const after = await loadSnapshot(db, na);
+    expect(after.runs.realm_items!.id).toBe(before.runs.realm_items!.id);
+    expect(after.lastAttempt.realm_items!.status).toBe('failed');
     expect(after.local.size).toBe(before.local.size);
   });
 
   it('un archivo con cabecera incorrecta se rechaza sin activar', async () => {
-    const r = await ingest(db, us, 'realm_items', { text: 'a,b\n1,2\n' });
+    const r = await ingest(db, na, 'realm_items', { text: 'a,b\n1,2\n' });
     expect(r.status).toBe('rejected');
-    const s = await loadSnapshot(db, us);
+    const s = await loadSnapshot(db, na);
     expect(s.runs.realm_items!.status).toBe('ok');
   });
 
-  it('cambiar de reino o región no mezcla datos', async () => {
-    const other = await loadSnapshot(db, { version: 'retail', region: 'us', realm: 'ragnaros' });
-    expect(other.runs.realm_items).toBeUndefined();
-    expect(other.runs.commodities).toBeDefined(); // commodities son regionales
-    const eu = await loadSnapshot(db, { version: 'retail', region: 'eu', realm: 'area-52' });
+  it('cambiar de casa de subastas o de región no mezcla datos', async () => {
+    const horde = await loadSnapshot(db, { version: 'forever', region: 'us', realm: 'normal-horde' });
+    expect(horde.runs.realm_items).toBeUndefined();
+    expect(horde.local.size).toBe(0);
+    expect(horde.runs.region_items).toBeDefined(); // las estadísticas regionales son comunes
+    const eu = await loadSnapshot(db, { version: 'forever', region: 'eu', realm: 'normal-alliance' });
     expect(Object.keys(eu.runs)).toEqual([]);
-    expect(eu.local.size).toBe(0);
   });
 
   it('reimportar conserva como máximo dos lotes con filas', async () => {
-    for (let i = 0; i < 3; i++) await ingest(db, us, 'commodities', { text: fx('tsm_commodities_sample.csv') });
+    for (let i = 0; i < 3; i++) await ingest(db, na, 'realm_items', { text: fx(REALM) });
     const rows = await db.query<{ c: number }>(
-      `select count(distinct run_id)::int as c from price_row p join ingestion_run r on r.id=p.run_id where r.file_kind='commodities'`);
+      `select count(distinct run_id)::int as c from price_row p join ingestion_run r on r.id=p.run_id where r.file_kind='realm_items'`);
     expect(Number(rows[0].c)).toBeLessThanOrEqual(2);
   });
 });

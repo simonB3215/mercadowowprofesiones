@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, DemoBanner, dt, type DraftEntry } from '../lib.js';
+import { api, useApp, useAsync, money, getDraft, setDraft, ErrorBox, dt, type DraftEntry } from '../lib.js';
 
 export function PlanPage() {
   const { ctx, profileId } = useApp();
@@ -24,7 +24,6 @@ export function PlanPage() {
 
   return (
     <div>
-      <DemoBanner />
       <h1>Lista de fabricación y compras</h1>
       <p className="muted small">Agrupa materiales de varias recetas, aplica el inventario del perfil una sola vez y muestra el capital necesario antes de fabricar. Las cantidades no garantizan ventas.</p>
       {!profileId && <div className="alert info"><p>Sin perfil seleccionado: no se descuenta inventario.</p></div>}

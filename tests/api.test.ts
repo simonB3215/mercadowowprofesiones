@@ -4,8 +4,9 @@ import { Q } from '../src/engine/rational.js';
 process.env.DATABASE_URL = 'pglite:memory';
 const { getDb, migrate } = await import('../src/server/db.js');
 const { handle } = await import('../src/server/router.js');
+const { seedTestCatalog, TEST_CTX } = await import('./helpers/seed.js');
 
-const ctx = { version: 'demo', region: 'demo', realm: 'reino-demo' };
+const ctx = TEST_CTX;
 const qs = new URLSearchParams(ctx).toString();
 const q = (j: any): Q => Q.fromJSON(j);
 
@@ -15,9 +16,9 @@ async function api(method: string, path: string, body?: unknown) {
 }
 
 beforeAll(async () => {
-  await migrate(await getDb());
-  const r = await api('POST', '/api/demo/seed');
-  expect(r.json.ingest).toEqual(['ok', 'ok', 'ok']);
+  const db = await getDb();
+  await migrate(db);
+  expect(await seedTestCatalog(db)).toEqual(['ok', 'ok']);
 });
 
 async function detail(id: number, extra = '') {
@@ -26,12 +27,18 @@ async function detail(id: number, extra = '') {
   return r.json.evaluation;
 }
 
-describe('API sobre catálogo demo', () => {
-  it('meta lista versiones con Classic deshabilitado', async () => {
+describe('API sobre un catálogo de prueba de WoW Forever', () => {
+  it('solo WoW Forever: sin Retail ni Classic, sin commodities y con casas de subastas fijas', async () => {
     const r = await api('GET', '/api/meta');
-    const classic = r.json.versions.find((v: any) => v.id === 'classic');
-    expect(classic.enabled).toBe(false);
-    expect(classic.reason).toMatch(/PB-26/);
+    const ids = r.json.versions.map((v: any) => v.id);
+    expect(ids).toEqual(['forever']);
+    for (const v of ['retail', 'classic', 'demo']) expect((await api('GET', `/api/opportunities?version=${v}&region=us`)).status).toBe(400);
+    expect((await api('POST', '/api/demo/seed')).status).toBe(404);
+    const realms = await api('GET', '/api/realms?version=forever&region=us');
+    expect(realms.json.realms).toHaveLength(12);
+    expect(realms.json.realms.slice(0, 3).map((x: any) => x.slug)).toEqual(['normal-alliance', 'normal-horde', 'normal-aguasnegras']);
+    const st = await api('GET', '/api/market/status?version=forever&region=us&realm=normal-alliance');
+    expect(st.json.files.map((f: any) => f.kind)).toEqual(['region_items', 'realm_items']);
   });
 
   it('receta que produce 5 unidades reparte el costo', async () => {
@@ -59,10 +66,10 @@ describe('API sobre catálogo demo', () => {
     expect(e.status).toBe('no_vendible');
   });
 
-  it('calidad sin correspondencia bloquea la recomendación', async () => {
+  it('resultado con variantes del mismo nombre bloquea la recomendación', async () => {
     const e = await detail(800006);
     expect(e.status).toBe('datos_insuficientes');
-    expect(e.reasons.join(' ')).toMatch(/calidad/i);
+    expect(e.reasons.join(' ')).toMatch(/variantes con el mismo nombre/i);
   });
 
   it('rendimiento variable bloquea hasta fijarlo manualmente', async () => {
@@ -164,12 +171,12 @@ describe('API sobre catálogo demo', () => {
     expect(r.json.manual).toBe(true);
   });
 
-  it('cambiar de contexto: versión deshabilitada o región inválida', async () => {
-    expect((await api('GET', '/api/opportunities?version=classic&region=us')).status).toBe(400);
-    expect((await api('GET', '/api/opportunities?version=retail&region=xx')).status).toBe(400);
-    const empty = await api('GET', '/api/opportunities?version=retail&region=us&realm=area-52');
-    expect(empty.status).toBe(200);
-    expect(empty.json.total).toBe(0);
+  it('cambiar de casa de subastas no mezcla precios', async () => {
+    expect((await api('GET', '/api/opportunities?version=forever&region=xx')).status).toBe(400);
+    const otra = await api('GET', '/api/opportunities?version=forever&region=us&realm=pvp-horde');
+    expect(otra.status).toBe(200);
+    // Sin precios cargados para pvp-horde: ningún coste ni ganancia calculados.
+    expect(otra.json.items.every((i: any) => i.profitUnit === null)).toBe(true);
   });
 
   it('datos desactualizados impiden candidato', async () => {

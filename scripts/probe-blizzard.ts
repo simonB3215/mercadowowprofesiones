@@ -1,11 +1,11 @@
-// Guarda respuestas reales de muestra en docs/muestras para validar el contrato (PB-01).
+// Guarda respuestas reales de WoW Forever en docs/muestras/forever para validar el contrato (PB-01).
 import fs from 'node:fs';
 import { createBlizzardClient } from '../src/server/providers/blizzard.js';
 const region = process.argv.slice(2).find((a) => a !== '--') ?? 'us';
 const c = createBlizzardClient(region);
-const ns = `static-${region}`;
-fs.mkdirSync('docs/muestras', { recursive: true });
-const save = (name: string, data: unknown) => fs.writeFileSync(`docs/muestras/${name}.json`, JSON.stringify(data, null, 2));
+const ns = `static-forever-${region}`;
+fs.mkdirSync('docs/muestras/forever', { recursive: true });
+const save = (name: string, data: unknown) => fs.writeFileSync(`docs/muestras/forever/${name}.json`, JSON.stringify(data, null, 2));
 const index = await c.get('/data/wow/profession/index', ns);
 save('profession_index', index);
 const profs: any[] = index.professions ?? [];
@@ -25,5 +25,4 @@ for (const p of profs.slice(0, 20)) {
   if (itemId) save(`item_${itemId}`, await c.get(`/data/wow/item/${itemId}`, ns));
   console.log(`  ${p.id}: tier ${tier.id}, receta ${rec.id}, objeto ${itemId ?? '-'}`);
 }
-save('realm_index', await c.get('/data/wow/realm/index', `dynamic-${region}`));
-console.log('Muestras guardadas en docs/muestras/');
+console.log('Muestras guardadas en docs/muestras/forever/');

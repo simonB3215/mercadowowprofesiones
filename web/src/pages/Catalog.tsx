@@ -1,5 +1,5 @@
 import React from 'react';
-import { api, useApp, useAsync, Loading, ErrorBox, DemoBanner } from '../lib.js';
+import { api, useApp, useAsync, Loading, ErrorBox } from '../lib.js';
 
 const KIND: Record<string, string> = {
   fabricacion: 'Fabricación', secundaria: 'Secundaria (fabricación)', recoleccion: 'Recolección / transformación', historica: 'Histórica', desconocido: 'Sin clasificar',
@@ -17,9 +17,8 @@ export function Catalog() {
   for (const r of cov.data?.rows ?? []) (expansionsByProf[r.profession] ??= []).push(r);
   return (
     <div>
-      <DemoBanner />
       <h1>Catálogo de profesiones</h1>
-      <p className="muted small">Profesiones y expansiones disponibles en el catálogo de la versión seleccionada. Pulsa una expansión para abrir el comparador filtrado.</p>
+      <p className="muted small">Profesiones de WoW Forever disponibles en el catálogo. Pulsa una para abrir el comparador filtrado.</p>
       {p.data.missingRequired.length > 0 && (
         <div className="alert warn" role="note">
           <p><strong>Profesiones requeridas sin datos en el catálogo:</strong> {p.data.missingRequired.map((m: any) => m.name).join(', ')}.</p>
@@ -39,7 +38,7 @@ export function Catalog() {
                 <ul className="small" style={{ paddingLeft: 18, margin: 0 }}>
                   {(expansionsByProf[x.name] ?? []).filter((e) => e.total > 0).map((e) => (
                     <li key={e.expansion}>
-                      <a href={`#/?professionId=${x.id}&expansion=${encodeURIComponent(e.expansion)}`}>{e.expansion}</a>: {e.total} ({e.complete} completas)
+                      <a href={`#/?professionId=${x.id}`}>Ver recetas</a>: {e.total} ({e.complete} completas)
                     </li>
                   ))}
                   {!(expansionsByProf[x.name] ?? []).some((e) => e.total > 0) && <li className="muted">Sin recetas en el catálogo.</li>}

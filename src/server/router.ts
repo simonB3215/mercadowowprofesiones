@@ -3,15 +3,15 @@
  * la función de Vercel (api/index.ts) y el servidor local (scripts/dev-server.ts).
  */
 import { getDb, type Db } from './db.js';
-import { VERSIONS, REGION_LABEL, DEFAULT_SETTINGS, PRICE_FIELD_LABEL, type Settings } from './config.js';
+import { VERSIONS, REGION_LABEL, DEFAULT_SETTINGS, PRICE_FIELD_LABEL, findHouse, commissionFor, type Settings } from './config.js';
 import { HttpError, ingest, loadSnapshot, validateContext, ageHours, type MarketContext } from './market.js';
 import { tsmUrl, type FileKind } from './providers/tsm.js';
-import { hasBlizzardCredentials } from './providers/blizzard.js';
+import { hasBlizzardCredentials, createBlizzardClient } from './providers/blizzard.js';
+import { fetchHouseCsv } from './providers/blizzardAuctions.js';
 import { buildEvalContext, evaluateRecipe, loadRecipes, loadSettings, resolvePrice, type Overrides, type Profile, type Evaluation } from './evaluate.js';
-import { REQUIRED_PROFESSIONS, PROFESSION_ES } from './catalog/rules.js';
+import { requiredProfessions, PROFESSION_ES } from './catalog/rules.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
-import { seedDemo } from './demo.js';
 import { storeRaw } from './storage.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
@@ -80,28 +80,28 @@ route('GET', '/api/meta', async (_r, _p, _u, db) => {
     defaults: DEFAULT_SETTINGS,
     priceFields: PRICE_FIELD_LABEL,
     blizzardConfigured: hasBlizzardCredentials(),
-    demoEnabled: process.env.DISABLE_DEMO !== 'true',
     catalog: { runs: catalog, recipes: Object.fromEntries(counts.map((c) => [c.game_version, Number(c.recipes)])) },
   };
 });
 
 route('GET', '/api/realms', async (_r, _p, u, db) => {
-  const version = u.searchParams.get('version') ?? 'retail';
+  const version = u.searchParams.get('version') ?? 'forever';
   const region = u.searchParams.get('region') ?? '';
   const rows = await db.query<any>(`select slug, name, source from realm where game_version=$1 and region=$2 order by name`, [version, region]);
-  return { realms: rows };
+  const v = VERSIONS.find((x) => x.id === version);
+  const fixed = (v?.fixedRealms ?? []).map((r) => ({ slug: r.slug, name: r.name, source: 'fijo', faction: r.faction, tsm: r.tsm }));
+  return { realms: [...fixed, ...rows.filter((r) => !fixed.some((f) => f.slug === r.slug))], realmLabel: v?.realmLabel ?? 'Reino' };
 });
 
 route('POST', '/api/realms', async (req, _p, _u, db) => {
   const b = await body(req);
   const ctx = ctxFrom(b);
-  if (!ctx.realm) throw new HttpError(400, 'Indica el slug del reino (por ejemplo, area-52).');
-  if (ctx.version === 'demo') throw new HttpError(400, 'El modo demo tiene su propio reino ficticio.');
+  if (!ctx.realm) throw new HttpError(400, 'Indica el slug de la casa de subastas (por ejemplo, normal-alliance).');
   const v = VERSIONS.find((x) => x.id === ctx.version)!;
   const url = tsmUrl(v.tsmGameType!, ctx.region, 'realm_items', ctx.realm);
   const res = await fetch(url, { method: 'HEAD' });
-  if (res.status === 404) throw new HttpError(404, `TSM no publica datos para el reino "${ctx.realm}" en ${ctx.region.toUpperCase()}. Copia el slug desde la URL del reino en tradeskillmaster.com.`);
-  if (!res.ok) throw new HttpError(502, `No se pudo comprobar el reino en TSM (HTTP ${res.status}).`);
+  if (res.status === 404) throw new HttpError(404, `TSM no publica la casa de subastas "${ctx.realm}" de WoW Forever en ${ctx.region.toUpperCase()}.`);
+  if (!res.ok) throw new HttpError(502, `No se pudo comprobar la casa de subastas en TSM (HTTP ${res.status}).`);
   const name = String(b.name || ctx.realm);
   await db.query(
     `insert into realm (game_version,region,slug,name,source) values ($1,$2,$3,$4,'usuario') on conflict (game_version,region,slug) do nothing`,
@@ -110,10 +110,15 @@ route('POST', '/api/realms', async (req, _p, _u, db) => {
   return { ok: true, realm: { slug: ctx.realm, name } };
 });
 
+/** Archivos de TSM del contexto (WoW Forever no tiene commodities). */
+function fileKinds(ctx: MarketContext): FileKind[] {
+  return ['region_items', ...(ctx.realm ? (['realm_items'] as FileKind[]) : [])];
+}
+
 async function marketStatus(db: Db, ctx: MarketContext) {
   const snap = await loadSnapshot(db, ctx, []);
   const settings = await loadSettings(db);
-  const kinds: FileKind[] = ['commodities', 'region_items', ...(ctx.realm ? (['realm_items'] as FileKind[]) : [])];
+  const kinds = fileKinds(ctx);
   return {
     ctx,
     files: kinds.map((k) => {
@@ -122,8 +127,8 @@ async function marketStatus(db: Db, ctx: MarketContext) {
       const max = k === 'region_items' ? settings.maxAgeHoursRegion : settings.maxAgeHoursRealm;
       return {
         kind: k,
-        scope: k === 'realm_items' ? 'reino' : 'región',
-        label: k === 'commodities' ? 'Commodities (regional)' : k === 'region_items' ? 'Estadísticas regionales' : `Objetos del reino ${ctx.realm}`,
+        scope: k === 'realm_items' ? 'casa de subastas' : 'región',
+        label: k === 'region_items' ? 'Estadísticas regionales (TSM)' : `Casa de subastas ${findHouse(ctx.realm)?.name ?? ctx.realm}`,
         active: run ?? null,
         sourceAgeHours: age,
         stale: age === null ? null : age > max,
@@ -138,9 +143,30 @@ route('GET', '/api/market/status', async (_r, _p, u, db) => marketStatus(db, ctx
 
 const MIN_REFETCH_MIN = 60;
 
+/**
+ * Precios de la casa de subastas: Blizzard (foto actual de la casa, incluida Aguasnegras) si hay credenciales;
+ * si falla o no hay credenciales, TSM, que solo publica las casas Normal y JcJ de Alianza y Horda.
+ */
+async function ingestHouse(db: Db, ctx: MarketContext) {
+  const house = findHouse(ctx.realm);
+  let blizzardError: string | null = null;
+  if (house && hasBlizzardCredentials()) {
+    try {
+      const { text, url } = await fetchHouseCsv(createBlizzardClient(ctx.region), house.blizzardHouseId);
+      return await ingest(db, ctx, 'realm_items', { text, provider: 'blizzard', sourceUrl: url, storeRaw });
+    } catch (e) {
+      blizzardError = (e as Error).message;
+    }
+  }
+  if (!house || house.tsm) {
+    const r = await ingest(db, ctx, 'realm_items', { storeRaw });
+    return blizzardError ? { ...r, blizzardError } : r;
+  }
+  return { status: 'failed', error: blizzardError ?? 'Esta casa de subastas solo está disponible con la API de Blizzard: configura BLIZZARD_CLIENT_ID y BLIZZARD_CLIENT_SECRET.' };
+}
+
 export async function syncPrices(db: Db, ctx: MarketContext, force = false) {
-  if (ctx.version === 'demo') throw new HttpError(400, 'El modo demo no se sincroniza con TSM.');
-  const kinds: FileKind[] = ['commodities', 'region_items', ...(ctx.realm ? (['realm_items'] as FileKind[]) : [])];
+  const kinds = fileKinds(ctx);
   const results: Record<string, unknown> = {};
   for (const k of kinds) {
     const last = await db.query<any>(
@@ -149,10 +175,10 @@ export async function syncPrices(db: Db, ctx: MarketContext, force = false) {
     );
     const mins = last[0] ? (Date.now() - new Date(last[0].finished_at).getTime()) / 60000 : Infinity;
     if (!force && mins < MIN_REFETCH_MIN) {
-      results[k] = { status: 'omitido', reason: `Descargado hace ${Math.round(mins)} min; TSM actualiza cada pocas horas.` };
+      results[k] = { status: 'omitido', reason: `Descargado hace ${Math.round(mins)} min; las fuentes se actualizan cada hora o más.` };
       continue;
     }
-    results[k] = await ingest(db, ctx, k, { storeRaw });
+    results[k] = k === 'realm_items' ? await ingestHouse(db, ctx) : await ingest(db, ctx, k, { storeRaw });
   }
   // Registrar el contexto para el cron.
   const key = `${ctx.version}|${ctx.region}|${ctx.realm ?? ''}`;
@@ -160,7 +186,7 @@ export async function syncPrices(db: Db, ctx: MarketContext, force = false) {
   const list: string[] = cur[0]?.value ?? [];
   if (!list.includes(key)) {
     list.unshift(key);
-    await db.query(`insert into app_setting(key,value) values ('tracked_contexts',$1) on conflict (key) do update set value=excluded.value, updated_at=now()`, [JSON.stringify(list.slice(0, 10))]);
+    await db.query(`insert into app_setting(key,value) values ('tracked_contexts',$1::text::jsonb) on conflict (key) do update set value=excluded.value, updated_at=now()`, [JSON.stringify(list.slice(0, 10))]);
   }
   return results;
 }
@@ -178,6 +204,7 @@ route('GET', '/api/cron/sync-prices', async (req, _p, _u, db) => {
   const out: Record<string, unknown> = {};
   for (const key of list) {
     const [version, region, realm] = key.split('|');
+    if (version !== 'forever') continue; // contextos antiguos de otras versiones: se ignoran
     try {
       out[key] = await syncPrices(db, validateContext({ version, region, realm: realm || null }));
     } catch (e) {
@@ -192,7 +219,7 @@ route('GET', '/api/cron/sync-prices', async (req, _p, _u, db) => {
 // ---------------------------------------------------------------------------
 
 route('GET', '/api/professions', async (_r, _p, u, db) => {
-  const version = u.searchParams.get('version') ?? 'retail';
+  const version = u.searchParams.get('version') ?? 'forever';
   const rows = await db.query<any>(
     `select p.id, p.name, p.name_en, p.kind, count(r.id)::int as recipes,
             count(r.id) filter (where r.fetch_error is null)::int as complete
@@ -201,14 +228,14 @@ route('GET', '/api/professions', async (_r, _p, u, db) => {
     [version],
   );
   const present = new Set(rows.map((r) => r.name_en));
-  const missing = version === 'demo' ? [] : REQUIRED_PROFESSIONS.filter((n) => !present.has(n)).map((n) => ({ name: PROFESSION_ES[n] ?? n, name_en: n }));
+  const missing = requiredProfessions(version).filter((n) => !present.has(n)).map((n) => ({ name: PROFESSION_ES[n] ?? n, name_en: n }));
   const expansions = await db.query<any>(
     `select expansion, count(*)::int as tiers from skill_tier where game_version=$1 group by expansion order by expansion`, [version]);
   return { professions: rows, missingRequired: missing, expansions };
 });
 
 route('GET', '/api/coverage', async (_r, _p, u, db) => {
-  const version = u.searchParams.get('version') ?? 'retail';
+  const version = u.searchParams.get('version') ?? 'forever';
   const rows = await db.query<any>(
     `select p.name as profession, p.kind, coalesce(t.expansion,'Sin clasificar') as expansion,
             count(r.id)::int as total,
@@ -355,7 +382,7 @@ route('GET', '/api/recipes/:id', async (_r, p, u, db) => {
   const ctx = ctxFrom(u);
   const { base, profile, ectx, rawRecipe } = await evaluateOne(db, ctx, int(p.id)!, u.searchParams.get('profileId'), {});
   const sourcing = await sourcingFor(db, ctx, base, profile);
-  return { evaluation: base, sourcing, market: ectx.snap.runs, settings: ectx.settings, rawRecipe };
+  return { evaluation: base, sourcing, market: ectx.snap.runs, settings: { ...ectx.settings, commission: commissionFor(ectx.settings, ctx.realm) }, rawRecipe };
 });
 
 route('POST', '/api/calculate', async (req, _p, _u, db) => {
@@ -379,7 +406,7 @@ route('GET', '/api/materials/:id', async (_r, p, u, db) => {
   const ctx = ctxFrom(u);
   const itemId = int(p.id)!;
   const settings = await loadSettings(db);
-  const commission = Q.parse(settings.commission);
+  const commission = Q.parse(commissionFor(settings, ctx.realm));
   const uses = await db.query<any>(`select distinct recipe_id from recipe_reagent where game_version=$1 and item_id=$2`, [ctx.version, itemId]);
   const recipes = await loadRecipes(db, ctx.version, { recipeIds: uses.map((x) => Number(x.recipe_id)) });
   const ectx = await buildEvalContext(db, ctx, recipes, null, settings);
@@ -399,11 +426,11 @@ route('GET', '/api/materials/:id', async (_r, p, u, db) => {
   });
   alternatives.sort((a, b) => (!a.valuePerUnit ? 1 : !b.valuePerUnit ? -1 : b.valuePerUnit.cmp(a.valuePerUnit)));
   const item = ectx.items.get(itemId);
-  return { itemId, name: item?.name ?? ectx.snap.local.get(itemId)?.name ?? null, price: own, sellNet, alternatives, commission: settings.commission };
+  return { itemId, name: item?.name ?? ectx.snap.local.get(itemId)?.name ?? null, price: own, sellNet, alternatives, commission: commissionFor(settings, ctx.realm) };
 });
 
 route('GET', '/api/materials', async (_r, _p, u, db) => {
-  const version = u.searchParams.get('version') ?? 'retail';
+  const version = u.searchParams.get('version') ?? 'forever';
   const search = (u.searchParams.get('search') ?? '').toLowerCase().slice(0, 60);
   const rows = await db.query<any>(
     `select g.item_id, coalesce(i.name, 'Objeto ' || g.item_id) as name, count(distinct g.recipe_id)::int as uses,
@@ -428,14 +455,15 @@ route('PUT', '/api/settings', async (req, _p, _u, db) => {
   const cur = await loadSettings(db);
   const next: Settings = { ...cur };
   const fields = Object.keys(PRICE_FIELD_LABEL);
-  for (const k of ['commission', 'minProfitUnitGold', 'minRoiPct'] as const) {
+  for (const k of ['commission', 'commissionNeutral', 'minProfitUnitGold', 'minRoiPct'] as const) {
     if (b[k] !== undefined) {
       try { Q.parse(String(b[k])); } catch { throw new HttpError(400, `Valor inválido para ${k}.`); }
       next[k] = String(b[k]).replace(',', '.');
     }
   }
-  const c = Q.parse(next.commission);
-  if (c.sign() < 0 || c.cmp(Q.one) >= 0) throw new HttpError(400, 'La comisión debe cumplir 0 ≤ t < 1 (por ejemplo 0.05).');
+  for (const c of [Q.parse(next.commission), Q.parse(next.commissionNeutral)]) {
+    if (c.sign() < 0 || c.cmp(Q.one) >= 0) throw new HttpError(400, 'La comisión debe cumplir 0 ≤ t < 1 (por ejemplo 0.05).');
+  }
   for (const k of ['minSaleRate', 'minSoldPerDay', 'maxAgeHoursRealm', 'maxAgeHoursRegion'] as const) {
     if (b[k] !== undefined) {
       const n = Number(b[k]);
@@ -449,7 +477,7 @@ route('PUT', '/api/settings', async (req, _p, _u, db) => {
       next[k] = b[k];
     }
   }
-  await db.query(`insert into app_setting(key,value) values ('settings',$1) on conflict (key) do update set value=excluded.value, updated_at=now()`, [JSON.stringify(next)]);
+  await db.query(`insert into app_setting(key,value) values ('settings',$1::text::jsonb) on conflict (key) do update set value=excluded.value, updated_at=now()`, [JSON.stringify(next)]);
   return { settings: next };
 });
 
@@ -483,14 +511,14 @@ route('GET', '/api/profiles', async (_r, _p, _u, db) => ({
 }));
 route('POST', '/api/profiles', async (req, _p, _u, db) => {
   const { name, data } = cleanProfile(await body(req));
-  const [r] = await db.query<any>(`insert into character_profile(name,data) values ($1,$2) returning id`, [name, JSON.stringify(data)]);
+  const [r] = await db.query<any>(`insert into character_profile(name,data) values ($1,$2::text::jsonb) returning id`, [name, JSON.stringify(data)]);
   return { id: r.id };
 });
 route('GET', '/api/profiles/:id', async (_r, p, _u, db) => ({ profile: await loadProfile(db, p.id) }));
 route('PUT', '/api/profiles/:id', async (req, p, _u, db) => {
   await loadProfile(db, p.id);
   const { name, data } = cleanProfile(await body(req));
-  await db.query(`update character_profile set name=$2, data=$3, updated_at=now() where id=$1`, [p.id, name, JSON.stringify(data)]);
+  await db.query(`update character_profile set name=$2, data=$3::text::jsonb, updated_at=now() where id=$1`, [p.id, name, JSON.stringify(data)]);
   return { ok: true };
 });
 route('DELETE', '/api/profiles/:id', async (_r, p, _u, db) => {
@@ -505,7 +533,7 @@ route('GET', '/api/scenarios', async (_r, _p, u, db) => ({
 route('POST', '/api/scenarios', async (req, _p, _u, db) => {
   const b = await body(req);
   if (!b.recipeKey || typeof b.recipeKey !== 'string') throw new HttpError(400, 'Falta recipeKey.');
-  const [r] = await db.query<any>(`insert into scenario(recipe_key,name,data) values ($1,$2,$3) returning id`, [b.recipeKey.slice(0, 64), String(b.name ?? 'Escenario').slice(0, 60), JSON.stringify(b.overrides ?? {})]);
+  const [r] = await db.query<any>(`insert into scenario(recipe_key,name,data) values ($1,$2,$3::text::jsonb) returning id`, [b.recipeKey.slice(0, 64), String(b.name ?? 'Escenario').slice(0, 60), JSON.stringify(b.overrides ?? {})]);
   return { id: r.id };
 });
 route('DELETE', '/api/scenarios/:id', async (_r, p, _u, db) => {
@@ -524,7 +552,7 @@ route('POST', '/api/crafting-plan', async (req, _p, _u, db) => {
   const recipes = await loadRecipes(db, ctx.version, { recipeIds: entries.map((e) => Number(e.recipeId)) });
   const ectx = await buildEvalContext(db, ctx, recipes, profile);
   const settings = ectx.settings;
-  const commission = Q.parse(settings.commission);
+  const commission = Q.parse(commissionFor(settings, ctx.realm));
   const warnings: string[] = [];
   const planEntries = entries.map((e) => {
     const r = recipes.find((x) => x.id === Number(e.recipeId));
@@ -542,7 +570,7 @@ route('POST', '/api/crafting-plan', async (req, _p, _u, db) => {
     };
   });
   const plan = buildPlan(planEntries, profile?.inventory ?? {}, commission);
-  return { plan, warnings, commission: settings.commission, note: 'Las cantidades son una planificación, no una garantía de venta.' };
+  return { plan, warnings, commission: commissionFor(settings, ctx.realm), note: 'Las cantidades son una planificación, no una garantía de venta.' };
 });
 
 route('GET', '/api/plans', async (_r, _p, _u, db) => ({ plans: await db.query<any>(`select id, name, profile_id, data, updated_at from crafting_plan order by updated_at desc`) }));
@@ -553,10 +581,10 @@ route('POST', '/api/plans', async (req, _p, _u, db) => {
   const data = { ctx: b.ctx ?? null, entries: Array.isArray(b.entries) ? b.entries.slice(0, 100) : [] };
   if (b.id) {
     if (!uuidRe.test(b.id)) throw new HttpError(400, 'Id inválido.');
-    await db.query(`update crafting_plan set name=$2, profile_id=$3, data=$4, updated_at=now() where id=$1`, [b.id, name, b.profileId ?? null, JSON.stringify(data)]);
+    await db.query(`update crafting_plan set name=$2, profile_id=$3, data=$4::text::jsonb, updated_at=now() where id=$1`, [b.id, name, b.profileId ?? null, JSON.stringify(data)]);
     return { id: b.id };
   }
-  const [r] = await db.query<any>(`insert into crafting_plan(name,profile_id,data) values ($1,$2,$3) returning id`, [name, b.profileId ?? null, JSON.stringify(data)]);
+  const [r] = await db.query<any>(`insert into crafting_plan(name,profile_id,data) values ($1,$2,$3::text::jsonb) returning id`, [name, b.profileId ?? null, JSON.stringify(data)]);
   return { id: r.id };
 });
 route('DELETE', '/api/plans/:id', async (_r, p, _u, db) => {
@@ -601,7 +629,7 @@ route('POST', '/api/ledger', async (req, _p, _u, db) => {
     if (b.replacesId) await t.query(`update ledger_entry set voided=true where id=$1`, [b.replacesId]);
     const [r] = await t.query<any>(
       `insert into ledger_entry(profile_id,plan_id,kind,item_id,item_name,quantity,unit_price_copper,occurred_at,note,estimate,replaces_id)
-       values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning id`,
+       values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::text::jsonb,$11) returning id`,
       [b.profileId ?? null, b.planId ?? null, b.kind, b.itemId ? Number(b.itemId) : null, b.itemName ? String(b.itemName).slice(0, 120) : null,
         qty, price.toString(), occurred.toISOString(), b.note ? String(b.note).slice(0, 300) : null, b.estimate ? JSON.stringify(b.estimate) : null, b.replacesId ?? null],
     );
@@ -614,15 +642,12 @@ route('POST', '/api/ledger/:id/void', async (_r, p, _u, db) => {
   return { ok: true };
 });
 
-// Herramientas avanzadas manuales (PB-21/22/23): cálculo puro, siempre etiquetado como manual.
+// Herramienta avanzada manual (valor esperado, PB-23): cálculo puro, siempre etiquetado como manual.
 route('POST', '/api/tools/expected', async (req) => {
   const b = await body(req);
-  const { expectedRevenue, concentrationEfficiency } = await import('../engine/calc.js');
+  const { expectedRevenue } = await import('../engine/calc.js');
   const gq = (s: any) => Q.parse(String(s)).mul(COPPER_PER_GOLD);
   try {
-    if (b.kind === 'concentration') {
-      return { manual: true, ...concentrationEfficiency(gq(b.profitWithoutGold), gq(b.profitWithGold), Number(b.concentration)) };
-    }
     const scen = (b.scenarios ?? []).map((s: any) => ({ label: String(s.label ?? ''), probability: Q.parse(String(s.probability)), netRevenue: gq(s.netRevenueGold) }));
     const r = expectedRevenue(scen);
     const cost = b.costGold !== undefined && b.costGold !== '' ? gq(b.costGold) : null;
@@ -632,10 +657,6 @@ route('POST', '/api/tools/expected', async (req) => {
   }
 });
 
-route('POST', '/api/demo/seed', async (_r, _p, _u, db) => {
-  if (process.env.DISABLE_DEMO === 'true') throw new HttpError(403, 'El modo demo está desactivado.');
-  return seedDemo(db);
-});
 
 // ---------------------------------------------------------------------------
 

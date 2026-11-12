@@ -6,8 +6,7 @@ import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { computeCost, computeProfit, classify, applyPriceDrop, type Status, type ProfitResult, type CostResult } from '../engine/calc.js';
 import type { Db } from './db.js';
 import { loadSnapshot, ageHours, type MarketContext, type MarketSnapshot } from './market.js';
-import { DEFAULT_SETTINGS, type Settings, type PriceField } from './config.js';
-import { QUALITY_SYSTEM_EXPANSIONS } from './catalog/rules.js';
+import { DEFAULT_SETTINGS, commissionFor, type Settings, type PriceField } from './config.js';
 
 export interface RecipeRow {
   id: number;
@@ -67,7 +66,7 @@ export interface Overrides {
 export interface PriceInfo {
   copper: Q | null;
   field: PriceField | 'manual';
-  scope: 'commodity (región)' | 'reino' | 'región' | 'manual' | 'sin datos';
+  scope: 'casa de subastas' | 'región' | 'manual' | 'sin datos';
   sourceTime: string | null;
   observed: Partial<Record<PriceField, string | null>>;
 }
@@ -133,7 +132,7 @@ export function resolvePrice(snap: MarketSnapshot, itemId: number, field: PriceF
   }
   const l = o.local;
   const v = l ? (l as any)[field] as bigint | null : null;
-  const scope = !v ? 'sin datos' : l!.kind === 'commodities' ? 'commodity (región)' : 'reino';
+  const scope = !v ? 'sin datos' : 'casa de subastas';
   const st = l ? snap.runs[l.kind]?.sourceTime ?? null : null;
   return { copper: q(v), field, scope, sourceTime: st, observed: o.observed };
 }
@@ -181,26 +180,22 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   let manual = false;
   if (r.fetch_error) blockers.push(`Receta incompleta: ${r.fetch_error}`);
 
-  // Resultado y facción
+  // Resultado y facción. En WoW Forever la casa de subastas ya indica la facción (p. ej. normal-horde).
+  const realmFaction = snap.ctx.realm?.endsWith('-alliance') ? 'alliance' : snap.ctx.realm?.endsWith('-horde') ? 'horde' : null;
+  const faction = profile?.faction ?? realmFaction;
   let outId = r.crafted_item_id;
   if (outId === null && (r.alliance_item_id || r.horde_item_id)) {
     if (r.alliance_item_id === r.horde_item_id) outId = r.alliance_item_id;
-    else if (profile?.faction === 'alliance') outId = r.alliance_item_id;
-    else if (profile?.faction === 'horde') outId = r.horde_item_id;
+    else if (faction === 'alliance') outId = r.alliance_item_id;
+    else if (faction === 'horde') outId = r.horde_item_id;
     else {
       outId = r.alliance_item_id ?? r.horde_item_id;
-      blockers.push('El resultado depende de la facción; indícala en el perfil.');
+      blockers.push('El resultado depende de la facción; elige una casa de subastas de Alianza u Horda, o indica la facción en el perfil (Aguasnegras es neutral).');
     }
   }
   const outItem = outId !== null ? items.get(outId) : undefined;
   if (outId !== null && (!outItem || outItem.fetch_error)) notes.push('Faltan los detalles del objeto resultante en el catálogo.');
-  // Verificado con muestras reales (docs/muestras): en Dragonflight y posteriores la API de Blizzard
-  // omite crafted_item y crafted_quantity. Eso no significa que la receta sea un servicio.
-  const outputUnpublished = outId === null && r.qty_min === null && QUALITY_SYSTEM_EXPANSIONS.has(r.expansion);
-  const sell = outputUnpublished
-    ? { channel: 'desconocido' as const, reason: `La API de Blizzard no publica el objeto resultante de las recetas de ${r.expansion}.` }
-    : sellability(outItem, outId, snap);
-  if (outputUnpublished) blockers.push(`La API de Blizzard no indica qué objeto produce esta receta de ${r.expansion} ni cuántas unidades; no se puede calcular el precio de venta.`);
+  const sell = sellability(outItem, outId, snap);
 
   // Rendimiento
   let unitsPerRun: number | null = r.qty_min !== null && r.qty_min === r.qty_max ? r.qty_min : null;
@@ -219,17 +214,14 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   }
   const runs = ov.runs ?? 1;
 
-  // Calidades
-  const quality = QUALITY_SYSTEM_EXPANSIONS.has(r.expansion);
+  // Variantes con el mismo nombre (otro itemId): no se puede saber cuál se obtiene
   const outName = outItem?.name_en ?? snap.local.get(outId ?? -1)?.name ?? snap.region.get(outId ?? -1)?.name ?? null;
   const outVariants = outName ? (ctx.variants.get(outName) ?? []).filter((x) => x !== outId) : [];
-  if (quality || outVariants.length) {
-    const why = outVariants.length
-      ? `El resultado tiene otras variantes de calidad con el mismo nombre (IDs ${outVariants.join(', ')}); no se puede determinar cuál se obtiene.`
-      : `Receta de ${r.expansion}: la calidad del resultado depende de habilidad, especialización y reactivos, y TSM no distingue variantes de calidad del equipo. No hay reglas verificadas.`;
+  if (outVariants.length) {
+    const why = `El resultado tiene otras variantes con el mismo nombre (IDs ${outVariants.join(', ')}); no se puede determinar cuál se obtiene.`;
     if (ov.assumeQuality) {
       manual = true;
-      notes.push(`Calidad asumida manualmente: ${why}`);
+      notes.push(`Variante asumida manualmente: ${why}`);
     } else blockers.push(why);
   }
 
@@ -264,7 +256,7 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   // Precio de venta
   if (ov.sellPrice !== undefined && ov.sellPrice !== '') manual = true;
   const sellPrice = outId !== null ? resolvePrice(snap, outId, settings.sellSource, ov.sellPrice) : { copper: null, field: settings.sellSource, scope: 'sin datos' as const, sourceTime: null, observed: {} };
-  const commission = ov.commission !== undefined && ov.commission !== '' ? Q.parse(ov.commission) : Q.parse(settings.commission);
+  const commission = ov.commission !== undefined && ov.commission !== '' ? Q.parse(ov.commission) : Q.parse(commissionFor(settings, snap.ctx.realm));
   if (ov.commission) manual = true;
   const lost = g(ov.lostDeposits) ?? Q.zero;
   const recov = g(ov.recoverableDeposits) ?? Q.zero;
@@ -283,12 +275,12 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   }
 
   // Frescura
-  const usedLocal = [sellPrice, ...reagents.map((x) => x.price)].some((p) => p.scope === 'reino' || p.scope === 'commodity (región)');
-  const localTimes = [snap.runs.commodities?.sourceTime, snap.runs.realm_items?.sourceTime].filter(Boolean) as string[];
+  const usedLocal = [sellPrice, ...reagents.map((x) => x.price)].some((p) => p.scope === 'casa de subastas');
+  const localTimes = [snap.runs.realm_items?.sourceTime].filter(Boolean) as string[];
   const localHours = localTimes.length ? Math.max(...localTimes.map((t) => ageHours(t, now)!)) : null;
   const regionHours = ageHours(snap.runs.region_items?.sourceTime, now);
   const staleParts: string[] = [];
-  if (usedLocal && localHours !== null && localHours > settings.maxAgeHoursRealm) staleParts.push(`precios de reino/commodities con ${localHours.toFixed(1)} h (máx. ${settings.maxAgeHoursRealm} h)`);
+  if (usedLocal && localHours !== null && localHours > settings.maxAgeHoursRealm) staleParts.push(`precios de la casa de subastas con ${localHours.toFixed(1)} h (máx. ${settings.maxAgeHoursRealm} h)`);
   const usedRegion = [sellPrice, ...reagents.map((x) => x.price)].some((p) => p.scope === 'región');
   if (regionHours !== null && regionHours > settings.maxAgeHoursRegion && usedRegion) staleParts.push(`estadísticas regionales con ${regionHours.toFixed(1)} h (máx. ${settings.maxAgeHoursRegion} h)`);
   const stale = staleParts.length > 0;

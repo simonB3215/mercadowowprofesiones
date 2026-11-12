@@ -70,7 +70,11 @@ function save(k: string, v: unknown) {
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [ctx, setCtxS] = useState<Ctx>(() => stored('ctx', { version: 'retail', region: 'us', realm: null }));
+  // Solo WoW Forever. Un contexto guardado de otra versión (Retail, demo) se descarta.
+  const [ctx, setCtxS] = useState<Ctx>(() => {
+    const c = stored<Ctx | null>('ctx', null);
+    return c && c.version === 'forever' ? c : { version: 'forever', region: 'us', realm: null };
+  });
   const [profileId, setPid] = useState<string | null>(() => stored('profileId', null));
   const [meta, setMeta] = useState<any>(null);
   const reloadMeta = useCallback(() => {
@@ -159,16 +163,6 @@ export function dt(iso: string | null | undefined) {
   return new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
 }
 export const hoursSince = (iso: string | null | undefined) => (iso ? (Date.now() - Date.parse(iso)) / 3600000 : null);
-
-export function DemoBanner() {
-  const { ctx } = useApp();
-  if (ctx.version !== 'demo') return null;
-  return (
-    <div className="alert demo" role="note">
-      <p><span className="badge b-demo">DEMO</span> <strong>Datos ficticios.</strong> Objetos, recetas y precios inventados para probar la aplicación. No son resultados reales del juego.</p>
-    </div>
-  );
-}
 
 export function GoldInput({ label, value, onChange, placeholder, hint }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; hint?: string }) {
   let invalid = false;

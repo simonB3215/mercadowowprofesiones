@@ -10,12 +10,9 @@ export function MarketStatus({ compact = false }: { compact?: boolean }) {
     setBusy(true);
     setMsg(null);
     try {
-      if (ctx.version === 'demo') await api('/api/demo/seed', { method: 'POST' });
-      else {
-        const r = await api('/api/sync/prices', { method: 'POST', body: { ...ctx, force } });
-        const parts = Object.entries(r.results).map(([k, v]: any) => `${k}: ${v.status}${v.error ? ` (${v.error})` : v.reason ? ` (${v.reason})` : ''}`);
-        setMsg(parts.join(' · '));
-      }
+      const r = await api('/api/sync/prices', { method: 'POST', body: { ...ctx, force } });
+      const parts = Object.entries(r.results).map(([k, v]: any) => `${k}: ${v.status}${v.error ? ` (${v.error})` : v.reason ? ` (${v.reason})` : ''}`);
+      setMsg(parts.join(' · '));
       st.reload();
       reloadMeta();
       window.dispatchEvent(new Event('market-updated'));
@@ -46,12 +43,12 @@ export function MarketStatus({ compact = false }: { compact?: boolean }) {
           ))}
         </div>
         <span className="row">
-          <button className="primary" onClick={() => sync(false)} disabled={busy}>{busy ? 'Actualizando…' : ctx.version === 'demo' ? 'Recargar datos demo' : 'Actualizar precios'}</button>
+          <button className="primary" onClick={() => sync(false)} disabled={busy}>{busy ? 'Actualizando…' : 'Actualizar precios'}</button>
         </span>
       </div>
       {none && !busy && (
         <p className="small muted" style={{ marginTop: 6 }}>
-          {ctx.version === 'demo' ? 'Aún no se han cargado los datos de demostración.' : 'Todavía no hay precios para este mercado. Pulsa «Actualizar precios» para descargarlos de TSM.'}
+          Todavía no hay precios para esta casa de subastas. Pulsa «Actualizar precios» para descargarlos de TSM.
         </p>
       )}
       {files.some((f) => f.lastAttempt?.status === 'failed' || f.lastAttempt?.status === 'rejected') && (
@@ -60,7 +57,7 @@ export function MarketStatus({ compact = false }: { compact?: boolean }) {
         </p>
       )}
       {msg && <p className="small muted" role="status">{msg}</p>}
-      {!ctx.realm && ctx.version !== 'demo' && <p className="small muted">Sin reino seleccionado: solo hay precios de commodities y estadísticas regionales; el equipo no commodity aparecerá sin precio.</p>}
+      {!ctx.realm && <p className="small muted">Elige una casa de subastas (modo de juego y facción) arriba: sin ella solo hay estadísticas regionales y los precios de compra y venta quedan vacíos.</p>}
     </section>
   );
 }

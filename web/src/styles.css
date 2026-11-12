@@ -110,15 +110,11 @@ tr:last-child td { border-bottom: none; }
 .b-bad { background: var(--bad-bg); color: var(--bad); }
 .b-info { background: var(--info-bg); color: var(--info); }
 .b-neutral { background: var(--neutral-bg); color: var(--muted); }
-.b-demo { background: #6b21a8; color: #fff; }
-.b-demo::before { display: none; }
 
 .alert { border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; border: 1px solid var(--border); }
 .alert.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 .alert.bad { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
 .alert.info { background: var(--info-bg); color: var(--info); border-color: transparent; }
-.alert.demo { background: #f3e8ff; color: #581c87; border-color: #d8b4fe; }
-@media (prefers-color-scheme: dark) { .alert.demo { background: #2e1646; color: #e9d5ff; border-color: #6b21a8; } }
 .alert p { margin: 0.2rem 0; }
 
 .kv { display: grid; grid-template-columns: minmax(140px, max-content) 1fr; gap: 4px 14px; font-size: 0.92rem; }

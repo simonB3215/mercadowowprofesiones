@@ -17,7 +17,6 @@
     "sync:prices": "tsx --env-file-if-exists=.env scripts/sync-prices.ts",
     "sync:catalog": "tsx --env-file-if-exists=.env scripts/sync-catalog.ts",
     "probe:blizzard": "tsx --env-file-if-exists=.env scripts/probe-blizzard.ts",
-    "seed:demo": "tsx --env-file-if-exists=.env scripts/seed-demo.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

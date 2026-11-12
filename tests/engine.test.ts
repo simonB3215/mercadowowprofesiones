@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Q, gold } from '../src/engine/rational.js';
 import {
   computeCost, computeProfit, classify, buildPlan, resolveSourcing, expectedRevenue,
-  concentrationEfficiency, applyPriceDrop, type Thresholds, type ClassifyInput,
+  applyPriceDrop, type Thresholds, type ClassifyInput,
 } from '../src/engine/calc.js';
 import { formatMoney, exactGold } from '../src/engine/format.js';
 
@@ -212,10 +212,6 @@ describe('Probabilístico y concentración', () => {
       { label: 'b', probability: Q.of(2, 3), netRevenue: gold(0) },
     ]);
     expect(ok.expected!.eq(gold(10))).toBe(true);
-  });
-  it('concentración con consumo cero no da eficiencia', () => {
-    expect(concentrationEfficiency(gold(1), gold(5), 0).perPoint).toBeNull();
-    expect(concentrationEfficiency(gold(1), gold(5), 4).perPoint!.eq(gold(1))).toBe(true);
   });
 });
 

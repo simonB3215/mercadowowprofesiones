@@ -11,7 +11,7 @@ describe('Acceso con APP_PASSWORD', () => {
 
   it('sin sesión, la API responde 401 y el estado indica que hace falta entrar', async () => {
     expect((await call('/api/meta')).status).toBe(401);
-    expect((await call('/api/opportunities?version=retail&region=us')).status).toBe(401);
+    expect((await call('/api/opportunities?version=forever&region=us')).status).toBe(401);
     expect((await call('/api/ledger', { method: 'POST', body: '{}' })).status).toBe(401);
     expect(await (await call('/api/auth/status')).json()).toEqual({ required: true, authenticated: false });
   });

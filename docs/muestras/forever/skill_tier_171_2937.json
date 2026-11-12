@@ -1,0 +1,4120 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/171/skill-tier/2937?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "id": 2937,
+  "name": {
+    "en_US": "Alchemy",
+    "es_MX": "Alquimia",
+    "pt_BR": "Alquimia",
+    "de_DE": "Alchimie",
+    "en_GB": "Alchemy",
+    "es_ES": "Alquimia",
+    "fr_FR": "Alchimie",
+    "it_IT": "Alchemy",
+    "ru_RU": "Алхимия",
+    "ko_KR": "연금술",
+    "zh_TW": "鍊金術",
+    "zh_CN": "炼金术"
+  },
+  "minimum_skill_level": 1,
+  "maximum_skill_level": 75,
+  "categories": [
+    {
+      "name": {
+        "en_US": "Elixirs",
+        "es_MX": "Elíxires",
+        "pt_BR": "Elixires",
+        "de_DE": "Elixiere",
+        "en_GB": "Elixirs",
+        "es_ES": "Elixires",
+        "fr_FR": "Élixirs",
+        "ru_RU": "Эликсиры",
+        "ko_KR": "비약",
+        "zh_TW": "藥劑",
+        "zh_CN": "药剂"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1378?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Strength",
+            "es_MX": "Elixir de fuerza menor",
+            "pt_BR": "Elixir de Força Menor",
+            "de_DE": "Elixier der schwachen Stärke",
+            "en_GB": "Elixir of Minor Strength",
+            "es_ES": "Elixir de fuerza menor",
+            "fr_FR": "Élixir de Force mineure",
+            "it_IT": "Elisir della Forza del Leone",
+            "ru_RU": "Малый эликсир силы",
+            "ko_KR": "최하급 힘의 비약",
+            "zh_TW": "初級力量藥劑",
+            "zh_CN": "初级力量药剂"
+          },
+          "id": 1378
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1382?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Fortitude",
+            "es_MX": "Elixir de entereza menor",
+            "pt_BR": "Elixir de Fortitude Menor",
+            "de_DE": "Elixier der schwachen Seelenstärke",
+            "en_GB": "Elixir of Minor Fortitude",
+            "es_ES": "Elixir de entereza menor",
+            "fr_FR": "Elixir de Robustesse mineure",
+            "it_IT": "Elisir della Fermezza Minore",
+            "ru_RU": "Слабый эликсир стойкости",
+            "ko_KR": "최하급 인내의 비약",
+            "zh_TW": "初級堅韌藥劑",
+            "zh_CN": "初级坚韧药剂"
+          },
+          "id": 1382
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1814?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Wisdom",
+            "es_MX": "Elixir de sabiduría",
+            "pt_BR": "Elixir de Sabedoria",
+            "de_DE": "Elixier der Weisheit",
+            "en_GB": "Elixir of Wisdom",
+            "es_ES": "Elixir de sabiduría",
+            "fr_FR": "Elixir de Sagesse",
+            "it_IT": "Elisir della Saggezza",
+            "ru_RU": "Эликсир мудрости",
+            "ko_KR": "지혜의 비약",
+            "zh_TW": "智慧藥劑",
+            "zh_CN": "智慧药剂"
+          },
+          "id": 1814
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1817?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Poison Cleansing",
+            "es_MX": "Poción de limpieza contraveneno",
+            "pt_BR": "Poção Antiveneno",
+            "de_DE": "Trank der Giftreinigung",
+            "en_GB": "Potion of Poison Cleansing",
+            "es_ES": "Poción de purificación de veneno",
+            "fr_FR": "Potion de purification du poison",
+            "ru_RU": "Зелье нейтрализации яда",
+            "ko_KR": "독 정화의 물약",
+            "zh_TW": "清毒藥水",
+            "zh_CN": "清毒药水"
+          },
+          "id": 1817
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1819?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Troll's Blood Elixir",
+            "es_MX": "Elixir de sangre de trol inferior",
+            "pt_BR": "Elixir de Sangue de Troll Inferior",
+            "de_DE": "Geringes Trollblutelixier",
+            "en_GB": "Lesser Troll's Blood Elixir",
+            "es_ES": "Elixir de sangre de trol inferior",
+            "fr_FR": "Élixir de sang de Troll inférieur",
+            "ru_RU": "Малый эликсир тролльей крови",
+            "ko_KR": "하급 트롤의 피 비약",
+            "zh_TW": "次級食人妖之血藥劑",
+            "zh_CN": "次级巨魔之血药剂"
+          },
+          "id": 1819
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1820?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Lesser Defense",
+            "es_MX": "Elixir de defensa inferior",
+            "pt_BR": "Elixir de Defesa Inferior",
+            "de_DE": "Elixier der geringen Verteidigung",
+            "en_GB": "Elixir of Lesser Defense",
+            "es_ES": "Elixir de defensa inferior",
+            "fr_FR": "Élixir de défense inférieure",
+            "it_IT": "Elisir della Difesa",
+            "ru_RU": "Малый эликсир защиты",
+            "ko_KR": "하급 방어의 비약",
+            "zh_TW": "次級防禦藥劑",
+            "zh_CN": "次级防御药剂"
+          },
+          "id": 1820
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1821?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Lesser Agility",
+            "es_MX": "Elixir de agilidad inferior",
+            "pt_BR": "Elixir de Agilidade Inferior",
+            "de_DE": "Elixier der geringen Beweglichkeit",
+            "en_GB": "Elixir of Lesser Agility",
+            "es_ES": "Elixir de agilidad inferior",
+            "fr_FR": "Elixir d'Agilité inférieure",
+            "it_IT": "Elisir dell'Agilità Inferiore",
+            "ru_RU": "Малый эликсир ловкости",
+            "ko_KR": "하급 민첩의 비약",
+            "zh_TW": "次級敏捷藥劑",
+            "zh_CN": "次级敏捷药剂"
+          },
+          "id": 1821
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1822?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Ogre Strength",
+            "es_MX": "Elixir de fuerza de ogro",
+            "pt_BR": "Elixir de Força de Ogro",
+            "de_DE": "Elixier der Ogerstärke",
+            "en_GB": "Elixir of Ogre Strength",
+            "es_ES": "Elixir de fuerza de ogro",
+            "fr_FR": "Élixir de force d’ogre",
+            "it_IT": "Elisir della Forza degli Ogre",
+            "ru_RU": "Эликсир силы огра",
+            "ko_KR": "오우거 힘의 비약",
+            "zh_TW": "巨魔之力藥劑",
+            "zh_CN": "食人魔力量药剂"
+          },
+          "id": 1822
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1832?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Troll's Blood Elixir",
+            "es_MX": "Elixir de sangre de trol menor",
+            "pt_BR": "Elixir de Sangue de Troll Menor",
+            "de_DE": "Schwaches Trollblutelixier",
+            "en_GB": "Minor Troll's Blood Elixir",
+            "es_ES": "Elixir de sangre de trol menor",
+            "fr_FR": "Élixir de sang de Troll mineur",
+            "ru_RU": "Малый эликсир тролльей крови",
+            "ko_KR": "최하급 트롤의 피 비약",
+            "zh_TW": "初級食人妖之血藥劑",
+            "zh_CN": "初级巨魔之血药剂"
+          },
+          "id": 1832
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1833?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Agility",
+            "es_MX": "Elixir de agilidad menor",
+            "pt_BR": "Elixir de Agilidade Menor",
+            "de_DE": "Elixier der schwachen Beweglichkeit",
+            "en_GB": "Elixir of Minor Agility",
+            "es_ES": "Elixir de agilidad menor",
+            "fr_FR": "Elixir d'Agilité mineure",
+            "it_IT": "Elisir dell'Agilità Minore",
+            "ru_RU": "Малый эликсир ловкости",
+            "ko_KR": "최하급 민첩의 비약",
+            "zh_TW": "初級敏捷藥劑",
+            "zh_CN": "初级敏捷药剂"
+          },
+          "id": 1833
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1933?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Lesser Fortitude",
+            "es_MX": "Elixir de entereza inferior",
+            "pt_BR": "Elixir de Fortitude Inferior",
+            "de_DE": "Elixier der geringen Seelenstärke",
+            "en_GB": "Elixir of Lesser Fortitude",
+            "es_ES": "Elixir de entereza inferior",
+            "fr_FR": "Élixir de robustesse inférieure",
+            "ru_RU": "Малый эликсир стойкости",
+            "ko_KR": "하급 인내의 비약",
+            "zh_TW": "次級堅韌藥劑",
+            "zh_CN": "次级坚韧药剂"
+          },
+          "id": 1933
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1934?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Troll's Blood Elixir",
+            "es_MX": "Elixir de sangre de trol",
+            "pt_BR": "Elixir de Sangue de Troll",
+            "de_DE": "Trollblutelixier",
+            "en_GB": "Troll's Blood Elixir",
+            "es_ES": "Elixir de sangre de trol",
+            "fr_FR": "Élixir de sang de Troll",
+            "ru_RU": "Эликсир тролльей крови",
+            "ko_KR": "트롤의 피 비약",
+            "zh_TW": "食人妖之血藥劑",
+            "zh_CN": "巨魔之血药剂"
+          },
+          "id": 1934
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4178?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Defense",
+            "es_MX": "Elixir de defensa menor",
+            "pt_BR": "Elixir de Defesa Menor",
+            "de_DE": "Elixier der schwachen Verteidigung",
+            "en_GB": "Elixir of Minor Defense",
+            "es_ES": "Elixir de defensa menor",
+            "fr_FR": "Elixir de défense mineure",
+            "it_IT": "Elisir della Difesa Minore",
+            "ru_RU": "Слабый эликсир защиты",
+            "ko_KR": "최하급 방어의 비약",
+            "zh_TW": "初級防禦藥劑",
+            "zh_CN": "初级防御药剂"
+          },
+          "id": 4178
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4396?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Fire Power",
+            "es_MX": "Elixir de poder de fuego",
+            "pt_BR": "Elixir de Poder de Fogo",
+            "de_DE": "Elixier der Feuermacht",
+            "en_GB": "Elixir of Fire Power",
+            "es_ES": "Elixir de poder de Fuego",
+            "fr_FR": "Élixir de puissance du feu",
+            "it_IT": "Elisir della Potenza del Fuoco",
+            "ru_RU": "Эликсир силы огня",
+            "ko_KR": "화염 강화의 비약",
+            "zh_TW": "火焰之力藥劑",
+            "zh_CN": "火力药剂"
+          },
+          "id": 4396
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4570?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Giant Growth",
+            "es_MX": "Elixir de crecimiento gigante",
+            "pt_BR": "Elixir de Crescimento Gigantesco",
+            "de_DE": "Elixier des Riesenwuchses",
+            "en_GB": "Elixir of Giant Growth",
+            "es_ES": "Elixir de crecimiento gigante",
+            "fr_FR": "Elixir de Taille de géant",
+            "it_IT": "Elisir della Crescita Gigante",
+            "ru_RU": "Эликсир Увеличения",
+            "ko_KR": "성장의 비약",
+            "zh_TW": "增長藥劑",
+            "zh_CN": "增长药剂"
+          },
+          "id": 4570
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/5997?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Agility",
+            "es_MX": "Elixir de agilidad",
+            "pt_BR": "Elixir de Agilidade",
+            "de_DE": "Elixier der Beweglichkeit",
+            "en_GB": "Elixir of Agility",
+            "es_ES": "Elixir de agilidad",
+            "fr_FR": "Elixir d'Agilité",
+            "it_IT": "Elisir dell'Agilità",
+            "ru_RU": "Эликсир Ловкости",
+            "ko_KR": "민첩의 비약",
+            "zh_TW": "敏捷藥劑",
+            "zh_CN": "敏捷药剂"
+          },
+          "id": 5997
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/5998?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Defense",
+            "es_MX": "Elixir de defensa",
+            "pt_BR": "Elixir de Defesa",
+            "de_DE": "Elixier der Verteidigung",
+            "en_GB": "Elixir of Defense",
+            "es_ES": "Elixir de defensa",
+            "fr_FR": "Élixir de défense",
+            "it_IT": "Elisir della Difesa Superiore",
+            "ru_RU": "Эликсир защиты",
+            "ko_KR": "방어의 비약",
+            "zh_TW": "防禦藥劑",
+            "zh_CN": "防御药剂"
+          },
+          "id": 5998
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6009?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Arcane Elixir",
+            "es_MX": "Elixir Arcano",
+            "pt_BR": "Elixir Arcano",
+            "de_DE": "Arkanes Elixier",
+            "en_GB": "Arcane Elixir",
+            "es_ES": "Elixir Arcano",
+            "fr_FR": "Elixir des arcanes",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Чародейский эликсир",
+            "ko_KR": "신비의 비약",
+            "zh_TW": "秘法藥劑",
+            "zh_CN": "奥法药剂"
+          },
+          "id": 6009
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6011?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Intellect",
+            "es_MX": "Elixir de intelecto superior",
+            "pt_BR": "Elixir de Intelecto Maior",
+            "de_DE": "Elixier der großen Intelligenz",
+            "en_GB": "Elixir of Greater Intellect",
+            "es_ES": "Elixir de intelecto superior",
+            "fr_FR": "Elixir d'Intelligence supérieure",
+            "it_IT": "Elisir dell'Intelletto Superiore",
+            "ru_RU": "Сильный эликсир интеллекта",
+            "ko_KR": "상급 지능의 비약",
+            "zh_TW": "強效聰穎藥劑",
+            "zh_CN": "强效聪颖药剂"
+          },
+          "id": 6011
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6012?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Gift of Arthas",
+            "es_MX": "Ofrenda de Arthas",
+            "pt_BR": "Dádiva de Arthas",
+            "de_DE": "Arthas' Gabe",
+            "en_GB": "Gift of Arthas",
+            "es_ES": "Regalo de Arthas",
+            "fr_FR": "Don d'Arthas",
+            "it_IT": "Dono di Arthas",
+            "ru_RU": "Дар Артаса",
+            "ko_KR": "아서스의 선물",
+            "zh_TW": "阿薩斯的賜福",
+            "zh_CN": "阿尔萨斯的礼物"
+          },
+          "id": 6012
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6013?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Agility",
+            "es_MX": "Elixir de agilidad superior",
+            "pt_BR": "Elixir de Agilidade Maior",
+            "de_DE": "Elixier der großen Beweglichkeit",
+            "en_GB": "Elixir of Greater Agility",
+            "es_ES": "Elixir de agilidad superior",
+            "fr_FR": "Elixir d'Agilité supérieure",
+            "it_IT": "Elisir dell'Agilità Superiore",
+            "ru_RU": "Сильный эликсир ловкости",
+            "ko_KR": "상급 민첩의 비약",
+            "zh_TW": "強效敏捷藥劑",
+            "zh_CN": "强效敏捷药剂"
+          },
+          "id": 6013
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6015?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Strength",
+            "es_MX": "Elixir de fuerza superior",
+            "pt_BR": "Elixir de Força Maior",
+            "de_DE": "Elixier der großen Stärke",
+            "en_GB": "Elixir of Greater Strength",
+            "es_ES": "Elixir de fuerza superior",
+            "fr_FR": "Élixir de Force supérieure",
+            "it_IT": "Elisir dei Giganti",
+            "ru_RU": "Действенный эликсир силы",
+            "ko_KR": "상급 힘의 비약",
+            "zh_TW": "強效力量藥劑",
+            "zh_CN": "强效力量药剂"
+          },
+          "id": 6015
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6017?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Shadow Power",
+            "es_MX": "Elixir de poder de las Sombras",
+            "pt_BR": "Elixir de Poder Sombrio",
+            "de_DE": "Elixier der Schattenmacht",
+            "en_GB": "Elixir of Shadow Power",
+            "es_ES": "Elixir de poder de las sombras",
+            "fr_FR": "Elixir de Puissance de l'ombre",
+            "it_IT": "Elisir del Potere dell'Ombra",
+            "ru_RU": "Эликсир силы тьмы",
+            "ko_KR": "암흑 강화의 비약",
+            "zh_TW": "暗影之力藥劑",
+            "zh_CN": "暗影之力药剂"
+          },
+          "id": 6017
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6018?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Demon Slaying",
+            "es_MX": "Poción de matanza de demonios",
+            "pt_BR": "Poção da Matança de Demônios",
+            "de_DE": "Trank des Dämonentötens",
+            "en_GB": "Potion of Demon Slaying",
+            "es_ES": "Poción de matanza de demonios",
+            "fr_FR": "Potion de tueur de démons",
+            "ru_RU": "Зелье истребления демонов",
+            "ko_KR": "악마 사냥의 물약",
+            "zh_TW": "屠魔藥水",
+            "zh_CN": "屠魔药水"
+          },
+          "id": 6018
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9939?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Defense",
+            "es_MX": "Elixir de defensa superior",
+            "pt_BR": "Elixir de Defesa Maior",
+            "de_DE": "Elixier der großen Verteidigung",
+            "en_GB": "Elixir of Greater Defense",
+            "es_ES": "Elixir de defensa superior",
+            "fr_FR": "Élixir de défense supérieure",
+            "it_IT": "Elisir della Difesa Massima",
+            "ru_RU": "Сильный эликсир защиты",
+            "ko_KR": "상급 방어의 비약",
+            "zh_TW": "強效防禦藥劑",
+            "zh_CN": "强效防御药剂"
+          },
+          "id": 9939
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9940?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Sages",
+            "es_MX": "Elixir de los sabios",
+            "pt_BR": "Elixir dos Sábios",
+            "de_DE": "Elixier der Weisen",
+            "en_GB": "Elixir of the Sages",
+            "es_ES": "Elixir de los sabios",
+            "fr_FR": "Elixir des Sages",
+            "it_IT": "Elisir dei Saggi",
+            "ru_RU": "Эликсир Мудреца",
+            "ko_KR": "현인의 비약",
+            "zh_TW": "先知藥劑",
+            "zh_CN": "先知药剂"
+          },
+          "id": 9940
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9942?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Brute Force",
+            "es_MX": "Elixir de fuerza bruta",
+            "pt_BR": "Elixir da Força Bruta",
+            "de_DE": "Elixier der rohen Gewalt",
+            "en_GB": "Elixir of Brute Force",
+            "es_ES": "Elixir de fuerza bruta",
+            "fr_FR": "Elixir de Force de brute",
+            "it_IT": "Elisir della Forza Bruta",
+            "ru_RU": "Эликсир Грубой силы",
+            "ko_KR": "야수 힘의 비약",
+            "zh_TW": "蠻力藥劑",
+            "zh_CN": "蛮力药剂"
+          },
+          "id": 9942
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9952?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Mongoose",
+            "es_MX": "Elixir de la mangosta",
+            "pt_BR": "Elixir do Mangusto",
+            "de_DE": "Elixier des Mungos",
+            "en_GB": "Elixir of the Mongoose",
+            "es_ES": "Elixir de la mangosta",
+            "fr_FR": "Elixir de la Mangouste",
+            "it_IT": "Elisir della Mangusta",
+            "ru_RU": "Эликсир Мангуста",
+            "ko_KR": "살쾡이의 비약",
+            "zh_TW": "貓鼬藥劑",
+            "zh_CN": "猫鼬药剂"
+          },
+          "id": 9952
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9954?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Arcane Elixir",
+            "es_MX": "Elixir Arcano superior",
+            "pt_BR": "Elixir Arcano Maior",
+            "de_DE": "Großes Arkanelixier",
+            "en_GB": "Greater Arcane Elixir",
+            "es_ES": "Elixir superior Arcano",
+            "fr_FR": "Elixir des arcanes supérieur",
+            "it_IT": "Elisir Arcano Superiore",
+            "ru_RU": "Сильный чародейский эликсир",
+            "ko_KR": "상급 신비의 비약",
+            "zh_TW": "強效秘法藥劑",
+            "zh_CN": "强效奥法药剂"
+          },
+          "id": 9954
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12137?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Frost Power",
+            "es_MX": "Elixir de poder de Escarcha",
+            "pt_BR": "Elixir de Poder Gélido",
+            "de_DE": "Elixier der Frostmacht",
+            "en_GB": "Elixir of Frost Power",
+            "es_ES": "Elixir de poder de Escarcha",
+            "fr_FR": "Elixir de Puissance du givre",
+            "it_IT": "Elisir del Potere del Freddo",
+            "ru_RU": "Эликсир Силы льда",
+            "ko_KR": "냉기 강화의 비약",
+            "zh_TW": "冰霜之力藥劑",
+            "zh_CN": "冰霜之力药剂"
+          },
+          "id": 12137
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12892?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mageblood Elixir",
+            "es_MX": "Elixir de sangre de mago",
+            "pt_BR": "Elixir de Sangue de Mago",
+            "de_DE": "Magierblutelixier",
+            "en_GB": "Mageblood Elixir",
+            "es_ES": "Elixir de sangre de mago",
+            "fr_FR": "Elixir magesang",
+            "ru_RU": "Эликсир крови волшебника",
+            "ko_KR": "마법사의 피 비약",
+            "zh_TW": "法師之血藥劑",
+            "zh_CN": "魔血药剂"
+          },
+          "id": 12892
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12895?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Troll's Blood Elixir",
+            "es_MX": "Elixir de sangre de trol sublime",
+            "pt_BR": "Elixir Elevado de Sangue de Troll",
+            "de_DE": "Erhebliches Trollblutelixier",
+            "en_GB": "Major Troll's Blood Elixir",
+            "es_ES": "Elixir de sangre de trol sublime",
+            "fr_FR": "Élixir de sang de Troll majeur",
+            "ru_RU": "Большой эликсир тролльей крови",
+            "ko_KR": "일급 트롤의 피 비약",
+            "zh_TW": "極效食人妖之血藥劑",
+            "zh_CN": "特效巨魔之血药剂"
+          },
+          "id": 12895
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/13417?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Holy Power",
+            "es_MX": "Elixir de poder sagrado",
+            "pt_BR": "Elixir de Poder Sagrado",
+            "de_DE": "Elixier der heiligen Kraft",
+            "en_GB": "Elixir of Holy Power",
+            "es_ES": "Elixir de poder Sagrado",
+            "fr_FR": "Élixir de puissance sacrée",
+            "it_IT": "Elisir della Potenza del Fuoco Superiore",
+            "ru_RU": "Эликсир энергии Света",
+            "ko_KR": "신성 강화의 비약",
+            "zh_TW": "神聖之力藥劑",
+            "zh_CN": "神圣能量药剂"
+          },
+          "id": 13417
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54190?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Distilled Firewater",
+            "es_MX": "Aguardiente destilada",
+            "pt_BR": "Aguardente Destilada",
+            "de_DE": "Destilliertes Feuerwasser",
+            "en_GB": "Distilled Firewater",
+            "es_ES": "Piroagua destilada",
+            "fr_FR": "Eau-de-feu distillée",
+            "it_IT": "Elisir dell'Agilità Inferiore",
+            "ru_RU": "Дистиллированная огненная вода",
+            "ko_KR": "증류된 화주",
+            "zh_TW": "蒸餾火水",
+            "zh_CN": "提纯火酒"
+          },
+          "id": 54190
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54210?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Arcane Elixir",
+            "es_MX": "Elixir arcano menor",
+            "pt_BR": "Elixir Arcano Menor",
+            "de_DE": "Schwaches Arkanelixier",
+            "en_GB": "Minor Arcane Elixir",
+            "es_ES": "Elixir Arcano menor",
+            "fr_FR": "Élixir des arcanes mineur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый чародейский эликсир",
+            "ko_KR": "최하급 신비의 비약",
+            "zh_TW": "初級秘法藥劑",
+            "zh_CN": "初级奥法药剂"
+          },
+          "id": 54210
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54211?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Force",
+            "es_MX": "Elixir de fuerza menor",
+            "pt_BR": "Elixir de Potência Menor",
+            "de_DE": "Elixier der schwachen Gewalt",
+            "en_GB": "Elixir of Minor Force",
+            "es_ES": "Elixir de fuerza menor",
+            "fr_FR": "Élixir de Force mineure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир мощи",
+            "ko_KR": "최하급 완력의 비약",
+            "zh_TW": "初級原力藥劑",
+            "zh_CN": "初级威力药剂"
+          },
+          "id": 54211
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54535?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Cunning",
+            "es_MX": "Elixir de astucia",
+            "pt_BR": "Elixir da Astúcia",
+            "de_DE": "Elixier der Gerissenheit",
+            "en_GB": "Elixir of Cunning",
+            "es_ES": "Elixir de astucia",
+            "fr_FR": "Élixir de ruse",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир хитрости",
+            "ko_KR": "교활의 비약",
+            "zh_TW": "靈巧藥劑",
+            "zh_CN": "狡诈药剂"
+          },
+          "id": 54535
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54536?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Phalanx",
+            "es_MX": "Elixir de la falange",
+            "pt_BR": "Elixir da Falange",
+            "de_DE": "Elixier der Phalanx",
+            "en_GB": "Elixir of the Phalanx",
+            "es_ES": "Elixir de la falange",
+            "fr_FR": "Élixir de la phalange",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир фаланги",
+            "ko_KR": "결사단원의 비약",
+            "zh_TW": "方陣藥劑",
+            "zh_CN": "密集阵药剂"
+          },
+          "id": 54536
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54537?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Cleric's Elixir",
+            "es_MX": "Elixir de clérigo menor",
+            "pt_BR": "Elixir Menor do Clérigo",
+            "de_DE": "Schwaches Klerikerelixier",
+            "en_GB": "Minor Cleric's Elixir",
+            "es_ES": "Elixir de clérigo menor",
+            "fr_FR": "Élixir des clercs mineur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир священника",
+            "ko_KR": "최하급 성직자의 비약",
+            "zh_TW": "初級教士藥劑",
+            "zh_CN": "初级牧师药剂"
+          },
+          "id": 54537
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54538?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Cleric's Elixir",
+            "es_MX": "Elixir de clérigo inferior",
+            "pt_BR": "Elixir Inferior do Clérigo",
+            "de_DE": "Geringes Klerikerelixier",
+            "en_GB": "Lesser Cleric's Elixir",
+            "es_ES": "Elixir de clérigo inferior",
+            "fr_FR": "Élixir des clercs inférieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир священника",
+            "ko_KR": "하급 성직자의 비약",
+            "zh_TW": "次級教士藥劑",
+            "zh_CN": "次级牧师药剂"
+          },
+          "id": 54538
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54539?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Cleric's Elixir",
+            "es_MX": "Elixir de clérigo",
+            "pt_BR": "Elixir do Clérigo",
+            "de_DE": "Klerikerelixier",
+            "en_GB": "Cleric's Elixir",
+            "es_ES": "Elixir de clérigo",
+            "fr_FR": "Élixir des clercs",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир священника",
+            "ko_KR": "성직자의 비약",
+            "zh_TW": "教士藥劑",
+            "zh_CN": "牧师药剂"
+          },
+          "id": 54539
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54540?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Cleric's Elixir",
+            "es_MX": "Elixir de clérigo superior",
+            "pt_BR": "Elixir Maior do Clérigo",
+            "de_DE": "Großes Klerikerelixier",
+            "en_GB": "Greater Cleric's Elixir",
+            "es_ES": "Elixir de clérigo superior",
+            "fr_FR": "Élixir des clercs supérieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильный эликсир священника",
+            "ko_KR": "상급 성직자의 비약",
+            "zh_TW": "強效教士藥劑",
+            "zh_CN": "强效牧师药剂"
+          },
+          "id": 54540
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54541?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Fortitude",
+            "es_MX": "Elixir de entereza",
+            "pt_BR": "Elixir de Fortitude",
+            "de_DE": "Elixier der Seelenstärke",
+            "en_GB": "Elixir of Fortitude",
+            "es_ES": "Elixir de entereza",
+            "fr_FR": "Élixir de robustesse",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир стойкости",
+            "ko_KR": "인내의 비약",
+            "zh_TW": "堅韌藥劑",
+            "zh_CN": "坚韧药剂"
+          },
+          "id": 54541
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54542?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Fortitude",
+            "es_MX": "Elixir de entereza superior",
+            "pt_BR": "Elixir Maior de Fortitude",
+            "de_DE": "Elixier der großen Seelenstärke",
+            "en_GB": "Elixir of Greater Fortitude",
+            "es_ES": "Elixir de entereza superior",
+            "fr_FR": "Élixir de robustesse supérieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильный эликсир стойкости",
+            "ko_KR": "상급 인내의 비약",
+            "zh_TW": "強效堅韌藥劑",
+            "zh_CN": "强效坚韧药剂"
+          },
+          "id": 54542
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54543?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Wicked Regeneration",
+            "es_MX": "Elixir de regeneración endiablada",
+            "pt_BR": "Elixir da Regeneração Perversa",
+            "de_DE": "Elixier der bösartigen Regeneration",
+            "en_GB": "Elixir of Wicked Regeneration",
+            "es_ES": "Elixir de regeneración perversa",
+            "fr_FR": "Élixir de régénération maudite",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир зловещей регенерации",
+            "ko_KR": "사악한 재생의 비약",
+            "zh_TW": "邪惡再生藥劑",
+            "zh_CN": "邪恶恢复药剂"
+          },
+          "id": 54543
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54544?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Owl",
+            "es_MX": "Elixir del búho",
+            "pt_BR": "Elixir da Coruja",
+            "de_DE": "Elixier der Eule",
+            "en_GB": "Elixir of the Owl",
+            "es_ES": "Elixir del búho",
+            "fr_FR": "Élixir de la chouette",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир совы",
+            "ko_KR": "올빼미의 비약",
+            "zh_TW": "貓頭鷹藥劑",
+            "zh_CN": "夜枭药剂"
+          },
+          "id": 54544
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54545?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Sages",
+            "es_MX": "Elixir de los sabios",
+            "pt_BR": "Elixir dos Sábios",
+            "de_DE": "Elixier der Weisen",
+            "en_GB": "Elixir of Sages",
+            "es_ES": "Elixir de los sabios",
+            "fr_FR": "Élixir des sages",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир мудрецов",
+            "ko_KR": "현자의 비약",
+            "zh_TW": "賢者藥劑",
+            "zh_CN": "先知药剂"
+          },
+          "id": 54545
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54546?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Mageblood Elixir",
+            "es_MX": "Elixir de sangre de mago menor",
+            "pt_BR": "Elixir Menor de Sangue de Mago",
+            "de_DE": "Schwaches Magierblutelixier",
+            "en_GB": "Minor Mageblood Elixir",
+            "es_ES": "Elixir de sangre de mago menor",
+            "fr_FR": "Élixir magesang mineur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир крови волшебника",
+            "ko_KR": "최하급 마법사의 피 비약",
+            "zh_TW": "初級法師之血藥劑",
+            "zh_CN": "初级魔血药剂"
+          },
+          "id": 54546
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54547?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Mageblood Elixir",
+            "es_MX": "Elixir de sangre de mago inferior",
+            "pt_BR": "Elixir Inferior de Sangue de Mago",
+            "de_DE": "Geringes Magierblutelixier",
+            "en_GB": "Lesser Mageblood Elixir",
+            "es_ES": "Elixir de sangre de mago inferior",
+            "fr_FR": "Élixir magesang inférieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир крови волшебника",
+            "ko_KR": "하급 마법사의 피 비약",
+            "zh_TW": "次級法師之血藥劑",
+            "zh_CN": "次级魔血药剂"
+          },
+          "id": 54547
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54548?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Mageblood Elixir",
+            "es_MX": "Elixir de sangre de mago superior",
+            "pt_BR": "Elixir Maior de Sangue de Mago",
+            "de_DE": "Großes Magierblutelixier",
+            "en_GB": "Greater Mageblood Elixir",
+            "es_ES": "Elixir de sangre de mago superior",
+            "fr_FR": "Élixir magesang supérieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильный эликсир крови волшебника",
+            "ko_KR": "상급 마법사의 피 비약",
+            "zh_TW": "強效法師之血藥劑",
+            "zh_CN": "强效魔血药剂"
+          },
+          "id": 54548
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54549?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Arcane Elixir",
+            "es_MX": "Elixir arcano inferior",
+            "pt_BR": "Elixir Arcano Inferior",
+            "de_DE": "Geringes Arkanelixier",
+            "en_GB": "Lesser Arcane Elixir",
+            "es_ES": "Elixir Arcano inferior",
+            "fr_FR": "Élixir des arcanes inférieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый чародейский эликсир",
+            "ko_KR": "하급 신비의 비약",
+            "zh_TW": "次級秘法藥劑",
+            "zh_CN": "次级奥法药剂"
+          },
+          "id": 54549
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54550?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Nature Power",
+            "es_MX": "Elixir de poder de la naturaleza",
+            "pt_BR": "Elixir de Poder da Natureza",
+            "de_DE": "Elixier der Naturmacht",
+            "en_GB": "Elixir of Nature Power",
+            "es_ES": "Elixir de poder de la Naturaleza",
+            "fr_FR": "Élixir de puissance de la nature",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир силы природы",
+            "ko_KR": "자연 강화의 비약",
+            "zh_TW": "自然之力藥劑",
+            "zh_CN": "自然能量药剂"
+          },
+          "id": 54550
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54551?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Minor Spirit",
+            "es_MX": "Elixir de espíritu menor",
+            "pt_BR": "Elixir Menor de Espírito",
+            "de_DE": "Elixier der schwachen Willenskraft",
+            "en_GB": "Elixir of Minor Spirit",
+            "es_ES": "Elixir de espíritu menor",
+            "fr_FR": "Élixir d’Esprit mineur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир духа",
+            "ko_KR": "최하급 정신력의 비약",
+            "zh_TW": "初級精神藥劑",
+            "zh_CN": "初级精神药剂"
+          },
+          "id": 54551
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54552?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Lesser Spirit",
+            "es_MX": "Elixir de espíritu inferior",
+            "pt_BR": "Elixir Inferior de Espírito",
+            "de_DE": "Elixier der geringen Willenskraft",
+            "en_GB": "Elixir of Lesser Spirit",
+            "es_ES": "Elixir de espíritu inferior",
+            "fr_FR": "Élixir d’Esprit inférieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир духа",
+            "ko_KR": "하급 정신력의 비약",
+            "zh_TW": "次級精神藥劑",
+            "zh_CN": "次级精神药剂"
+          },
+          "id": 54552
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54553?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Spirit",
+            "es_MX": "Elixir de espíritu",
+            "pt_BR": "Elixir de Espírito",
+            "de_DE": "Elixier der Willenskraft",
+            "en_GB": "Elixir of Spirit",
+            "es_ES": "Elixir de espíritu",
+            "fr_FR": "Élixir d’Esprit",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир духа",
+            "ko_KR": "정신력의 비약",
+            "zh_TW": "精神藥劑",
+            "zh_CN": "精神药剂"
+          },
+          "id": 54553
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54554?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Greater Spirit",
+            "es_MX": "Elixir de espíritu superior",
+            "pt_BR": "Elixir Maior de Espírito",
+            "de_DE": "Elixier der großen Willenskraft",
+            "en_GB": "Elixir of Greater Spirit",
+            "es_ES": "Elixir de espíritu superior",
+            "fr_FR": "Élixir d’Esprit supérieur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильный эликсир духа",
+            "ko_KR": "상급 정신력의 비약",
+            "zh_TW": "強效精神藥劑",
+            "zh_CN": "强效精神药剂"
+          },
+          "id": 54554
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54555?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Whale",
+            "es_MX": "Elixir de la ballena",
+            "pt_BR": "Elixir da Baleia",
+            "de_DE": "Elixier des Wals",
+            "en_GB": "Elixir of the Whale",
+            "es_ES": "Elixir de la ballena",
+            "fr_FR": "Élixir de la baleine",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир кита",
+            "ko_KR": "고래의 비약",
+            "zh_TW": "鯨魚藥劑",
+            "zh_CN": "巨鲸药剂"
+          },
+          "id": 54555
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54556?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Strength",
+            "es_MX": "Elixir de fuerza",
+            "pt_BR": "Elixir de Força",
+            "de_DE": "Elixier der Stärke",
+            "en_GB": "Elixir of Strength",
+            "es_ES": "Elixir de fuerza",
+            "fr_FR": "Élixir de Force",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир силы",
+            "ko_KR": "힘의 비약",
+            "zh_TW": "力量藥劑",
+            "zh_CN": "力量药剂"
+          },
+          "id": 54556
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54557?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Ferocity",
+            "es_MX": "Elixir de ferocidad",
+            "pt_BR": "Elixir de Ferocidade",
+            "de_DE": "Elixier der Wildheit",
+            "en_GB": "Elixir of Ferocity",
+            "es_ES": "Elixir de ferocidad",
+            "fr_FR": "Élixir de férocité",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир свирепости",
+            "ko_KR": "야성의 비약",
+            "zh_TW": "凶暴藥劑",
+            "zh_CN": "凶猛药剂"
+          },
+          "id": 54557
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54558?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Grizzly",
+            "es_MX": "Elixir del oso pardo",
+            "pt_BR": "Elixir do Cinzento",
+            "de_DE": "Elixier des Grizzlybären",
+            "en_GB": "Elixir of the Grizzly",
+            "es_ES": "Elixir de los pardos",
+            "fr_FR": "Élixir du grizzly",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир гризли",
+            "ko_KR": "회색곰의 비약",
+            "zh_TW": "灰熊藥劑",
+            "zh_CN": "灰熊药剂"
+          },
+          "id": 54558
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54559?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Lesser Intellect",
+            "es_MX": "Elixir de intelecto inferior",
+            "pt_BR": "Elixir Inferior de Intelecto",
+            "de_DE": "Elixier der geringen Intelligenz",
+            "en_GB": "Elixir of Lesser Intellect",
+            "es_ES": "Elixir de intelecto inferior",
+            "fr_FR": "Élixir d’Intelligence inférieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малый эликсир интеллекта",
+            "ko_KR": "하급 지능의 비약",
+            "zh_TW": "次級智力藥劑",
+            "zh_CN": "次级智力药剂"
+          },
+          "id": 54559
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54560?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Intellect",
+            "es_MX": "Elixir de intelecto",
+            "pt_BR": "Elixir de Intelecto",
+            "de_DE": "Elixier der Intelligenz",
+            "en_GB": "Elixir of Intellect",
+            "es_ES": "Elixir de intelecto",
+            "fr_FR": "Élixir d’Intelligence",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Эликсир интеллекта",
+            "ko_KR": "지능의 비약",
+            "zh_TW": "智力藥劑",
+            "zh_CN": "智力药剂"
+          },
+          "id": 54560
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Recovery Potions",
+        "es_MX": "Pociones de recuperación",
+        "pt_BR": "Poções de Recuperação",
+        "de_DE": "Erholungstränke",
+        "en_GB": "Recovery Potions",
+        "es_ES": "Pociones de recuperación",
+        "fr_FR": "Potions de récupération",
+        "ru_RU": "Зелья восстановления",
+        "ko_KR": "회복 물약",
+        "zh_TW": "恢復藥水",
+        "zh_CN": "恢复药水"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1379?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Mana Potion",
+            "es_MX": "Poción de maná menor",
+            "pt_BR": "Poção Menor de Mana",
+            "de_DE": "Schwacher Manatrank",
+            "en_GB": "Minor Mana Potion",
+            "es_ES": "Poción menor de maná",
+            "fr_FR": "Potion de mana mineure",
+            "it_IT": "Pozione di Mana Minore",
+            "ru_RU": "Слабое зелье маны",
+            "ko_KR": "최하급 마나 물약",
+            "zh_TW": "初級法力藥水",
+            "zh_CN": "初级法力药水"
+          },
+          "id": 1379
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1380?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Rejuvenation Potion",
+            "es_MX": "Poción de Rejuvenecimiento menor",
+            "pt_BR": "Poção Menor de Rejuvenescimento",
+            "de_DE": "Schwacher Verjüngungstrank",
+            "en_GB": "Minor Rejuvenation Potion",
+            "es_ES": "Poción menor de rejuvenecimiento",
+            "fr_FR": "Potion de régénération mineure",
+            "it_IT": "Pozione del Rinvigorimento Minore",
+            "ru_RU": "Слабое зелье омоложения",
+            "ko_KR": "최하급 회복 물약",
+            "zh_TW": "初級活力藥水",
+            "zh_CN": "初级活力药水"
+          },
+          "id": 1380
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1816?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Mana Potion",
+            "es_MX": "Poción de maná inferior",
+            "pt_BR": "Poção Inferior de Mana",
+            "de_DE": "Geringer Manatrank",
+            "en_GB": "Lesser Mana Potion",
+            "es_ES": "Poción inferior de maná",
+            "fr_FR": "Potion de mana inférieure",
+            "it_IT": "Pozione di Mana Inferiore",
+            "ru_RU": "Малое зелье маны",
+            "ko_KR": "하급 마나 물약",
+            "zh_TW": "次級法力藥水",
+            "zh_CN": "次级法力药水"
+          },
+          "id": 1816
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1935?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mana Potion",
+            "es_MX": "Poción de maná",
+            "pt_BR": "Poção de Mana",
+            "de_DE": "Manatrank",
+            "en_GB": "Mana Potion",
+            "es_ES": "Poción de maná",
+            "fr_FR": "Potion de mana",
+            "it_IT": "Pozione di Mana",
+            "ru_RU": "Зелье маны",
+            "ko_KR": "마나 물약",
+            "zh_TW": "法力藥水",
+            "zh_CN": "法力药水"
+          },
+          "id": 1935
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/2907?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Discolored Healing Potion",
+            "es_MX": "Poción de sanación descolorida menor",
+            "pt_BR": "Poção Descolorida de Cura Menor",
+            "de_DE": "Schwacher verfärbter Heiltrank",
+            "en_GB": "Minor Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida menor",
+            "fr_FR": "Potion de soins mineure décolorée",
+            "it_IT": "Pozione di Cura Scolorita",
+            "ru_RU": "Малое бесцветное лечебное зелье",
+            "ko_KR": "최하급 변색된 치유 물약",
+            "zh_TW": "初級透明治療藥水",
+            "zh_CN": "初级透明治疗药水"
+          },
+          "id": 2907
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6000?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Mana Potion",
+            "es_MX": "Poción de maná superior",
+            "pt_BR": "Poção Maior de Mana",
+            "de_DE": "Großer Manatrank",
+            "en_GB": "Greater Mana Potion",
+            "es_ES": "Poción superior de maná",
+            "fr_FR": "Potion de mana supérieure",
+            "it_IT": "Pozione di Mana Superiore",
+            "ru_RU": "Сильное зелье маны",
+            "ko_KR": "상급 마나 물약",
+            "zh_TW": "強效法力藥水",
+            "zh_CN": "强效法力药水"
+          },
+          "id": 6000
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6006?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Wildvine Potion",
+            "es_MX": "Poción de atriplex salvaje",
+            "pt_BR": "Poção de Vinha Selvagem",
+            "de_DE": "Wildrankentrank",
+            "en_GB": "Wildvine Potion",
+            "es_ES": "Poción de atriplex salvaje",
+            "fr_FR": "Potion de sauvageonne",
+            "it_IT": "Pozione della Vite Selvaggia",
+            "ru_RU": "Зелье из дикой лозы",
+            "ko_KR": "야생덩굴 물약",
+            "zh_TW": "野葡萄藥水",
+            "zh_CN": "野葡萄药水"
+          },
+          "id": 6006
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/8596?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Dreamless Sleep Potion",
+            "es_MX": "Poción de letargo sin sueños",
+            "pt_BR": "Poção do Sono sem Sonhos",
+            "de_DE": "Trank des traumlosen Schlafs",
+            "en_GB": "Dreamless Sleep Potion",
+            "es_ES": "Poción de letargo sin sueños",
+            "fr_FR": "Potion de sommeil sans rêve",
+            "it_IT": "Pozione del Sonno Senza Sogni",
+            "ru_RU": "Зелье спокойного сна",
+            "ko_KR": "숙면의 물약",
+            "zh_TW": "昏睡藥水",
+            "zh_CN": "昏睡药水"
+          },
+          "id": 8596
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9938?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Superior Mana Potion",
+            "es_MX": "Poción de maná excelente",
+            "pt_BR": "Poção Superior de Mana",
+            "de_DE": "Überragender Manatrank",
+            "en_GB": "Superior Mana Potion",
+            "es_ES": "Poción excelente de maná",
+            "fr_FR": "Potion de mana excellente",
+            "it_IT": "Pozione di Mana Massima",
+            "ru_RU": "Высшее зелье маны",
+            "ko_KR": "최상급 마나 물약",
+            "zh_TW": "超強法力藥水",
+            "zh_CN": "超强法力药水"
+          },
+          "id": 9938
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9961?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Mana Potion",
+            "es_MX": "Poción de maná sublime",
+            "pt_BR": "Poção Elevada de Mana",
+            "de_DE": "Erheblicher Manatrank",
+            "en_GB": "Major Mana Potion",
+            "es_ES": "poción sublime de maná",
+            "fr_FR": "Potion de mana majeure",
+            "it_IT": "Pozione di Mana Maggiore",
+            "ru_RU": "Сильнейшее зелье маны",
+            "ko_KR": "일급 마나 물약",
+            "zh_TW": "極效法力藥水",
+            "zh_CN": "特效法力药水"
+          },
+          "id": 9961
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12299?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Rejuvenation Potion",
+            "es_MX": "Poción de rejuvenecimiento sublime",
+            "pt_BR": "Poção Elevada de Rejuvenescimento",
+            "de_DE": "Erheblicher Verjüngungstrank",
+            "en_GB": "Major Rejuvenation Potion",
+            "es_ES": "Poción sublime de rejuvenecimiento",
+            "fr_FR": "Potion de régénération majeure",
+            "it_IT": "Pozione del Rinvigorimento Maggiore",
+            "ru_RU": "Сильнейшее зелье омоложения",
+            "ko_KR": "일급 회복 물약",
+            "zh_TW": "極效活力藥水",
+            "zh_CN": "特效活力药水"
+          },
+          "id": 12299
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12893?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Dreamless Sleep Potion",
+            "es_MX": "Poción de letargo sin sueños superior",
+            "pt_BR": "Poção Maior do Sono sem Sonhos",
+            "de_DE": "Großer Trank des traumlosen Schlafs",
+            "en_GB": "Greater Dreamless Sleep Potion",
+            "es_ES": "Poción superior de letargo sin sueños",
+            "fr_FR": "Potion de sommeil sans rêve supérieure",
+            "it_IT": "Pozione del Sonno Senza Sogni Superiore",
+            "ru_RU": "Сильное зелье спокойного сна",
+            "ko_KR": "상급 숙면의 물약",
+            "zh_TW": "強效昏睡藥水",
+            "zh_CN": "强效昏睡药水"
+          },
+          "id": 12893
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52729?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Discolored Healing Potion",
+            "es_MX": "Poción de sanación sublime descolorida",
+            "pt_BR": "Poção Elevada Descolorida de Cura",
+            "de_DE": "Erheblicher verfärbter Heiltrank",
+            "en_GB": "Major Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida sublime",
+            "fr_FR": "Potion de soins majeure décolorée",
+            "ru_RU": "Сильнейшее бесцветное лечебное зелье",
+            "ko_KR": "변색된 일급 치유 물약",
+            "zh_TW": "極效透明治療藥水",
+            "zh_CN": "特效褪色的治疗药水"
+          },
+          "id": 52729
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54197?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Discolored Healing Potion",
+            "es_MX": "Poción de sanación descolorida inferior",
+            "pt_BR": "Poção Inferior Descolorida de Cura",
+            "de_DE": "Geringer verfärbter Heiltrank",
+            "en_GB": "Lesser Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida inferior",
+            "fr_FR": "Potion de soins inférieure décolorée",
+            "it_IT": "Pozione di Cura Scolorita",
+            "ru_RU": "Малое бесцветное лечебное зелье",
+            "ko_KR": "하급 변색된 치유 물약",
+            "zh_TW": "次級透明治療藥水",
+            "zh_CN": "次级透明治疗药水"
+          },
+          "id": 54197
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54198?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Discolored Healing Potion",
+            "es_MX": "Poción de sanación descolorida",
+            "pt_BR": "Poção Descolorida de Cura",
+            "de_DE": "Verfärbter Heiltrank",
+            "en_GB": "Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida",
+            "fr_FR": "Potion de soins décolorée",
+            "it_IT": "Pozione di Cura Scolorita",
+            "ru_RU": "Бесцветное лечебное зелье",
+            "ko_KR": "변색된 치유 물약",
+            "zh_TW": "透明治療藥水",
+            "zh_CN": "透明治疗药水"
+          },
+          "id": 54198
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54199?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Discolored Healing Potion",
+            "es_MX": "Poción de sanación descolorida superior",
+            "pt_BR": "Poção Maior Descolorida de Cura",
+            "de_DE": "Großer verfärbter Heiltrank",
+            "en_GB": "Greater Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida superior",
+            "fr_FR": "Potion de soins supérieure décolorée",
+            "it_IT": "Pozione di Cura Scolorita",
+            "ru_RU": "Сильное бесцветное лечебное зелье",
+            "ko_KR": "상급 변색된 치유 물약",
+            "zh_TW": "強效透明治療藥水",
+            "zh_CN": "强效透明治疗药水"
+          },
+          "id": 54199
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54200?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Superior Discolored Healing Potion",
+            "es_MX": "Poción de sanación descolorida excelente",
+            "pt_BR": "Poção Superior Descolorida de Cura",
+            "de_DE": "Überragender verfärbter Heiltrank",
+            "en_GB": "Superior Discolored Healing Potion",
+            "es_ES": "Poción de sanación descolorida excelente",
+            "fr_FR": "Potion de soins excellente décolorée",
+            "it_IT": "Pozione di Cura Scolorita",
+            "ru_RU": "Высшее бесцветное лечебное зелье",
+            "ko_KR": "최상급 변색된 치유 물약",
+            "zh_TW": "超強透明治療藥水",
+            "zh_CN": "超强透明治疗药水"
+          },
+          "id": 54200
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Potions",
+        "es_MX": "Pociones",
+        "pt_BR": "Poções",
+        "de_DE": "Tränke",
+        "en_GB": "Potions",
+        "es_ES": "Pociones",
+        "fr_FR": "Potions",
+        "ru_RU": "Зелья",
+        "ko_KR": "물약",
+        "zh_TW": "藥水",
+        "zh_CN": "药水"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1383?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Swiftness Potion",
+            "es_MX": "Poción de presteza",
+            "pt_BR": "Poção de Rapidez",
+            "de_DE": "Hurtigkeitstrank",
+            "en_GB": "Swiftness Potion",
+            "es_ES": "Poción de rapidez",
+            "fr_FR": "Potion de Rapidité",
+            "it_IT": "Pozione della Velocità",
+            "ru_RU": "Зелье скорости",
+            "ko_KR": "신속의 물약",
+            "zh_TW": "迅捷藥水",
+            "zh_CN": "迅捷药水"
+          },
+          "id": 1383
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1815?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Magic Resistance Potion",
+            "es_MX": "Poción de resistencia a la magia menor",
+            "pt_BR": "Poção Menor de Resistência à Magia",
+            "de_DE": "Schwacher Magiewiderstandstrank",
+            "en_GB": "Minor Magic Resistance Potion",
+            "es_ES": "Poción menor de resistencia a la magia",
+            "fr_FR": "Potion de résistance à la magie mineure",
+            "it_IT": "Pozione della Resistenza alla Magia Minore",
+            "ru_RU": "Слабое зелье защиты от магии",
+            "ko_KR": "최하급 마법 저항 물약",
+            "zh_TW": "初級抗魔藥水",
+            "zh_CN": "初级抗魔药水"
+          },
+          "id": 1815
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1931?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Invisibility Potion",
+            "es_MX": "Poción de invisibilidad inferior",
+            "pt_BR": "Poção Inferior de Invisibilidade",
+            "de_DE": "Geringer Unsichtbarkeitstrank",
+            "en_GB": "Lesser Invisibility Potion",
+            "es_ES": "Poción inferior de invisibilidad",
+            "fr_FR": "Potion d'Invisibilité inférieure",
+            "it_IT": "Pozione dell'Invisibilità Inferiore",
+            "ru_RU": "Зелье малой невидимости",
+            "ko_KR": "하급 투명 물약",
+            "zh_TW": "次級隱形藥水",
+            "zh_CN": "次级隐形药水"
+          },
+          "id": 1931
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/2909?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Stoneshield Potion",
+            "es_MX": "Poción de escudo de piedra inferior",
+            "pt_BR": "Poção Inferior de Escudopétreo",
+            "de_DE": "Geringer Steinschildtrank",
+            "en_GB": "Lesser Stoneshield Potion",
+            "es_ES": "Poción de escudo de piedra inferior",
+            "fr_FR": "Potion de Bouclier de pierre inférieure",
+            "it_IT": "Pozione dello Scudosaldo Inferiore",
+            "ru_RU": "Малое зелье каменного щита",
+            "ko_KR": "하급 돌방패 물약",
+            "zh_TW": "次級石盾藥水",
+            "zh_CN": "次级石盾药水"
+          },
+          "id": 2909
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4004?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Free Action Potion",
+            "es_MX": "Poción de acción libre",
+            "pt_BR": "Poção de Ação Desimpedida",
+            "de_DE": "Trank der freien Aktion",
+            "en_GB": "Free Action Potion",
+            "es_ES": "Poción de acción libre",
+            "fr_FR": "Potion de libre action",
+            "it_IT": "Pozione della Libertà d'Azione",
+            "ru_RU": "Зелье свободы действий",
+            "ko_KR": "자유 의지의 물약",
+            "zh_TW": "自由行動藥劑",
+            "zh_CN": "自由行动药剂"
+          },
+          "id": 4004
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4006?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Great Rage Potion",
+            "es_MX": "Poción de gran ira",
+            "pt_BR": "Poção Grande de Raiva",
+            "de_DE": "Großer Wuttrank",
+            "en_GB": "Great Rage Potion",
+            "es_ES": "Poción de gran furia",
+            "fr_FR": "Potion de Grande rage",
+            "it_IT": "Pozione della Gran Rabbia",
+            "ru_RU": "Сильнодействующее зелье ярости",
+            "ko_KR": "상급 분노의 물약",
+            "zh_TW": "暴怒藥水",
+            "zh_CN": "暴怒药水"
+          },
+          "id": 4006
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4007?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Rage Potion",
+            "es_MX": "Poción de ira",
+            "pt_BR": "Poção de Raiva",
+            "de_DE": "Wuttrank",
+            "en_GB": "Rage Potion",
+            "es_ES": "Poción de cólera",
+            "fr_FR": "Potion de Rage",
+            "it_IT": "Pozione della Rabbia",
+            "ru_RU": "Зелье ярости",
+            "ko_KR": "분노의 물약",
+            "zh_TW": "怒氣藥水",
+            "zh_CN": "怒气药水"
+          },
+          "id": 4007
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4209?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Fire Protection Potion",
+            "es_MX": "Poción de Protección contra el Fuego",
+            "pt_BR": "Poção de Proteção contra o Fogo",
+            "de_DE": "Feuerschutztrank",
+            "en_GB": "Fire Protection Potion",
+            "es_ES": "Poción de Protección al Fuego",
+            "fr_FR": "Potion de protection contre le Feu",
+            "it_IT": "Pozione della Difesa dal Fuoco",
+            "ru_RU": "Зелье Огненной защиты",
+            "ko_KR": "화염 보호 물약",
+            "zh_TW": "火焰防護藥水",
+            "zh_CN": "火焰防护药水"
+          },
+          "id": 4209
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4210?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Frost Protection Potion",
+            "es_MX": "Poción de Protección contra la Escarcha",
+            "pt_BR": "Poção de Proteção contra o Gelo",
+            "de_DE": "Frostschutztrank",
+            "en_GB": "Frost Protection Potion",
+            "es_ES": "Poción de Protección a la Escarcha",
+            "fr_FR": "Potion de protection contre le Givre",
+            "it_IT": "Pozione della Difesa dal Gelo",
+            "ru_RU": "Зелье защиты от магии льда",
+            "ko_KR": "냉기 보호 물약",
+            "zh_TW": "冰霜防護藥水",
+            "zh_CN": "冰霜防护药水"
+          },
+          "id": 4210
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4211?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Holy Protection Potion",
+            "es_MX": "Poción de Protección contra lo Sagrado",
+            "pt_BR": "Poção de Proteção contra o Sagrado",
+            "de_DE": "Heiligschutztrank",
+            "en_GB": "Holy Protection Potion",
+            "es_ES": "Poción de protección Sagrada",
+            "fr_FR": "Potion de protection contre le Sacré",
+            "it_IT": "Pozione della Difesa dal Sacro",
+            "ru_RU": "Зелье священной защиты",
+            "ko_KR": "신성 보호 물약",
+            "zh_TW": "神聖防護藥水",
+            "zh_CN": "神圣防护药水"
+          },
+          "id": 4211
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4212?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Nature Protection Potion",
+            "es_MX": "Poción de Protección contra la Naturaleza",
+            "pt_BR": "Poção de Proteção contra a Natureza",
+            "de_DE": "Naturschutztrank",
+            "en_GB": "Nature Protection Potion",
+            "es_ES": "Poción de protección de la naturaleza",
+            "fr_FR": "Potion de protection contre la Nature",
+            "it_IT": "Pozione della Difesa dalla Natura",
+            "ru_RU": "Зелье Природной защиты",
+            "ko_KR": "자연 보호 물약",
+            "zh_TW": "自然防護藥水",
+            "zh_CN": "自然防护药水"
+          },
+          "id": 4212
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4213?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Shadow Protection Potion",
+            "es_MX": "Poción de Protección contra las Sombras",
+            "pt_BR": "Poção de Proteção contra a Sombra",
+            "de_DE": "Schattenschutztrank",
+            "en_GB": "Shadow Protection Potion",
+            "es_ES": "Poción de protección de las Sombras",
+            "fr_FR": "Potion de protection contre l'Ombre",
+            "it_IT": "Pozione della Difesa dall'Ombra",
+            "ru_RU": "Зелье защиты от темной магии",
+            "ko_KR": "암흑 보호 물약",
+            "zh_TW": "暗影防護藥水",
+            "zh_CN": "暗影防护药水"
+          },
+          "id": 4213
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4395?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Swim Speed Potion",
+            "es_MX": "Poción de velocidad de nado",
+            "pt_BR": "Poção de Velocidade de Nado",
+            "de_DE": "Schwimmtempotrank",
+            "en_GB": "Swim Speed Potion",
+            "es_ES": "Poción de velocidad de nado",
+            "fr_FR": "Potion de Nage rapide",
+            "it_IT": "Pozione della Velocità di Nuoto",
+            "ru_RU": "Зелье быстрого плавания",
+            "ko_KR": "신속한 수영 물약",
+            "zh_TW": "速遊藥水",
+            "zh_CN": "速游药水"
+          },
+          "id": 4395
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/5999?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Oil of Immolation",
+            "es_MX": "Aceite de inmolación",
+            "pt_BR": "Óleo de Imolação",
+            "de_DE": "Öl des Feuerbrandes",
+            "en_GB": "Oil of Immolation",
+            "es_ES": "Aceite de inmolación",
+            "fr_FR": "Huile d'immolation",
+            "it_IT": "Olio dell'Immolazione",
+            "ru_RU": "Воспламеняющая смесь",
+            "ko_KR": "제물의 오일",
+            "zh_TW": "獻祭之油",
+            "zh_CN": "献祭之油"
+          },
+          "id": 5999
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6001?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Restorative Potion",
+            "es_MX": "Poción restauradora",
+            "pt_BR": "Poção de Restauração",
+            "de_DE": "Regenerationstrank",
+            "en_GB": "Restorative Potion",
+            "es_ES": "Poción restauradora",
+            "fr_FR": "Potion de Restauration",
+            "it_IT": "Pozione Rigenerativa",
+            "ru_RU": "Приводящее в сознание зелье",
+            "ko_KR": "복원의 물약",
+            "zh_TW": "滋補藥水",
+            "zh_CN": "滋补药剂"
+          },
+          "id": 6001
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6002?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Magic Resistance Potion",
+            "es_MX": "Poción de resistencia a la magia",
+            "pt_BR": "Poção de Resistência à Magia",
+            "de_DE": "Magiewiderstandtrank",
+            "en_GB": "Magic Resistance Potion",
+            "es_ES": "Poción de resistencia a la magia",
+            "fr_FR": "Potion de résistance à la magie",
+            "it_IT": "Pozione della Resistenza alla Magia",
+            "ru_RU": "Зелье защиты от магии",
+            "ko_KR": "마법 저항 물약",
+            "zh_TW": "抗魔藥水",
+            "zh_CN": "抗魔药水"
+          },
+          "id": 6002
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6010?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Invisibility Potion",
+            "es_MX": "Poción de invisibilidad",
+            "pt_BR": "Poção de Invisibilidade",
+            "de_DE": "Unsichtbarkeitstrank",
+            "en_GB": "Invisibility Potion",
+            "es_ES": "Poción de invisibilidad",
+            "fr_FR": "Potion d'invisibilité",
+            "it_IT": "Pozione dell'Invisibilità",
+            "ru_RU": "Зелье невидимости",
+            "ko_KR": "투명 물약",
+            "zh_TW": "隱形藥水",
+            "zh_CN": "隐形药水"
+          },
+          "id": 6010
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9937?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mighty Rage Potion",
+            "es_MX": "Poción de ira poderosa",
+            "pt_BR": "Poção Potente de Raiva",
+            "de_DE": "Mächtiger Wuttrank",
+            "en_GB": "Mighty Rage Potion",
+            "es_ES": "Poción de furia poderosa",
+            "fr_FR": "Potion de rage puissante",
+            "it_IT": "Pozione della Rabbia Vigorosa",
+            "ru_RU": "Мощное зелье ярости",
+            "ko_KR": "강력한 분노의 물약",
+            "zh_TW": "強效怒氣藥水",
+            "zh_CN": "强效怒气药水"
+          },
+          "id": 9937
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9951?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Stoneshield Potion",
+            "es_MX": "Poción de escudo de piedra superior",
+            "pt_BR": "Poção Maior de Escudopétreo",
+            "de_DE": "Großer Steinschildtrank",
+            "en_GB": "Greater Stoneshield Potion",
+            "es_ES": "Poción de escudo de piedra superior",
+            "fr_FR": "Potion de Bouclier de pierre supérieure",
+            "it_IT": "Pozione dello Scudosaldo Superiore",
+            "ru_RU": "Сильное зелье каменного щита",
+            "ko_KR": "상급 돌방패 물약",
+            "zh_TW": "強效石盾藥水",
+            "zh_CN": "强效石盾药水"
+          },
+          "id": 9951
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9953?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Purification Potion",
+            "es_MX": "Poción de purificación",
+            "pt_BR": "Poção de Purificação",
+            "de_DE": "Läuterungstrank",
+            "en_GB": "Purification Potion",
+            "es_ES": "Poción de purificación",
+            "fr_FR": "Potion de purification",
+            "it_IT": "Pozione della Purezza",
+            "ru_RU": "Зелье Очищения",
+            "ko_KR": "정화 물약",
+            "zh_TW": "淨化藥水",
+            "zh_CN": "净化药水"
+          },
+          "id": 9953
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9955?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Fire Protection Potion",
+            "es_MX": "Poción de Protección contra el Fuego superior",
+            "pt_BR": "Poção Maior de Proteção contra o Fogo",
+            "de_DE": "Großer Feuerschutztrank",
+            "en_GB": "Greater Fire Protection Potion",
+            "es_ES": "Poción superior de protección de Fuego",
+            "fr_FR": "Potion de Protection contre le Feu supérieure",
+            "it_IT": "Pozione della Difesa dal Fuoco Superiore",
+            "ru_RU": "Сильное зелье защиты от огня",
+            "ko_KR": "상급 화염 보호 물약",
+            "zh_TW": "強效火焰防護藥水",
+            "zh_CN": "强效火焰防护药水"
+          },
+          "id": 9955
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9956?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Frost Protection Potion",
+            "es_MX": "Poción de Protección contra la Escarcha superior",
+            "pt_BR": "Poção Maior de Proteção contra o Gelo",
+            "de_DE": "Großer Frostschutztrank",
+            "en_GB": "Greater Frost Protection Potion",
+            "es_ES": "Poción superior de protección a la Escarcha",
+            "fr_FR": "Potion de protection contre le Givre supérieure",
+            "it_IT": "Pozione della Difesa dal Gelo Superiore",
+            "ru_RU": "Сильное зелье защиты от магии льда",
+            "ko_KR": "상급 냉기 보호 물약",
+            "zh_TW": "強效冰霜防護藥水",
+            "zh_CN": "强效冰霜防护药水"
+          },
+          "id": 9956
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9957?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Nature Protection Potion",
+            "es_MX": "Poción de Protección contra la Naturaleza superior",
+            "pt_BR": "Poção Maior de Proteção contra a Natureza",
+            "de_DE": "Großer Naturschutztrank",
+            "en_GB": "Greater Nature Protection Potion",
+            "es_ES": "Poción superior de protección a la Naturaleza",
+            "fr_FR": "Potion de protection contre la Nature supérieure",
+            "it_IT": "Pozione della Difesa dalla Natura Superiore",
+            "ru_RU": "Великая таинственная субстанция",
+            "ko_KR": "상급 자연 보호 물약",
+            "zh_TW": "強效自然防護藥水",
+            "zh_CN": "强效自然防护药水"
+          },
+          "id": 9957
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9958?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Arcane Protection Potion",
+            "es_MX": "Poción de Protección contra lo Arcano superior",
+            "pt_BR": "Poção Maior de Proteção contra o Arcano",
+            "de_DE": "Großer Arkanschutztrank",
+            "en_GB": "Greater Arcane Protection Potion",
+            "es_ES": "Poción superior de protección Arcana",
+            "fr_FR": "Potion de protection contre les Arcanes supérieure",
+            "it_IT": "Pozione della Difesa dall'Arcano Superiore",
+            "ru_RU": "Сильный чародейский эликсир",
+            "ko_KR": "상급 비전 보호 물약",
+            "zh_TW": "強效秘法防護藥水",
+            "zh_CN": "强效奥术防护药水"
+          },
+          "id": 9958
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9959?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Shadow Protection Potion",
+            "es_MX": "Poción de Protección contra las Sombras superior",
+            "pt_BR": "Poção Maior de Proteção contra a Sombra",
+            "de_DE": "Großer Schattenschutztrank",
+            "en_GB": "Greater Shadow Protection Potion",
+            "es_ES": "Poción superior de protección a las Sombras",
+            "fr_FR": "Potion de protection contre l'Ombre supérieure",
+            "it_IT": "Pozione della Difesa dall'Ombra Superiore",
+            "ru_RU": "Великая таинственная субстанция",
+            "ko_KR": "상급 암흑 보호 물약",
+            "zh_TW": "強效暗影防護藥水",
+            "zh_CN": "强效暗影防护药水"
+          },
+          "id": 9959
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9960?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Holy Protection Potion",
+            "es_MX": "Poción de Protección contra lo Sagrado superior",
+            "pt_BR": "Poção Maior de Proteção contra o Sagrado",
+            "de_DE": "Großer Heiligschutztrank",
+            "en_GB": "Greater Holy Protection Potion",
+            "es_ES": "Poción superior de protección Sagrada",
+            "fr_FR": "Potion de protection contre le Sacré supérieure",
+            "it_IT": "Pozione della Difesa dal Sacro Superiore",
+            "ru_RU": "Сильное зелье священной защиты",
+            "ko_KR": "상급 신성 보호 물약",
+            "zh_TW": "強效神聖防護藥水",
+            "zh_CN": "强效神圣防护药水"
+          },
+          "id": 9960
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/11316?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Limited Invulnerability Potion",
+            "es_MX": "Poción de invulnerabilidad limitada",
+            "pt_BR": "Poção de Invulnerabilidade Limitada",
+            "de_DE": "Begrenzter Unverwundbarkeitstrank",
+            "en_GB": "Limited Invulnerability Potion",
+            "es_ES": "Poción limitada de invulnerabilidad",
+            "fr_FR": "Potion d'invulnérabilité limitée",
+            "it_IT": "Pozione dell'Invulnerabilità Limitata",
+            "ru_RU": "Слабое зелье неуязвимости",
+            "ko_KR": "제한된 무적 물약",
+            "zh_TW": "有限無敵藥水",
+            "zh_CN": "有限无敌药水"
+          },
+          "id": 11316
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12894?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Living Action Potion",
+            "es_MX": "Poción de acción viva",
+            "pt_BR": "Poção de Ação Vivaz",
+            "de_DE": "Trank der lebhaften Aktion",
+            "en_GB": "Living Action Potion",
+            "es_ES": "Poción de acción viviente",
+            "fr_FR": "Potion de vive action",
+            "it_IT": "Pozione dell'Azione Continua",
+            "ru_RU": "Зелье актерства",
+            "ko_KR": "자유 행동의 물약",
+            "zh_TW": "活力行動藥水",
+            "zh_CN": "活力行动药水"
+          },
+          "id": 12894
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54655?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva menor",
+            "pt_BR": "Poção Menor de Impacto Mágico",
+            "de_DE": "Schwacher Trank des Zauberschlags",
+            "en_GB": "Minor Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos menor",
+            "fr_FR": "Potion d’explosion de sorts mineure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье взрывных чар",
+            "ko_KR": "최하급 주문 작렬 물약",
+            "zh_TW": "初級法爆藥水",
+            "zh_CN": "初级法术爆破药水"
+          },
+          "id": 54655
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54656?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva inferior",
+            "pt_BR": "Poção Inferior de Impacto Mágico",
+            "de_DE": "Geringer Trank des Zauberschlags",
+            "en_GB": "Lesser Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos inferior",
+            "fr_FR": "Potion d’explosion de sorts inférieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье взрывных чар",
+            "ko_KR": "하급 주문 작렬 물약",
+            "zh_TW": "次級法爆藥水",
+            "zh_CN": "次级法术爆破药水"
+          },
+          "id": 54656
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54657?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva",
+            "pt_BR": "Poção de Impacto Mágico",
+            "de_DE": "Trank des Zauberschlags",
+            "en_GB": "Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos",
+            "fr_FR": "Potion d’explosion de sorts",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье взрывных чар",
+            "ko_KR": "주문 작렬 물약",
+            "zh_TW": "法爆藥水",
+            "zh_CN": "法术爆破药水"
+          },
+          "id": 54657
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54658?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva superior",
+            "pt_BR": "Poção Maior de Impacto Mágico",
+            "de_DE": "Großer Trank des Zauberschlags",
+            "en_GB": "Greater Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos superior",
+            "fr_FR": "Potion d’explosion de sorts supérieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильное зелье взрывных чар",
+            "ko_KR": "상급 주문 작렬 물약",
+            "zh_TW": "強效法爆藥水",
+            "zh_CN": "强效法术爆破药水"
+          },
+          "id": 54658
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54659?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Superior Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva excelente",
+            "pt_BR": "Poção de Superior Impacto Mágico",
+            "de_DE": "Überragender Trank des Zauberschlags",
+            "en_GB": "Superior Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos excelente",
+            "fr_FR": "Potion d’explosion de sorts excellente",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Высшее зелье взрывных чар",
+            "ko_KR": "최상급 주문 작렬 물약",
+            "zh_TW": "超強法爆藥水",
+            "zh_CN": "超强法术爆破药水"
+          },
+          "id": 54659
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54660?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Spellblasting Potion",
+            "es_MX": "Poción de hechicería explosiva sublime",
+            "pt_BR": "Poção Elevada de Impacto Mágico",
+            "de_DE": "Erheblicher Trank des Zauberschlags",
+            "en_GB": "Major Spellblasting Potion",
+            "es_ES": "Poción de explosión de hechizos sublime",
+            "fr_FR": "Potion d’explosion de sorts majeure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Большое зелье взрывных чар",
+            "ko_KR": "일급 주문 작렬 물약",
+            "zh_TW": "極效法爆藥水",
+            "zh_CN": "特效法术爆破药水"
+          },
+          "id": 54660
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54661?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Frenzy Potion",
+            "es_MX": "Poción frenética menor",
+            "pt_BR": "Poção Menor de Frenesi",
+            "de_DE": "Schwacher Trank der Raserei",
+            "en_GB": "Minor Frenzy Potion",
+            "es_ES": "Poción de frenesí menor",
+            "fr_FR": "Potion de frénésie mineure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье бешенства",
+            "ko_KR": "최하급 광기의 물약",
+            "zh_TW": "初級狂亂藥水",
+            "zh_CN": "初级狂乱药水"
+          },
+          "id": 54661
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54662?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Frenzy Potion",
+            "es_MX": "Poción frenética inferior",
+            "pt_BR": "Poção Inferior de Frenesi",
+            "de_DE": "Geringer Trank der Raserei",
+            "en_GB": "Lesser Frenzy Potion",
+            "es_ES": "Poción de frenesí inferior",
+            "fr_FR": "Potion de frénésie inférieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье бешенства",
+            "ko_KR": "하급 광기의 물약",
+            "zh_TW": "次級狂亂藥水",
+            "zh_CN": "次级狂乱药水"
+          },
+          "id": 54662
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54663?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Frenzy Potion",
+            "es_MX": "Poción frenética",
+            "pt_BR": "Poção de Frenesi",
+            "de_DE": "Trank der Raserei",
+            "en_GB": "Frenzy Potion",
+            "es_ES": "Poción de frenesí",
+            "fr_FR": "Potion de frénésie",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье бешенства",
+            "ko_KR": "광기의 물약",
+            "zh_TW": "狂亂藥水",
+            "zh_CN": "狂乱药水"
+          },
+          "id": 54663
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54664?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Frenzy Potion",
+            "es_MX": "Poción frenética superior",
+            "pt_BR": "Poção Maior de Frenesi",
+            "de_DE": "Großer Trank der Raserei",
+            "en_GB": "Greater Frenzy Potion",
+            "es_ES": "Poción de frenesí superior",
+            "fr_FR": "Potion de frénésie supérieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильное зелье бешенства",
+            "ko_KR": "상급 광기의 물약",
+            "zh_TW": "強效狂亂藥水",
+            "zh_CN": "强效狂乱药水"
+          },
+          "id": 54664
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54665?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Superior Frenzy Potion",
+            "es_MX": "Poción frenética excelente",
+            "pt_BR": "Poção Superior de Frenesi",
+            "de_DE": "Überragender Trank der Raserei",
+            "en_GB": "Superior Frenzy Potion",
+            "es_ES": "Poción de frenesí excelente",
+            "fr_FR": "Potion de frénésie excellente",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Высшее зелье бешенства",
+            "ko_KR": "최상급 광기의 물약",
+            "zh_TW": "超強狂亂藥水",
+            "zh_CN": "超强狂乱药水"
+          },
+          "id": 54665
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54666?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Frenzy Potion",
+            "es_MX": "Poción frenética sublime",
+            "pt_BR": "Poção Elevada de Frenesi",
+            "de_DE": "Erheblicher Trank der Raserei",
+            "en_GB": "Major Frenzy Potion",
+            "es_ES": "Poción de frenesí sublime",
+            "fr_FR": "Potion de frénésie majeure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Большое зелье бешенства",
+            "ko_KR": "일급 광기의 물약",
+            "zh_TW": "極效狂亂藥水",
+            "zh_CN": "特效狂乱药水"
+          },
+          "id": 54666
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54667?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Minor Mender's Potion",
+            "es_MX": "Poción de ensalmador menor",
+            "pt_BR": "Poção Menor do Reparador",
+            "de_DE": "Schwacher Trank des Heilers",
+            "en_GB": "Minor Mender's Potion",
+            "es_ES": "Poción de ensalmador menor",
+            "fr_FR": "Potion de soigneur mineure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье целителя",
+            "ko_KR": "최하급 치유사의 물약",
+            "zh_TW": "初級治癒者藥水",
+            "zh_CN": "初级修补药水"
+          },
+          "id": 54667
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54668?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Mender's Potion",
+            "es_MX": "Poción de ensalmador inferior",
+            "pt_BR": "Poção Inferior do Reparador",
+            "de_DE": "Geringer Trank des Heilers",
+            "en_GB": "Lesser Mender's Potion",
+            "es_ES": "Poción de ensalmador inferior",
+            "fr_FR": "Potion de soigneur inférieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Малое зелье целителя",
+            "ko_KR": "하급 치유사의 물약",
+            "zh_TW": "次級治癒者藥水",
+            "zh_CN": "次级修补药水"
+          },
+          "id": 54668
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54669?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mender's Potion",
+            "es_MX": "Poción de ensalmador",
+            "pt_BR": "Poção do Reparador",
+            "de_DE": "Trank des Heilers",
+            "en_GB": "Mender's Potion",
+            "es_ES": "Poción de ensalmador",
+            "fr_FR": "Potion de soigneur",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье целителя",
+            "ko_KR": "치유사의 물약",
+            "zh_TW": "治癒者藥水",
+            "zh_CN": "修补药水"
+          },
+          "id": 54669
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54670?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Greater Mender's Potion",
+            "es_MX": "Poción de ensalmador superior",
+            "pt_BR": "Poção Maior do Reparador",
+            "de_DE": "Großer Trank des Heilers",
+            "en_GB": "Greater Mender's Potion",
+            "es_ES": "Poción de ensalmador superior",
+            "fr_FR": "Potion de soigneur supérieure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Сильное зелье целителя",
+            "ko_KR": "상급 치유사의 물약",
+            "zh_TW": "強效治癒者藥水",
+            "zh_CN": "强效修补药水"
+          },
+          "id": 54670
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54671?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Superior Mender's Potion",
+            "es_MX": "Poción de ensalmador excelente",
+            "pt_BR": "Poção Superior do Reparador",
+            "de_DE": "Überragender Trank des Heilers",
+            "en_GB": "Superior Mender's Potion",
+            "es_ES": "Poción de ensalmador excelente",
+            "fr_FR": "Potion de soigneur excellente",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Высшее зелье целителя",
+            "ko_KR": "최상급 치유사의 물약",
+            "zh_TW": "超強治癒者藥水",
+            "zh_CN": "超强修补药水"
+          },
+          "id": 54671
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54672?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Major Mender's Potion",
+            "es_MX": "Poción de ensalmador sublime",
+            "pt_BR": "Poção Elevada do Reparador",
+            "de_DE": "Erheblicher Trank des Heilers",
+            "en_GB": "Major Mender's Potion",
+            "es_ES": "Poción de ensalmador sublime",
+            "fr_FR": "Potion de soigneur majeure",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Большое зелье целителя",
+            "ko_KR": "일급 치유사의 물약",
+            "zh_TW": "極效治癒者藥水",
+            "zh_CN": "特效修补药水"
+          },
+          "id": 54672
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54673?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Venomous Blood",
+            "es_MX": "Poción de sangre venenosa",
+            "pt_BR": "Poção de Sangue Peçonhento",
+            "de_DE": "Trank des giftigen Blutes",
+            "en_GB": "Potion of Venomous Blood",
+            "es_ES": "Poción de sangre venenosa",
+            "fr_FR": "Potion de sang envenimé",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье ядовитой крови",
+            "ko_KR": "맹독성 피의 물약",
+            "zh_TW": "毒血藥水",
+            "zh_CN": "毒血药水"
+          },
+          "id": 54673
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54674?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Caustic Smog Potion",
+            "es_MX": "Poción de esmog cáustico",
+            "pt_BR": "Poção de Névoa Cáustica",
+            "de_DE": "Trank des ätzenden Dunstes",
+            "en_GB": "Caustic Smog Potion",
+            "es_ES": "Poción de humo cáustico",
+            "fr_FR": "Potion de brume caustique",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье едкого смога",
+            "ko_KR": "부식성 매연 물약",
+            "zh_TW": "腐蝕煙霧藥水",
+            "zh_CN": "腐蚀烟雾药水"
+          },
+          "id": 54674
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54676?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Dragonfire Potion",
+            "es_MX": "Poción de fuego de dragón",
+            "pt_BR": "Poção de Fogo de Dragão",
+            "de_DE": "Drachenfeuertrank",
+            "en_GB": "Dragonfire Potion",
+            "es_ES": "Poción de fuego de dragón",
+            "fr_FR": "Potion de feu draconique",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье пламени дракона",
+            "ko_KR": "용불꽃 물약",
+            "zh_TW": "龍火藥水",
+            "zh_CN": "龙火药水"
+          },
+          "id": 54676
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54677?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Elemental Purging",
+            "es_MX": "Poción de purificación elemental",
+            "pt_BR": "Poção da Purga Elemental",
+            "de_DE": "Trank der Elementarbannung",
+            "en_GB": "Potion of Elemental Purging",
+            "es_ES": "Poción de purga elemental",
+            "fr_FR": "Potion de purge d’élémentaires",
+            "ru_RU": "Зелье изгнания стихий",
+            "ko_KR": "정기 정화의 물약",
+            "zh_TW": "元素淨化藥水",
+            "zh_CN": "元素清除药水"
+          },
+          "id": 54677
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54678?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Beast Slaying",
+            "es_MX": "Poción de matanza de bestias",
+            "pt_BR": "Poção da Matança de Feras",
+            "de_DE": "Trank des Wildtiertötens",
+            "en_GB": "Potion of Beast Slaying",
+            "es_ES": "Poción de matanza de bestias",
+            "fr_FR": "Potion de tueur de bêtes",
+            "ru_RU": "Зелье убийства животных",
+            "ko_KR": "야수 사냥의 물약",
+            "zh_TW": "野獸殺手藥水",
+            "zh_CN": "屠兽药水"
+          },
+          "id": 54678
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Draughts",
+        "es_MX": "Jarabes",
+        "pt_BR": "Tisanas",
+        "de_DE": "Gebräue",
+        "en_GB": "Draughts",
+        "es_ES": "Jarabes",
+        "fr_FR": "Breuvages",
+        "ru_RU": "Снадобья",
+        "ko_KR": "비약",
+        "zh_TW": "藥膏",
+        "zh_CN": "药剂"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1384?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Tongues",
+            "es_MX": "Jarabe de las lenguas",
+            "pt_BR": "Tisana de Línguas",
+            "de_DE": "Trunk der Sprachen",
+            "en_GB": "Draught of Tongues",
+            "es_ES": "Jarabe de lenguas",
+            "fr_FR": "Breuvage des langages",
+            "ru_RU": "Настой наречий",
+            "ko_KR": "언어의 약물",
+            "zh_TW": "語言藥水",
+            "zh_CN": "语言饮剂"
+          },
+          "id": 1384
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1936?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Detect Lesser Invisibility",
+            "es_MX": "Jarabe de detección de invisibilidad inferior",
+            "pt_BR": "Tisana de Detectar Invisibilidade Inferior",
+            "de_DE": "Trunk der Entdeckung geringer Unsichtbarkeit",
+            "en_GB": "Draught of Detect Lesser Invisibility",
+            "es_ES": "Jarabe de detección de invisibilidad inferior",
+            "fr_FR": "Breuvage de détection de l’invisibilité inférieure",
+            "it_IT": "Elisir Individua Invisibilità Inferiore",
+            "ru_RU": "Малый настой обнаружения невидимости",
+            "ko_KR": "하급 투명체 감지의 약물",
+            "zh_TW": "偵測次級隱形藥水",
+            "zh_CN": "侦测次级隐形饮剂"
+          },
+          "id": 1936
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4176?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Water Breathing",
+            "es_MX": "Jarabe de respiración acuática",
+            "pt_BR": "Tisana de Respiração Aquática",
+            "de_DE": "Trunk der Wasseratmung",
+            "en_GB": "Draught of Water Breathing",
+            "es_ES": "Jarabe de respiración acuática",
+            "fr_FR": "Breuvage de respiration aquatique",
+            "it_IT": "Elisir del Respiro Acquatico",
+            "ru_RU": "Настой водного дыхания",
+            "ko_KR": "수중 호흡의 약물",
+            "zh_TW": "水下呼吸藥水",
+            "zh_CN": "水下呼吸饮剂"
+          },
+          "id": 4176
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/5996?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Water Walking",
+            "es_MX": "Jarabe de caminar sobre el agua",
+            "pt_BR": "Tisana de Andar sobre a Água",
+            "de_DE": "Trunk des Wasserwandelns",
+            "en_GB": "Draught of Water Walking",
+            "es_ES": "Jarabe de caminar sobre el agua",
+            "fr_FR": "Breuvage de marche sur l’eau",
+            "ru_RU": "Настой хождения по воде",
+            "ko_KR": "수면 걷기의 약물",
+            "zh_TW": "水上行走藥水",
+            "zh_CN": "水上行走饮剂"
+          },
+          "id": 5996
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6008?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Detect Undead",
+            "es_MX": "Jarabe de detección de no-muertos",
+            "pt_BR": "Tisana de Detecção de Mortos-vivos",
+            "de_DE": "Trunk der Untotenentdeckung",
+            "en_GB": "Draught of Detect Undead",
+            "es_ES": "Jarabe de detección de no-muertos",
+            "fr_FR": "Breuvage de détection des morts-vivants",
+            "it_IT": "Elisir Rivela Non Morti",
+            "ru_RU": "Настой обнаружения нежити",
+            "ko_KR": "언데드 감지의 약물",
+            "zh_TW": "偵測不死生物藥水",
+            "zh_CN": "侦测亡灵饮剂"
+          },
+          "id": 6008
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6014?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Dream Vision",
+            "es_MX": "Jarabe de visión onírica",
+            "pt_BR": "Tisana de Visão de Sonhos",
+            "de_DE": "Trunk der Traumvision",
+            "en_GB": "Draught of Dream Vision",
+            "es_ES": "Jarabe de visión onírica",
+            "fr_FR": "Breuvage de vision de rêve",
+            "it_IT": "Elisir della Visione Onirica",
+            "ru_RU": "Настой снозрения",
+            "ko_KR": "몽상의 약물",
+            "zh_TW": "夢境幻象藥水",
+            "zh_CN": "梦境饮剂"
+          },
+          "id": 6014
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6019?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Detect Demon",
+            "es_MX": "Jarabe de detección de demonios",
+            "pt_BR": "Tisana de Detecção de Demônios",
+            "de_DE": "Trunk der Dämonenentdeckung",
+            "en_GB": "Draught of Detect Demon",
+            "es_ES": "Jarabe de detección de demonios",
+            "fr_FR": "Breuvage de détection des démons",
+            "it_IT": "Elisir Rivela Demoni",
+            "ru_RU": "Настой обнаружения демонов",
+            "ko_KR": "악마 감지의 약물",
+            "zh_TW": "偵測惡魔藥水",
+            "zh_CN": "侦测恶魔饮剂"
+          },
+          "id": 6019
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6848?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Catseye Draught",
+            "es_MX": "Jarabe de ojo de gato",
+            "pt_BR": "Tisana Olho de Gato",
+            "de_DE": "Katzenaugentrunk",
+            "en_GB": "Catseye Draught",
+            "es_ES": "Jarabe Ojo de gato",
+            "fr_FR": "Breuvage d’œil de chat",
+            "it_IT": "Elisir Occhio Felino",
+            "ru_RU": "Настой \"Кошачий глаз\"",
+            "ko_KR": "고양이눈 약물",
+            "zh_TW": "貓眼藥水",
+            "zh_CN": "猫眼饮剂"
+          },
+          "id": 6848
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12322?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Draught of Greater Water Breathing",
+            "es_MX": "Jarabe de respiración acuática superior",
+            "pt_BR": "Tisana de Respiração Aquática Maior",
+            "de_DE": "Trunk der verbesserten Wasseratmung",
+            "en_GB": "Draught of Greater Water Breathing",
+            "es_ES": "Jarabe de respiración acuática superior",
+            "fr_FR": "Breuvage de respiration aquatique supérieure",
+            "it_IT": "Elisir del Respiro Acquatico Superiore",
+            "ru_RU": "Сильный настой водного дыхания",
+            "ko_KR": "상급 수중 호흡의 약물",
+            "zh_TW": "強效水下呼吸藥水",
+            "zh_CN": "强效水下呼吸饮剂"
+          },
+          "id": 12322
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54533?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Revealing Draught",
+            "es_MX": "Jarabe de revelación",
+            "pt_BR": "Tisana Reveladora",
+            "de_DE": "Enthüllender Trunk",
+            "en_GB": "Revealing Draught",
+            "es_ES": "Jarabe revelador",
+            "fr_FR": "Breuvage de révélation",
+            "it_IT": "Elisir Arcano",
+            "ru_RU": "Зелье обнаружения",
+            "ko_KR": "간파의 약물",
+            "zh_TW": "現形藥膏",
+            "zh_CN": "显形饮剂"
+          },
+          "id": 54533
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54534?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Potion of Predatory Senses",
+            "es_MX": "Poción de instintos depredadores",
+            "pt_BR": "Poção de Sentidos Predatórios",
+            "de_DE": "Trank der Raubtierinstinkte",
+            "en_GB": "Potion of Predatory Senses",
+            "es_ES": "Poción de instintos depredadores",
+            "fr_FR": "Potion de sens de prédateur",
+            "ru_RU": "Зелье хищных инстинктов",
+            "ko_KR": "포식자의 감각 물약",
+            "zh_TW": "掠食感官藥水",
+            "zh_CN": "掠食感知药水"
+          },
+          "id": 54534
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Weapon Oils",
+        "es_MX": "Aceites de armas",
+        "pt_BR": "Óleos para Armas",
+        "de_DE": "Waffenöle",
+        "en_GB": "Weapon Oils",
+        "es_ES": "Aceites para armas",
+        "fr_FR": "Huiles d’arme",
+        "ru_RU": "Оружейные масла",
+        "ko_KR": "무기 오일",
+        "zh_TW": "武器油",
+        "zh_CN": "武器之油"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1932?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Shadow Oil",
+            "es_MX": "Aceite de las Sombras",
+            "pt_BR": "Óleo de Sombra",
+            "de_DE": "Schattenöl",
+            "en_GB": "Shadow Oil",
+            "es_ES": "Aceite de las Sombras",
+            "fr_FR": "Huile des ténèbres",
+            "it_IT": "Olio d'Ombra",
+            "ru_RU": "Масло Тьмы",
+            "ko_KR": "암흑 오일",
+            "zh_TW": "暗影之油",
+            "zh_CN": "暗影之油"
+          },
+          "id": 1932
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/1937?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Frost Oil",
+            "es_MX": "Aceite de Escarcha",
+            "pt_BR": "Óleo Gélido",
+            "de_DE": "Frostöl",
+            "en_GB": "Frost Oil",
+            "es_ES": "Aceite de Escarcha",
+            "fr_FR": "Huile glaciale",
+            "it_IT": "Olio del Freddo",
+            "ru_RU": "Масло льда",
+            "ko_KR": "냉기 오일",
+            "zh_TW": "冰霜之油",
+            "zh_CN": "冰霜之油"
+          },
+          "id": 1937
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Reagents",
+        "es_MX": "Componentes",
+        "pt_BR": "Reagentes",
+        "de_DE": "Reagenzien",
+        "en_GB": "Reagents",
+        "es_ES": "Componentes",
+        "fr_FR": "Composants",
+        "ru_RU": "Реагенты",
+        "ko_KR": "재료",
+        "zh_TW": "材料",
+        "zh_CN": "材料"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4393?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Blackmouth Oil",
+            "es_MX": "Aceite de bocanegra",
+            "pt_BR": "Óleo de Bocanera",
+            "de_DE": "Schwarzmaulöl",
+            "en_GB": "Blackmouth Oil",
+            "es_ES": "Aceite de bocanegra",
+            "fr_FR": "Huile de bouche-noire",
+            "it_IT": "Olio di Boccanera",
+            "ru_RU": "Масло черноротика",
+            "ko_KR": "아귀 오일",
+            "zh_TW": "黑口魚油",
+            "zh_CN": "黑口鱼油"
+          },
+          "id": 4393
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/4394?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Fire Oil",
+            "es_MX": "Aceite de Fuego",
+            "pt_BR": "Óleo ígneo",
+            "de_DE": "Feueröl",
+            "en_GB": "Fire Oil",
+            "es_ES": "Aceite de Fuego",
+            "fr_FR": "Huile de feu",
+            "it_IT": "Oliofuoco",
+            "ru_RU": "Зажигательное масло",
+            "ko_KR": "화염 오일",
+            "zh_TW": "火焰之油",
+            "zh_CN": "火焰之油"
+          },
+          "id": 4394
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6004?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Goblin Rocket Fuel",
+            "es_MX": "Combustible de cohete goblin",
+            "pt_BR": "Combustível de Foguete Goblínico",
+            "de_DE": "Goblin-Raketentreibstoff",
+            "en_GB": "Goblin Rocket Fuel",
+            "es_ES": "Gasolina de cohete goblin",
+            "fr_FR": "Carburant de fusée gobelin",
+            "it_IT": "Carburante Razzo dei Goblin",
+            "ru_RU": "Гоблинское ракетное топливо",
+            "ko_KR": "고블린 로켓 연료",
+            "zh_TW": "哥布林火箭燃油",
+            "zh_CN": "地精火箭燃油"
+          },
+          "id": 6004
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6016?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Ghost Dye",
+            "es_MX": "Tinte fantasmal",
+            "pt_BR": "Pigmento Fantasma",
+            "de_DE": "Geisterfarbstoff",
+            "en_GB": "Ghost Dye",
+            "es_ES": "Tintura fantasmal",
+            "fr_FR": "Teinture fantôme",
+            "it_IT": "Tintura Spettrale",
+            "ru_RU": "Призрачная краска",
+            "ko_KR": "유령 염료",
+            "zh_TW": "幻象染料",
+            "zh_CN": "幻象染料"
+          },
+          "id": 6016
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9936?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Stonescale Oil",
+            "es_MX": "Aceite de escama pétrea",
+            "pt_BR": "Óleo de Petrescama",
+            "de_DE": "Steinschuppenöl",
+            "en_GB": "Stonescale Oil",
+            "es_ES": "Aceite de escamas de piedra",
+            "fr_FR": "Huile de pierre-écaille",
+            "it_IT": "Olio di Squamapietra",
+            "ru_RU": "Масло каменного угря",
+            "ko_KR": "돌비늘 오일",
+            "zh_TW": "石鱗魚油",
+            "zh_CN": "石鳞鱼油"
+          },
+          "id": 9936
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12216?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Refined Scale of Onyxia",
+            "es_MX": "Escama de Onyxia refinada",
+            "pt_BR": "Escama da Onyxia Refinada",
+            "de_DE": "Aufbereitete Schuppe von Onyxia",
+            "en_GB": "Refined Scale of Onyxia",
+            "es_ES": "Escama refinada de Onyxia",
+            "fr_FR": "Ecaille d'Onyxia raffinée",
+            "ru_RU": "Очищенная чешуя ониксии",
+            "ko_KR": "정제된 오닉시아 비늘",
+            "zh_TW": "精製奧妮克希亞鱗片",
+            "zh_CN": "精制奥妮克希亚鳞片"
+          },
+          "id": 12216
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54453?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Cerulean Dye",
+            "es_MX": "Tinte cerúleo",
+            "pt_BR": "Pigmento Cerúleo",
+            "de_DE": "Himmelblauer Farbstoff",
+            "en_GB": "Cerulean Dye",
+            "es_ES": "Tinte cerúleo",
+            "fr_FR": "Teinture céruléenne",
+            "it_IT": "Olio di Boccanera",
+            "ru_RU": "Небесно-голубая краска",
+            "ko_KR": "감청색 염료",
+            "zh_TW": "天藍染料",
+            "zh_CN": "天蓝染料"
+          },
+          "id": 54453
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54454?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Magenta Dye",
+            "es_MX": "Tinte magenta",
+            "pt_BR": "Pigmento Magenta",
+            "de_DE": "Magentafarbener Farbstoff",
+            "en_GB": "Magenta Dye",
+            "es_ES": "Tinte magenta",
+            "fr_FR": "Teinture magenta",
+            "it_IT": "Olio di Boccanera",
+            "ru_RU": "Малиновая краска",
+            "ko_KR": "자홍색 염료",
+            "zh_TW": "洋紅染料",
+            "zh_CN": "品红染料"
+          },
+          "id": 54454
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54455?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Viridian Dye",
+            "es_MX": "Tinte verde esmeralda",
+            "pt_BR": "Pigmento Viridiano",
+            "de_DE": "Viridiangrüner Farbstoff",
+            "en_GB": "Viridian Dye",
+            "es_ES": "Tinte viridiano",
+            "fr_FR": "Teinture viridienne",
+            "it_IT": "Olio di Boccanera",
+            "ru_RU": "Изумрудная краска",
+            "ko_KR": "청록색 염료",
+            "zh_TW": "翠綠染料",
+            "zh_CN": "翠绿染料"
+          },
+          "id": 54455
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/54456?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Sulfuric Acid",
+            "es_MX": "Ácido sulfúrico",
+            "pt_BR": "Ácido Sulfúrico",
+            "de_DE": "Schwefelsäure",
+            "en_GB": "Sulfuric Acid",
+            "es_ES": "Ácido sulfúrico",
+            "fr_FR": "Acide sulfurique",
+            "it_IT": "Olio di Boccanera",
+            "ru_RU": "Серная кислота",
+            "ko_KR": "유황산",
+            "zh_TW": "硫酸",
+            "zh_CN": "硫酸"
+          },
+          "id": 54456
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Miscellaneous",
+        "es_MX": "Miscelánea",
+        "pt_BR": "Diversos",
+        "de_DE": "Verschiedenes",
+        "en_GB": "Miscellaneous",
+        "es_ES": "Miscelánea",
+        "fr_FR": "Divers",
+        "ru_RU": "Разное",
+        "ko_KR": "기타",
+        "zh_TW": "雜項",
+        "zh_CN": "杂项"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6007?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Philosopher's Stone",
+            "es_MX": "Piedra filosofal",
+            "pt_BR": "Pedra Filosofal",
+            "de_DE": "Stein der Weisen",
+            "en_GB": "Philosopher's Stone",
+            "es_ES": "Piedra de filósofo",
+            "fr_FR": "Pierre philosophale",
+            "ru_RU": "Философский камень",
+            "ko_KR": "현자의 돌",
+            "zh_TW": "點金石",
+            "zh_CN": "点金石"
+          },
+          "id": 6007
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9976?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Alchemist's Stone",
+            "es_MX": "Piedra de alquimista",
+            "pt_BR": "Pedra do Alquimista",
+            "de_DE": "Alchimistenstein",
+            "en_GB": "Alchemist's Stone",
+            "es_ES": "Piedra del alquimista",
+            "fr_FR": "Pierre d'alchimiste",
+            "ru_RU": "Камень алхимика",
+            "ko_KR": "현자의 돌",
+            "zh_TW": "煉金石",
+            "zh_CN": "炼金石"
+          },
+          "id": 9976
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/12876?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Gurubashi Mojo Madness",
+            "es_MX": "Locura de mojo Gurubashi",
+            "pt_BR": "Insânia Mojo Gurubashi",
+            "de_DE": "Mojowahnsinn der Gurubashi",
+            "en_GB": "Gurubashi Mojo Madness",
+            "es_ES": "Locura de mojo Gurubashi",
+            "fr_FR": "Folie mojo des Gurubashi",
+            "it_IT": "Mojo della Follia dei Gurubashi",
+            "ru_RU": "Амулет безумия Гурубаши",
+            "ko_KR": "광기의 구루바시 모조",
+            "zh_TW": "古拉巴什魔精",
+            "zh_CN": "古拉巴什魔精"
+          },
+          "id": 12876
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Lesser Transmutations",
+        "es_MX": "Transmutaciones menores",
+        "pt_BR": "Transmutações Inferiores",
+        "de_DE": "Geringe Transmutationen",
+        "en_GB": "Lesser Transmutations",
+        "es_ES": "Transmutaciones inferiores",
+        "fr_FR": "Transmutations mineures",
+        "ru_RU": "Малые трансмутации",
+        "ko_KR": "하급 변환식",
+        "zh_TW": "次級轉化",
+        "zh_CN": "次级转化"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6020?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Iron to Gold",
+            "es_MX": "Transmutar: hierro a oro",
+            "pt_BR": "Transmutar: Ferro em Ouro",
+            "de_DE": "Transmutieren: Eisen in Gold",
+            "en_GB": "Transmute: Iron to Gold",
+            "es_ES": "Transmutar: hierro a oro",
+            "fr_FR": "Transmutation : Fer en Or",
+            "it_IT": "Trasmutazione: Ferro in Oro",
+            "ru_RU": "Трансмутация железа в золото",
+            "ko_KR": "변환식: 철을 금으로",
+            "zh_TW": "點鐵成金",
+            "zh_CN": "点铁成金"
+          },
+          "id": 6020
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/6021?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Mithril to Truesilver",
+            "es_MX": "Transmutar: mitril a veraplata",
+            "pt_BR": "Transmutar: Mithril em Veraprata",
+            "de_DE": "Transmutieren: Mithril in Echtsilber",
+            "en_GB": "Transmute: Mithril to Truesilver",
+            "es_ES": "Transmutar: mitril a veraplata",
+            "fr_FR": "Transmutation de mithril en vrai-argent",
+            "it_IT": "Trasmutazione: Mithril in Verargento",
+            "ru_RU": "Трансмутация мифрила в истинное серебро",
+            "ko_KR": "변환식: 미스릴을 진은으로",
+            "zh_TW": "轉化秘銀",
+            "zh_CN": "转化秘银"
+          },
+          "id": 6021
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9943?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Air to Fire",
+            "es_MX": "Transmutar: aire en fuego",
+            "pt_BR": "Transmutar: Ar em Fogo",
+            "de_DE": "Transmutieren: Luft zu Feuer",
+            "en_GB": "Transmute: Air to Fire",
+            "es_ES": "Transmutar: aire en fuego",
+            "fr_FR": "Transmutation de l'Air en Feu",
+            "it_IT": "Trasmutazione: Aria in Fuoco",
+            "ru_RU": "Трансмутация: воздух в огонь",
+            "ko_KR": "변환식: 바람을 불로",
+            "zh_TW": "轉化：點氣成火",
+            "zh_CN": "转化：点气成火"
+          },
+          "id": 9943
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9944?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Earth to Water",
+            "es_MX": "Transmutar: tierra a agua",
+            "pt_BR": "Transmutar: Terra em Água",
+            "de_DE": "Transmutieren: Erde zu Wasser",
+            "en_GB": "Transmute: Earth to Water",
+            "es_ES": "Transmutar: tierra a agua",
+            "fr_FR": "Transmutation de la Terre en Eau",
+            "it_IT": "Trasmutazione: Terra in Acqua",
+            "ru_RU": "Трансмутация: земля в воду",
+            "ko_KR": "변환식: 대지를 물로",
+            "zh_TW": "轉化：轉土成水",
+            "zh_CN": "转化：转土成水"
+          },
+          "id": 9944
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9945?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Earth to Life",
+            "es_MX": "Transmutar: tierra a vida",
+            "pt_BR": "Transmutar: Terra em Vida",
+            "de_DE": "Transmutieren: Erde zu Leben",
+            "en_GB": "Transmute: Earth to Life",
+            "es_ES": "Transmutar: tierra a vida",
+            "fr_FR": "Transmutation de la Terre en Vie",
+            "it_IT": "Trasmutazione: Terra in Vita",
+            "ru_RU": "Трансмутация: земля в жизнь",
+            "ko_KR": "변환식: 대지를 생명으로",
+            "zh_TW": "轉化：土轉生命",
+            "zh_CN": "转化：土转生命"
+          },
+          "id": 9945
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9946?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Fire to Earth",
+            "es_MX": "Transmutar: fuego a tierra",
+            "pt_BR": "Transmutar: Fogo em Terra",
+            "de_DE": "Transmutieren: Feuer zu Erde",
+            "en_GB": "Transmute: Fire to Earth",
+            "es_ES": "Transmutar: fuego a tierra",
+            "fr_FR": "Transmutation du Feu en Terre",
+            "it_IT": "Trasmutazione: Fuoco in Terra",
+            "ru_RU": "Трансмутация: огонь в землю",
+            "ko_KR": "변환식: 불을 대지로",
+            "zh_TW": "轉化：點火成土",
+            "zh_CN": "转化：点火成土"
+          },
+          "id": 9946
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9947?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Undeath to Water",
+            "es_MX": "Transmutar: no-muerte a agua",
+            "pt_BR": "Transmutar: Morte-viva em Água",
+            "de_DE": "Transmutieren: Untod zu Wasser",
+            "en_GB": "Transmute: Undeath to Water",
+            "es_ES": "Transmutar: no-muerte a agua",
+            "fr_FR": "Transmutation du Non-mort en Eau",
+            "it_IT": "Trasmutazione: Non Morte in Acqua",
+            "ru_RU": "Трансмутация: нежитие в воду",
+            "ko_KR": "변환식: 불사를 물로",
+            "zh_TW": "轉化：死靈化水",
+            "zh_CN": "转化：死灵化水"
+          },
+          "id": 9947
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9948?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Water to Air",
+            "es_MX": "Transmutar: agua a aire",
+            "pt_BR": "Transmutar: Água em Ar",
+            "de_DE": "Transmutieren: Wasser zu Luft",
+            "en_GB": "Transmute: Water to Air",
+            "es_ES": "Transmutar: agua a aire",
+            "fr_FR": "Transmutation de l'Eau en Air",
+            "it_IT": "Trasmutazione: Acqua in Aria",
+            "ru_RU": "Трансмутация: вода в воздух",
+            "ko_KR": "변환식: 물을 바람으로",
+            "zh_TW": "轉化：點水成氣",
+            "zh_CN": "转化：点水成气"
+          },
+          "id": 9948
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9949?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Water to Undeath",
+            "es_MX": "Transmutar: agua a no-muerte",
+            "pt_BR": "Transmutar: Água em Morte-viva",
+            "de_DE": "Transmutieren: Wasser zu Untod",
+            "en_GB": "Transmute: Water to Undeath",
+            "es_ES": "Transmutar: agua a no-muerte",
+            "fr_FR": "Transmutation de l'Eau en Non-mort",
+            "it_IT": "Trasmutazione: Acqua in Non Morte",
+            "ru_RU": "Трансмутация: вода в нежитие",
+            "ko_KR": "변환식: 물을 불사로",
+            "zh_TW": "轉化：水轉死靈",
+            "zh_CN": "转化：水转死灵"
+          },
+          "id": 9949
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9950?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Life to Earth",
+            "es_MX": "Transmutar: vida a tierra",
+            "pt_BR": "Transmutar: Vida em Terra",
+            "de_DE": "Transmutieren: Leben zu Erde",
+            "en_GB": "Transmute: Life to Earth",
+            "es_ES": "Transmutar: vida a tierra",
+            "fr_FR": "Transmutation de la Vie en Terre",
+            "it_IT": "Trasmutazione: Vita in Terra",
+            "ru_RU": "Трансмутация: жизнь в землю",
+            "ko_KR": "변환식: 생명을 대지로",
+            "zh_TW": "轉化：生命歸土",
+            "zh_CN": "转化：生命归土"
+          },
+          "id": 9950
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/13146?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Elemental Fire",
+            "es_MX": "Transmutar: fuego elemental",
+            "pt_BR": "Transmutar: Fogo Elemental",
+            "de_DE": "Elementarfeuer transmutieren",
+            "en_GB": "Transmute: Elemental Fire",
+            "es_ES": "Transmutar: fuego elemental",
+            "fr_FR": "Transmutation : Feu élémentaire",
+            "it_IT": "Trasmutazione: Fuoco Elementale",
+            "ru_RU": "Трансмутация: первородный огонь",
+            "ko_KR": "변환식: 자연의 불꽃",
+            "zh_TW": "轉化：元素火焰",
+            "zh_CN": "转化：元素火焰"
+          },
+          "id": 13146
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Greater Transmutations",
+        "es_MX": "Transmutaciones mayores",
+        "pt_BR": "Transmutações Maiores",
+        "de_DE": "Große Transmutation",
+        "en_GB": "Greater Transmutations",
+        "es_ES": "Transmutaciones superiores",
+        "fr_FR": "Transmutations majeures",
+        "ru_RU": "Великие трансмутации",
+        "ko_KR": "상급 변환식",
+        "zh_TW": "強效轉化",
+        "zh_CN": "强效转化"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9840?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Arcanite",
+            "es_MX": "Transmutar: arcanita",
+            "pt_BR": "Transmutar: Arcanita",
+            "de_DE": "Transmutieren: Arkanit",
+            "en_GB": "Transmute: Arcanite",
+            "es_ES": "Transmutar: arcanita",
+            "fr_FR": "Transmutation d'arcanite",
+            "it_IT": "Trasmutazione: Arcanite",
+            "ru_RU": "Трансмутация: арканит",
+            "ko_KR": "변환식: 아케이나이트",
+            "zh_TW": "轉化：奧金",
+            "zh_CN": "转化：奥金"
+          },
+          "id": 9840
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/59405?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Transmute: Legionite",
+            "es_MX": "Transmutar: legionita",
+            "pt_BR": "Transmutar: Legionita",
+            "de_DE": "Transmutieren: Legionit",
+            "en_GB": "Transmute: Legionite",
+            "es_ES": "Transmutar: legionita",
+            "fr_FR": "Transmutation : légionite",
+            "ru_RU": "Трансмутация: легионит",
+            "ko_KR": "변환식: 군단석",
+            "zh_TW": "轉化：軍團鋼",
+            "zh_CN": "转化：军团石"
+          },
+          "id": 59405
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Flasks",
+        "es_MX": "Frascos",
+        "pt_BR": "Frascos",
+        "de_DE": "Fläschchen",
+        "en_GB": "Flasks",
+        "es_ES": "Frascos",
+        "fr_FR": "Flacons",
+        "ru_RU": "Настои",
+        "ko_KR": "영약",
+        "zh_TW": "精煉藥劑",
+        "zh_CN": "合剂"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9977?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Petrification",
+            "es_MX": "Frasco de petrificación",
+            "pt_BR": "Frasco de Petrificação",
+            "de_DE": "Fläschchen der Versteinerung",
+            "en_GB": "Flask of Petrification",
+            "es_ES": "Frasco de petrificación",
+            "fr_FR": "Flacon de pétrification",
+            "ru_RU": "Склянка Оцепенения",
+            "ko_KR": "석화의 영약",
+            "zh_TW": "石化精煉藥水",
+            "zh_CN": "石化合剂"
+          },
+          "id": 9977
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9978?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of the Titans",
+            "es_MX": "Frasco de los titanes",
+            "pt_BR": "Frasco dos Titãs",
+            "de_DE": "Fläschchen der Titanen",
+            "en_GB": "Flask of the Titans",
+            "es_ES": "Frasco de los titanes",
+            "fr_FR": "Flacon des Titans",
+            "it_IT": "Tonico dei Titani",
+            "ru_RU": "Склянка Титанов",
+            "ko_KR": "티탄의 영약",
+            "zh_TW": "泰坦精煉藥水",
+            "zh_CN": "泰坦合剂"
+          },
+          "id": 9978
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9979?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Distilled Wisdom",
+            "es_MX": "Frasco de sabiduría destilada",
+            "pt_BR": "Frasco de Sabedoria Destilada",
+            "de_DE": "Fläschchen mit destillierter Weisheit",
+            "en_GB": "Flask of Distilled Wisdom",
+            "es_ES": "Frasco de sabiduría destilada",
+            "fr_FR": "Flacon de sagesse distillée",
+            "it_IT": "Tonico della Saggezza Distillata",
+            "ru_RU": "Склянка Концентрированной мудрости",
+            "ko_KR": "순수한 지혜의 영약",
+            "zh_TW": "智慧精煉藥水",
+            "zh_CN": "精炼智慧合剂"
+          },
+          "id": 9979
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9980?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Supreme Power",
+            "es_MX": "Frasco de poder supremo",
+            "pt_BR": "Frasco de Poder Supremo",
+            "de_DE": "Fläschchen mit oberster Macht",
+            "en_GB": "Flask of Supreme Power",
+            "es_ES": "Frasco de poder supremo",
+            "fr_FR": "Flacon de pouvoir suprême",
+            "it_IT": "Tonico della Potenza Suprema",
+            "ru_RU": "Склянка Великой силы",
+            "ko_KR": "강력한 마력의 영약",
+            "zh_TW": "超級能量精煉藥水",
+            "zh_CN": "超级能量合剂"
+          },
+          "id": 9980
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/9981?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Chromatic Resistance",
+            "es_MX": "Frasco de resistencia cromática",
+            "pt_BR": "Frasco de Resistência Cromática",
+            "de_DE": "Fläschchen mit chromatischem Widerstand",
+            "en_GB": "Flask of Chromatic Resistance",
+            "es_ES": "Frasco de resistencia cromática",
+            "fr_FR": "Flacon de résistance chromatique",
+            "it_IT": "Tonico della Resistenza Cromatica",
+            "ru_RU": "Склянка Разноцветной устойчивости",
+            "ko_KR": "마력 저항의 영약",
+            "zh_TW": "多重抗性精煉藥劑",
+            "zh_CN": "多重抗性合剂"
+          },
+          "id": 9981
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58410?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Natural Accuracy",
+            "es_MX": "Frasco de precisión natural",
+            "pt_BR": "Frasco da Exatidão Natural",
+            "de_DE": "Fläschchen der natürlichen Genauigkeit",
+            "en_GB": "Flask of Natural Accuracy",
+            "es_ES": "Frasco de acierto natural",
+            "fr_FR": "Flacon de justesse naturelle",
+            "ru_RU": "Настой природной меткости",
+            "ko_KR": "자연의 정확성 영약",
+            "zh_TW": "自然精度精煉藥劑",
+            "zh_CN": "自然精准合剂"
+          },
+          "id": 58410
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58411?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Natural Aggression",
+            "es_MX": "Frasco de agresividad natural",
+            "pt_BR": "Frasco da Agressão Natural",
+            "de_DE": "Fläschchen der natürlichen Aggression",
+            "en_GB": "Flask of Natural Aggression",
+            "es_ES": "Frasco de agresividad natural",
+            "fr_FR": "Flacon d’agression naturelle",
+            "ru_RU": "Настой природной ярости",
+            "ko_KR": "자연의 공격성 영약",
+            "zh_TW": "自然侵略精煉藥劑",
+            "zh_CN": "自然侵攻合剂"
+          },
+          "id": 58411
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58412?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Natural Precision",
+            "es_MX": "Frasco de exactitud natural",
+            "pt_BR": "Frasco da Precisão Natural",
+            "de_DE": "Fläschchen der natürlichen Präzision",
+            "en_GB": "Flask of Natural Precision",
+            "es_ES": "Frasco de precisión natural",
+            "fr_FR": "Flacon de précision naturelle",
+            "ru_RU": "Настой природной точности",
+            "ko_KR": "자연의 정밀함 영약",
+            "zh_TW": "自然精準精煉藥劑",
+            "zh_CN": "自然精确合剂"
+          },
+          "id": 58412
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/58413?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Natural Swiftness",
+            "es_MX": "Frasco de presteza natural",
+            "pt_BR": "Frasco da Rapidez Natural",
+            "de_DE": "Fläschchen der natürlichen Schnelligkeit",
+            "en_GB": "Flask of Natural Swiftness",
+            "es_ES": "Frasco de presteza natural",
+            "fr_FR": "Flacon de rapidité naturelle",
+            "ru_RU": "Настой природной быстроты",
+            "ko_KR": "자연의 신속함 영약",
+            "zh_TW": "自然迅捷精煉藥劑",
+            "zh_CN": "自然迅捷合剂"
+          },
+          "id": 58413
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "SEASON OF DISCOVERY",
+        "es_MX": "TEMPORADA DE DESCUBRIMIENTO",
+        "pt_BR": "TEMPORADA DA DESCOBERTA",
+        "de_DE": "SAISON DER ENTDECKUNGEN",
+        "en_GB": "SEASON OF DISCOVERY",
+        "es_ES": "TEMPORADA DEL DESCUBRIMIENTO",
+        "fr_FR": "SAISON DE LA DÉCOUVERTE",
+        "ru_RU": "СЕЗОН ОТКРЫТИЙ",
+        "ko_KR": "디스커버리 시즌",
+        "zh_TW": "探索賽季",
+        "zh_CN": "探索赛季"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/49255?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Coalesced Regret",
+            "es_MX": "Elixir de remordimientos fusionados",
+            "pt_BR": "Elixir do Arrependimento Coalescido",
+            "de_DE": "Elixier der verschmolzenen Reue",
+            "en_GB": "Elixir of Coalesced Regret",
+            "es_ES": "Elixir de arrepentimiento fusionado",
+            "fr_FR": "Élixir des regrets accumulés",
+            "it_IT": "Elisir della Difesa",
+            "ru_RU": "Эликсир накопившегося сожаления",
+            "ko_KR": "응축된 후회의 비약",
+            "zh_TW": "聯合懺悔藥劑",
+            "zh_CN": "凝结悔恨药剂"
+          },
+          "id": 49255
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/49863?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Insulating Gniodine",
+            "es_MX": "Gniodino aislante",
+            "pt_BR": "Gniodina com Isolamento Térmico",
+            "de_DE": "Isolierendes Gniodin",
+            "en_GB": "Insulating Gniodine",
+            "es_ES": "Gniodina aislante",
+            "fr_FR": "Gniode isolant",
+            "it_IT": "Olio d'Ombra",
+            "ru_RU": "Изолирующее гномное вещество",
+            "ko_KR": "차폐성 노움오딘",
+            "zh_TW": "密封的諾姆碘",
+            "zh_CN": "绝热诺碘"
+          },
+          "id": 49863
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/49876?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mildly Irradiated Rejuvenation Potion",
+            "es_MX": "Poción de rejuvenecimiento levemente irradiada",
+            "pt_BR": "Poção de Rejuvenescimento Ligeiramente Irradiada",
+            "de_DE": "Leicht bestrahlter Verjüngungstrank",
+            "en_GB": "Mildly Irradiated Rejuvenation Potion",
+            "es_ES": "Poción de rejuvenecimiento ligeramente irradiada",
+            "fr_FR": "Potion de régénération faiblement irradiée",
+            "it_IT": "Olio d'Ombra",
+            "ru_RU": "Слегка облученное зелье омоложения",
+            "ko_KR": "미약한 방사능 오염 회복 물약",
+            "zh_TW": "含微量輻射的活力藥水",
+            "zh_CN": "轻度辐射活力药水"
+          },
+          "id": 49876
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/50023?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Lesser Arcane Elixir",
+            "es_MX": "Elixir arcano inferior",
+            "pt_BR": "Elixir Arcano Inferior",
+            "de_DE": "Geringes Arkanelixier",
+            "en_GB": "Lesser Arcane Elixir",
+            "es_ES": "Elixir Arcano inferior",
+            "fr_FR": "Élixir des arcanes inférieur",
+            "it_IT": "Elisir Arcano Superiore",
+            "ru_RU": "Малый чародейский эликсир",
+            "ko_KR": "하급 신비의 비약",
+            "zh_TW": "次級秘法藥劑",
+            "zh_CN": "次级奥法药剂"
+          },
+          "id": 50023
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/50555?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Everlasting Nightmares",
+            "es_MX": "Frasco de pesadillas perpetuas",
+            "pt_BR": "Frasco dos Pesadelos Sempiternos",
+            "de_DE": "Fläschchen der unvergänglichen Alpträume",
+            "en_GB": "Flask of Everlasting Nightmares",
+            "es_ES": "Frasco de pesadillas perpetuas",
+            "fr_FR": "Flasque de cauchemars éternels",
+            "it_IT": "Pettorale Corazzato d'Argento Lucido",
+            "ru_RU": "Настой бесконечных кошмаров",
+            "ko_KR": "영원한 악몽의 영약",
+            "zh_TW": "永恆夢魘精煉藥劑",
+            "zh_CN": "恒久梦魇合剂"
+          },
+          "id": 50555
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/50600?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Jar of Nightmarish Mojo",
+            "es_MX": "Tarro de mojo de pesadilla",
+            "pt_BR": "Pote de Mojo Pesadelar",
+            "de_DE": "Krug des alptraumhaften Mojo",
+            "en_GB": "Jar of Nightmarish Mojo",
+            "es_ES": "Jarra de mojo de pesadilla",
+            "fr_FR": "Jarre de mojo cauchemardesque",
+            "it_IT": "Pettorale Corazzato d'Argento Lucido",
+            "ru_RU": "Кувшин кошмарного колдунства",
+            "ko_KR": "악몽 모조 단지",
+            "zh_TW": "夢魘魔精罐",
+            "zh_CN": "梦魇魔精罐"
+          },
+          "id": 50600
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51070?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Restless Dreams",
+            "es_MX": "Frasco de sueños inquietos",
+            "pt_BR": "Frasco dos Sonhos Inquietos",
+            "de_DE": "Fläschchen der ruhelosen Träume",
+            "en_GB": "Flask of Restless Dreams",
+            "es_ES": "Frasco de Sueños Inquietos",
+            "fr_FR": "Flacon des rêves troublés",
+            "it_IT": "Pettorale Corazzato d'Argento Lucido",
+            "ru_RU": "Настой неспокойных снов",
+            "ko_KR": "안식 없는 꿈의 영약",
+            "zh_TW": "躁動夢境精煉藥劑",
+            "zh_CN": "躁动梦境合剂"
+          },
+          "id": 51070
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51674?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Unyielding Sorrow",
+            "es_MX": "Frasco de pena implacable",
+            "pt_BR": "Frasco de Tristeza sem Fim",
+            "de_DE": "Fläschchen des unnachgiebigen Kummers",
+            "en_GB": "Flask of Unyielding Sorrow",
+            "es_ES": "Frasco de pesar implacable",
+            "fr_FR": "Flacon de chagrin inflexible",
+            "ru_RU": "Настой неуемного горя",
+            "ko_KR": "꺾이지 않는 슬픔의 영약",
+            "zh_TW": "不屈傷痛精煉藥劑",
+            "zh_CN": "不息哀痛合剂"
+          },
+          "id": 51674
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51675?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of the Old Gods",
+            "es_MX": "Frasco de los dioses antiguos",
+            "pt_BR": "Frasco dos Deuses Antigos",
+            "de_DE": "Fläschchen der Alten Götter",
+            "en_GB": "Flask of the Old Gods",
+            "es_ES": "Frasco de los dioses antiguos",
+            "fr_FR": "Flacon des Dieux très anciens",
+            "ru_RU": "Настой Древних богов",
+            "ko_KR": "고대 신의 영약",
+            "zh_TW": "上古之神精煉藥劑",
+            "zh_CN": "上古之神合剂"
+          },
+          "id": 51675
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51676?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Ancient Knowledge",
+            "es_MX": "Frasco de conocimiento antiguo",
+            "pt_BR": "Frasco de Conhecimento Ancestral",
+            "de_DE": "Fläschchen des uralten Wissens",
+            "en_GB": "Flask of Ancient Knowledge",
+            "es_ES": "Frasco de conocimiento ancestral",
+            "fr_FR": "Flacon de savoir antique",
+            "ru_RU": "Настой древних знаний",
+            "ko_KR": "고대 지식의 영약",
+            "zh_TW": "遠古知識精煉藥劑",
+            "zh_CN": "远古智识合剂"
+          },
+          "id": 51676
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51677?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Flask of Madness",
+            "es_MX": "Frasco de locura",
+            "pt_BR": "Frasco de Loucura",
+            "de_DE": "Fläschchen des Wahnsinns",
+            "en_GB": "Flask of Madness",
+            "es_ES": "Frasco de locura",
+            "fr_FR": "Flacon de folie",
+            "ru_RU": "Настой безумия",
+            "ko_KR": "광기의 영약",
+            "zh_TW": "瘋狂精煉藥劑",
+            "zh_CN": "疯狂合剂"
+          },
+          "id": 51677
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51678?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Honey Badger",
+            "es_MX": "Elixir del tejón mielero",
+            "pt_BR": "Elixir do Texugo Melífero",
+            "de_DE": "Elixier des Honigdachses",
+            "en_GB": "Elixir of the Honey Badger",
+            "es_ES": "Elixir de tejón",
+            "fr_FR": "Élixir du ratel",
+            "it_IT": "Elisir della Mangusta",
+            "ru_RU": "Эликсир медоеда",
+            "ko_KR": "꿀오소리의 비약",
+            "zh_TW": "蜜獾藥劑",
+            "zh_CN": "蜜獾药剂"
+          },
+          "id": 51678
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51679?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Mage-Lord",
+            "es_MX": "Elixir del señor de la magia",
+            "pt_BR": "Elixir do Lorde-mago",
+            "de_DE": "Elixier des Magierlords",
+            "en_GB": "Elixir of the Mage-Lord",
+            "es_ES": "Elixir del señor de la magia",
+            "fr_FR": "Élixir du seigneur-mage",
+            "it_IT": "Elisir della Mangusta",
+            "ru_RU": "Эликсир верховного мага",
+            "ko_KR": "대마법사의 비약",
+            "zh_TW": "大法師藥劑",
+            "zh_CN": "大法师药剂"
+          },
+          "id": 51679
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51680?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of the Ironside",
+            "es_MX": "Elixir de los Ladoférreo",
+            "pt_BR": "Elixir do Ladoférreo",
+            "de_DE": "Elixier der Eisenflanken",
+            "en_GB": "Elixir of the Ironside",
+            "es_ES": "Elixir de brazo de hierro",
+            "fr_FR": "Élixir du cuirassé",
+            "it_IT": "Elisir della Mangusta",
+            "ru_RU": "Эликсир железной брони",
+            "ko_KR": "중무장의 비약",
+            "zh_TW": "鐵面藥劑",
+            "zh_CN": "铁甲药剂"
+          },
+          "id": 51680
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/51681?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Elixir of Alacrity",
+            "es_MX": "Elixir de prontitud",
+            "pt_BR": "Elixir de Diligência",
+            "de_DE": "Elixier des Eifers",
+            "en_GB": "Elixir of Alacrity",
+            "es_ES": "Elixir de prontitud",
+            "fr_FR": "Élixir d’empressement",
+            "it_IT": "Elisir della Mangusta",
+            "ru_RU": "Эликсир рвения",
+            "ko_KR": "기민함의 비약",
+            "zh_TW": "矯捷藥劑",
+            "zh_CN": "灵动药剂"
+          },
+          "id": 51681
+        }
+      ]
+    },
+    {
+      "name": {
+        "en_US": "Camping",
+        "es_MX": "Campamento",
+        "pt_BR": "Acampamento",
+        "de_DE": "Lager aufschlagen",
+        "en_GB": "Camping",
+        "es_ES": "Acampada",
+        "fr_FR": "Campement",
+        "ru_RU": "Отдых в лагере",
+        "ko_KR": "캠핑",
+        "zh_TW": "紮營",
+        "zh_CN": "露营"
+      },
+      "recipes": [
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/52646?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Mana Well",
+            "es_MX": "Pozo de maná",
+            "pt_BR": "Poço de Mana",
+            "de_DE": "Manabrunnen",
+            "en_GB": "Mana Well",
+            "es_ES": "Pozo de maná",
+            "fr_FR": "Puits de mana",
+            "ru_RU": "Колодец маны",
+            "ko_KR": "마나 우물",
+            "zh_TW": "法力井",
+            "zh_CN": "法力之井"
+          },
+          "id": 52646
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/57006?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Fermenter",
+            "es_MX": "Fermentador",
+            "pt_BR": "Fermento",
+            "de_DE": "Gärbehälter",
+            "en_GB": "Fermenter",
+            "es_ES": "Fermentador",
+            "fr_FR": "Fermenteur",
+            "ru_RU": "Бродильный аппарат",
+            "ko_KR": "발효조",
+            "zh_TW": "發酵罐",
+            "zh_CN": "发酵桶"
+          },
+          "id": 57006
+        },
+        {
+          "key": {
+            "href": "https://us.api.blizzard.com/data/wow/recipe/57031?namespace=static-1.60.1_70399-forever-us"
+          },
+          "name": {
+            "en_US": "Alchemy Laboratory",
+            "es_MX": "Laboratorio de alquimia",
+            "pt_BR": "Laboratório de Alquimia",
+            "de_DE": "Alchemielaboratorium",
+            "en_GB": "Alchemy Laboratory",
+            "es_ES": "Laboratorio de alquimia",
+            "fr_FR": "Laboratoire d’alchimie",
+            "ru_RU": "Алхимическая лаборатория",
+            "ko_KR": "연금술 실험실",
+            "zh_TW": "鍊金實驗室",
+            "zh_CN": "炼金实验室"
+          },
+          "id": 57031
+        }
+      ]
+    }
+  ]
+}

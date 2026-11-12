@@ -5,10 +5,12 @@
  */
 import type { Db } from '../db.js';
 import { pickName, LOCALE_PREF, type BlizzardClient } from '../providers/blizzard.js';
-import { PROFESSION_KIND, PROFESSION_ES, expansionOf } from './rules.js';
+import { PROFESSION_ES, expansionOf, professionKind, isInternalProfession } from './rules.js';
 
 export interface SyncOptions {
   version: string;
+  /** Namespace estático de Blizzard (p. ej. static-forever-us). */
+  namespace: string;
   refresh?: boolean;
   concurrency?: number;
   onlyProfessions?: number[];
@@ -58,7 +60,7 @@ export function parseRecipe(raw: any) {
 
 export async function syncCatalog(db: Db, client: BlizzardClient, o: SyncOptions) {
   const log = o.log ?? (() => {});
-  const ns = `static-${client.region}`;
+  const ns = o.namespace;
   const pref = LOCALE_PREF[client.region] ?? ['es_ES', 'en_US'];
   const conc = o.concurrency ?? 8;
   const [run] = await db.query<{ id: number }>(
@@ -76,7 +78,8 @@ export async function syncCatalog(db: Db, client: BlizzardClient, o: SyncOptions
       const detail = await client.get(`/data/wow/profession/${pid}`, ns);
       const n = pickName(detail?.name ?? p?.name, pref);
       const en = n.en ?? (typeof p?.name === 'string' ? p.name : null);
-      const kind = (en && PROFESSION_KIND[en]) || 'desconocido';
+      if (isInternalProfession(en)) { log(`Omitida profesión interna: ${en}`); continue; }
+      const kind = (en && professionKind(en, o.version)) || 'desconocido';
       const display = n.name ?? (en ? PROFESSION_ES[en] ?? en : `Profesión ${pid}`);
       await db.query(
         `insert into profession (game_version,id,name,name_en,type,kind,raw,fetched_at) values ($1,$2,$3,$4,$5,$6,$7,now())
@@ -91,7 +94,7 @@ export async function syncCatalog(db: Db, client: BlizzardClient, o: SyncOptions
         const td = await client.get(`/data/wow/profession/${pid}/skill-tier/${tid}`, ns);
         const tn = pickName(td?.name ?? t?.name, pref);
         const tEn = tn.en ?? (typeof t?.name === 'string' ? t.name : null);
-        const exp = expansionOf(tEn);
+        const exp = expansionOf(tEn, o.version);
         await db.query(
           `insert into skill_tier (game_version,id,profession_id,name,name_en,expansion,min_skill,max_skill,raw,fetched_at)
            values ($1,$2,$3,$4,$5,$6,$7,$8,$9,now())

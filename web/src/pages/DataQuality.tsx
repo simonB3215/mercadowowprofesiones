@@ -1,5 +1,5 @@
 import React from 'react';
-import { api, useApp, useAsync, Loading, ErrorBox, DemoBanner, dt, age } from '../lib.js';
+import { api, useApp, useAsync, Loading, ErrorBox, dt, age } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 
 export function DataQuality() {
@@ -8,7 +8,6 @@ export function DataQuality() {
   const cov = useAsync(() => api(`/api/coverage?version=${ctx.version}`), [ctx.version]);
   return (
     <div>
-      <DemoBanner />
       <h1>Calidad de datos</h1>
       <p className="muted small">«Todas las profesiones» no oculta lagunas: aquí se ve la cobertura real, los errores y la antigüedad de cada fuente.</p>
       <MarketStatus />
@@ -34,12 +33,12 @@ export function DataQuality() {
             </table>
           </div>
         )}
-        <p className="small muted">Los commodities y las estadísticas regionales son de toda la región; solo «Objetos del reino» es específico del reino.</p>
+        <p className="small muted">Las estadísticas regionales son de toda la región; solo «Casa de subastas» es específica del modo de juego y la facción. WoW Forever no tiene archivo de commodities.</p>
       </section>
 
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Cobertura del catálogo (Blizzard)</h2>
-        {!meta?.blizzardConfigured && ctx.version !== 'demo' && <div className="alert warn"><p>Credenciales de Blizzard no configuradas en el servidor: el catálogo de Retail no se puede sincronizar.</p></div>}
+        {!meta?.blizzardConfigured && <div className="alert warn"><p>Credenciales de Blizzard no configuradas en el servidor: el catálogo de WoW Forever no se puede sincronizar.</p></div>}
         {cov.loading ? <Loading /> : cov.error ? <ErrorBox error={cov.error} /> : (
           <>
             <p className="small">Última sincronización: {cov.data.lastRun ? `${cov.data.lastRun.status} · ${dt(cov.data.lastRun.finished_at ?? cov.data.lastRun.started_at)}${cov.data.lastRun.error ? ` · ${cov.data.lastRun.error}` : ''}` : 'nunca'} · Objetos: {cov.data.items?.total ?? 0} ({cov.data.items?.errors ?? 0} con error)</p>

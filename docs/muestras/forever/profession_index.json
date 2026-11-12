@@ -1,0 +1,259 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "professions": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/197?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Tailoring",
+        "es_MX": "Sastrería",
+        "pt_BR": "Alfaiataria",
+        "de_DE": "Schneiderei",
+        "en_GB": "Tailoring",
+        "es_ES": "Costura",
+        "fr_FR": "Couture",
+        "it_IT": "Sartoria",
+        "ru_RU": "Портняжное дело",
+        "ko_KR": "재봉술",
+        "zh_TW": "裁縫",
+        "zh_CN": "裁缝"
+      },
+      "id": 197
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/185?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Cooking",
+        "es_MX": "Cocina",
+        "pt_BR": "Culinária",
+        "de_DE": "Kochkunst",
+        "en_GB": "Cooking",
+        "es_ES": "Cocina",
+        "fr_FR": "Cuisine",
+        "it_IT": "Cucina",
+        "ru_RU": "Кулинария",
+        "ko_KR": "요리",
+        "zh_TW": "烹飪",
+        "zh_CN": "烹饪"
+      },
+      "id": 185
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/165?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Leatherworking",
+        "es_MX": "Peletería",
+        "pt_BR": "Couraria",
+        "de_DE": "Lederverarbeitung",
+        "en_GB": "Leatherworking",
+        "es_ES": "Peletería",
+        "fr_FR": "Travail du cuir",
+        "it_IT": "Conciatura",
+        "ru_RU": "Кожевничество",
+        "ko_KR": "가죽세공",
+        "zh_TW": "製皮",
+        "zh_CN": "制皮"
+      },
+      "id": 165
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/393?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Skinning",
+        "es_MX": "Desuello",
+        "pt_BR": "Esfolamento",
+        "de_DE": "Kürschnerei",
+        "en_GB": "Skinning",
+        "es_ES": "Desollar",
+        "fr_FR": "Dépeçage",
+        "it_IT": "Scuoiatura",
+        "ru_RU": "Снятие шкур",
+        "ko_KR": "무두질",
+        "zh_TW": "剝皮",
+        "zh_CN": "剥皮"
+      },
+      "id": 393
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/333?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Enchanting",
+        "es_MX": "Encantamiento",
+        "pt_BR": "Encantamento",
+        "de_DE": "Verzauberkunst",
+        "en_GB": "Enchanting",
+        "es_ES": "Encantamiento",
+        "fr_FR": "Enchantement",
+        "it_IT": "Incantamento",
+        "ru_RU": "Наложение чар",
+        "ko_KR": "마법부여",
+        "zh_TW": "附魔",
+        "zh_CN": "附魔"
+      },
+      "id": 333
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/186?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Mining",
+        "es_MX": "Minería",
+        "pt_BR": "Mineração",
+        "de_DE": "Bergbau",
+        "en_GB": "Mining",
+        "es_ES": "Minería",
+        "fr_FR": "Minage",
+        "it_IT": "Estrazione",
+        "ru_RU": "Горное дело",
+        "ko_KR": "채광",
+        "zh_TW": "採礦",
+        "zh_CN": "采矿"
+      },
+      "id": 186
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/164?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Blacksmithing",
+        "es_MX": "Herrería",
+        "pt_BR": "Ferraria",
+        "de_DE": "Schmiedekunst",
+        "en_GB": "Blacksmithing",
+        "es_ES": "Herrería",
+        "fr_FR": "Forge",
+        "it_IT": "Forgiatura",
+        "ru_RU": "Кузнечное дело",
+        "ko_KR": "대장기술",
+        "zh_TW": "鍛造",
+        "zh_CN": "锻造"
+      },
+      "id": 164
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/202?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Engineering",
+        "es_MX": "Ingeniería",
+        "pt_BR": "Engenharia",
+        "de_DE": "Ingenieurskunst",
+        "en_GB": "Engineering",
+        "es_ES": "Ingeniería",
+        "fr_FR": "Ingénierie",
+        "it_IT": "Ingegneria",
+        "ru_RU": "Инженерное дело",
+        "ko_KR": "기계공학",
+        "zh_TW": "工程學",
+        "zh_CN": "工程学"
+      },
+      "id": 202
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/356?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Fishing",
+        "es_MX": "Pesca",
+        "pt_BR": "Pesca",
+        "de_DE": "Angeln",
+        "en_GB": "Fishing",
+        "es_ES": "Pesca",
+        "fr_FR": "Pêche",
+        "it_IT": "Pesca",
+        "ru_RU": "Рыбная ловля",
+        "ko_KR": "낚시",
+        "zh_TW": "釣魚",
+        "zh_CN": "钓鱼"
+      },
+      "id": 356
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/171?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Alchemy",
+        "es_MX": "Alquimia",
+        "pt_BR": "Alquimia",
+        "de_DE": "Alchimie",
+        "en_GB": "Alchemy",
+        "es_ES": "Alquimia",
+        "fr_FR": "Alchimie",
+        "it_IT": "Alchimia",
+        "ru_RU": "Алхимия",
+        "ko_KR": "연금술",
+        "zh_TW": "鍊金術",
+        "zh_CN": "炼金术"
+      },
+      "id": 171
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/182?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Herbalism",
+        "es_MX": "Herboristería",
+        "pt_BR": "Herborismo",
+        "de_DE": "Kräuterkunde",
+        "en_GB": "Herbalism",
+        "es_ES": "Botánica",
+        "fr_FR": "Herboristerie",
+        "it_IT": "Erbalismo",
+        "ru_RU": "Травничество",
+        "ko_KR": "약초채집",
+        "zh_TW": "草藥學",
+        "zh_CN": "草药学"
+      },
+      "id": 182
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/129?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "First Aid",
+        "es_MX": "Primeros auxilios",
+        "pt_BR": "Primeiros Socorros",
+        "de_DE": "Erste Hilfe",
+        "en_GB": "First Aid",
+        "es_ES": "Primeros auxilios",
+        "fr_FR": "Secourisme",
+        "it_IT": "Pronto Soccorso",
+        "ru_RU": "Первая помощь",
+        "ko_KR": "응급치료",
+        "zh_TW": "急救",
+        "zh_CN": "急救"
+      },
+      "id": 129
+    },
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/2933?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Test Profession [DNT]",
+        "en_GB": "Test Profession [DNT]"
+      },
+      "id": 2933
+    }
+  ]
+}

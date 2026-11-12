@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, DemoBanner, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q } from '../lib.js';
+import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q } from '../lib.js';
 
 function backHref() {
   try { return sessionStorage.getItem('lastComparator') ?? '#/'; } catch { return '#/'; }
@@ -104,10 +104,9 @@ export function RecipeDetail({ id }: { id: number }) {
 
   return (
     <div>
-      <DemoBanner />
       <p><a href={backHref()}>← Volver al comparador</a></p>
       <h1>{e.name}</h1>
-      <p className="muted">{e.profession} · {e.expansion}{e.tier ? ` · ${e.tier}` : ''}{e.category ? ` · ${e.category}` : ''} · receta {e.recipeId}</p>
+      <p className="muted">{e.profession}{e.tier ? ` · ${e.tier}` : ''}{e.category ? ` · ${e.category}` : ''} · receta {e.recipeId}</p>
 
       <div className="grid grid-2">
         <Breakdown e={e} title="Escenario base (datos de origen)" />
@@ -147,7 +146,7 @@ export function RecipeDetail({ id }: { id: number }) {
             <tbody>
               {e.reagents.map((r: any) => (
                 <tr key={r.itemId}>
-                  <td data-label="Material"><a href={`#/materiales/${r.itemId}`}>{r.name ?? `Objeto ${r.itemId}`}</a><div className="small muted">ID {r.itemId}{r.variants.length ? ` · otras calidades: ${r.variants.join(', ')}` : ''}</div></td>
+                  <td data-label="Material"><a href={`#/materiales/${r.itemId}`}>{r.name ?? `Objeto ${r.itemId}`}</a><div className="small muted">ID {r.itemId}{r.variants.length ? ` · otros IDs con el mismo nombre: ${r.variants.join(', ')}` : ''}</div></td>
                   <td data-label="Cantidad" className="num">{r.quantity === null ? '—' : r.quantity * e.runs}</td>
                   <td data-label="Precio usado" className="num">{money(r.price.copper)}</td>
                   <td data-label="Procedencia" className="small">{r.price.field} · {r.price.scope}{r.price.sourceTime ? ` · ${dt(r.price.sourceTime)}` : ''}</td>
@@ -186,7 +185,7 @@ export function RecipeDetail({ id }: { id: number }) {
         </div>
         <label className="check" style={{ marginTop: 8 }}>
           <input type="checkbox" checked={Boolean(ov.assumeQuality)} onChange={(ev) => setOv({ ...ov, assumeQuality: ev.target.checked })} />
-          Asumir manualmente que el precio corresponde a la calidad obtenida (excluye la recomendación automática)
+          Asumir manualmente que el precio corresponde al objeto obtenido aunque haya otro con el mismo nombre (excluye la recomendación automática)
         </label>
         <div className="row" style={{ marginTop: 10 }}>
           <button className="primary" onClick={calc} disabled={busy}>{busy ? 'Calculando…' : 'Recalcular escenario'}</button>

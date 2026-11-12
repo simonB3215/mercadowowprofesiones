@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, Loading, ErrorBox, DemoBanner, StatusBadge, GoldInput, toQ, formatMoney, Q } from '../lib.js';
+import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, toQ, formatMoney, Q } from '../lib.js';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
   const [units, setUnits] = useState('');
@@ -79,10 +79,9 @@ export function Materials({ itemId }: { itemId: number | null }) {
   const [q, setQ] = useState('');
   useEffect(() => { const t = setTimeout(() => setQ(search), 300); return () => clearTimeout(t); }, [search]);
   const list = useAsync(() => api(`/api/materials?version=${ctx.version}&search=${encodeURIComponent(q)}`), [ctx.version, q]);
-  if (itemId) return <div><DemoBanner /><MaterialDetail itemId={itemId} /></div>;
+  if (itemId) return <MaterialDetail itemId={itemId} />;
   return (
     <div>
-      <DemoBanner />
       <h1>Materiales</h1>
       <p className="muted small">Compara vender un material (por ejemplo, de recolección) con usarlo en las recetas del catálogo.</p>
       <label className="field" style={{ maxWidth: 360 }}>Buscar material<input type="search" value={search} onChange={(e) => setSearch(e.target.value)} /></label>

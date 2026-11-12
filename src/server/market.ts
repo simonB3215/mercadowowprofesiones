@@ -19,8 +19,7 @@ export function contextKey(c: MarketContext) {
 
 export function validateContext(c: Partial<MarketContext>): MarketContext {
   const v = VERSIONS.find((x) => x.id === c.version);
-  if (!v) throw new HttpError(400, 'Versión desconocida.');
-  if (!v.enabled) throw new HttpError(400, `Versión no disponible: ${v.reason ?? ''}`);
+  if (!v) throw new HttpError(400, 'Versión no disponible. Esta aplicación solo trabaja con WoW Forever.');
   if (!c.region || !v.regions.includes(c.region)) throw new HttpError(400, 'Región no soportada para esta versión.');
   const realm = c.realm ? String(c.realm).toLowerCase() : null;
   if (realm && !/^[a-z0-9-]{2,64}$/.test(realm)) throw new HttpError(400, 'Slug de reino inválido.');
@@ -50,11 +49,11 @@ export async function ingest(
   db: Db,
   ctx: MarketContext,
   kind: FileKind,
-  opts: { fetchImpl?: typeof fetch; text?: string; provider?: string; storeRaw?: (key: string, text: string) => Promise<string | null> } = {},
+  opts: { fetchImpl?: typeof fetch; text?: string; provider?: string; sourceUrl?: string; storeRaw?: (key: string, text: string) => Promise<string | null> } = {},
 ): Promise<IngestResult> {
   const version = VERSIONS.find((v) => v.id === ctx.version)!;
   const realm = kind === 'realm_items' ? ctx.realm : null;
-  const url = version.tsmGameType ? tsmUrl(version.tsmGameType, ctx.region, kind, realm ?? undefined) : null;
+  const url = opts.sourceUrl ?? tsmUrl(version.tsmGameType, ctx.region, kind, realm ?? undefined);
   const [run] = await db.query<{ id: number }>(
     `insert into ingestion_run (provider, game_version, region, realm, file_kind, source_url, status)
      values ($1,$2,$3,$4,$5,$6,'staging') returning id`,
@@ -148,15 +147,16 @@ export interface RunInfo {
   sourceTime: string | null;
   fetchedAt: string | null;
   rows: number;
-  scope: 'reino' | 'region';
+  scope: 'casa de subastas' | 'region';
+  provider: string;
 }
 
 export interface MarketSnapshot {
   ctx: MarketContext;
   runs: Partial<Record<FileKind, RunInfo>>;
   lastAttempt: Partial<Record<FileKind, { status: string; at: string; error: string | null }>>;
-  /** itemId → precios de reino o commodity (excluyentes: un commodity no aparece en el archivo de reino). */
-  local: Map<number, { kind: 'commodities' | 'realm_items'; marketValue: bigint | null; minBuyout: bigint | null; recent: bigint | null; historical: bigint | null; name: string | null }>;
+  /** itemId → precios de la casa de subastas elegida (modo de juego + facción). */
+  local: Map<number, { kind: 'realm_items'; marketValue: bigint | null; minBuyout: bigint | null; recent: bigint | null; historical: bigint | null; name: string | null }>;
   region: Map<number, { marketValue: bigint | null; historical: bigint | null; avgSalePrice: bigint | null; saleRate: number | null; soldPerDay: number | null; name: string | null }>;
 }
 
@@ -164,7 +164,7 @@ const iso = (v: any) => (v ? new Date(v).toISOString() : null);
 
 export async function loadSnapshot(db: Db, ctx: MarketContext, itemIds?: number[]): Promise<MarketSnapshot> {
   const runs = await db.query<any>(
-    `select id, file_kind, status, source_time, finished_at, rows_valid from ingestion_run
+    `select id, provider, file_kind, status, source_time, finished_at, rows_valid from ingestion_run
      where active and game_version=$1 and region=$2 and (file_kind<>'realm_items' or realm=$3)`,
     [ctx.version, ctx.region, ctx.realm],
   );
@@ -178,7 +178,7 @@ export async function loadSnapshot(db: Db, ctx: MarketContext, itemIds?: number[
   for (const r of runs) {
     snap.runs[r.file_kind as FileKind] = {
       id: Number(r.id), kind: r.file_kind, status: r.status, sourceTime: iso(r.source_time), fetchedAt: iso(r.finished_at),
-      rows: Number(r.rows_valid), scope: r.file_kind === 'realm_items' ? 'reino' : 'region',
+      rows: Number(r.rows_valid), scope: r.file_kind === 'realm_items' ? 'casa de subastas' : 'region', provider: r.provider,
     };
   }
   const ids = runs.map((r) => Number(r.id));

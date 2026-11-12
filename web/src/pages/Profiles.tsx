@@ -118,7 +118,7 @@ export function Profiles() {
           ))}
         </ul>
         <h2>Inventario</h2>
-        <p className="small muted">Por identificador de objeto (cada calidad tiene su propio ID). El inventario reduce las compras, pero el costo económico se sigue calculando a precio de reposición.</p>
+        <p className="small muted">Por identificador de objeto. El inventario reduce las compras, pero el costo económico se sigue calculando a precio de reposición.</p>
         <div className="row">
           <label className="field">ID del objeto<input type="number" value={invId} onChange={(e) => setInvId(e.target.value)} /></label>
           <label className="field">Cantidad<input type="number" min={1} value={invQty} onChange={(e) => setInvQty(e.target.value)} /></label>

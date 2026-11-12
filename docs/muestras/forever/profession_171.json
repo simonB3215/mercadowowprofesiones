@@ -1,0 +1,81 @@
+{
+  "_links": {
+    "self": {
+      "href": "https://us.api.blizzard.com/data/wow/profession/171?namespace=static-1.60.1_70399-forever-us"
+    }
+  },
+  "id": 171,
+  "name": {
+    "en_US": "Alchemy",
+    "es_MX": "Alquimia",
+    "pt_BR": "Alquimia",
+    "de_DE": "Alchimie",
+    "en_GB": "Alchemy",
+    "es_ES": "Alquimia",
+    "fr_FR": "Alchimie",
+    "it_IT": "Alchimia",
+    "ru_RU": "Алхимия",
+    "ko_KR": "연금술",
+    "zh_TW": "鍊金術",
+    "zh_CN": "炼金术"
+  },
+  "description": {
+    "en_US": "Higher alchemy skill allows you to learn higher level alchemy recipes.  Alchemy recipes can be found on trainers around the world as well as from quests and monsters.",
+    "es_MX": "Con un nivel alto de habilidad en alquimia, podrás aprender recetas de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "pt_BR": "Um alto nível na perícia alquimia permite aprender receitas de nível mais alto.  As receitas podem ser aprendidas ou compradas dos instrutores de alquimia espalhados pelo mundo, bem como saqueadas de monstros e obtidas como recompensa de missões.",
+    "de_DE": "Eine hohe Alchimiefertigkeit ermöglicht es Euch höherstufigere Rezepte zu benutzen. Alchimierezepte könnt Ihr bei Lehrern überall in der Welt erwerben. Tote Gegner hinterlassen manchmal Rezepte oder Ihr erhaltet sie als Questbelohnung.",
+    "en_GB": "Higher alchemy skill allows you to learn higher level alchemy recipes.  Alchemy recipes can be found on trainers around the world as well as from quests and monsters.",
+    "es_ES": "Con un nivel alto de habilidad en alquimia, podrás aprender recetas de nivel superior. Visita a los instructores dispersos por el mundo, completa misiones y derrota a los monstruos para conseguirlas.",
+    "fr_FR": "Un plus haut score dans la compétence alchimie vous permet d’apprendre des recettes plus difficiles en alchimie. Les recettes d'alchimie se trouvent dans le monde entier auprès de maîtres aussi bien qu’en recompense de quêtes ou qu’en butin de monstres.",
+    "it_IT": "Una maggiore competenza in alchimia permette di apprendere ricette di livello superiore. Le ricette possono essere acquistate da venditori o istruttori in giro per il mondo o essere ottenute attraverso missioni o uccidendo mostri.",
+    "ru_RU": "Чем лучше развит этот навык, тем более сложные алхимические рецепты вы можете использовать. Рецепты можно найти у учителей, а также получить в качестве добычи или награды.",
+    "ko_KR": "연금술 숙련도가 올라갈수록 고레벨의 연금술 조제법을 배울 수 있습니다. 조제법은 전문 연금술사나 퀘스트를 통해 배우거나 몬스터에게서 얻을 수 있습니다.",
+    "zh_TW": "高級的鍊金術技能使你可以學習高級的鍊金術配方。你可以在訓練師那裡學習新的配方，也可以通過完成任務或殺死怪物獲得新的配方。",
+    "zh_CN": "高级的炼金术技能使你可以学习高级的炼金术配方。你可以在训练师那里学习新的配方，也可以通过完成任务或杀死怪物获得新的配方。"
+  },
+  "type": {
+    "type": "PRIMARY",
+    "name": {
+      "en_US": "Primary",
+      "es_MX": "Principal",
+      "pt_BR": "Principal",
+      "de_DE": "Primär",
+      "en_GB": "Primary",
+      "es_ES": "Principal",
+      "fr_FR": "Principales",
+      "it_IT": "Primario",
+      "ru_RU": "Основное",
+      "ko_KR": "주",
+      "zh_TW": "主要",
+      "zh_CN": "主要"
+    }
+  },
+  "media": {
+    "key": {
+      "href": "https://us.api.blizzard.com/data/wow/media/profession/171?namespace=static-1.60.1_70399-forever-us"
+    },
+    "id": 171
+  },
+  "skill_tiers": [
+    {
+      "key": {
+        "href": "https://us.api.blizzard.com/data/wow/profession/171/skill-tier/2937?namespace=static-1.60.1_70399-forever-us"
+      },
+      "name": {
+        "en_US": "Alchemy",
+        "es_MX": "Alquimia",
+        "pt_BR": "Alquimia",
+        "de_DE": "Alchimie",
+        "en_GB": "Alchemy",
+        "es_ES": "Alquimia",
+        "fr_FR": "Alchimie",
+        "it_IT": "Alchemy",
+        "ru_RU": "Алхимия",
+        "ko_KR": "연금술",
+        "zh_TW": "鍊金術",
+        "zh_CN": "炼金术"
+      },
+      "id": 2937
+    }
+  ]
+}

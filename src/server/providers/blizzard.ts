@@ -13,6 +13,8 @@
 
 export interface BlizzardClient {
   get(path: string, namespace: string): Promise<any>;
+  /** Igual que get, pero devuelve también la cabecera Last-Modified (momento del escaneo). */
+  getRaw(path: string, namespace: string): Promise<{ json: any; lastModified: string | null }>;
   region: string;
 }
 
@@ -50,13 +52,16 @@ export function createBlizzardClient(region: string, fetchImpl: typeof fetch = f
     return token.value;
   }
 
-  return {
+  const client: BlizzardClient = {
     region,
     async get(path: string, namespace: string) {
+      return (await client.getRaw(path, namespace)).json;
+    },
+    async getRaw(path: string, namespace: string) {
       const url = `https://${region}.api.blizzard.com${path}${path.includes('?') ? '&' : '?'}namespace=${encodeURIComponent(namespace)}`;
       for (let attempt = 0; attempt < 5; attempt++) {
         const res = await fetchImpl(url, { headers: { authorization: `Bearer ${await getToken()}` } });
-        if (res.ok) return res.json();
+        if (res.ok) return { json: await res.json(), lastModified: res.headers.get('last-modified') };
         if (res.status === 401 && attempt === 0) {
           token = null;
           continue;
@@ -70,6 +75,7 @@ export function createBlizzardClient(region: string, fetchImpl: typeof fetch = f
       throw new BlizzardError(429, `Demasiados reintentos en ${path}`);
     },
   };
+  return client;
 }
 
 /** Los nombres pueden llegar como texto (con locale) o como objeto {en_US, es_ES, ...} (sin locale). */

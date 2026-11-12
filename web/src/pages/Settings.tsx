@@ -29,11 +29,12 @@ export function SettingsPage() {
   return (
     <div>
       <h1>Ajustes</h1>
-      <p className="muted small">Los umbrales son preferencias tuyas, no reglas oficiales de TSM. La comisión del 5 % es un supuesto configurable: verifícala para tu mercado y versión.</p>
+      <p className="muted small">Los umbrales son preferencias tuyas, no reglas oficiales de TSM. Las comisiones (5 % en las casas de Alianza y Horda, 15 % en Aguasnegras) son supuestos configurables: verifícalas en el juego.</p>
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Precios y comisión</h2>
         <div className="grid grid-3">
-          {fld('commission', 'Comisión de subasta (decimal)', '0 ≤ t < 1, p. ej. 0.05')}
+          {fld('commission', 'Comisión Alianza / Horda (decimal)', '0 ≤ t < 1, p. ej. 0.05')}
+          {fld('commissionNeutral', 'Comisión Aguasnegras (decimal)', '0 ≤ t < 1, p. ej. 0.15')}
           {src('buySource', 'Precio de los materiales')}
           {src('sellSource', 'Precio de venta del resultado')}
         </div>
@@ -50,7 +51,7 @@ export function SettingsPage() {
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Vigencia de los datos</h2>
         <div className="grid grid-3">
-          {fld('maxAgeHoursRealm', 'Antigüedad máx. reino/commodities (h)', 'TSM los actualiza cada pocas horas', 'number')}
+          {fld('maxAgeHoursRealm', 'Antigüedad máx. casa de subastas (h)', 'TSM los actualiza cada pocas horas', 'number')}
           {fld('maxAgeHoursRegion', 'Antigüedad máx. estadísticas regionales (h)', 'TSM las actualiza a diario', 'number')}
         </div>
       </section>
