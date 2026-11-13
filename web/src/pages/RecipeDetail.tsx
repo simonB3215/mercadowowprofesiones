@@ -163,7 +163,7 @@ export function RecipeDetail({ id }: { id: number }) {
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Materiales</h2>
         <div className="table-wrap">
-          <table className="responsive">
+          <table className="responsive cards-lg">
             <thead><tr><th>Material</th><th className="num">Cantidad</th><th className="num">Precio usado</th><th>Procedencia</th><th className="num">Subtotal</th><th className="num">Inventario</th><th className="num">A comprar</th><th>Precio manual (oro)</th></tr></thead>
             <tbody>
               {e.reagents.map((r: any) => (

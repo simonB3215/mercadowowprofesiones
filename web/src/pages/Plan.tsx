@@ -89,7 +89,7 @@ export function PlanPage() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Ejecuciones</h2>
             <div className="table-wrap">
-              <table className="responsive">
+              <table className="responsive cards-lg">
                 <thead><tr><th>Receta</th><th className="num">Solicitado</th><th className="num">Ejecuciones</th><th className="num">Unidades</th><th className="num">Excedente</th><th className="num">Costo</th><th className="num">Ingreso neto</th></tr></thead>
                 <tbody>
                   {result.plan.entries.map((e: any) => (
@@ -110,7 +110,7 @@ export function PlanPage() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Lista de compras</h2>
             <div className="table-wrap">
-              <table className="responsive">
+              <table className="responsive cards-lg">
                 <thead><tr><th>Material</th><th className="num">Necesario</th><th className="num">En inventario</th><th className="num">Usado del inventario</th><th className="num">A comprar</th><th className="num">Precio unit.</th><th className="num">Reposición</th><th className="num">Desembolso</th></tr></thead>
                 <tbody>
                   {result.plan.materials.map((m: any) => (

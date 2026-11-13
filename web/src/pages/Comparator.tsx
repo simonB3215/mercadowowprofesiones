@@ -158,44 +158,51 @@ export function Comparator() {
       )}
       {data.data && total > 0 && (
         <div className="table-wrap" style={{ opacity: data.loading ? 0.55 : 1, transition: 'opacity 150ms' }} aria-busy={data.loading}>
-          <table className="responsive">
+          <table className="responsive cards-lg">
             <caption className="sr-only">Recetas con costo, precio, ganancia estimada y estado</caption>
             <thead>
+              {/* 6 columnas: los datos relacionados van juntos para que la tabla quepa sin desplazarse hacia el lado.
+                  El orden por lote o ROI sigue disponible en «Ordenar por». */}
               <tr>
-                <th>Receta / objeto</th>
-                <th>Profesión</th>
-                <th className="num">Unid./lote</th>
+                <th>Receta</th>
                 {th('cost', 'Costo/unid.')}
                 <th className="num">Precio venta</th>
                 {th('profitUnit', 'Ganancia est./unid.')}
-                {th('profitBatch', 'Ganancia est./lote')}
-                {th('roi', 'ROI')}
-                <th className="num">Demanda regional</th>
-                <th>Antigüedad</th>
+                <th className="num">Demanda</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              {data.data.items.map((i: any) => (
-                <tr key={i.recipeId}>
-                  <td data-label="Receta" className="cell-main">
-                    <ItemLabel id={i.output?.itemId} quality={i.output?.quality} href={`#/receta/${i.recipeId}`} name={i.name}
-                      sub={i.output?.name && i.output.name !== i.name ? i.output.name : undefined} />
-                  </td>
-                  <td data-label="Profesión"><span className="icon-inline"><WowIcon kind="profession" id={i.professionId} px={20} />{i.profession}</span></td>
-                  <td data-label="Unid./lote" className="num">{i.unitsPerRun ?? (i.yieldRange[0] !== null ? `${i.yieldRange[0]}–${i.yieldRange[1]}` : '—')}</td>
-                  <td data-label="Costo/unid." className="num"><Money v={i.costUnit} /></td>
-                  <td data-label="Precio venta" className="num"><Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div></td>
-                  <td data-label="Ganancia est./unid." className="num"><Delta v={i.profitUnit} /></td>
-                  <td data-label="Ganancia est./lote" className="num"><Delta v={i.profitBatch} tag={false} /></td>
-                  <td data-label="ROI" className="num">{i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</td>
-                  <td data-label="Demanda regional" className="num">
-                    {i.demand ? <>{i.demand.saleRate ?? '—'}<span className="unit">tasa</span><div className="small muted">{i.demand.soldPerDay ?? '—'} ventas/día (región)</div></> : '—'}
-                  </td>
-                  <td data-label="Antigüedad" className="small">{i.sourceTime ? age(hoursSince(i.sourceTime)) : '—'}{i.freshness.stale && <div><span className="badge b-warn">Desactualizado</span></div>}</td>
-                  <td data-label="Estado"><StatusBadge s={i.status} /><div className="small muted">{i.reasons[0]}</div></td>
-                </tr>
-              ))}
+              {data.data.items.map((i: any) => {
+                const units = i.unitsPerRun ?? (i.yieldRange[0] !== null ? `${i.yieldRange[0]}–${i.yieldRange[1]}` : null);
+                return (
+                  <tr key={i.recipeId}>
+                    <td data-label="Receta" className="cell-main">
+                      <ItemLabel id={i.output?.itemId} quality={i.output?.quality} href={`#/receta/${i.recipeId}`} name={i.name}
+                        sub={<span className="cmp-sub">
+                          <WowIcon kind="profession" id={i.professionId} px={14} />{i.profession}
+                          {i.output?.name && i.output.name !== i.name && <> · {i.output.name}</>}
+                        </span>} />
+                    </td>
+                    <td data-label="Costo/unid." className="num">
+                      <Money v={i.costUnit} />
+                      {units !== null && units !== 1 && <div className="small muted">{units} por fabricación</div>}
+                    </td>
+                    <td data-label="Precio venta" className="num"><Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div></td>
+                    <td data-label="Ganancia est./unid." className="num">
+                      <Delta v={i.profitUnit} />
+                      <div className="small muted">ROI {i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</div>
+                      {units !== null && units !== 1 && <div className="small muted">Lote: <Money v={i.profitBatch} /></div>}
+                    </td>
+                    <td data-label="Demanda" className="num">
+                      {i.demand ? <>{i.demand.saleRate ?? '—'}<span className="unit">tasa</span><div className="small muted">{i.demand.soldPerDay ?? '—'} ventas/día</div></> : '—'}
+                      <div className="small muted">Precio de hace {i.sourceTime ? age(hoursSince(i.sourceTime)) : '—'}</div>
+                      {i.freshness.stale && <span className="badge b-warn">Desactualizado</span>}
+                    </td>
+                    <td data-label="Estado" className="cmp-status"><StatusBadge s={i.status} /><div className="small muted">{i.reasons[0]}</div></td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
