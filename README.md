@@ -85,6 +85,26 @@ Las pruebas cubren:
 - **API completa sobre PGlite** con un catálogo de prueba ficticio que solo existe en las pruebas (`tests/helpers/seed.ts`).
 - **Acceso con contraseña** (`APP_PASSWORD`).
 
+## Servidor MCP (consultar los datos desde Claude)
+
+`src/mcp/server.ts` expone los datos de la aplicación como herramientas MCP **de solo lectura**: no sincroniza precios ni escribe nada. Usa la base de datos de `DATABASE_URL` en `.env` y llama a la misma API dentro del proceso (si hay `APP_PASSWORD`, la sesión se genera localmente; la contraseña no sale del equipo).
+
+| Herramienta | Qué devuelve |
+|---|---|
+| `estado_mercado` | Antigüedad de los precios de la casa y de TSM, y si están desactualizados |
+| `profesiones` | Ids de profesión y número de recetas |
+| `recetas_rentables` | Recetas con costo, venta, ganancia, ROI, demanda, estado y motivos (filtros y orden) |
+| `detalle_receta` | Materiales con precio y procedencia, equilibrio, precio mínimo publicable, estado |
+| `buscar_material` | Id de un material por nombre |
+| `vender_o_usar_material` | Vender el material frente a usarlo en cada receta |
+| `ruta_subir_nivel` | Ruta más barata para subir una profesión y lista de compra |
+
+Importes en oro con 4 decimales; `null` = sin datos (nunca 0). Casa por defecto: JcJ — Horda (parámetro `casa`).
+
+- **Claude Code:** `.mcp.json` ya lo registra como `mercado-wow`. Al abrir el proyecto, Claude Code pide aprobarlo una vez.
+- **Otro cliente MCP (Claude Desktop…):** comando `node`, argumentos `["<ruta>/node_modules/tsx/dist/cli.mjs", "<ruta>/scripts/mcp-server.ts"]`.
+- A mano: `npm run mcp` (habla MCP por stdin/stdout).
+
 ## Despliegue en Supabase y Vercel
 
 1. **Supabase:** crea el proyecto. En *Project Settings → Database* copia la cadena del **Transaction pooler** (puerto 6543) y aplica las migraciones.
@@ -115,6 +135,7 @@ supabase/migrations/         Esquema SQL (RLS activado)
 web/src/                     Interfaz React
 src/server/leveling.ts       Ruta de subida de nivel (datos de Wowhead + precios)
 data/leveling/               Recetas y umbrales de dificultad de Wowhead (WoW Forever)
+src/mcp/server.ts            Servidor MCP de solo lectura (scripts/mcp-server.ts lo arranca por stdio)
 scripts/                     Servidor local, migraciones, sincronizaciones, sonda de Blizzard
 tests/                       Vitest (motor, ingesta, API)
 docs/                        Validación de fuentes y decisiones técnicas

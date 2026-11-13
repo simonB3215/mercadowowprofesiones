@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mercado-wow": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/tsx/dist/cli.mjs", "scripts/mcp-server.ts"]
+    }
+  }
+}

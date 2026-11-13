@@ -48,6 +48,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Páginas secundarias cargadas bajo demanda: paquete inicial de 269 kB (81 kB comprimido).
 - **Iconos de WoW:** tabla `visual_asset`, `GET /api/assets` y `npm run sync:icons`. 2 452 recursos de Wowhead Forever (12 profesiones + 2 440 objetos) y 263 objetos con el icono oficial de Blizzard; ninguno sin icono. Si una imagen falla: Blizzard y, después, un marcador neutro.
 - **Robustez de la base de datos:** las lecturas de más de 30 s fallan con un error visible y renuevan el pool (D26).
+- **Servidor MCP** (D30): 7 herramientas de solo lectura para consultar desde Claude el estado del mercado, recetas rentables, detalle, materiales y rutas de subida de nivel. Probado por stdio con los datos reales de Supabase (13-11-2026) y con pruebas automáticas.
 - **Acceso:** contraseña compartida (`APP_PASSWORD`), cookie HttpOnly firmada; el cron usa `CRON_SECRET`.
 
 ## En curso o bloqueado
