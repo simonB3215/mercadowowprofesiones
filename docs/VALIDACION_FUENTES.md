@@ -71,6 +71,35 @@ Fecha de extracción: 13 de noviembre de 2026. Archivo: `data/leveling/forever-w
 - Los nombres en español se toman del catálogo de Blizzard solo si la receta coincide de forma única por objeto creado y materiales exactos; si no, se muestra el nombre inglés de Wowhead.
 - **Tiempo de reutilización** (`data/leveling/forever-cooldowns.json`): los listados no lo traen. Se leyó del tooltip de cada hechizo (`https://nether.wowhead.com/tooltip/spell/{id}?dataEnv=16&locale=0`, texto «… cooldown»), consultado desde una página de Wowhead en el navegador, para las 2 215 recetas (13-11-2026). 15 tienen reutilización: las 13 transmutaciones (de 10 min a ≈ 2 días), Tela lunar (≈ 4 días) y Fogata básica (5 min). Los segundos se derivan del texto redondeado de Wowhead («1.958 days» = 47 h).
 
+## Battle.net: inicio de sesión y perfil del personaje (PC-01, comprobado el 13-11-2026)
+
+Documentación oficial consultada: guía de OAuth, WoW Classic Profile APIs y namespaces de Classic (community.developer.battle.net).
+
+| Elemento | Contrato | Comprobado |
+|---|---|---|
+| Autorización | `GET https://oauth.battle.net/authorize` con `response_type=code`, `client_id`, `redirect_uri`, `scope=openid wow.profile` y `state` | Documentado. Sin inicio de sesión real (lo tiene que hacer el usuario). |
+| Token | `POST https://oauth.battle.net/token`, `grant_type=authorization_code`, Basic `client_id:secret`; devuelve `access_token`, `expires_in` (≈ 24 h) y `scope`. **Sin token de renovación.** | Documentado; probado con respuestas simuladas. |
+| Usuario | `GET https://oauth.battle.net/userinfo` → `sub`, `id`, `battletag` | Documentado. El propietario se identifica por `sub`. |
+| Personajes de la cuenta | `GET /profile/user/wow` con el token del usuario (ámbito `wow.profile`) → `wow_accounts[].characters[]` | Documentado en Classic: `profile-classic1x-{región}` (Era), `profile-classic-{región}` (MoP) y `profile-classicann-{región}` (Aniversario). **Forever no aparece.** Con el token de la aplicación responde 403 en `profile-forever-us`, `profile-classic1x-us`, `profile-classicann-us`, `profile-classic-us` y `profile-us` (`npm run probe:profile`). Hace falta un token de usuario para saber si `profile-forever-us` responde. |
+| Profesiones | `GET /profile/wow/character/{reino}/{nombre}/professions` | Solo documentado en retail (`primaries`/`secondaries` con `tiers[].skill_points`, `max_skill_points`, `known_recipes`). **Las Profile APIs de Classic no incluyen profesiones.** Si responde 404, se guarda «no disponible» y se piden los datos a mano. |
+| Datos dinámicos de Forever | `dynamic-forever-us` | Índices de reinos y de reinos conectados → 404 (13-11-2026). Solo responden las casas de subastas (D21). |
+
+Consecuencias:
+- La lista de personajes y las profesiones de Forever **no están verificadas** con una cuenta real.
+- El módulo prueba el namespace configurable `BNET_PROFILE_NAMESPACES` (por defecto `profile-forever-{región}`) y registra el código HTTP de cada intento.
+- Sin profesiones de la API, usa datos manuales con procedencia.
+- Forever (Classic) no tiene bonificaciones de habilidad, conocimiento ni especializaciones de profesión, así que el planificador no los modela.
+
+## Tiempos de lanzamiento y herramientas (Wowhead, 13-11-2026)
+
+`npm run sync:spells` lee el tooltip de las 2 215 recetas (`nether.wowhead.com/tooltip/spell/{id}?dataEnv=16`; desde Node responde 200 desde el 13-11-2026) y guarda `data/leveling/forever-spell-details.json` con:
+- el tiempo de lanzamiento: de 2 a 60 s, ninguna receta sin dato;
+- las herramientas («Blacksmith Hammer», varillas rúnicas, etc.).
+
+El tiempo activo de una ruta es fabricaciones esperadas × tiempo de lanzamiento. **No hay datos verificados** de desplazamiento, compra, aprendizaje ni recolección: se muestran como «no incluido».
+
+Los rangos del instructor (Oficial hasta 150, Experto hasta 225 y Artesano hasta 300, con nivel de personaje 10, 20 y 35) son reglas de Classic **sin verificar en Forever** y sin costo conocido. Se muestran como requisito «según las reglas de Classic».
+
 ## Lo que falta y cómo afecta al cálculo
 
 | Laguna | Efecto |

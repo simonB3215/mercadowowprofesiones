@@ -14,13 +14,13 @@ function saveManual(m: Record<string, string>) {
 const validGold = (v: string) => /^\d{1,7}(\.\d{1,4})?$/.test(v.trim());
 
 /** Color de dificultad: punto de color + nombre (nunca solo color). */
-function SkillColor({ c }: { c: string | null }) {
+export function SkillColor({ c }: { c: string | null }) {
   if (!c) return null;
   return <span className={`skill skill-${c}`}>{c}</span>;
 }
 
 /** Cómo se consigue la receta, en una frase corta. */
-function HowToLearn({ r }: { r: any }) {
+export function HowToLearn({ r }: { r: any }) {
   if (r.availability === 'instructor') {
     const cost = String(r.trainingCost ?? '0'); // cobre como texto (bigint serializado)
     return <>Instructor (nivel {r.learnedAt}){cost !== '0' && <>{' · '}<Money v={{ n: cost, d: '1' }} /></>}</>;

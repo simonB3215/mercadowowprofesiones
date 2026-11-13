@@ -105,6 +105,39 @@ Importes en oro con 4 decimales; `null` = sin datos (nunca 0). Casa por defecto:
 - **Otro cliente MCP (Claude Desktop…):** comando `node`, argumentos `["<ruta>/node_modules/tsx/dist/cli.mjs", "<ruta>/scripts/mcp-server.ts"]`.
 - A mano: `npm run mcp` (habla MCP por stdin/stdout).
 
+## Mi personaje: Battle.net y rutas de subida (`#/personaje`)
+
+Flujo:
+1. Conectar con Battle.net (inicio de sesión oficial; la web no pide la contraseña).
+2. Elegir un personaje propio y ver sus profesiones.
+3. Calcular la ruta **más rápida** (o la más barata), con presupuesto opcional.
+4. Guardar la ruta y registrar el progreso para recalcular.
+
+Sin conexión, la misma pantalla calcula la ruta con el nivel escrito a mano.
+
+Configuración (una vez):
+1. En https://community.developer.battle.net/access/clients, en el cliente que ya usa `BLIZZARD_CLIENT_ID`, añade como *Redirect URLs*:
+   - `https://mercadowowprofesiones.vercel.app/api/auth/battlenet/callback`
+   - `http://localhost:5173/api/auth/battlenet/callback` (desarrollo)
+2. Aplica la migración `supabase/migrations/20261115000000_battlenet.sql` con `npm run migrate`. Ya está aplicada en Supabase desde el 13-11-2026.
+3. Opcional, en Vercel y en `.env`: `BNET_TOKEN_KEY` (clave propia para cifrar los tokens) y `BNET_PROFILE_NAMESPACES` (ver `.env.example`). Los secretos se escriben solo ahí, nunca en el código ni en el chat.
+
+Qué está verificado y qué no:
+- La API de Blizzard **no documenta profesiones en Classic** y Forever no aparece en la documentación de perfiles (`docs/VALIDACION_FUENTES.md`). Si Blizzard no las da, se indican a mano y quedan etiquetadas «Manual».
+- El flujo completo se ha probado con respuestas **simuladas** de Blizzard, no con una cuenta real.
+- Tiempos: solo el de fabricación (lanzamiento de Wowhead × fabricaciones esperadas). Viajes, compras y aprendizaje se muestran como «no incluido».
+- Con presupuesto, la ruta es «la más rápida entre las evaluadas» (D34), no un óptimo garantizado.
+
+Rutas de la API:
+- `GET /api/route`: ruta sin cuenta.
+- `GET /api/battlenet/status`, `GET /api/battlenet/start`, `GET /api/auth/battlenet/callback` y `POST /api/battlenet/disconnect`.
+- `GET|POST /api/me/characters[/sync]`, `POST /api/me/characters/:id/professions/sync`, `PUT|DELETE /api/me/characters/:id/professions/:pid` y `POST /api/me/characters/:id/route`.
+- `GET|POST /api/me/plans`, `GET|DELETE /api/me/plans/:id` y `POST /api/me/plans/:id/progress`.
+
+Datos:
+- `npm run sync:spells` regenera los tiempos de lanzamiento.
+- `npm run probe:profile` vuelve a comprobar los namespaces de perfil.
+
 ## Despliegue en Supabase y Vercel
 
 1. **Supabase:** crea el proyecto. En *Project Settings → Database* copia la cadena del **Transaction pooler** (puerto 6543) y aplica las migraciones.

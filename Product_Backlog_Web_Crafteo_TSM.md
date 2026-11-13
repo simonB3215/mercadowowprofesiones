@@ -99,6 +99,34 @@ Actualizado el 13 de noviembre de 2026. «Terminado» exige que se cumplan los c
 | PB-28 | Terminado | Publicada en Vercel (https://mercadowowprofesiones.vercel.app) con Supabase, protegida con `APP_PASSWORD`; secretos solo en el servidor y RLS activado. Precios automáticos: GitHub Actions cada hora (primera ejecución correcta el 13-11-2026, tras configurar `CRON_SECRET`) y cron diario de Vercel. |
 | PB-29 | Terminado | `#/nivel` (D27, D29): ruta más barata por profesión con recetas y dificultad de Wowhead y precios de la casa elegida; sin recetas con reutilización. Pruebas `tests/leveling*.test.ts`; Alquimia 1→300 revisada en el navegador. |
 
+## Ampliación: conexión del personaje y rutas de subida (PC-01 a PC-20)
+
+Añadida el 13-11-2026 desde «Prompt_Backlog_Conexion_Personaje_Rutas.md». No sustituye ni cierra ningún PB.
+**Ningún flujo con una cuenta real de Battle.net se ha probado todavía:** las pruebas usan respuestas simuladas de Blizzard (`tests/battlenet.test.ts`). Falta que el usuario registre la URL de retorno e inicie sesión.
+
+| ID | Estado | Evidencia |
+|---|---|---|
+| PC-01 | Terminado (con límites) | Contratos de OAuth, Account Profile y namespaces de Classic en `docs/VALIDACION_FUENTES.md`. `npm run probe:profile`: `/profile/user/wow` → 403 con el token de la aplicación en todos los namespaces; `dynamic-forever-us` sin índice de reinos. Las Profile APIs de Classic no tienen profesiones. Forever solo se puede confirmar con un inicio de sesión real. |
+| PC-02 | Implementado, sin verificar con cuenta real | Código de autorización con `openid wow.profile`; `state` de un solo uso (SHA-256 en `oauth_state` + cookie del navegador); intercambio en el servidor; cancelación y `state` inválido o repetido devuelven a `#/personaje` con el motivo. Sin contraseña en la web. Sin PKCE (no documentado por Blizzard; cliente confidencial, D32). Pruebas: 4 casos simulados. |
+| PC-03 | Terminado (simulado) | Cookie `mw_bnet` HttpOnly, Secure, SameSite=Lax; token cifrado (AES-256-GCM) y comprobado que no aparece en respuestas ni en la base; caducidad por `expires_in`; sin token de renovación. «Desconectar» borra las sesiones; «Desconectar y borrar mis datos» borra cuenta, personajes, profesiones, rutas y progreso. Pruebas: desconectar, reconectar, borrar sin tocar otra cuenta, sesión caducada → 401. |
+| PC-04 | Implementado, sin verificar con cuenta real | Personajes de `/profile/user/wow` con el token del usuario, identificados por id de personaje, id de reino, namespace y cuenta de WoW. Propiedad comprobada en el servidor. Prueba: la cuenta B recibe 404 al leer, sincronizar, editar o calcular con el personaje de A. |
+| PC-05 | Parcial | Profesión, rango (tier), habilidad y máximo de la API cuando existan; `null` ≠ 0; se elige el rango con mayor máximo, nunca se suman. Forever no tiene bonificaciones, conocimiento ni especializaciones (no se muestran). Falta comprobar con cuenta real si Forever publica `/professions`. |
+| PC-06 | Terminado | Lectura bajo demanda, sin caché ni límite propio: un clic, una petición; Blizzard limita por su lado. Estado `ok`, `no_disponible` o `error` con código HTTP y fecha. Un error conserva el último dato. Datos manuales con fecha, nota y etiqueta «Manual» que no borran el oficial; el usuario elige cuál usar. Pruebas de profesiones y datos manuales. |
+| PC-07 | Parcial | Recetas conocidas (ids de Blizzard) enlazadas con Wowhead por objeto + materiales, solo si la coincidencia es única; las conocidas no cobran instructor y se pueden usar aunque sean de patrón. Instructor con costo y nivel, iniciales deducidas. Reputación, misiones y vendedores no se modelan: quedan fuera salvo que se conozcan o el usuario los incluya. |
+| PC-08 | Parcial | Objetivo, modo (más rápida o más barata), presupuesto, patrones, «solo naranja» y recetas conocidas. Bloqueos explicados: presupuesto insuficiente, tramos sin datos y nivel de personaje para el rango. No se ofrece «tiempo total transcurrido» porque faltan datos de viajes y compras, y el inventario manual aún no se descuenta. |
+| PC-09 | Parcial | Umbrales y puntos por receta de Wowhead; una receta gris no avanza. La probabilidad en amarillo y verde es la estimación de la comunidad, rotulada, u opcionalmente solo naranja. No hay probabilidades verificadas de Blizzard. |
+| PC-10 | Implementado (heurística) | `src/engine/route.ts`: menor tiempo activo (lanzamiento × fabricaciones esperadas) más instructor; con presupuesto, lagrangiana + mejora voraz, rotulada «entre las evaluadas». La prueba exhaustiva (6 puntos × 3 recetas, 8 presupuestos) coincide con el óptimo. No incluye viaje ni adquisición (sin datos). Real: Alquimia 1→300 en 15,4 min y 53,90 o (rápida) frente a 23,7 min y 38,59 o (barata); con 45 o, 16,1 min. |
+| PC-11 | Terminado | Por tramo: receta, niveles inicial y final, «cambia al llegar a», fabricaciones (exactas si todo es naranja; si no, esperadas, compradas y mínimo garantizado), materiales, herramienta, requisito de aprendizaje y costo. Lista de compra consolidada. El inventario no se descuenta todavía. |
+| PC-12 | Terminado | Desembolso (materiales + instructor) con los precios y el campo de compra existentes; un precio ausente deja el total incompleto. La «recuperación si vendieras lo fabricado» es hipotética: campo de venta, comisión y objetos ligados excluidos, y no se resta. No hay costo de oportunidad porque no se usa inventario. |
+| PC-13 | Terminado | `#/personaje` «Mi personaje»: conexión, personajes, profesiones con origen, formulario de ruta, resumen, bloqueos, pasos, lista de compra y rutas guardadas, con el estilo existente e iconos de Wowhead. Revisado en el navegador a 1024 y 375 px en modo manual (sin desplazamiento horizontal). Los estados conectados solo están probados por API simulada. |
+| PC-14 | Parcial | Registro del nivel observado (manual o de Blizzard) con procedencia e historial; recálculo desde ese nivel con las mismas restricciones; objetivo alcanzado → «completado»; un dato de Blizzard menor que el último observado se rechaza (posible foto atrasada). No se registran fabricaciones ni consumo de materiales. |
+| PC-15 | Hecho con simulación | `tests/battlenet.test.ts` (19): `state` inválido o repetido, cancelación, aislamiento A/B, CSRF, sin datos, manual, objetivo alcanzado, foto atrasada, desconexión, caducidad, `APP_PASSWORD`. `tests/route.test.ts` (11): rápida frente a barata, presupuesto, presupuesto imposible, exhaustiva, sin tiempo, azar, solo naranja, conocidas, rangos. **Sin prueba con cuenta real.** |
+| PC-16 | Parcial | La respuesta y la pantalla comparan rápida y barata (costo y tiempo activo). No hay modo «equilibrado» con pesos ocultos: el equilibrio se pide de forma explícita con el presupuesto. |
+| PC-17 | Pendiente | Sin datos verificados de zonas, tasas ni rutas de recolección para Forever. Herboristería, Desuello y Pesca siguen marcadas «se suben recolectando»; Minería solo cubre la fundición. |
+| PC-18 | Pendiente | No hay un formato de importación documentado. Nunca se ejecutaría Lua ni código subido. |
+| PC-19 | Probablemente no aplica | Forever (Classic) no tiene conocimiento ni especializaciones de profesión. Falta confirmarlo en el juego. |
+| PC-20 | Parcial | Varios personajes por cuenta con rutas y progreso separados por personaje y propietario. Otras versiones del juego descartadas (D19). |
+
 ## Historias y criterios de aceptación
 
 ### PB-01 — Validar las fuentes
@@ -485,3 +513,166 @@ La documentación se actualiza si cambia una fórmula, una fuente o un supuesto.
 
 Estas decisiones no impiden usar este backlog para preparar tareas. PB-01 debe resolver los contratos de datos antes de comprometer fórmulas dependientes de mecánicas no verificadas.
 
+## Historias de la ampliación (PC-01 a PC-20)
+
+Texto original del documento complementario del 13-11-2026; el estado actual está en la tabla «Ampliación».
+
+### PC-01 — Validar contratos y cobertura
+
+**Prioridad:** P0. **Dependencias:** —. **Estado:** ver la tabla «Ampliación».
+
+Como desarrollador, quiero comprobar OAuth, perfiles y profesiones antes de depender de sus datos.
+
+**Aceptación:** Registrar endpoints, scopes, namespaces y muestras anonimizadas; comprobar habilidad, máximo y recetas conocidas por versión; documentar campos ausentes y desfases. No asumir que especialización, inventario o concentración están disponibles.
+
+### PC-02 — Conectar Battle.net
+
+**Prioridad:** P0. **Dependencias:** PC-01. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero vincular mi cuenta mediante el inicio de sesión oficial.
+
+**Aceptación:** Usar Authorization Code con wow.profile si lo confirma el contrato vigente; validar state de un solo uso y redirect URI; intercambio de código en servidor. No pedir contraseña en la web ni exponer tokens; manejar rechazo y código inválido. PKCE cuando lo soporte el proveedor y corresponda.
+
+### PC-03 — Sesión, expiración y desconexión
+
+**Prioridad:** P0. **Dependencias:** PC-02. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero controlar la vinculación de mi cuenta.
+
+**Aceptación:** Cookies seguras HttpOnly y SameSite apropiado; tokens protegidos en servidor y fuera de logs; actuar según expires_in. No asumir refresh token: reautorizar si hace falta. Desconectar elimina tokens y detiene sincronizaciones; ofrecer eliminar los datos importados y los planes asociados.
+
+### PC-04 — Elegir personaje propio
+
+**Prioridad:** P0. **Dependencias:** PC-02. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero seleccionar uno de los personajes de mi cuenta.
+
+**Aceptación:** Obtener listado de cuenta autorizado y comprobar pertenencia en servidor; seleccionar región y cuenta WoW cuando proceda; identificar por IDs y contexto, no solo nombre. Consulta pública por nombre no acredita propiedad. Impedir acceso cruzado entre usuarios.
+
+### PC-05 — Consultar profesiones por expansión
+
+**Prioridad:** P0. **Dependencias:** PC-04. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero ver mi habilidad actual y el máximo de la profesión elegida.
+
+**Aceptación:** Separar profesión, tier/expansión, habilidad base, bonificaciones y conocimiento. Mostrar fuente y fecha. Diferenciar máximo entrenado y máximo objetivo de la versión si son distintos. Null no es cero ni profesión no aprendida; no fijar 100 como máximo universal.
+
+### PC-06 — Actualizar y resolver datos faltantes
+
+**Prioridad:** P0. **Dependencias:** PC-05. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero actualizar mi progreso y corregir un dato ausente.
+
+**Aceptación:** Sincronizar con caché y límites; conservar último dato correcto ante error. Permitir valores manuales con procedencia y fecha sin sobrescribir el snapshot oficial. Detectar conflictos y confirmar cuál usar; el progreso manual no se presenta como verificado por Blizzard.
+
+### PC-07 — Recetas conocidas y requisitos
+
+**Prioridad:** P0. **Dependencias:** PC-01, PC-05. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero una ruta que pueda ejecutar.
+
+**Aceptación:** Cruzar IDs de recetas con el catálogo existente; estado conocida/desconocida/sin datos. Modelar instructor, compra, reputación, misión, especialización y acceso cuando apliquen. Una receta no conocida solo entra con un paso viable de aprendizaje y su costo/tiempo.
+
+### PC-08 — Objetivo y restricciones
+
+**Prioridad:** P0. **Dependencias:** PC-05. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero llegar al máximo de una profesión en una expansión concreta.
+
+**Aceptación:** Elegir objetivo y modo: menor tiempo activo o menor tiempo total transcurrido. Permitir presupuesto, compra/recolección, inventario manual, recetas accesibles y esperas. Si no se llega al máximo bajo esas restricciones, explicar el bloqueo; no cambiar silenciosamente el objetivo.
+
+### PC-09 — Reglas de ganancia de habilidad
+
+**Prioridad:** P0. **Dependencias:** PC-01, PC-07. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero cantidades basadas en cómo sube realmente la habilidad.
+
+**Aceptación:** Mantener reglas por receta, tier y parche: niveles válidos, ganancia, probabilidades verificadas y umbrales. Una receta sin posibilidad de progreso no avanza el plan. No deducir probabilidades exactas únicamente de colores; evitar confundir dificultad/calidad de fabricación con probabilidad de subir habilidad.
+
+### PC-10 — Motor de ruta rápida
+
+**Prioridad:** P0. **Dependencias:** PC-08, PC-09. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero la mejor ruta encontrada para mi objetivo y restricciones.
+
+**Aceptación:** Modelar habilidad, desbloqueos y recursos limitados relevantes; comparar secuencias completas y no solo la mejor receta inmediata. Incluir fabricación, aprendizaje, adquisición, desplazamiento y espera sin duplicar intervalos concurrentes. Mostrar supuestos, cobertura y método; llamar óptima solo a una solución demostrada dentro de un modelo completo y acotado.
+
+### PC-11 — Cantidades y materiales de la ruta
+
+**Prioridad:** P0. **Dependencias:** PC-10. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero saber qué comprar y fabricar en cada tramo.
+
+**Aceptación:** Mostrar receta o acción, rango inicial/final, ejecuciones, materiales, prerrequisitos y momento de cambiar. Distinguir ejecuciones de unidades producidas. Consolidar compras sin duplicar inventario; con azar mostrar cantidad esperada y reserva explícita, sin garantía. Si faltan probabilidades, no dar una cantidad exacta falsa.
+
+### PC-12 — Costos y recuperación por ventas
+
+**Prioridad:** P0. **Dependencias:** PC-11. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero conocer el capital necesario para seguir la ruta.
+
+**Aceptación:** Reutilizar precios y comisiones existentes; separar desembolso, costo de oportunidad y recuperación hipotética por venta. No financiar la viabilidad con ventas futuras no realizadas. Precio ausente deja costo incompleto; precio mínimo no acredita oferta suficiente.
+
+### PC-13 — Pantalla Mi personaje y ruta
+
+**Prioridad:** P0. **Dependencias:** PC-05, PC-11, PC-12. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero ver mi progreso y el siguiente paso.
+
+**Aceptación:** Tarjetas por profesión/tier y ruta con tramos desplegables, lista de compras, presupuesto y tiempos desglosados. Mostrar bloqueos, fuentes y actualización. Conservar diseño Glassy Dashboard v2 y recursos Wowhead existentes; accesible en móvil y teclado. Sin datos, usar estados explicados.
+
+### PC-14 — Seguir y recalcular el progreso
+
+**Prioridad:** P0. **Dependencias:** PC-06, PC-13. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero que la ruta se adapte a mi avance real.
+
+**Aceptación:** Registrar habilidad alcanzada, ejecuciones y consumo manual, o actualizar desde la API. Marcar un paso no inventa una subida real. Recalcular desde estado observado, preservar historial y compras; evitar consumo duplicado y regresiones por un snapshot atrasado.
+
+### PC-15 — Comprobar conexión y planificador
+
+**Prioridad:** P0. **Dependencias:** PC-03, PC-04, PC-14. **Estado:** ver la tabla «Ampliación».
+
+Como responsable, quiero verificar que el módulo funciona y aísla las cuentas.
+
+**Aceptación:** Probar OAuth cancelado/expirado, state inválido, acceso entre usuarios, personaje sin datos y límites del proveedor. Probar tier erróneo, máximo ya logrado, receta sin progreso, presupuesto insuficiente, azar y bloqueos. Comparar el optimizador con solución exhaustiva en un caso pequeño; documentar qué se verificó con cuenta real.
+
+### PC-16 — Comparar rápida, barata y equilibrada
+
+**Prioridad:** P1. **Dependencias:** PC-10, PC-12. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero conocer el costo de ahorrar tiempo.
+
+**Aceptación:** Mostrar alternativas con tiempo, costo y restricciones comparables; conservar la rápida como objetivo principal. Definir explícitamente ponderaciones del modo equilibrado y evitar pesos ocultos; no llamar rápida a una ruta elegida solo por precio.
+
+### PC-17 — Recolección y pesca
+
+**Prioridad:** P1. **Dependencias:** PC-09, PC-10. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero rutas apropiadas para profesiones que suben recolectando.
+
+**Aceptación:** Modelar acciones y zonas verificadas en vez de inventar recetas. Mostrar acceso, nivel, viaje, competencia y tasas como supuestos. Sin datos fiables, ofrecer guía orientativa o parcial; no prometer minutos exactos ni un recorrido óptimo.
+
+### PC-18 — Importación complementaria opcional
+
+**Prioridad:** P1. **Dependencias:** PC-06, PC-07. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero completar datos que la API no expone.
+
+**Aceptación:** Permitir importación de un formato documentado con versión, personaje, fecha y esquema validado. Tratar el contenido como datos, nunca ejecutar Lua ni código subido. Un addon exportador es una tarea adicional, no una capacidad asumida; no automatizar juego, compras o fabricación.
+
+### PC-19 — Conocimiento y especializaciones
+
+**Prioridad:** P1. **Dependencias:** PC-08, PC-09. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero planificar conocimiento sin confundirlo con habilidad.
+
+**Aceptación:** Presentar objetivo separado; usar actividades, requisitos y límites de tiempo verificados para la versión. No prometer completar un árbol al alcanzar el máximo de habilidad. Cambios irreversibles se presentan como decisiones del usuario, no se ejecutan automáticamente.
+
+### PC-20 — Varios personajes y otras versiones
+
+**Prioridad:** P2. **Dependencias:** PC-15. **Estado:** ver la tabla «Ampliación».
+
+Como jugador, quiero mantener planes independientes para mis personajes.
+
+**Aceptación:** Aislar perfiles, inventario, objetivos y rutas por propietario y contexto. Validar soporte por versión antes de activarlo. No asumir transferencias de materiales vinculados ni mezclar progreso entre personajes.

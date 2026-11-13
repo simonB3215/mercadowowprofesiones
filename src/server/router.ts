@@ -15,7 +15,8 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
-import { levelingProfessions, levelingPlan, parseManualPrices } from './leveling.js';
+import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds } from './leveling.js';
+import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, ownedCharacter, characterProfessions } from './battlenet.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
@@ -482,6 +483,258 @@ route('GET', '/api/leveling', async (_r, _p, u, db) => {
 });
 
 // ---------------------------------------------------------------------------
+// Ruta recomendada (más rápida o más barata) sin cuenta: nivel indicado a mano (PC-08 a PC-12, PC-16)
+// ---------------------------------------------------------------------------
+
+/** Opciones de la ruta desde la petición (query o cuerpo JSON). El presupuesto llega en oro. */
+function routeOptions(get: (k: string) => unknown) {
+  const s = (k: string) => { const v = get(k); return v === undefined || v === null || v === '' ? null : String(v); };
+  const mode = s('mode') ?? 'rapida';
+  if (mode !== 'rapida' && mode !== 'barata') throw new HttpError(400, 'Modo inválido: «rapida» o «barata».');
+  const chance = s('chance') ?? 'comunidad';
+  if (chance !== 'comunidad' && chance !== 'garantizado') throw new HttpError(400, 'Probabilidad inválida: «comunidad» o «garantizado».');
+  const budgetRaw = s('budget');
+  let budget: Q | null = null;
+  if (budgetRaw !== null) {
+    if (!/^\d{1,7}(\.\d{1,4})?$/.test(budgetRaw)) throw new HttpError(400, 'Presupuesto inválido (oro, hasta 4 decimales).');
+    budget = Q.parse(budgetRaw).mul(COPPER_PER_GOLD);
+  }
+  const bool = (k: string, def: boolean) => { const v = get(k); return v === undefined || v === null || v === '' ? def : v === true || v === '1' || v === 'true'; };
+  return {
+    mode: mode as 'rapida' | 'barata', chanceModel: chance as 'comunidad' | 'garantizado', budget, budgetGold: budgetRaw,
+    trainerOnly: bool('trainerOnly', true), useKnown: bool('useKnown', true),
+    manualRaw: s('manual'), manual: parseManualPrices(s('manual')),
+  };
+}
+
+route('GET', '/api/route', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const o = routeOptions((k) => u.searchParams.get(k));
+  return routePlan(db, ctx, await loadSettings(db), {
+    ...o, professionId: int(u.searchParams.get('profession'))!, from: int(u.searchParams.get('from'), 1)!, to: int(u.searchParams.get('to'), 300)!,
+    currentMax: int(u.searchParams.get('currentMax')) ?? null, characterLevel: int(u.searchParams.get('characterLevel')) ?? null,
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Battle.net: conexión, personajes propios, profesiones, rutas guardadas y progreso (PC-02 a PC-15)
+// ---------------------------------------------------------------------------
+
+route('GET', '/api/battlenet/status', async (req, _p, _u, db) => {
+  const cfg = battlenetConfig();
+  const s = cfg.configured ? await currentSession(db, req) : null;
+  return {
+    configured: cfg.configured, missing: cfg.missing, redirectUri: redirectUri(req), namespaces: profileNamespaces(s?.region ?? 'us'),
+    connected: Boolean(s), account: s ? { battletag: s.battletag, region: s.region, expiresAt: s.expiresAt, scope: s.scope, tokenOk: s.token !== null } : null,
+  };
+});
+route('GET', '/api/battlenet/start', async (req, _p, u, db) => startLogin(db, req, u.searchParams.get('region') ?? 'us'));
+route('GET', '/api/auth/battlenet/callback', async (req, _p, u, db) => finishLogin(db, req, u));
+route('POST', '/api/battlenet/disconnect', async (req, _p, _u, db) => {
+  checkSameOrigin(req);
+  const b = await body(req);
+  return disconnect(db, req, b.deleteData === true);
+});
+
+async function characterView(db: Db, c: any) {
+  const sync = await db.query<any>(`select status, http_status, detail, checked_at from character_sync where character_id=$1`, [c.id]);
+  return {
+    id: c.id, name: c.name, level: c.level, className: c.class_name, raceName: c.race_name, faction: c.faction,
+    realm: { id: c.realm_id === null ? null : Number(c.realm_id), slug: c.realm_slug, name: c.realm_name }, namespace: c.namespace,
+    syncedAt: new Date(c.synced_at).toISOString(),
+    professionSync: sync[0] ? { status: sync[0].status, httpStatus: sync[0].http_status, detail: sync[0].detail, checkedAt: new Date(sync[0].checked_at).toISOString() } : null,
+    professions: await characterProfessions(db, c.id),
+  };
+}
+
+route('GET', '/api/me/characters', async (req, _p, _u, db) => {
+  const s = await requireSession(db, req);
+  const rows = await db.query<any>(`select * from bnet_character where account_id=$1 order by level desc nulls last, name`, [s.accountId]);
+  return { characters: await Promise.all(rows.map((c) => characterView(db, c))) };
+});
+route('POST', '/api/me/characters/sync', async (req, _p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const r = await syncCharacters(db, s);
+  const rows = await db.query<any>(`select * from bnet_character where account_id=$1 order by level desc nulls last, name`, [s.accountId]);
+  return { ...r, characters: await Promise.all(rows.map((c) => characterView(db, c))) };
+});
+route('GET', '/api/me/characters/:id', async (req, p, _u, db) => {
+  const s = await requireSession(db, req);
+  return { character: await characterView(db, await ownedCharacter(db, s, p.id)) };
+});
+route('POST', '/api/me/characters/:id/professions/sync', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  const r = await syncProfessions(db, s, c);
+  return { result: r, character: await characterView(db, c) };
+});
+route('PUT', '/api/me/characters/:id/professions/:pid', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  const pid = int(p.pid)!;
+  const b = await body(req);
+  const opt = (v: unknown, name: string) => {
+    if (v === null || v === undefined || v === '') return null;
+    const n = Number(v);
+    if (!Number.isInteger(n) || n < 0 || n > 1000) throw new HttpError(400, `${name} inválido (entero entre 0 y 1000).`);
+    return n;
+  };
+  const skill = opt(b.skillPoints, 'Nivel');
+  const max = opt(b.maxSkillPoints, 'Máximo');
+  if (skill !== null && max !== null && skill > max) throw new HttpError(400, 'El nivel no puede superar el máximo.');
+  const preferred = b.preferred === 'blizzard' ? 'blizzard' : 'manual';
+  await db.query(
+    `insert into profession_manual (character_id, profession_id, skill_points, max_skill_points, note, preferred, updated_at) values ($1,$2,$3,$4,$5,$6,now())
+     on conflict (character_id, profession_id) do update set skill_points=excluded.skill_points, max_skill_points=excluded.max_skill_points,
+       note=excluded.note, preferred=excluded.preferred, updated_at=now()`,
+    [c.id, pid, skill, max, typeof b.note === 'string' ? b.note.slice(0, 200) : null, preferred],
+  );
+  return { character: await characterView(db, c) };
+});
+route('DELETE', '/api/me/characters/:id/professions/:pid', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  await db.query(`delete from profession_manual where character_id=$1 and profession_id=$2`, [c.id, int(p.pid)]);
+  return { character: await characterView(db, c) };
+});
+
+/** Ruta para un personaje propio: nivel de partida = el observado (Blizzard o manual) salvo que se indique otro. */
+async function characterRoute(db: Db, s: Awaited<ReturnType<typeof requireSession>>, c: any, b: any, fromOverride?: number) {
+  const ctx = ctxFrom(b);
+  const o = routeOptions((k) => b[k]);
+  const professionId = Number(b.professionId);
+  if (!Number.isInteger(professionId)) throw new HttpError(400, 'Elige una profesión.');
+  const prof = (await characterProfessions(db, c.id)).find((x) => x.professionId === professionId);
+  const observed = fromOverride ?? (b.from !== undefined && b.from !== null && b.from !== '' ? Number(b.from) : prof?.effective.skillPoints ?? null);
+  if (observed === null || !Number.isInteger(observed)) {
+    throw new HttpError(400, 'No se conoce el nivel actual de esa profesión: sincroniza con Blizzard o indícalo a mano.');
+  }
+  const startSource = fromOverride !== undefined ? 'progreso' : b.from !== undefined && b.from !== null && b.from !== '' ? 'manual' : prof?.effective.source ?? 'manual';
+  const to = Number(b.to ?? 300);
+  let known: Set<number> | undefined;
+  let unmatchedKnown = 0;
+  if (o.useKnown && prof?.blizzard?.knownRecipes?.length) {
+    const k = await knownSpellIds(db, ctx.version, professionId, prof.blizzard.knownRecipes);
+    known = k.known;
+    unmatchedKnown = k.unmatched;
+  }
+  const result = await routePlan(db, ctx, await loadSettings(db), {
+    professionId, from: Math.max(1, observed), to, mode: o.mode, budget: o.budget, trainerOnly: o.trainerOnly, chanceModel: o.chanceModel,
+    manual: o.manual, known, currentMax: prof?.effective.maxSkillPoints ?? null, characterLevel: c.level ?? null,
+  });
+  return {
+    result: { ...result, startSkill: observed, startSource, unmatchedKnownRecipes: unmatchedKnown },
+    constraints: { ...ctx, professionId, to, mode: o.mode, budget: o.budgetGold, trainerOnly: o.trainerOnly, chanceModel: o.chanceModel, useKnown: o.useKnown, manual: o.manualRaw },
+    startSkill: observed, startSource,
+  };
+}
+
+route('POST', '/api/me/characters/:id/route', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  return (await characterRoute(db, s, c, await body(req))).result;
+});
+
+const toJson = (v: unknown) => JSON.stringify(v, jsonReplacer);
+function planView(r: any, events: any[] = []) {
+  return {
+    id: r.id, characterId: r.character_id, professionId: r.profession_id, target: r.target, mode: r.mode, algorithm: r.algorithm,
+    constraints: r.constraints, startSkill: r.start_skill, startSource: r.start_source, status: r.status,
+    createdAt: new Date(r.created_at).toISOString(), updatedAt: new Date(r.updated_at).toISOString(), result: r.result,
+    progress: events.map((e) => ({ observedSkill: e.observed_skill, source: e.source, note: e.note, at: new Date(e.created_at).toISOString() })),
+  };
+}
+async function ownedPlan(db: Db, accountId: string, id: string) {
+  if (!uuidRe.test(id)) throw new HttpError(400, 'Identificador de ruta inválido.');
+  const rows = await db.query<any>(`select * from leveling_plan where id=$1 and account_id=$2`, [id, accountId]);
+  if (!rows.length) throw new HttpError(404, 'Ruta no encontrada.');
+  return rows[0];
+}
+
+route('GET', '/api/me/plans', async (req, _p, u, db) => {
+  const s = await requireSession(db, req);
+  const ch = u.searchParams.get('character');
+  if (ch && !uuidRe.test(ch)) throw new HttpError(400, 'Identificador de personaje inválido.');
+  const rows = await db.query<any>(
+    `select id, character_id, profession_id, target, mode, algorithm, constraints, start_skill, start_source, status, created_at, updated_at, null as result
+     from leveling_plan where account_id=$1 and ($2::uuid is null or character_id=$2::uuid) order by updated_at desc limit 50`,
+    [s.accountId, ch || null],
+  );
+  return { plans: rows.map((r) => planView(r)) };
+});
+route('POST', '/api/me/plans', async (req, _p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const b = await body(req);
+  const c = await ownedCharacter(db, s, String(b.characterId ?? ''));
+  const r = await characterRoute(db, s, c, b);
+  const row = await db.query<any>(
+    `insert into leveling_plan (account_id, character_id, profession_id, target, mode, constraints, algorithm, start_skill, start_source, result, status)
+     values ($1,$2,$3,$4,$5,$6::text::jsonb,$7,$8,$9,$10::text::jsonb,$11) returning *`,
+    [s.accountId, c.id, r.constraints.professionId, r.constraints.to, r.constraints.mode, toJson(r.constraints), 'algorithm' in r.result ? r.result.algorithm : 'completado', r.startSkill, r.startSource, toJson(r.result), 'completed' in r.result ? 'completado' : 'activo'],
+  );
+  return { plan: planView(row[0]) };
+});
+route('GET', '/api/me/plans/:id', async (req, p, _u, db) => {
+  const s = await requireSession(db, req);
+  const plan = await ownedPlan(db, s.accountId, p.id);
+  const ev = await db.query<any>(`select * from progress_event where plan_id=$1 order by created_at`, [plan.id]);
+  return { plan: planView(plan, ev) };
+});
+route('DELETE', '/api/me/plans/:id', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const plan = await ownedPlan(db, s.accountId, p.id);
+  await db.query(`delete from leveling_plan where id=$1 and account_id=$2`, [plan.id, s.accountId]);
+  return { ok: true };
+});
+/**
+ * Progreso (PC-14): el usuario indica el nivel observado (o se lee de Blizzard) y la ruta se recalcula desde ahí con las
+ * mismas restricciones y los precios actuales. Cada observación queda registrada con su procedencia.
+ */
+route('POST', '/api/me/plans/:id/progress', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const plan = await ownedPlan(db, s.accountId, p.id);
+  const c = await ownedCharacter(db, s, plan.character_id);
+  const b = await body(req);
+  let observed: number | null = null;
+  let source = 'manual';
+  if (b.sync === true) {
+    await syncProfessions(db, s, c);
+    const prof = (await characterProfessions(db, c.id)).find((x) => x.professionId === Number(plan.profession_id));
+    observed = prof?.blizzard?.skillPoints ?? null;
+    source = 'blizzard';
+    if (observed === null) throw new HttpError(409, 'Blizzard no devolvió el nivel de esta profesión: indícalo a mano.');
+    // Un dato de Blizzard más bajo que el último registrado puede ser una foto atrasada: no se retrocede sin confirmación.
+    const last = await db.query<any>(`select max(observed_skill) as m from progress_event where plan_id=$1`, [plan.id]);
+    const latest = Math.max(Number(plan.start_skill), Number(last[0]?.m ?? 0));
+    if (observed < latest) {
+      throw new HttpError(409, `Blizzard indica ${observed}, menos que el último nivel registrado (${latest}). Puede ser un dato atrasado: si ${observed} es correcto, indícalo a mano.`);
+    }
+  } else {
+    observed = Number(b.observedSkill);
+    if (!Number.isInteger(observed) || observed < 1 || observed > 1000) throw new HttpError(400, 'Nivel observado inválido.');
+  }
+  await db.query(`insert into progress_event (plan_id, observed_skill, source, note) values ($1,$2,$3,$4)`,
+    [plan.id, observed, source, typeof b.note === 'string' ? b.note.slice(0, 200) : null]);
+  if (observed >= Number(plan.target)) {
+    await db.query(`update leveling_plan set status='completado', updated_at=now() where id=$1`, [plan.id]);
+  } else {
+    const r = await characterRoute(db, s, c, { ...plan.constraints }, observed);
+    await db.query(`update leveling_plan set result=$2::text::jsonb, status='activo', updated_at=now() where id=$1`, [plan.id, toJson(r.result)]);
+  }
+  const fresh = await ownedPlan(db, s.accountId, plan.id);
+  const ev = await db.query<any>(`select * from progress_event where plan_id=$1 order by created_at`, [plan.id]);
+  return { plan: planView(fresh, ev) };
+});
+
+// ---------------------------------------------------------------------------
 // Ajustes
 // ---------------------------------------------------------------------------
 
@@ -738,7 +991,8 @@ export async function handle(req: Request): Promise<Response> {
       if (!m) continue;
       const params = Object.fromEntries(r.keys.map((k, i) => [k, decodeURIComponent(m[i + 1])]));
       const db = await getDb();
-      return json(await r.handler(req, params, url, db));
+      const out = await r.handler(req, params, url, db);
+      return out instanceof Response ? out : json(out);
     }
     return json({ error: 'Ruta no encontrada.' }, 404);
   } catch (e) {

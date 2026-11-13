@@ -13,9 +13,10 @@ const Materials = lazy(() => import('./pages/Materials.js').then((m) => ({ defau
 const Advanced = lazy(() => import('./pages/Advanced.js').then((m) => ({ default: m.Advanced })));
 const Ledger = lazy(() => import('./pages/Ledger.js').then((m) => ({ default: m.Ledger })));
 const Leveling = lazy(() => import('./pages/Leveling.js').then((m) => ({ default: m.Leveling })));
+const Character = lazy(() => import('./pages/Character.js').then((m) => ({ default: m.Character })));
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
 import {
-  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, type Icon,
+  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, type Icon,
 } from '@phosphor-icons/react';
 
 const NAV: Array<[string, string, Icon]> = [
@@ -24,7 +25,8 @@ const NAV: Array<[string, string, Icon]> = [
   ['/plan', 'Fabricación', Hammer],
   ['/materiales', 'Materiales', Package],
   ['/nivel', 'Subir nivel', ArrowFatLinesUp],
-  ['/perfil', 'Personaje', UserCircle],
+  ['/personaje', 'Mi personaje', IdentificationCard],
+  ['/perfil', 'Perfil manual', UserCircle],
   ['/registro', 'Registro real', Receipt],
   ['/avanzado', 'Simulador', Calculator],
   ['/datos', 'Calidad de datos', ShieldCheck],
@@ -82,6 +84,7 @@ function App() {
     case 'avanzado': page = <Advanced />; break;
     case 'registro': page = <Ledger />; break;
     case 'nivel': page = <Leveling />; break;
+    case 'personaje': page = <Character />; break;
     case 'ajustes': page = <SettingsPage />; break;
     default: page = <div className="empty card">Página no encontrada. <a href="#/">Volver al comparador</a></div>;
   }

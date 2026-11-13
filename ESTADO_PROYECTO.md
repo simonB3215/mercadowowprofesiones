@@ -5,7 +5,7 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 107 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto.
+- 137 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
@@ -46,9 +46,19 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Estados de carga (esqueleto), error (con «Reintentar») y vacío en todas las páginas.
   - Tableta: barra lateral solo con iconos. Móvil: navegación horizontal y tablas convertidas en tarjetas.
   - Teclado con foco visible, contraste AA medido y `prefers-reduced-motion`.
-  - Páginas secundarias cargadas bajo demanda: paquete inicial de 269 kB (81 kB comprimido).
+  - Páginas secundarias cargadas bajo demanda: paquete inicial de 281 kB (83 kB comprimido; 13-11-2026).
 - **Iconos de WoW:** tabla `visual_asset`, `GET /api/assets` y `npm run sync:icons`. 2 452 recursos de Wowhead Forever (12 profesiones + 2 440 objetos) y 263 objetos con el icono oficial de Blizzard; ninguno sin icono. Si una imagen falla: Blizzard y, después, un marcador neutro.
 - **Robustez de la base de datos:** las lecturas de más de 30 s fallan con un error visible y renuevan el pool (D26).
+- **Mi personaje** (`#/personaje`, PC-01 a PC-16, D32 a D34; estado por PC en el backlog, sección «Ampliación»):
+  - Conexión con Battle.net (inicio de sesión oficial, `state` de un solo uso, token cifrado en el servidor, desconectar y borrar datos).
+  - Personajes propios con aislamiento por cuenta.
+  - Profesiones de Blizzard o manuales, con procedencia.
+  - Ruta **más rápida** (tiempo activo = fabricaciones × tiempo de lanzamiento de Wowhead) o más barata, con presupuesto, «solo naranja» y recetas conocidas.
+  - Por paso: fabricaciones esperadas frente al mínimo garantizado, requisitos de rango (reglas de Classic, sin verificar), bloqueos, recuperación hipotética por venta.
+  - Rutas guardadas con progreso y recálculo.
+  - Sin cuenta, calcula con el nivel escrito a mano. Revisado en el navegador a 1024 y 375 px en ese modo.
+  - Con datos reales: Alquimia 1→300 rápida = 15,4 min y 53,90 o; barata = 23,7 min y 38,59 o; con 45 o de presupuesto = 16,1 min.
+  - **El flujo con cuenta real no está probado:** solo con respuestas simuladas de Blizzard (`tests/battlenet.test.ts`).
 - **Servidor MCP** (D30): 7 herramientas de solo lectura para consultar desde Claude el estado del mercado, recetas rentables, detalle, materiales y rutas de subida de nivel. Probado por stdio con los datos reales de Supabase (13-11-2026) y con pruebas automáticas.
 - **Acceso:** contraseña compartida (`APP_PASSWORD`), cookie HttpOnly firmada; el cron usa `CRON_SECRET`.
 
@@ -67,6 +77,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Iconos de objetos nuevos | Hay que ejecutar `npm run sync:icons` tras cada `sync:catalog` | Los objetos sin resolver se muestran con un marcador neutro. |
 | Subida de nivel: tramos altos | Por encima de ≈ 250 algunas profesiones necesitan recetas de patrón o materiales de vendedor sin precio en la casa de subastas | Marcar «Incluir recetas de patrón…» o indicar precios manuales. La probabilidad en amarillo y verde es una estimación de la comunidad. |
 | Subida de nivel: datos de Wowhead | Copiados a mano el 13-11-2026 (Wowhead bloquea descargas automáticas) | Repetir la copia si Forever cambia recetas o umbrales. |
+| Battle.net (Mi personaje) | Implementado y probado con respuestas simuladas. Tablas creadas en Supabase (migración `20261115000000`, 13-11-2026). Blizzard no documenta perfiles de Forever ni profesiones en Classic. | Registrar las URL de retorno en el cliente de Blizzard (README) y que el usuario conecte su cuenta. Así se comprueba si `profile-forever-us` lista personajes y si `/professions` responde; si no, usar datos manuales. |
+| Rutas: tiempos no incluidos | Solo se cuenta el tiempo de fabricación | Sin datos verificados de viajes, compras, aprendizaje ni recolección (PC-17). |
 | Tema claro | Sustituido por el estilo del juego (oscuro) a petición del usuario | Recuperable con los tokens de la primera iteración (historial de git). |
 
 ## Decisiones
@@ -79,14 +91,16 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29); servidor MCP (D30); reutilización en comparador y plan (D31).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29); servidor MCP (D30); reutilización en comparador y plan (D31); conexión con Battle.net (D32), datos del personaje con procedencia (D33) y ruta más rápida (D34).
 
 ## Siguientes pasos
 
-1. Verificar las comisiones en el juego.
-2. PB-23: tablas verificadas de desencantado, prospección y molienda para Forever.
-3. PB-20 y PB-21: confirmar que no aplican en Forever (sin calidades de fabricación ni producción adicional) y cerrarlos.
-4. Revisar la cobertura del catálogo en «Calidad de datos».
+1. Battle.net: registrar las URL de retorno, conectar una cuenta real y anotar en `docs/VALIDACION_FUENTES.md` qué devuelve Forever (personajes, profesiones).
+2. PC-14 y PC-08: descontar inventario y registrar fabricaciones y consumo en el progreso.
+3. Verificar las comisiones en el juego.
+4. PB-23: tablas verificadas de desencantado, prospección y molienda para Forever.
+5. PB-20 y PB-21: confirmar que no aplican en Forever (sin calidades de fabricación ni producción adicional) y cerrarlos.
+6. Revisar la cobertura del catálogo en «Calidad de datos».
 
 ## Cómo continuar sin empezar de nuevo
 

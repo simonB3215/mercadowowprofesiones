@@ -440,3 +440,46 @@ details > summary { cursor: pointer; font-weight: 600; color: var(--gold-soft); 
 .login label { display: grid; gap: 4px; font-weight: 600; font-size: var(--text-sm); }
 .login input { width: 100%; }
 .login .alert { margin: 0; }
+
+/* ---- Mi personaje (PC-13) ---- */
+a.button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; border: 1px solid #6b5f45; white-space: nowrap; }
+a.button.primary { background: linear-gradient(180deg, var(--btn-red-hover) 0%, var(--btn-red) 45%, var(--btn-red-dark) 100%); color: var(--gold); border-color: #c9a227; text-shadow: 0 1px 1px #000; box-shadow: inset 0 1px 0 rgba(255, 200, 150, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.5); }
+a.button:hover { filter: brightness(1.15); }
+.pc-h2 { margin: 0 0 var(--space-2); font-size: 1.1rem; display: flex; align-items: center; gap: var(--space-2); }
+.pc-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.pc-row > div:first-child { min-width: 0; flex: 1 1 320px; }
+.pc-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.ok-icon { color: var(--color-ok); }
+.pc-chars { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-2); }
+.pc-char { display: grid; gap: 2px; padding: var(--space-3); border-radius: var(--radius); border: 1px solid var(--color-border); background: var(--glass-bg); cursor: pointer; position: relative; min-height: 44px; }
+.pc-char input { position: absolute; opacity: 0; pointer-events: none; }
+.pc-char.on { border-color: var(--gold-soft); box-shadow: 0 0 0 1px var(--gold-line) inset; }
+.pc-char:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pc-char-name { font-weight: 700; color: #fff; }
+.pc-table { width: 100%; margin-top: var(--space-2); }
+.pc-table td, .pc-table th { padding: 8px var(--space-3); vertical-align: top; }
+.pc-row-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: flex-end; }
+.pc-edit { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-3); align-items: end; margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--color-border); }
+.pc-edit .pc-note { grid-column: span 2; }
+.pc-full { grid-column: 1 / -1; margin: 0; }
+.pc-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-3); align-items: start; }
+.pc-hint { font-size: var(--text-xs); color: var(--color-muted-fg); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-weight: 400; }
+.pc-mode { border: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.pc-mode legend { padding: 0; margin-bottom: 4px; }
+.pc-mode-opt { position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--glass-bg); cursor: pointer; font-weight: 600; }
+.pc-mode-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.pc-mode-opt.on { border-color: #c9a227; color: var(--gold); }
+.pc-mode-opt:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+.pc-checks { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.pc-compare { color: var(--color-fg); display: block; }
+.pc-blockers { display: grid; gap: var(--space-2); }
+.pc-blockers p { margin: 0; }
+.pc-crafts { margin: 0; color: var(--color-muted-fg); }
+.pc-plans { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.pc-plans li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+.pc-progress { margin-top: var(--space-3); display: grid; gap: var(--space-3); }
+.pc-history { margin: 0; padding-left: 1.2rem; color: var(--color-muted-fg); }
+@media (max-width: 640px) {
+  .pc-edit .pc-note { grid-column: auto; }
+  .pc-row-actions { justify-content: flex-start; }
+}
