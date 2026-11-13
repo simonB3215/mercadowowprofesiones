@@ -5,6 +5,7 @@ Web en español para consultar los crafteables de las profesiones de **World of 
 - **Precios de la casa de subastas:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis) (`dynamic-forever-us`, foto de cada casa, incluida la neutral de Aguasnegras). Si falla o no hay credenciales, los CSV públicos de [TradeSkillMaster](https://tradeskillmaster.com/public-data) (`/forever/…`), que no publican Aguasnegras.
 - **Demanda:** estadísticas regionales de TSM (tasa de venta y ventas por día).
 - **Catálogo:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis), namespace `static-forever-us`. Necesita credenciales.
+- **Subida de nivel:** recetas, niveles de aprendizaje y umbrales de dificultad de [Wowhead (WoW Forever)](https://www.wowhead.com/forever), guardados en `data/leveling/forever-wowhead.json` (copiados a mano; ver `docs/VALIDACION_FUENTES.md`).
 - **Base de datos:** Supabase (PostgreSQL). **Despliegue:** Vercel.
 
 Especificación: [Documentacion_Web_Crafteo_TSM.md](Documentacion_Web_Crafteo_TSM.md) · Backlog: [Product_Backlog_Web_Crafteo_TSM.md](Product_Backlog_Web_Crafteo_TSM.md) · Estado: [ESTADO_PROYECTO.md](ESTADO_PROYECTO.md)
@@ -112,6 +113,8 @@ src/server/evaluate.ts       Evaluación de recetas contra un mercado
 src/server/router.ts         API interna
 supabase/migrations/         Esquema SQL (RLS activado)
 web/src/                     Interfaz React
+src/server/leveling.ts       Ruta de subida de nivel (datos de Wowhead + precios)
+data/leveling/               Recetas y umbrales de dificultad de Wowhead (WoW Forever)
 scripts/                     Servidor local, migraciones, sincronizaciones, sonda de Blizzard
 tests/                       Vitest (motor, ingesta, API)
 docs/                        Validación de fuentes y decisiones técnicas
@@ -133,5 +136,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | POST | `/api/calculate` | Escenario con valores manuales |
 | POST | `/api/crafting-plan` | Lista de fabricación y compras |
 | GET | `/api/materials`, `/api/materials/{id}` | Vender un material frente a usarlo |
+| GET | `/api/leveling/professions` | Profesiones con datos de subida de nivel |
+| GET | `/api/leveling?profession=&from=&to=&trainerOnly=&manual=id:oro,…` | Ruta más barata de subida de nivel con costos y lista de compra |
 | CRUD | `/api/profiles`, `/api/scenarios`, `/api/plans`, `/api/ledger`, `/api/settings` | Datos del usuario |
 | POST | `/api/tools/expected` | Calculadora manual de valor esperado |

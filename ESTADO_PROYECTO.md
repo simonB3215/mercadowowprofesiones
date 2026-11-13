@@ -34,6 +34,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Perfil (profesiones, recetas conocidas, inventario).
   - Lista de fabricación y compras con inventario compartido.
   - Materiales: vender o usar, y oro por hora con datos del usuario.
+  - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 28 o completa.
   - Registro real con correcciones sin duplicar.
   - Ajustes.
   - Calculadoras manuales avanzadas.
@@ -61,6 +62,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
 | Consultas colgadas con el pooler | Mitigado (límite de 30 s y renovación del pool) | Si se repite en producción, probar el pooler de sesión (puerto 5432) para el servidor local. Causa exacta sin confirmar. |
 | Iconos de objetos nuevos | Hay que ejecutar `npm run sync:icons` tras cada `sync:catalog` | Los objetos sin resolver se muestran con un marcador neutro. |
+| Subida de nivel: tramos altos | Por encima de ≈ 250 algunas profesiones necesitan recetas de patrón o materiales de vendedor sin precio en la casa de subastas | Marcar «Incluir recetas de patrón…» o indicar precios manuales. La probabilidad en amarillo y verde es una estimación de la comunidad. |
+| Subida de nivel: datos de Wowhead | Copiados a mano el 13-11-2026 (Wowhead bloquea descargas automáticas) | Repetir la copia si Forever cambia recetas o umbrales. |
 | Tema claro | Sustituido por el estilo del juego (oscuro) a petición del usuario | Recuperable con los tokens de la primera iteración (historial de git). |
 
 ## Decisiones
@@ -73,7 +76,7 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27).
 
 ## Siguientes pasos
 

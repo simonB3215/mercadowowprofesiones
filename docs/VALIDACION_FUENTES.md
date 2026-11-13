@@ -56,6 +56,20 @@ La API no nombra el modo de cada grupo de casas. Se asignó comparando el `minBu
 Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = precio unitario mínimo; `marketValue` = media ponderada por cantidad del 15 % más barato del volumen publicado; `historical` sale del historial propio (media de los promedios diarios de 14 días). Las subastas sin compra inmediata se ignoran. Las variantes con `bonus_lists` del mismo `item.id` se agrupan.
 - Otros namespaces probados (`static-classic-forever-us`, `static-forever1x-us`…) → 403.
 
+## Subida de nivel: Wowhead (WoW Forever)
+
+Fecha de extracción: 13 de noviembre de 2026. Archivo: `data/leveling/forever-wowhead.json`.
+
+- El catálogo de Blizzard **no publica** el nivel de aprendizaje ni los umbrales de dificultad (naranja, amarillo, verde, gris) de las recetas. Además, `skill_tier` de Forever indica `max_skill` = 75 en todas las profesiones (solo el rango Aprendiz), así que no sirve como máximo.
+- Fuente: los listados de hechizos de Wowhead `https://www.wowhead.com/forever/spells/professions/{tailoring, blacksmithing, leatherworking, alchemy, enchanting, engineering, mining}` y `/forever/spells/secondary-skills/{cooking, first-aid}`. Cada fila trae `learnedat`, `colors` (4 umbrales), `nskillup`, `source`, `trainingcost` (cobre), `creates` y `reagents`.
+- Wowhead responde **HTTP 202 sin contenido** a peticiones automáticas desde Node (protección contra bots). No se ha eludido: los datos se copiaron desde un navegador normal abriendo cada listado. Para actualizarlos hay que repetir ese proceso a mano.
+- La ruta `/forever/spells/professions/cooking` no es válida: devuelve un listado genérico limitado a 1000 filas. Cocina y Primeros auxilios están en `secondary-skills`.
+- El id de la línea de habilidad (`skill`) de Wowhead coincide con el id de profesión de Blizzard (197 Sastrería, 164 Herrería, 165 Peletería, 171 Alquimia, 333 Encantamiento, 202 Ingeniería, 185 Cocina, 129 Primeros auxilios, 186 Minería).
+- Recetas útiles por profesión: Sastrería 414, Herrería 442, Peletería 509, Alquimia 183, Encantamiento 230, Ingeniería 259, Cocina 130, Primeros auxilios 30, Minería 18.
+- `source` contiene 6 para las recetas de instructor. Las recetas **iniciales** (las que se conocen al aprender la profesión) no tienen fuente en Wowhead: se deducen como «sin fuente, naranja desde 0 y aprendizaje ≤ 50» (en esas filas `learnedat` coincide con el umbral amarillo). Es una inferencia y se muestra como tal.
+- Herboristería, Desuello y Pesca no se incluyen: se suben recolectando.
+- Los nombres en español se toman del catálogo de Blizzard solo si la receta coincide de forma única por objeto creado y materiales exactos; si no, se muestra el nombre inglés de Wowhead.
+
 ## Lo que falta y cómo afecta al cálculo
 
 | Laguna | Efecto |
@@ -67,4 +81,6 @@ Resumen por objeto (`src/server/providers/blizzardAuctions.ts`): `minBuyout` = p
 | Depósitos | No vienen en las fuentes; los introduce el usuario (perdidos o recuperables). |
 | Habilidad requerida por receta | No se valida el nivel del personaje; se indica en las notas. |
 | Desencantado y otros resultados aleatorios | Sin tablas verificadas: solo hay una calculadora manual de valor esperado. |
+| Probabilidad de subir un punto en amarillo y verde | No la publica ninguna fuente oficial. Se usa la fórmula de la comunidad (gris − nivel) / (gris − amarillo); el número de fabricaciones de esos tramos es una estimación. |
+| Materiales de vendedor en la subida de nivel | Si un material (p. ej. Hilo rúnico) no se publica en la casa de subastas, ese tramo queda «sin datos» hasta que el usuario indica un precio manual. |
 | Objetos con el mismo nombre y distinto ID | Se marcan como «datos insuficientes» salvo que el usuario asuma la variante manualmente. Nunca se unen precios por nombre. |

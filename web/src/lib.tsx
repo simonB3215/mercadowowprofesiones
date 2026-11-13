@@ -44,11 +44,16 @@ export const money = (j: any) => formatMoney(toQ(j));
 export function CoinText({ text }: { text: string }) {
   const parts = text.split(/ ([opc])(?=\s|$)/);
   if (parts.length === 1) return <>{text}</>;
-  return (
-    <span className="coins">
-      {parts.map((p, i) => (i % 2 === 1 ? <React.Fragment key={i}>{' '}<span className={`coin coin-${p}`}>{p}</span></React.Fragment> : p ? <React.Fragment key={i}>{p}</React.Fragment> : null))}
-    </span>
-  );
+  // Cada «número + moneda» va junto (no se parte entre líneas); los grupos sí pueden pasar a otra línea.
+  const out: React.ReactNode[] = [];
+  for (let i = 0; i < parts.length; i += 2) {
+    const num = parts[i];
+    const unit = parts[i + 1];
+    if (unit === undefined) { if (num) out.push(<React.Fragment key={i}>{num}</React.Fragment>); continue; }
+    const lead = num.match(/^\s*/)![0];
+    out.push(<React.Fragment key={i}>{lead}<span className="coin-group">{num.slice(lead.length)}{' '}<span className={`coin coin-${unit}`}>{unit}</span></span></React.Fragment>);
+  }
+  return <span className="coins">{out}</span>;
 }
 export function Money({ v }: { v: any }) {
   return <CoinText text={money(v)} />;

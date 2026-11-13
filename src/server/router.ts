@@ -14,6 +14,7 @@ import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
+import { levelingProfessions, levelingPlan, parseManualPrices } from './leveling.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
@@ -456,6 +457,24 @@ route('GET', '/api/materials', async (_r, _p, u, db) => {
     [version, search],
   );
   return { materials: rows };
+});
+
+// ---------------------------------------------------------------------------
+// Subida de nivel por profesión (recetas y dificultad de Wowhead + precios de la casa de subastas)
+// ---------------------------------------------------------------------------
+
+route('GET', '/api/leveling/professions', async (_r, _p, u, db) => levelingProfessions(db, u.searchParams.get('version') ?? 'forever'));
+
+route('GET', '/api/leveling', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const settings = await loadSettings(db);
+  return levelingPlan(db, ctx, settings, {
+    professionId: int(u.searchParams.get('profession'))!,
+    from: int(u.searchParams.get('from'), 1)!,
+    to: int(u.searchParams.get('to'), 300)!,
+    trainerOnly: u.searchParams.get('trainerOnly') !== '0',
+    manual: parseManualPrices(u.searchParams.get('manual')),
+  });
 });
 
 // ---------------------------------------------------------------------------

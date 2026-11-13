@@ -1,5 +1,7 @@
 node_modules/
 dist/
-data/
+# Datos locales (PGlite, descargas). Excepción: el conjunto de subida de nivel, que importa el servidor.
+data/*
+!data/leveling/
 .env
 *.log
