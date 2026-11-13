@@ -305,6 +305,8 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
   const sort = u.searchParams.get('sort') ?? 'profitUnit';
   const dir = u.searchParams.get('dir') === 'asc' ? 1 : -1;
   list.sort((a, b) => {
+    // Con un precio de venta atípico la ganancia no es fiable: va detrás de las confirmadas (salvo al ordenar por costo).
+    if (sort !== 'cost' && !a.sellCheck !== !b.sellCheck) return a.sellCheck ? 1 : -1;
     const x = metricKey(a, sort);
     const y = metricKey(b, sort);
     if (!x && !y) return a.name.localeCompare(b.name);
@@ -328,6 +330,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     items: slice.map((e) => ({
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope,
+      sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined,
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
     })),

@@ -57,7 +57,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Comisiones | Supuestos: 5 % (facción) y 15 % (Aguasnegras) | Comprobarlas en el juego y ajustarlas en «Ajustes». |
 | Objetos sin ficha en Blizzard | 345 objetos devuelven 404 (sobre todo recetas de «Temporada de descubrimiento») | Aparecen sin nombre; sus precios se usan por id. |
 | Desencantado y transformaciones aleatorias (PB-23) | Parcial | Calculadora manual de valor esperado; faltan tablas verificadas. |
-| Cron horario | Workflow de GitHub Actions listo | Añadir el secreto `CRON_SECRET` en GitHub (*Settings → Secrets and variables → Actions*). |
+| Cron horario | El workflow de GitHub Actions **falla** desde el 12-11-2026 (2 ejecuciones, error en el paso que llama a la web). La web responde bien y la sincronización manual funciona (≈ 15 s). Causa probable: falta el secreto `CRON_SECRET` en GitHub. Desde el 13-11-2026 el workflow indica la causa exacta como anotación y reintenta una vez. | Añadir el secreto `CRON_SECRET` en GitHub (*Settings → Secrets and variables → Actions*), con el mismo valor que en Vercel, y lanzar el workflow a mano para comprobarlo. |
+| Estadísticas regionales de TSM | TSM no publica un archivo regional nuevo desde el 11-11-2026 08:47 UTC; la descarga funciona | Pasarán a «Desactualizado» a las 48 h (ajustable en «Ajustes»). La página distingue «comprobado hace poco» de «datos viejos de la fuente». |
 | Historial | En marcha desde el 12-11-2026 para JcJ — Horda | `historical` gana fiabilidad a partir de unos 7–14 días. |
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
 | Consultas colgadas con el pooler | Mitigado (límite de 30 s y renovación del pool) | Si se repite en producción, probar el pooler de sesión (puerto 5432) para el servidor local. Causa exacta sin confirmar. |
@@ -76,7 +77,7 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28).
 
 ## Siguientes pasos
 

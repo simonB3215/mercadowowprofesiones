@@ -71,6 +71,38 @@ export interface PriceInfo {
   observed: Partial<Record<PriceField, string | null>>;
 }
 
+/**
+ * Precio de venta atípico (D28). Una sola publicación muy cara puede fijar el valor de mercado de una casa pequeña
+ * (p. ej. Calamar a la parrilla a 453 o). Sin el número de publicaciones por objeto, se compara con TSM regional:
+ *  - con referencia regional: atípico si supera ATYPICAL_SELL_RATIO veces el valor regional;
+ *  - sin referencia: «sin confirmar» si el ROI estimado supera ATYPICAL_ROI_NO_REF_PCT.
+ * No se cambia el precio: la receta pasa a «Datos insuficientes» con el motivo y se ordena al final.
+ */
+export const ATYPICAL_SELL_RATIO = 3;
+export const ATYPICAL_ROI_NO_REF_PCT = 1000;
+export interface SellCheck { kind: 'atipico' | 'sin_confirmar'; reason: string; reference: Q | null; ratio: Q | null }
+
+export function checkSellPrice(sell: PriceInfo, region: Q | null, roiPct: Q | null): SellCheck | null {
+  if (!sell.copper || sell.scope !== 'casa de subastas') return null; // manual, regional o sin precio: no aplica
+  if (region && region.sign() > 0) {
+    const ratio = sell.copper.div(region);
+    if (ratio.cmp(Q.of(ATYPICAL_SELL_RATIO)) > 0) {
+      return {
+        kind: 'atipico', reference: region, ratio,
+        reason: `Precio de venta atípico: ${ratio.toDecimal(1)} veces el valor regional de TSM. Probablemente una publicación aislada; no se toma como ganancia fiable.`,
+      };
+    }
+    return null;
+  }
+  if (roiPct && roiPct.cmp(Q.of(ATYPICAL_ROI_NO_REF_PCT)) > 0) {
+    return {
+      kind: 'sin_confirmar', reference: null, ratio: null,
+      reason: `Precio de venta sin confirmar: ROI de más del ${ATYPICAL_ROI_NO_REF_PCT} % y TSM no tiene precio regional para comparar. Puede ser una sola publicación.`,
+    };
+  }
+  return null;
+}
+
 export interface Evaluation {
   recipeKey: string;
   recipeId: number;
@@ -87,6 +119,8 @@ export interface Evaluation {
   runs: number;
   reagents: Array<{ itemId: number; name: string | null; quantity: number | null; price: PriceInfo; subtotal: Q | null; owned: number; toBuy: number; variants: number[] }>;
   sellPrice: PriceInfo;
+  /** Precio de venta atípico o sin confirmar (null si parece normal o no aplica). */
+  sellCheck: SellCheck | null;
   channel: 'subasta' | 'vinculado' | 'servicio' | 'desconocido';
   channelReason: string;
   cost: Pick<CostResult, 'materials' | 'batch' | 'unit' | 'outOfPocket' | 'missing'>;
@@ -274,6 +308,10 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     dropScenario = { drop: ov.priceDrop, price: p2, profit: computeProfit({ units: yieldKnown ? totalUnits : 1, price: p2, commission, cost: cost.batch, lostDeposits: lost, recoverableDeposits: recov, targetProfit: target }) };
   }
 
+  // Precio de venta atípico: bloquea la clasificación como oportunidad, pero se muestran los números.
+  const sellCheck = checkSellPrice(sellPrice, outId !== null ? q(snap.region.get(outId)?.marketValue) : null, profit.roiPct);
+  if (sellCheck) blockers.push(sellCheck.reason);
+
   // Frescura
   const usedLocal = [sellPrice, ...reagents.map((x) => x.price)].some((p) => p.scope === 'casa de subastas');
   const localTimes = [snap.runs.realm_items?.sourceTime].filter(Boolean) as string[];
@@ -348,6 +386,7 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
       return { ...x, subtotal: l?.subtotal ?? null, toBuy: l?.toBuy ?? 0 };
     }),
     sellPrice,
+    sellCheck,
     channel: sell.channel,
     channelReason: sell.reason,
     cost: { materials: cost.materials, batch: cost.batch, unit: yieldKnown ? cost.unit : null, outOfPocket: cost.outOfPocket, missing: cost.missing },

@@ -188,7 +188,14 @@ export function Comparator() {
                       <Money v={i.costUnit} />
                       {units !== null && units !== 1 && <div className="small muted">{units} por fabricación</div>}
                     </td>
-                    <td data-label="Precio venta" className="num"><Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div></td>
+                    <td data-label="Precio venta" className="num">
+                      <Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div>
+                      {i.sellCheck && (
+                        <span className="badge b-warn" title={i.sellCheck.kind === 'atipico' ? 'Muy por encima del valor regional de TSM' : 'Sin precio regional para confirmarlo'}>
+                          {i.sellCheck.kind === 'atipico' ? 'Precio atípico' : 'Sin confirmar'}
+                        </span>
+                      )}
+                    </td>
                     <td data-label="Ganancia est./unid." className="num">
                       <Delta v={i.profitUnit} />
                       <div className="small muted">ROI {i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</div>
