@@ -1,0 +1,40 @@
+{
+  "description": "Tiempo de reutilización (segundos) de recetas de WoW Forever, leído del tooltip de Wowhead de cada hechizo (texto «… cooldown»). Se comprobaron las 2215 recetas de forever-wowhead.json; las que no aparecen aquí no tienen reutilización. Los segundos se derivan del texto redondeado de Wowhead (p. ej. «1.958 days» = 47 h).",
+  "source": "https://nether.wowhead.com/tooltip/spell/{id}?dataEnv=16&locale=0",
+  "checkedAt": "2026-11-13",
+  "checkedRecipes": 2215,
+  "cooldowns": {
+    "818": 300,
+    "11479": 3600,
+    "11480": 3600,
+    "17187": 169200,
+    "17559": 82800,
+    "17560": 82800,
+    "17561": 82800,
+    "17562": 82800,
+    "17563": 82800,
+    "17564": 82800,
+    "17565": 82800,
+    "17566": 82800,
+    "18560": 342000,
+    "25146": 600,
+    "1317279": 169200
+  },
+  "wowheadText": {
+    "818": "5 min cooldown (Basic Campfire)",
+    "11479": "1 hour cooldown (Transmute: Iron to Gold)",
+    "11480": "1 hour cooldown (Transmute: Mithril to Truesilver)",
+    "17187": "1.958 days cooldown (Transmute: Arcanite)",
+    "17559": "23 hrs cooldown (Transmute: Air to Fire)",
+    "17560": "23 hrs cooldown (Transmute: Fire to Earth)",
+    "17561": "23 hrs cooldown (Transmute: Earth to Water)",
+    "17562": "23 hrs cooldown (Transmute: Water to Air)",
+    "17563": "23 hrs cooldown (Transmute: Undeath to Water)",
+    "17564": "23 hrs cooldown (Transmute: Water to Undeath)",
+    "17565": "23 hrs cooldown (Transmute: Life to Earth)",
+    "17566": "23 hrs cooldown (Transmute: Earth to Life)",
+    "18560": "3.958 days cooldown (Mooncloth)",
+    "25146": "10 min cooldown (Transmute: Elemental Fire)",
+    "1317279": "1.958 days cooldown (Transmute: Legionite)"
+  }
+}

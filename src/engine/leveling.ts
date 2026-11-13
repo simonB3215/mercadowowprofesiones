@@ -30,6 +30,11 @@ export interface LevelRecipe {
   /** Costo de aprenderla en el instructor, en cobre (0 si no aplica). */
   trainingCost: bigint;
   reagents: Array<{ itemId: number; quantity: number }>;
+  /**
+   * Tiempo de reutilización en segundos (p. ej. transmutaciones: 1 h). Una receta con reutilización no sirve para
+   * subir nivel repitiéndola, así que nunca se elige. 0 o ausente = sin reutilización conocida.
+   */
+  cooldown?: number;
 }
 
 export interface LevelStep {
@@ -97,7 +102,8 @@ export function planLeveling(
   const { from, to, price, trainerOnly } = opts;
   if (!Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to <= from) throw new Error('Rango de niveles inválido.');
   // Sin materiales no hay costo que comparar (p. ej. el propio hechizo de la profesión): nunca cuenta como gratis.
-  const pool = recipes.filter((r) => r.reagents.length > 0 && (trainerOnly ? r.availability !== 'otra' : true));
+  // Las recetas con tiempo de reutilización (transmutaciones, tela lunar…) no se pueden repetir: se excluyen.
+  const pool = recipes.filter((r) => r.reagents.length > 0 && !(r.cooldown && r.cooldown > 0) && (trainerOnly ? r.availability !== 'otra' : true));
   const costCache = new Map<number, Q | null>();
   const costOf = (r: LevelRecipe) => {
     if (!costCache.has(r.id)) costCache.set(r.id, craftCost(r, price));

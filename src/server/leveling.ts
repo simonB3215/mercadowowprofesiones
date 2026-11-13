@@ -23,6 +23,19 @@ export function parseManualPrices(raw: string | null | undefined): Map<number, Q
   return out;
 }
 import dataset from '../../data/leveling/forever-wowhead.json' with { type: 'json' };
+import cooldownData from '../../data/leveling/forever-cooldowns.json' with { type: 'json' };
+
+/** Reutilización comprobada en Wowhead, por id de hechizo (segundos). */
+const COOLDOWNS = new Map<number, number>(Object.entries((cooldownData as { cooldowns: Record<string, number> }).cooldowns).map(([k, v]) => [Number(k), Number(v)]));
+/**
+ * Reutilización de una receta: la comprobada en Wowhead (se revisaron todas las recetas del conjunto de datos).
+ * Si se añade una receta nueva sin revisar, las transmutaciones se tratan como con 1 h (todas las de Forever la tienen).
+ */
+export function cooldownOf(r: { id: number; name: string }): number {
+  const known = COOLDOWNS.get(r.id);
+  if (known !== undefined) return known;
+  return /^Transmute\b/i.test(r.name) ? 3600 : 0;
+}
 
 interface WhRecipe {
   id: number;
@@ -63,6 +76,7 @@ const toLevel = (r: WhRecipe): LevelRecipe => {
   return {
     id: r.id, name: r.name, learnedAt: availability === 'inicial' ? 1 : r.learnedAt, colors: r.colors, skillUps: Math.max(1, r.skillUps || 1),
     availability, trainingCost: availability === 'instructor' ? BigInt(Math.max(0, Math.floor(r.trainingCost || 0))) : 0n, reagents: r.reagents,
+    cooldown: cooldownOf(r),
   };
 };
 

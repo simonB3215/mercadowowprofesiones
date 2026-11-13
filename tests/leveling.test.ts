@@ -77,6 +77,15 @@ describe('Subida de nivel', () => {
     expect(todas.trainingCost.isZero()).toBe(true);
   });
 
+  it('nunca elige recetas con tiempo de reutilización aunque sean las más baratas (p. ej. transmutaciones)', () => {
+    const transmutar = rec(1, [1, 20, 25, 30], [[100, 1]], { cooldown: 3600 });
+    const normal = rec(2, [1, 20, 25, 30], [[101, 1]]);
+    const plan = planLeveling([transmutar, normal], { from: 1, to: 10, price: prices({ 100: 1, 101: 50 }), trainerOnly: true });
+    expect(plan.steps.map((s) => s.recipe?.id)).toEqual([2]);
+    const soloTransmutar = planLeveling([transmutar], { from: 1, to: 5, price: prices({ 100: 1 }), trainerOnly: false });
+    expect(soloTransmutar.steps.map((s) => s.recipe)).toEqual([null]);
+  });
+
   it('rechaza rangos inválidos', () => {
     expect(() => planLeveling([], { from: 10, to: 10, price: () => null, trainerOnly: true })).toThrow();
   });

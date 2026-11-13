@@ -3,7 +3,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 process.env.DATABASE_URL = 'pglite:memory';
 const { getDb, migrate } = await import('../src/server/db.js');
 const { handle } = await import('../src/server/router.js');
-const { parseManualPrices, availabilityOf } = await import('../src/server/leveling.js');
+const { parseManualPrices, availabilityOf, cooldownOf } = await import('../src/server/leveling.js');
 const { TEST_CTX } = await import('./helpers/seed.js');
 
 const qs = new URLSearchParams(TEST_CTX).toString();
@@ -57,5 +57,12 @@ describe('API de subida de nivel', () => {
     expect(availabilityOf({ source: [], colors: [0, 25, 37, 50], learnedAt: 25 })).toBe('inicial');
     expect(availabilityOf({ source: [], colors: [0, 300, 305, 310], learnedAt: 230 })).toBe('otra');
     expect(availabilityOf({ source: [5], colors: [0, 10, 12, 15], learnedAt: 10 })).toBe('otra');
+  });
+
+  it('reutilización comprobada en Wowhead; una transmutación sin comprobar cuenta como 1 h', () => {
+    expect(cooldownOf({ id: 11479, name: 'Transmute: Iron to Gold' })).toBe(3600);
+    expect(cooldownOf({ id: 18560, name: 'Mooncloth' })).toBeGreaterThan(0);
+    expect(cooldownOf({ id: 3275, name: 'Linen Bandage' })).toBe(0);
+    expect(cooldownOf({ id: 99999999, name: 'Transmute: Something New' })).toBe(3600);
   });
 });

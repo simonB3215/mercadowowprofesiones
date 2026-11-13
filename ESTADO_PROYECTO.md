@@ -34,7 +34,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Perfil (profesiones, recetas conocidas, inventario).
   - Lista de fabricación y compras con inventario compartido.
   - Materiales: vender o usar, y oro por hora con datos del usuario.
-  - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 28 o completa.
+  - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 38 o completa. Las recetas con tiempo de reutilización (transmutaciones, Tela lunar, Fogata básica) no se usan (D29).
   - Registro real con correcciones sin duplicar.
   - Ajustes.
   - Calculadoras manuales avanzadas.
@@ -77,7 +77,7 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29).
 
 ## Siguientes pasos
 

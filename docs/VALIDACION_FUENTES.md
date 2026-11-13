@@ -69,6 +69,7 @@ Fecha de extracción: 13 de noviembre de 2026. Archivo: `data/leveling/forever-w
 - `source` contiene 6 para las recetas de instructor. Las recetas **iniciales** (las que se conocen al aprender la profesión) no tienen fuente en Wowhead: se deducen como «sin fuente, naranja desde 0 y aprendizaje ≤ 50» (en esas filas `learnedat` coincide con el umbral amarillo). Es una inferencia y se muestra como tal.
 - Herboristería, Desuello y Pesca no se incluyen: se suben recolectando.
 - Los nombres en español se toman del catálogo de Blizzard solo si la receta coincide de forma única por objeto creado y materiales exactos; si no, se muestra el nombre inglés de Wowhead.
+- **Tiempo de reutilización** (`data/leveling/forever-cooldowns.json`): los listados no lo traen. Se leyó del tooltip de cada hechizo (`https://nether.wowhead.com/tooltip/spell/{id}?dataEnv=16&locale=0`, texto «… cooldown»), consultado desde una página de Wowhead en el navegador, para las 2 215 recetas (13-11-2026). 15 tienen reutilización: las 13 transmutaciones (de 10 min a ≈ 2 días), Tela lunar (≈ 4 días) y Fogata básica (5 min). Los segundos se derivan del texto redondeado de Wowhead («1.958 days» = 47 h).
 
 ## Lo que falta y cómo afecta al cálculo
 
