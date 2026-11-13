@@ -1,11 +1,11 @@
 # Estado del proyecto
 
-Última actualización: 12 de noviembre de 2026.
+Última actualización: 13 de noviembre de 2026.
 
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 80 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto.
+- 107 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto.
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
@@ -35,6 +35,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Lista de fabricación y compras con inventario compartido.
   - Materiales: vender o usar, y oro por hora con datos del usuario.
   - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 38 o completa. Las recetas con tiempo de reutilización (transmutaciones, Tela lunar, Fogata básica) no se usan (D29).
+  - Reutilización (PB-22, D31): las 13 transmutaciones y Tela lunar llevan la etiqueta «1 cada X» en el comparador y el detalle; el plan de fabricación avisa del tiempo mínimo para repetirlas.
   - Registro real con correcciones sin duplicar.
   - Ajustes.
   - Calculadoras manuales avanzadas.
@@ -58,8 +59,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Comisiones | Supuestos: 5 % (facción) y 15 % (Aguasnegras) | Comprobarlas en el juego y ajustarlas en «Ajustes». |
 | Objetos sin ficha en Blizzard | 345 objetos devuelven 404 (sobre todo recetas de «Temporada de descubrimiento») | Aparecen sin nombre; sus precios se usan por id. |
 | Desencantado y transformaciones aleatorias (PB-23) | Parcial | Calculadora manual de valor esperado; faltan tablas verificadas. |
-| Cron horario | El workflow de GitHub Actions **falla** desde el 12-11-2026 (2 ejecuciones, error en el paso que llama a la web). La web responde bien y la sincronización manual funciona (≈ 15 s). Causa probable: falta el secreto `CRON_SECRET` en GitHub. Desde el 13-11-2026 el workflow indica la causa exacta como anotación y reintenta una vez. | Añadir el secreto `CRON_SECRET` en GitHub (*Settings → Secrets and variables → Actions*), con el mismo valor que en Vercel, y lanzar el workflow a mano para comprobarlo. |
-| Estadísticas regionales de TSM | TSM no publica un archivo regional nuevo desde el 11-11-2026 08:47 UTC; la descarga funciona | Pasarán a «Desactualizado» a las 48 h (ajustable en «Ajustes»). La página distingue «comprobado hace poco» de «datos viejos de la fuente». |
+| Cron horario | **Resuelto el 13-11-2026.** Fallaba porque `CRON_SECRET` estaba vacío en Vercel (el servidor rechaza todo con un secreto vacío, también el cron diario) y faltaba en GitHub. Se configuró en los dos y la ejecución manual de GitHub Actions salió correcta (casa con datos de hace < 1 h). | Si vuelve a fallar, la anotación del workflow dice la causa («Falta CRON_SECRET», «no coincide», sin respuesta). |
+| Estadísticas regionales de TSM | TSM tarda a veces más de un día en publicar el archivo regional (11-11 → 12-11-2026); la descarga funciona | Pasan a «Desactualizado» a las 48 h (ajustable en «Ajustes»). La página distingue «comprobado hace poco» de «datos viejos de la fuente». |
 | Historial | En marcha desde el 12-11-2026 para JcJ — Horda | `historical` gana fiabilidad a partir de unos 7–14 días. |
 | Hardcore | Las casas 112/115/118 existen pero están vacías | Añadirlas cuando el modo se lance. |
 | Consultas colgadas con el pooler | Mitigado (límite de 30 s y renovación del pool) | Si se repite en producción, probar el pooler de sesión (puerto 5432) para el servidor local. Causa exacta sin confirmar. |
@@ -78,12 +79,14 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29); servidor MCP (D30); reutilización en comparador y plan (D31).
 
 ## Siguientes pasos
 
 1. Verificar las comisiones en el juego.
-2. Revisar la cobertura del catálogo en «Calidad de datos».
+2. PB-23: tablas verificadas de desencantado, prospección y molienda para Forever.
+3. PB-20 y PB-21: confirmar que no aplican en Forever (sin calidades de fabricación ni producción adicional) y cerrarlos.
+4. Revisar la cobertura del catálogo en «Calidad de datos».
 
 ## Cómo continuar sin empezar de nuevo
 

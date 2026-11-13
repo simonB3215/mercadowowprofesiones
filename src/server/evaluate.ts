@@ -7,6 +7,8 @@ import { computeCost, computeProfit, classify, applyPriceDrop, type Status, type
 import type { Db } from './db.js';
 import { loadSnapshot, ageHours, type MarketContext, type MarketSnapshot } from './market.js';
 import { DEFAULT_SETTINGS, commissionFor, type Settings, type PriceField } from './config.js';
+import { catalogCooldown } from './cooldowns.js';
+import { cooldownLabel } from '../engine/cooldown.js';
 
 export interface RecipeRow {
   id: number;
@@ -131,6 +133,8 @@ export interface Evaluation {
   status: Status;
   reasons: string[];
   notes: string[];
+  /** Reutilización en segundos (PB-22): 0 = ninguna; null = desconocida (la receta no coincide con los datos de Wowhead). */
+  cooldown: number | null;
   manual: boolean;
   /** Hay cualquier modificación del usuario (incluida la caída de precio). */
   edited: boolean;
@@ -192,6 +196,8 @@ export interface EvalContext {
   reagents: Map<number, Array<{ item_id: number; quantity: number | null }>>;
   variants: Map<string, number[]>;
   profile: Profile | null;
+  /** Reutilización por id de receta (segundos; 0 = sin reutilización; ausente o null = desconocida). Ver cooldowns.ts. */
+  cooldowns?: Map<number, number | null>;
   now?: number;
 }
 
@@ -365,6 +371,10 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     },
   });
   if (demand) notes.push('La tasa y el volumen son regionales: no son probabilidad de venta diaria ni ventas de tu personaje.');
+  const cooldown = ctx.cooldowns?.get(r.id) ?? null;
+  if (cooldown) {
+    notes.push(`Reutilización de ${cooldownLabel(cooldown)} (Wowhead): como máximo una fabricación cada ${cooldownLabel(cooldown)}. La ganancia es por fabricación; no se puede repetir seguida.`);
+  }
 
   const costLines = cost.lines;
   return {
@@ -397,6 +407,7 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     status: cls.status,
     reasons: cls.reasons,
     notes: [...cls.notes, ...notes],
+    cooldown,
     manual,
     edited: Object.values(ov).some((v) => v !== undefined && v !== '' && v !== false && !(typeof v === 'object' && v !== null && !Object.values(v).some((x) => x !== ''))),
     character,
@@ -446,15 +457,17 @@ export async function loadRecipes(db: Db, version: string, f: RecipeFilter = {})
 export async function buildEvalContext(db: Db, ctx: MarketContext, recipes: RecipeRow[], profile: Profile | null, settings?: Settings): Promise<EvalContext> {
   const ids = recipes.map((r) => r.id);
   const rr = ids.length
-    ? await db.query<any>(`select recipe_id, item_id, quantity from recipe_reagent where game_version=$1 and recipe_id = any($2::int[]) order by recipe_id, slot`, [ctx.version, ids])
+    ? await db.query<any>(`select recipe_id, item_id, quantity, optional from recipe_reagent where game_version=$1 and recipe_id = any($2::int[]) order by recipe_id, slot`, [ctx.version, ids])
     : [];
   const reagents = new Map<number, Array<{ item_id: number; quantity: number | null }>>();
+  const required = new Map<number, Array<{ item_id: number; quantity: number | null }>>();
   for (const x of rr) {
     const k = Number(x.recipe_id);
-    const arr = reagents.get(k) ?? [];
-    arr.push({ item_id: Number(x.item_id), quantity: x.quantity === null ? null : Number(x.quantity) });
-    reagents.set(k, arr);
+    const g = { item_id: Number(x.item_id), quantity: x.quantity === null ? null : Number(x.quantity) };
+    reagents.set(k, [...(reagents.get(k) ?? []), g]);
+    if (!x.optional) required.set(k, [...(required.get(k) ?? []), g]);
   }
+  const cooldowns = new Map<number, number | null>(recipes.map((r) => [r.id, catalogCooldown(r.crafted_item_id, required.get(r.id) ?? [])]));
   const itemIds = new Set<number>();
   for (const r of recipes) for (const v of [r.crafted_item_id, r.alliance_item_id, r.horde_item_id]) if (v !== null) itemIds.add(v);
   for (const x of rr) itemIds.add(Number(x.item_id));
@@ -464,5 +477,5 @@ export async function buildEvalContext(db: Db, ctx: MarketContext, recipes: Reci
   const items = new Map<number, ItemRow>(its.map((i) => [Number(i.id), { ...i, id: Number(i.id) }]));
   // Snapshot completo: necesario para detectar variantes de calidad por nombre.
   const snap = await loadSnapshot(db, ctx);
-  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, variants: variantIndex(snap), profile };
+  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, variants: variantIndex(snap), profile, cooldowns };
 }

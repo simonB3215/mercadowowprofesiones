@@ -14,6 +14,7 @@ import { handle } from '../server/router.js';
 import { authRequired, sessionCookie } from '../server/auth.js';
 import { FOREVER_REALMS } from '../server/config.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
+import { cooldownLabel } from '../engine/cooldown.js';
 
 const DEFAULT_HOUSE = 'pvp-horde';
 const HOUSES = FOREVER_REALMS.map((r) => r.slug) as [string, ...string[]];
@@ -131,6 +132,7 @@ export function createServer(): McpServer {
         gananciaUnidad: gold(e.profitUnit), gananciaLote: gold(e.profitBatch), roiPct: e.roiUndefined ? 'no definido (costo 0)' : num(e.roiPct, 1),
         precioAtipico: e.sellCheck ? (e.sellCheck.kind === 'atipico' ? `${num(e.sellCheck.ratio, 1)}× el valor regional` : 'sin referencia regional') : null,
         ventasPorDia: e.demand?.soldPerDay ?? null, tasaDeVenta: e.demand?.saleRate ?? null,
+        reutilizacion: e.cooldown ? `una fabricación cada ${cooldownLabel(e.cooldown)}` : e.cooldown === 0 ? 'ninguna' : 'desconocida',
         estado: e.status, motivos: e.reasons, canal: e.channel, preciosDe: e.sourceTime,
       })),
     };
@@ -157,6 +159,7 @@ export function createServer(): McpServer {
       precioMinimoPublicable: e.profit.minListPrice === null || e.profit.minListPrice === undefined ? null : gold(e.profit.minListPrice),
       demandaRegional: e.demand ? { ventasPorDia: e.demand.soldPerDay, tasaDeVenta: e.demand.saleRate, precioMedioVenta: gold(e.demand.avgSalePrice) } : null,
       antiguedadHoras: { casa: round1(e.freshness.localHours), region: round1(e.freshness.regionHours), desactualizado: e.freshness.stale },
+      reutilizacion: e.cooldown ? `una fabricación cada ${cooldownLabel(e.cooldown)}` : e.cooldown === 0 ? 'ninguna' : 'desconocida',
       canal: e.channel, motivoCanal: e.channelReason, estado: e.status, motivos: e.reasons, notas: e.notes,
     };
   }));

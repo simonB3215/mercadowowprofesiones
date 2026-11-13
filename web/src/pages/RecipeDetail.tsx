@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta, Money } from '../lib.js';
 import { ItemLabel, WowIcon, useAsset } from '../icons.js';
-import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass } from '@phosphor-icons/react';
+import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
 
 function backHref() {
   try { return sessionStorage.getItem('lastComparator') ?? '#/'; } catch { return '#/'; }
@@ -17,6 +18,7 @@ function Breakdown({ e, title }: { e: any; title: string }) {
       <ul className="reasons">{e.reasons.map((r: string, i: number) => <li key={i}>{r}</li>)}</ul>
       <dl className="kv">
         <dt>Ejecuciones</dt><dd>{e.runs}</dd>
+        {e.cooldown > 0 && <><dt>Reutilización</dt><dd>{cooldownLabel(e.cooldown)} entre fabricaciones <span className="small muted">(Wowhead; {e.runs > 1 ? `${e.runs} ejecuciones tardan al menos ${durationLabel(minTimeForRuns(e.runs, e.cooldown))}` : 'no se puede repetir seguida'})</span></dd></>}
         <dt>Unidades producidas</dt><dd>{e.unitsPerRun !== null ? `${e.unitsPerRun * e.runs} (${e.unitsPerRun} por ejecución)` : 'desconocido'}</dd>
         <dt>Costo de materiales</dt><dd><Money v={c.materials} /></dd>
         <dt>Costo del lote (C)</dt><dd><Money v={c.batch} /></dd>
@@ -71,6 +73,7 @@ function RecipeHeader({ e }: { e: any }) {
       </div>
       <div className="row" style={{ alignItems: 'center' }}>
         <StatusBadge s={e.status} />
+        {e.cooldown > 0 && <span className="badge b-info" title="Tiempo de reutilización (Wowhead)"><Hourglass size={12} weight="bold" aria-hidden="true" />1 cada {cooldownLabel(e.cooldown)}</span>}
         {a?.page && <a className="icon-inline small" href={a.page} target="_blank" rel="noopener noreferrer">Ficha en Wowhead<ArrowSquareOut size={14} aria-hidden="true" /><span className="sr-only">(se abre en otra pestaña)</span></a>}
       </div>
     </div>

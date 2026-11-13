@@ -12,6 +12,7 @@ import { buildEvalContext, evaluateRecipe, loadRecipes, loadSettings, resolvePri
 import { requiredProfessions, PROFESSION_ES } from './catalog/rules.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
+import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
 import { levelingProfessions, levelingPlan, parseManualPrices } from './leveling.js';
@@ -330,7 +331,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     items: slice.map((e) => ({
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope,
-      sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null,
+      sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined,
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
     })),
@@ -605,6 +606,13 @@ route('POST', '/api/crafting-plan', async (req, _p, _u, db) => {
     };
   });
   const plan = buildPlan(planEntries, profile?.inventory ?? {}, commission);
+  // PB-22: una receta con reutilización no se puede repetir seguida.
+  for (const pe of plan.entries) {
+    const cd = ectx.cooldowns?.get(Number(pe.recipeId));
+    if (cd && pe.runs > 1) {
+      warnings.push(`${pe.name}: reutilización de ${cooldownLabel(cd)}. ${pe.runs} fabricaciones necesitan al menos ${durationLabel(minTimeForRuns(pe.runs, cd))} (una cada ${cooldownLabel(cd)}).`);
+    }
+  }
   return { plan, warnings, commission: commissionFor(settings, ctx.realm), note: 'Las cantidades son una planificación, no una garantía de venta.' };
 });
 

@@ -23,10 +23,7 @@ export function parseManualPrices(raw: string | null | undefined): Map<number, Q
   return out;
 }
 import dataset from '../../data/leveling/forever-wowhead.json' with { type: 'json' };
-import cooldownData from '../../data/leveling/forever-cooldowns.json' with { type: 'json' };
-
-/** Reutilización comprobada en Wowhead, por id de hechizo (segundos). */
-const COOLDOWNS = new Map<number, number>(Object.entries((cooldownData as { cooldowns: Record<string, number> }).cooldowns).map(([k, v]) => [Number(k), Number(v)]));
+import { SPELL_COOLDOWNS as COOLDOWNS, reagentKey } from './cooldowns.js';
 /**
  * Reutilización de una receta: la comprobada en Wowhead (se revisaron todas las recetas del conjunto de datos).
  * Si se añade una receta nueva sin revisar, las transmutaciones se tratan como con 1 h (todas las de Forever la tienen).
@@ -79,9 +76,6 @@ const toLevel = (r: WhRecipe): LevelRecipe => {
     cooldown: cooldownOf(r),
   };
 };
-
-const reagentKey = (crafted: number | null | undefined, reagents: Array<{ itemId: number; quantity: number }>) =>
-  `${crafted ?? 0}|${reagents.map((g) => `${g.itemId}x${g.quantity}`).sort().join('+')}`;
 
 export async function levelingProfessions(db: Db, version: string) {
   if (version !== DATA.gameVersion) return { professions: [], source: DATA.source };

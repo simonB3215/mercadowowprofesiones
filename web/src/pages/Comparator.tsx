@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon } from '../icons.js';
-import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight } from '@phosphor-icons/react';
+import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass } from '@phosphor-icons/react';
+import { cooldownLabel } from '../../../src/engine/cooldown.js';
 
 const SORTS: Array<[string, string]> = [['profitUnit', 'Ganancia por unidad'], ['profitBatch', 'Ganancia por lote'], ['roi', 'ROI'], ['cost', 'Costo por unidad']];
 
@@ -183,6 +184,11 @@ export function Comparator() {
                           <WowIcon kind="profession" id={i.professionId} px={14} />{i.profession}
                           {i.output?.name && i.output.name !== i.name && <> · {i.output.name}</>}
                         </span>} />
+                      {i.cooldown > 0 && (
+                        <span className="badge b-info cmp-cooldown" title="Tiempo de reutilización (Wowhead): no se puede fabricar seguida. La ganancia es por fabricación.">
+                          <Hourglass size={12} weight="bold" aria-hidden="true" /> 1 cada {cooldownLabel(i.cooldown)}
+                        </span>
+                      )}
                     </td>
                     <td data-label="Costo/unid." className="num">
                       <Money v={i.costUnit} />

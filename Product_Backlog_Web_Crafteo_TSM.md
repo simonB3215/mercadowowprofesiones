@@ -33,14 +33,14 @@ No se afirmará que se evalúa toda receta existente mientras existan faltantes 
 
 | ID | Elemento | Prioridad | Depende de | Estado |
 |---|---|---|---|---|
-| PB-01 | Validar las fuentes | P0 | — | En revisión (Blizzard bloqueado: credenciales) |
+| PB-01 | Validar las fuentes | P0 | — | Terminado |
 | PB-02 | Elegir versión, región y reino | P0 | PB-01 | Terminado |
-| PB-03 | Normalizar objetos y variantes | P0 | PB-01 | En revisión (campos Blizzard) |
+| PB-03 | Normalizar objetos y variantes | P0 | PB-01 | Terminado |
 | PB-04 | Importar precios de TSM | P0 | PB-02, PB-03 | Terminado |
 | PB-05 | Actualizar sin perder datos válidos | P0 | PB-04 | Terminado |
-| PB-06 | Catálogo de todas las profesiones | P0 | PB-01, PB-03 | Bloqueado (credenciales Blizzard) |
-| PB-07 | Materiales y resultados por receta | P0 | PB-06 | Bloqueado (datos reales) |
-| PB-08 | Comprobar canal de venta | P0 | PB-03, PB-07 | En revisión (vinculación Blizzard) |
+| PB-06 | Catálogo de todas las profesiones | P0 | PB-01, PB-03 | Terminado |
+| PB-07 | Materiales y resultados por receta | P0 | PB-06 | Terminado |
+| PB-08 | Comprobar canal de venta | P0 | PB-03, PB-07 | Terminado |
 | PB-09 | Calcular costo de fabricación | P0 | PB-04, PB-07 | Terminado |
 | PB-10 | Calcular ganancia y punto de equilibrio | P0 | PB-08, PB-09 | Terminado |
 | PB-11 | Mostrar señales de demanda | P0 | PB-04 | Terminado |
@@ -52,30 +52,31 @@ No se afirmará que se evalúa toda receta existente mientras existan faltantes 
 | PB-17 | Inventario y costo de reposición | P1 | PB-09, PB-16 | Terminado |
 | PB-18 | Lista de fabricación y compras | P1 | PB-13, PB-17 | Terminado |
 | PB-19 | Comparar comprar y fabricar componentes | P1 | PB-09, PB-16, PB-18 | Terminado |
-| PB-20 | Calcular con habilidad y calidades | P1 | PB-07, PB-16 | Bloqueado (reglas no verificadas) |
-| PB-21 | Producción adicional y ahorro | P1 | PB-09, PB-20 | Bloqueado (reglas no verificadas) |
-| PB-22 | Concentración y enfriamientos | P1 | PB-18, PB-20 | En desarrollo (solo manual) |
+| PB-20 | Calcular con habilidad y calidades | P1 | PB-07, PB-16 | Bloqueado (probablemente no aplica en Forever; sin confirmar) |
+| PB-21 | Producción adicional y ahorro | P1 | PB-09, PB-20 | Bloqueado (probablemente no aplica en Forever; sin confirmar) |
+| PB-22 | Concentración y enfriamientos | P1 | PB-18, PB-20 | Terminado (enfriamientos); concentración solo manual |
 | PB-23 | Transformaciones y resultados aleatorios | P1 | PB-06, PB-21 | En desarrollo (solo manual) |
 | PB-24 | Valor de materiales recolectados | P1 | PB-06, PB-09 | Terminado |
 | PB-25 | Registrar resultados reales | P2 | PB-17, PB-18 | Terminado |
-| PB-26 | Incorporar Classic y otras versiones | P2 | PB-01, PB-03, PB-06, PB-10 | Bloqueado (no validado) |
+| PB-26 | Incorporar Classic y otras versiones | P2 | PB-01, PB-03, PB-06, PB-10 | Descartado (solo WoW Forever, D19) |
 | PB-27 | Interfaz usable en móvil y teclado | P0 | PB-13, PB-14 | Terminado |
-| PB-28 | Publicar una versión verificable | P0 | PB-01 a PB-14, PB-27 | En desarrollo (sin desplegar) |
+| PB-28 | Publicar una versión verificable | P0 | PB-01 a PB-14, PB-27 | Terminado |
+| PB-29 | Subir de nivel una profesión al menor costo | P1 | PB-04, PB-09 | Terminado (añadido el 13-11-2026) |
 
 ## Estado de implementación y evidencia
 
-Actualizado el 11 de noviembre de 2026. «Terminado» exige que se cumplan los criterios con una verificación reproducible; un elemento que solo tiene interfaz no cuenta como terminado. Las pruebas citadas están en `tests/` (`npm test`: 59 pruebas en verde). La revisión en el navegador se hizo con `npm run dev`.
+Actualizado el 13 de noviembre de 2026. «Terminado» exige que se cumplan los criterios con una verificación reproducible; un elemento que solo tiene interfaz no cuenta como terminado. Las pruebas citadas están en `tests/` (`npm test`: 107 pruebas en verde). La revisión en el navegador se hizo con `npm run dev` y con la web publicada (https://mercadowowprofesiones.vercel.app). Desde el 12-11-2026 la aplicación es solo WoW Forever (D19): las menciones a Retail, «Area 52» o commodities en las evidencias antiguas son históricas.
 
 | ID | Estado | Evidencia / bloqueo |
 |---|---|---|
-| PB-01 | En revisión | TSM: muestras reales guardadas y contrato documentado en `docs/VALIDACION_FUENTES.md`; pruebas en `tests/market.test.ts`. Blizzard: rutas y OAuth verificados en la documentación oficial, pero los campos de respuesta no, porque faltan credenciales. `npm run probe:blizzard` guardará muestras. No se ha probado una receta por profesión. |
+| PB-01 | Terminado | TSM y Blizzard verificados con respuestas reales de Forever (`docs/VALIDACION_FUENTES.md`, muestras en `docs/muestras/forever/`): 13 profesiones, recetas con objeto creado, cantidad y materiales, y las 15 casas de subastas. Wowhead para la subida de nivel y los tiempos de reutilización. Lagunas que siguen abiertas: comisiones, desencantado y probabilidad de subir punto (tabla «Lo que falta»). |
 | PB-02 | Terminado | Selector de versión, región y reino persistente; el reino se valida contra TSM (404 = no soportado). Cambiar de contexto recalcula (prueba «cambiar de contexto»; `tests/market.test.ts` «no mezcla datos»). No se usa geolocalización ni un reino por defecto. |
-| PB-03 | En revisión | La clave es `game_version` + `itemId`; se detectan variantes por nombre sin unir precios (prueba «rangos de calidad tienen itemId propios»). Falta verificar los campos de calidad y vinculación de Blizzard. |
+| PB-03 | Terminado | La clave es `game_version` + `itemId`; se detectan variantes por nombre sin unir precios (prueba «rangos de calidad tienen itemId propios»). Calidad y vinculación vienen de Blizzard: con el catálogo del 13-11-2026, 2 358 objetos con calidad y 1 300 con vinculación (`ON_EQUIP`, `ON_ACQUIRE`, `ON_USE`); 345 objetos dan 404 en Blizzard y se usan solo por id. |
 | PB-04 | Terminado | Parser CSV, validación de cabecera, cobre entero, `null` para ausentes, separación commodities/reino/región. Probado con datos reales (US/Area 52) en la app y en `tests/market.test.ts`. |
 | PB-05 | Terminado | Activación atómica, conservación del último lote ante fallo o rechazo, registro de intentos y antigüedad (pruebas «fallo de sincronización», «cabecera incorrecta»). Programación: botón bajo demanda y Vercel Cron diario. |
-| PB-06 | Bloqueado | El código de sincronización y la pantalla de cobertura están listos y probados con el catálogo demo. Faltan las credenciales de Blizzard. Las profesiones requeridas sin datos se muestran como laguna, no como ausencia. |
-| PB-07 | Bloqueado | La lógica de ingredientes, cantidades, rendimiento y bloqueo está probada en demo (rendimiento variable, receta sin ingredientes). Falta el catálogo real. Los ingredientes opcionales no se suman (prueba del motor). |
-| PB-08 | En revisión | Canales subasta / vinculado / servicio / desconocido (pruebas «resultado ligado», «servicio sin objeto», «vendibilidad desconocida»). La vinculación real depende de un campo de Blizzard aún no verificado. |
+| PB-06 | Terminado | Catálogo real de Forever en Supabase (`npm run sync:catalog`): 12 profesiones y 2 493 recetas; la pantalla «Calidad de datos» muestra la cobertura y las lagunas. |
+| PB-07 | Terminado | Materiales, cantidades y rendimiento de las 2 493 recetas reales; rendimiento variable y receta sin ingredientes bloquean (pruebas). Los ingredientes opcionales no se suman (prueba del motor). |
+| PB-08 | Terminado | Canales subasta / vinculado / servicio / desconocido (pruebas «resultado ligado», «servicio sin objeto», «vendibilidad desconocida») con la vinculación real de Blizzard (ver PB-03). Sin vinculación ni observaciones en subasta, el canal es «desconocido». |
 | PB-09 | Terminado | `computeCost`: precio ausente → `null`; reposición frente a desembolso; precisión exacta; costo marcado como estimado (pruebas del motor y «material sin precio»). |
 | PB-10 | Terminado | Caso de referencia 80/40 o, C = 0 → ROI no definido, validación de Q y t (`tests/engine.test.ts`). |
 | PB-11 | Terminado | Tasa y volumen regionales con fecha y ámbito, con advertencia de que no son ventas personales; no se calcula «beneficio diario». |
@@ -87,15 +88,16 @@ Actualizado el 11 de noviembre de 2026. «Terminado» exige que se cumplan los c
 | PB-17 | Terminado | Inventario por ID de objeto; reposición separada del desembolso; sin doble asignación (prueba «plan con inventario compartido»). No se registra el costo histórico de compra. |
 | PB-18 | Terminado | Ejecuciones o unidades con excedente, agregación de materiales, compras, desembolso, total incompleto si falta un precio. Revisado en el navegador (12 unidades → 3 ejecuciones, excedente 3). |
 | PB-19 | Terminado | Comprar o fabricar recursivo solo con recetas accesibles; ciclos detectados y marcados (pruebas «comprar o fabricar» y «ciclo barra ↔ polvo»). |
-| PB-20 | Bloqueado | No hay reglas verificadas de calidad por receta y parche. Se muestra la limitación y se permite una suposición manual etiquetada. |
-| PB-21 | Bloqueado | No hay reglas verificadas. Solo rendimiento manual etiquetado, excluido de la recomendación automática. |
-| PB-22 | En desarrollo | Calculadora manual de ganancia incremental por punto de concentración (consumo 0 → sin eficiencia). Faltan los enfriamientos y la integración en el plan. |
+| PB-20 | Bloqueado | No hay reglas verificadas de calidad por receta. En Forever (era Classic) las recetas no tienen rangos de calidad ni concentración, así que probablemente no aplica; falta confirmarlo antes de cerrarlo. Se permite una suposición manual etiquetada. |
+| PB-21 | Bloqueado | No hay reglas verificadas de producción adicional. Igual que PB-20, probablemente no aplica en Forever; sin confirmar. Solo rendimiento manual etiquetado, excluido de la recomendación automática. |
+| PB-22 | Terminado (enfriamientos) | Tiempos de reutilización comprobados en Wowhead para las 2 215 recetas (D29) y enlazados con el catálogo por objeto y materiales (D31): 14 recetas del catálogo (13 transmutaciones y Tela lunar). El comparador y el detalle lo indican («1 cada 47 h»); el plan de fabricación avisa del tiempo mínimo para repetirla; la subida de nivel no las usa. La ganancia sigue siendo por fabricación. Una receta sin coincidencia en Wowhead tiene reutilización desconocida, no 0. Pruebas: `tests/cooldown.test.ts`. La concentración no existe en Forever: queda la calculadora manual. |
 | PB-23 | En desarrollo | Calculadora manual de valor esperado con probabilidades que deben sumar exactamente 1. Faltan fuentes verificadas de molienda, prospección y desencantado. |
 | PB-24 | Terminado | Pantalla de materiales: valor neto de venta frente a valor por unidad usado en cada receta, con los mismos supuestos; oro por hora solo con datos del usuario. Sin recetas inventadas para la recolección (prueba «materiales»). |
 | PB-25 | Terminado | Registro de compras, ventas, gastos, depósitos perdidos y fabricaciones; beneficio realizado separado de lo pendiente; corrección por reemplazo sin duplicar (prueba «registro real»). |
-| PB-26 | Bloqueado | Classic y Classic progresión aparecen deshabilitados con su motivo. TSM publica datos para ellos (verificado), pero faltan el catálogo y las reglas. |
+| PB-26 | Descartado | El usuario decidió trabajar solo con WoW Forever (D19, 12-11-2026); Retail, Classic y el modo demo se retiraron del código y de Supabase. |
 | PB-27 | Terminado | Tabla convertida en tarjetas a 375 px sin desplazamiento horizontal (comprobado: scrollWidth = 375); etiquetas en todos los controles, foco visible, estados con texto y unidades (o/p/c). No se hizo una auditoría completa con lector de pantalla. |
-| PB-28 | En desarrollo | Probados datos válidos, incompletos, fallos, aislamiento entre mercados y casos de cálculo. Secretos solo en el servidor y RLS activado. Configuración de Vercel/Supabase lista y función verificada compilada; **sin desplegar** y sin catálogo real. |
+| PB-28 | Terminado | Publicada en Vercel (https://mercadowowprofesiones.vercel.app) con Supabase, protegida con `APP_PASSWORD`; secretos solo en el servidor y RLS activado. Precios automáticos: GitHub Actions cada hora (primera ejecución correcta el 13-11-2026, tras configurar `CRON_SECRET`) y cron diario de Vercel. |
+| PB-29 | Terminado | `#/nivel` (D27, D29): ruta más barata por profesión con recetas y dificultad de Wowhead y precios de la casa elegida; sin recetas con reutilización. Pruebas `tests/leveling*.test.ts`; Alquimia 1→300 revisada en el navegador. |
 
 ## Historias y criterios de aceptación
 

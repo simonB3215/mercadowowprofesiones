@@ -286,6 +286,7 @@ table.cards-lg th, table.cards-lg td { padding: 10px; }
 .b-warn { background: var(--color-warn-bg); color: var(--color-warn); border-color: rgba(255, 179, 65, 0.35); }
 .b-bad { background: var(--color-bad-bg); color: var(--color-bad); border-color: rgba(255, 107, 94, 0.35); }
 .b-info { background: var(--color-info-bg); color: var(--color-info); border-color: rgba(121, 184, 255, 0.35); }
+.cmp-cooldown { margin-top: 4px; }
 .b-neutral { background: var(--color-neutral-bg); color: var(--color-neutral); border-color: var(--color-border); }
 
 /* Dificultad de receta (colores del juego). Siempre con el nombre del color como texto. */
