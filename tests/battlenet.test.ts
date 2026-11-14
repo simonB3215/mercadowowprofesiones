@@ -12,7 +12,7 @@ delete process.env.APP_PASSWORD;
 
 const { getDb, migrate } = await import('../src/server/db.js');
 const { handle } = await import('../src/server/router.js');
-const { setBattlenetFetch, parseProfessions, parseAccountProfile, profilePathOf, encryptToken, decryptToken } = await import('../src/server/battlenet.js');
+const { setBattlenetFetch, parseProfessions, parseAccountProfile, profilePathOf, parseMedia, parseEquipment, encryptToken, decryptToken } = await import('../src/server/battlenet.js');
 
 const ORIGIN = 'https://app.test';
 const call = (path: string, init: RequestInit = {}) => handle(new Request(ORIGIN + path, { redirect: 'manual', ...init }));
@@ -47,6 +47,18 @@ const fakeFetch = (async (input: any, init: any = {}) => {
   if (url === 'https://oauth.battle.net/userinfo') return reply(200, { sub: acc.sub, id: Number(acc.sub), battletag: acc.tag });
   const u = new URL(url);
   if (u.pathname === '/profile/user/wow') return reply(200, { wow_accounts: [{ id: 77, characters: acc.chars }] });
+  // Forma real de Forever (14-11-2026): perfil, retrato y equipo.
+  if (u.pathname === '/profile/wow/character/zeta-rojas') return reply(200, { id: 3003, name: 'Zeta', level: 34, guild: { name: 'Last Kings' } });
+  if (u.pathname === '/profile/wow/character/zeta-rojas/character-media') {
+    return reply(200, { assets: [{ key: 'main-raw', value: 'https://render.worldofwarcraft.com/forever-us/character/39/3003-main-raw.png' }, { key: 'avatar', value: 'https://render.worldofwarcraft.com/forever-us/character/39/3003-avatar.jpg' }] });
+  }
+  if (u.pathname === '/profile/wow/character/zeta-rojas/equipment') {
+    return reply(200, { equipped_items: [
+      { item: { id: 3030 }, slot: { type: 'AMMO', name: 'Munición' }, quantity: 200, quality: { type: 'COMMON' }, name: 'Flecha navaja', level: { value: 30 } },
+      { item: { id: 9859 }, slot: { type: 'HEAD', name: 'Cabeza' }, quality: { type: 'UNCOMMON' }, name: 'Gorro de arquero del bandido', level: { value: 36 },
+        armor: { display: { display_string: '96 de armadura' } }, stats: [{ display: { display_string: '+5 Agilidad' } }], requirements: { level: { display_string: 'Requiere nivel 31' } } },
+    ] });
+  }
   if (u.pathname === '/profile/wow/character/zeta-rojas/professions') {
     return reply(200, { primaries: [{ profession: { id: 171, name: 'Alchemy' }, tiers: [{ skill_points: 198, max_skill_points: 225, tier: { id: 2937, name: 'Alchemy' }, known_recipes: [{ id: 1814 }] }] }] });
   }
@@ -311,6 +323,30 @@ describe('Battle.net: personajes de WoW Forever (sin reino)', () => {
     expect(calls.some((u) => u.includes('/profile/wow/character/zeta-rojas/professions'))).toBe(true);
     const d = await jsonCall(`/api/me/characters/${id}`, C);
     expect(JSON.stringify(d.json)).toContain('198');
+  });
+
+  it('«Actualizar desde Blizzard» guarda nivel, hermandad, retrato y equipo en el orden del juego', async () => {
+    const C = await connect('codigo-C');
+    const list = await jsonCall('/api/me/characters', C);
+    const id = list.json.characters[0].id;
+    const r = await jsonCall(`/api/me/characters/${id}/sync`, C, 'POST', {});
+    expect(r.status).toBe(200);
+    const c = r.json.character;
+    expect(c).toMatchObject({ level: 34, guild: 'Last Kings', profileDetail: null });
+    expect(c.media.main).toMatch(/^https:\/\/render\.worldofwarcraft\.com\//);
+    expect(c.equipment.map((i: any) => i.slot)).toEqual(['HEAD', 'AMMO']);
+    expect(c.equipment[0]).toMatchObject({ itemId: 9859, quality: 'UNCOMMON', itemLevel: 36, armor: '96 de armadura', stats: ['+5 Agilidad'], requirement: 'Requiere nivel 31' });
+    expect(c.profileSyncedAt).not.toBeNull();
+    expect(c.professions.length).toBeGreaterThan(0);
+    // Otra cuenta no puede actualizar este personaje.
+    const otra = await connect('codigo-A');
+    expect((await jsonCall(`/api/me/characters/${id}/sync`, otra, 'POST', {})).status).toBe(404);
+  });
+
+  it('el retrato solo acepta https de render.worldofwarcraft.com; un equipo sin id se ignora', () => {
+    expect(parseMedia({ assets: [{ key: 'main-raw', value: 'https://evil.example.com/x.png' }, { key: 'avatar', value: 'javascript:alert(1)' }] })).toEqual({ avatar: null, main: null });
+    expect(parseMedia({ assets: [{ key: 'main', value: 'https://render.worldofwarcraft.com/a/b-main.png' }] }).main).toBe('https://render.worldofwarcraft.com/a/b-main.png');
+    expect(parseEquipment({ equipped_items: [{ slot: { type: 'HEAD' } }, { item: { id: 1 } }] }, 'us')).toEqual([]);
   });
 
   it('solo acepta enlaces de personaje de api.blizzard.com', () => {

@@ -5,7 +5,7 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 144 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
+- 146 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
@@ -52,6 +52,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 - **Mi personaje** (`#/personaje`, PC-01 a PC-16, D32 a D34; estado por PC en el backlog, sección «Ampliación»):
   - Conexión con Battle.net (inicio de sesión oficial, `state` de un solo uso, token cifrado en el servidor, desconectar y borrar datos).
   - Personajes propios con aislamiento por cuenta.
+  - Ficha del personaje como el panel del juego: retrato de Blizzard, equipo puesto con la información de cada pieza (ratón, teclado o toque), nivel de objeto medio, nivel y hermandad, tal como estaban al pulsar «Actualizar desde Blizzard» (se lee solo la primera vez). Profesiones en tarjetas con barra de progreso; «Ruta para subirla» calcula la ruta desde el nivel actual. Revisado en el navegador a 1280 y 375 px con datos reales de Blizzard (base local de prueba).
   - Profesiones de Blizzard o manuales, con procedencia.
   - Ruta **más rápida** (tiempo activo = fabricaciones × tiempo de lanzamiento de Wowhead) o más barata, con presupuesto, «solo naranja» y recetas conocidas.
   - Por paso: fabricaciones esperadas frente al mínimo garantizado, requisitos de rango (reglas de Classic, sin verificar), bloqueos, recuperación hipotética por venta.

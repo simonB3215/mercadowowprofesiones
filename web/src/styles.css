@@ -483,3 +483,79 @@ a.button:hover { filter: brightness(1.15); }
   .pc-edit .pc-note { grid-column: auto; }
   .pc-row-actions { justify-content: flex-start; }
 }
+
+/* ---- Ficha del personaje (retrato + equipo, estilo panel del juego) ---- */
+.pc-sheet { position: relative; }
+.pc-sheet-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-3); }
+.pc-sheet-name { font-size: 1.5rem; margin: 0; }
+.pc-sheet-sub { margin: 2px 0 0; color: var(--color-fg); display: flex; flex-wrap: wrap; gap: 6px var(--space-2); align-items: center; }
+.pc-guild { margin: 2px 0 0; color: var(--q-uncommon); font-weight: 600; }
+.pc-faction { font-size: var(--text-xs); font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--color-border); }
+.pc-faction.horde { color: #ff7b6b; border-color: rgba(255, 90, 70, 0.45); background: rgba(140, 16, 8, 0.35); }
+.pc-faction.alliance { color: #8cc4ff; border-color: rgba(80, 150, 255, 0.45); background: rgba(10, 50, 130, 0.35); }
+.pc-sheet-sync { display: grid; gap: 4px; justify-items: end; text-align: right; }
+.spin { animation: pc-spin 1s linear infinite; }
+@keyframes pc-spin { to { transform: rotate(360deg); } }
+
+.pc-doll { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'left portrait right' 'bottom bottom bottom'; gap: var(--space-3); align-items: stretch; }
+.pc-slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; align-content: start; }
+.pc-left { grid-area: left; }
+.pc-right { grid-area: right; }
+.pc-bottom { grid-area: bottom; grid-auto-flow: column; justify-content: center; }
+.pc-slot { position: relative; width: 48px; height: 48px; }
+.pc-slot > a { display: block; width: 48px; height: 48px; border-radius: var(--radius-sm); outline-offset: 2px; }
+.pc-slot .pc-slot-icon { width: 48px !important; height: 48px !important; border-width: 2px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease); }
+.pc-slot .pc-slot-icon img { width: 100%; height: 100%; }
+.pc-slot.open .pc-slot-icon, .pc-slot > a:hover .pc-slot-icon { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--gold-line), 0 4px 12px rgba(0, 0, 0, 0.7); }
+.pc-slot-frame { display: block; box-sizing: border-box; width: 48px; height: 48px; min-height: 48px; border-radius: var(--radius-sm); border: 1px dashed var(--color-border-strong); background: rgba(0, 0, 0, 0.35); }
+
+.pc-portrait { grid-area: portrait; margin: 0; position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--gold-line);
+  background: radial-gradient(ellipse at 50% 60%, rgba(120, 90, 40, 0.35), rgba(8, 9, 15, 0.95) 70%); min-height: 380px; }
+/* El PNG de Blizzard (1600×1200) deja al personaje en el centro con mucho margen: se amplía y centra. */
+.pc-portrait img { position: absolute; max-width: none; height: 180%; width: auto; left: 50%; top: 50%; transform: translate(-50%, -56%); pointer-events: none; user-select: none; }
+.pc-portrait-empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: var(--space-2); padding: var(--space-4); text-align: center; color: var(--color-muted-fg); }
+.pc-ilvl { position: absolute; left: 50%; bottom: var(--space-2); transform: translateX(-50%); background: rgba(0, 0, 0, 0.72); border: 1px solid var(--gold-line); border-radius: 999px; padding: 4px 12px; font-size: var(--text-xs); color: var(--color-muted-fg); white-space: nowrap; }
+.pc-ilvl span { color: var(--gold); font-weight: 700; font-size: 0.95rem; margin-right: 4px; }
+.pc-doll-note { margin: var(--space-2) 0 0; text-align: center; }
+
+.pc-tip { position: absolute; z-index: 20; width: 260px; padding: 10px 12px; border-radius: var(--radius-sm); background: rgba(6, 8, 20, 0.97); border: 1px solid #8a7a52;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75); font-size: 0.85rem; line-height: 1.35; pointer-events: none; text-align: left; }
+.pc-tip p { margin: 0; color: #fff; }
+.pc-tip .pc-tip-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+.pc-tip .pc-tip-ilvl { color: var(--gold); }
+.pc-tip .pc-tip-row { display: flex; justify-content: space-between; gap: var(--space-2); }
+.pc-tip .pc-tip-stat { color: var(--q-uncommon); }
+.pc-tip .q-poor { color: var(--q-poor); } .pc-tip .q-common { color: var(--q-common); } .pc-tip .q-uncommon { color: var(--q-uncommon); }
+.pc-tip .q-rare { color: var(--q-rare); } .pc-tip .q-epic { color: var(--q-epic); } .pc-tip .q-legendary { color: var(--q-legendary); }
+.pc-tip-right { left: calc(100% + 10px); top: 0; }
+.pc-tip-left { right: calc(100% + 10px); top: 0; }
+.pc-tip-up { bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); }
+
+.pc-char { grid-template-columns: auto 1fr; column-gap: var(--space-2); }
+.pc-char > span { grid-column: 2; }
+.pc-char-avatar { grid-row: 1 / span 3; border-radius: 50%; border: 1px solid var(--gold-line); object-fit: cover; align-self: center; }
+
+/* ---- Profesiones en tarjetas ---- */
+.pc-tiles { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--space-3); }
+.pc-tile { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius); border: 1px solid var(--color-border); background: var(--glass-bg); }
+.pc-tile-head { display: flex; gap: var(--space-3); align-items: center; }
+.pc-tile-name { margin: 0; font-weight: 700; color: #fff; }
+.pc-tile-skill { margin: 0; color: var(--color-muted-fg); display: flex; gap: 6px; align-items: center; }
+.pc-tile-skill strong { color: var(--gold); font-size: 1.1rem; }
+.pc-bar { height: 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--color-border-strong); overflow: hidden; }
+.pc-bar > span { display: block; height: 100%; background: linear-gradient(90deg, #1f7a1f, #3fbf3f); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25); }
+.pc-tile-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.pc-tile-actions .primary { min-height: 40px; }
+.pc-manual-notes { margin: var(--space-3) 0 0; padding-left: 1.2rem; }
+
+@media (max-width: 720px) {
+  .pc-doll { grid-template-columns: 1fr; grid-template-areas: 'portrait' 'left' 'right' 'bottom'; }
+  .pc-slots, .pc-bottom { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, 48px); justify-content: center; }
+  .pc-portrait { min-height: 320px; }
+  .pc-sheet-sync { justify-items: start; text-align: left; }
+  .pc-tip, .pc-tip-right, .pc-tip-left, .pc-tip-up { position: fixed; left: 16px; right: 16px; bottom: 16px; top: auto; width: auto; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+.pc-sheet, form.lv-form { scroll-margin-top: 120px; }
+@media (max-width: 720px) { .pc-sheet, form.lv-form { scroll-margin-top: 16px; } }
+@media (max-width: 720px) { .pc-tip { pointer-events: auto; } .pc-tip::after { content: "Toca aquí para cerrar · toca otra vez la pieza para abrir Wowhead"; display: block; margin-top: 6px; color: var(--color-muted-fg); font-size: var(--text-xs); } }

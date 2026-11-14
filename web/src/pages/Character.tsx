@@ -7,13 +7,14 @@ import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { SkillColor, HowToLearn } from './Leveling.js';
+import { CharacterSheet, ProfessionTiles, PROFESSION_NAME_ES, useScrollTo } from './CharacterSheet.js';
 import {
   IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers,
   ShoppingCart, FloppyDisk, ArrowSquareOut, Trash, PencilSimple, XCircle, Flag,
 } from '@phosphor-icons/react';
 
 const BNET_MSG: Record<string, [string, 'info' | 'warn' | 'bad']> = {
-  ok: ['Cuenta de Battle.net conectada. Pulsa «Actualizar personajes» si no aparecen.', 'info'],
+  ok: ['Cuenta de Battle.net conectada.', 'info'],
   cancelado: ['Cancelaste el inicio de sesión en Battle.net: no se conectó nada.', 'warn'],
   estado_invalido: ['La conexión caducó o no empezó en este navegador. Vuelve a pulsar «Conectar con Battle.net».', 'bad'],
   sin_permiso: ['Battle.net no concedió el permiso para ver tus personajes (wow.profile).', 'warn'],
@@ -48,6 +49,9 @@ export function Character() {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [charData, setCharData] = useState<any>(null);
+  const [focus, setFocus] = useState<{ pid: number; n: number } | null>(null);
+  const autoSynced = React.useRef(new Set<string>());
+  const autoListed = React.useRef(false);
 
   const list: any[] = chars.data?.characters ?? [];
   useEffect(() => { if (!charId && list.length) setCharId(list[0].id); }, [list.length]);
@@ -58,7 +62,14 @@ export function Character() {
     try { await fn(); } catch (e) { setErr((e as Error).message); } finally { setBusy(null); }
   };
   const syncChars = () => run('chars', async () => { await api('/api/me/characters/sync', { method: 'POST', body: {} }); chars.reload(); });
-  const syncProfs = () => run('profs', async () => { const r = await api(`/api/me/characters/${charId}/professions/sync`, { method: 'POST', body: {} }); setCharData(r.character); });
+  const syncAll = (id = charId) => run('sync', async () => { const r = await api(`/api/me/characters/${id}/sync`, { method: 'POST', body: {} }); setCharData(r.character); });
+  // Recién conectado y sin personajes guardados: se piden a Blizzard sin que haga falta pulsar nada.
+  useEffect(() => { if (connected && chars.data && !list.length && !autoListed.current) { autoListed.current = true; syncChars(); } }, [connected, chars.data]);
+  // Primera vez que se ve un personaje: se lee su ficha (retrato, equipo y profesiones) automáticamente.
+  useEffect(() => {
+    if (charData && !charData.profileSyncedAt && !autoSynced.current.has(charData.id) && !busy) { autoSynced.current.add(charData.id); syncAll(charData.id); }
+  }, [charData?.id, charData?.profileSyncedAt]);
+  const plannable = new Set<number>((profs.data?.professions ?? []).map((p: any) => p.id));
   const disconnect = (deleteData: boolean) => run('out', async () => {
     if (deleteData && !confirm('Se borrarán de esta aplicación tus personajes, profesiones, rutas y progreso guardados. No se puede deshacer. ¿Continuar?')) return;
     await api('/api/battlenet/disconnect', { method: 'POST', body: { deleteData } });
@@ -99,7 +110,7 @@ export function Character() {
               <p className="small muted">Región {String(status.data.account.region).toUpperCase()} · la conexión caduca {dt(status.data.account.expiresAt)}; después hay que volver a conectar.</p>
             </div>
             <div className="pc-actions">
-              <button type="button" onClick={syncChars} disabled={!!busy}><ArrowsClockwise size={18} aria-hidden="true" />{busy === 'chars' ? 'Actualizando…' : 'Actualizar personajes'}</button>
+              <button type="button" onClick={syncChars} disabled={!!busy}><ArrowsClockwise size={18} aria-hidden="true" />{busy === 'chars' ? 'Buscando…' : 'Buscar personajes nuevos'}</button>
               <button type="button" onClick={() => disconnect(false)} disabled={!!busy}><SignOut size={18} aria-hidden="true" />Desconectar</button>
               <button type="button" className="link danger" onClick={() => disconnect(true)} disabled={!!busy}><Trash size={14} aria-hidden="true" />Desconectar y borrar mis datos</button>
             </div>
@@ -107,7 +118,7 @@ export function Character() {
         )}
       </section>
 
-      {connected && (
+      {connected && (chars.loading || chars.error || list.length !== 1) && (
         <section className="card" aria-label="Personajes">
           <h2 className="pc-h2">Tus personajes</h2>
           {chars.loading && <Loading label="Cargando personajes…" />}
@@ -120,6 +131,7 @@ export function Character() {
               {list.map((c) => (
                 <label key={c.id} className={`pc-char${c.id === charId ? ' on' : ''}`}>
                   <input type="radio" name="pc-char" value={c.id} checked={c.id === charId} onChange={() => setCharId(c.id)} />
+                  {c.media?.avatar && <img className="pc-char-avatar" src={c.media.avatar} alt="" width={40} height={40} referrerPolicy="no-referrer" />}
                   <span className="pc-char-name">{c.name}{c.surname ? ` ${c.surname}` : ''}</span>
                   <span className="small muted">{[c.level !== null ? `Nivel ${c.level}` : null, c.raceName, c.className].filter(Boolean).join(' · ')}</span>
                   <span className="small muted">{[c.realm.name ?? c.realm.slug, c.faction === 'HORDE' ? 'Horda' : c.faction === 'ALLIANCE' ? 'Alianza' : c.faction].filter(Boolean).join(' · ')}</span>
@@ -130,11 +142,13 @@ export function Character() {
         </section>
       )}
 
+      {connected && charData && <CharacterSheet c={charData} busy={busy === 'sync'} onSync={() => syncAll()} />}
+
       {connected && charData && (
-        <ProfessionsCard c={charData} profs={profs.data?.professions ?? []} onSync={syncProfs} syncing={busy === 'profs'} onChange={setCharData} />
+        <ProfessionsCard c={charData} profs={profs.data?.professions ?? []} plannable={plannable} onPlan={(pid) => setFocus({ pid, n: Date.now() })} onChange={setCharData} />
       )}
 
-      <RoutePlanner c={connected ? charData : null} profs={profs.data?.professions ?? []} ctxQuery={ctxQuery} ctx={ctx} />
+      <RoutePlanner c={connected ? charData : null} profs={profs.data?.professions ?? []} ctxQuery={ctxQuery} ctx={ctx} focus={focus} />
     </>
   );
 }
@@ -145,10 +159,9 @@ function sourceBadge(src: string | null) {
   return <span className="badge b-neutral">Sin dato</span>;
 }
 
-function ProfessionsCard({ c, profs, onSync, syncing, onChange }: { c: any; profs: any[]; onSync: () => void; syncing: boolean; onChange: (c: any) => void }) {
+function ProfessionsCard({ c, profs, plannable, onPlan, onChange }: { c: any; profs: any[]; plannable: Set<number>; onPlan: (pid: number) => void; onChange: (c: any) => void }) {
   const [edit, setEdit] = useState<{ pid: string; skill: string; max: string; note: string; preferred: string } | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const nameOf = (pid: number, fallback: string | null) => profs.find((p) => p.id === pid)?.name ?? fallback ?? `Profesión ${pid}`;
   const save = async () => {
     if (!edit) return;
     setErr(null);
@@ -167,8 +180,7 @@ function ProfessionsCard({ c, profs, onSync, syncing, onChange }: { c: any; prof
       <div className="pc-row">
         <h2 className="pc-h2">Profesiones de {c.name}</h2>
         <div className="pc-actions">
-          <button type="button" onClick={onSync} disabled={syncing}><ArrowsClockwise size={18} aria-hidden="true" />{syncing ? 'Consultando…' : 'Leer de Blizzard'}</button>
-          <button type="button" onClick={() => setEdit({ pid: String(profs[0]?.id ?? ''), skill: '', max: '', note: '', preferred: 'manual' })}><PencilSimple size={18} aria-hidden="true" />Indicar a mano</button>
+          <button type="button" onClick={() => setEdit({ pid: String(profs[0]?.id ?? ''), skill: '', max: '', note: '', preferred: 'manual' })}><PencilSimple size={18} aria-hidden="true" />Añadir a mano</button>
         </div>
       </div>
       {sync && (
@@ -177,28 +189,16 @@ function ProfessionsCard({ c, profs, onSync, syncing, onChange }: { c: any; prof
         </p>
       )}
       {!c.professions.length ? (
-        <p className="small muted">Sin profesiones registradas. {sync ? 'Indícalas a mano con tu nivel actual y máximo (lo ves en el juego, ventana de habilidades).' : 'Pulsa «Leer de Blizzard» o indícalas a mano.'}</p>
+        <p className="small muted">Sin profesiones registradas. {sync ? 'Añádelas a mano con tu nivel actual y máximo (lo ves en el juego, ventana de habilidades).' : 'Pulsa «Actualizar desde Blizzard» arriba o añádelas a mano.'}</p>
       ) : (
-        <table className="pc-table">
-          <thead><tr><th>Profesión</th><th className="num">Nivel</th><th className="num">Máximo</th><th>Origen</th><th><span className="sr-only">Acciones</span></th></tr></thead>
-          <tbody>
-            {c.professions.map((p: any) => (
-              <tr key={p.professionId}>
-                <td>{nameOf(p.professionId, p.name)}{p.manual?.note && <span className="lv-unit">{p.manual.note}</span>}</td>
-                <td className="num">{p.effective.skillPoints ?? '—'}</td>
-                <td className="num">{p.effective.maxSkillPoints ?? '—'}</td>
-                <td>
-                  {sourceBadge(p.effective.source)}
-                  {p.blizzard && p.manual && <span className="lv-unit">Blizzard: {p.blizzard.skillPoints ?? '—'} · manual: {p.manual.skillPoints ?? '—'} ({dt(p.manual.updatedAt)})</span>}
-                </td>
-                <td className="pc-row-actions">
-                  <button type="button" className="link" onClick={() => setEdit({ pid: String(p.professionId), skill: String(p.manual?.skillPoints ?? p.effective.skillPoints ?? ''), max: String(p.manual?.maxSkillPoints ?? p.effective.maxSkillPoints ?? ''), note: p.manual?.note ?? '', preferred: p.manual?.preferred ?? 'manual' })}>Editar</button>
-                  {p.manual && <button type="button" className="link danger" onClick={() => removeManual(p.professionId)}>Quitar manual</button>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ProfessionTiles c={c} plannable={plannable} onPlan={onPlan} onEdit={(p) => setEdit({ pid: String(p.professionId), skill: String(p.manual?.skillPoints ?? p.effective.skillPoints ?? ''), max: String(p.manual?.maxSkillPoints ?? p.effective.maxSkillPoints ?? ''), note: p.manual?.note ?? '', preferred: p.manual?.preferred ?? 'manual' })} />
+      )}
+      {c.professions.some((p: any) => p.manual) && (
+        <ul className="pc-manual-notes small muted">
+          {c.professions.filter((p: any) => p.manual).map((p: any) => (
+            <li key={p.professionId}>{PROFESSION_NAME_ES[p.professionId] ?? p.name}: dato manual {p.manual.skillPoints ?? '—'} ({dt(p.manual.updatedAt)}){p.blizzard ? `, Blizzard ${p.blizzard.skillPoints ?? '—'}` : ''}. <button type="button" className="link danger" onClick={() => removeManual(p.professionId)}>Quitar manual</button></li>
+          ))}
+        </ul>
       )}
       {edit && (
         <form className="pc-edit" onSubmit={(e) => { e.preventDefault(); save(); }}>
@@ -223,7 +223,7 @@ function ProfessionsCard({ c, profs, onSync, syncing, onChange }: { c: any; prof
   );
 }
 
-function RoutePlanner({ c, profs, ctxQuery, ctx }: { c: any | null; profs: any[]; ctxQuery: string; ctx: any }) {
+function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs: any[]; ctxQuery: string; ctx: any; focus?: { pid: number; n: number } | null }) {
   const charProf = (pid: string) => c?.professions.find((p: any) => String(p.professionId) === pid) ?? null;
   const [f, setF] = useState<RouteForm>({ professionId: '', from: '1', to: '300', mode: 'rapida', budget: '', chance: 'comunidad', all: false, useKnown: true, currentMax: '', characterLevel: '' });
   const [result, setResult] = useState<any>(null);
@@ -242,6 +242,17 @@ function RoutePlanner({ c, profs, ctxQuery, ctx }: { c: any | null; profs: any[]
     setResult(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profs.length, c?.id]);
+
+  const [autoRun, setAutoRun] = useState(0);
+  const formRef = useScrollTo<HTMLFormElement>(focus?.n);
+  useEffect(() => {
+    if (!focus) return;
+    const p = charProf(String(focus.pid));
+    setF((x) => ({ ...x, professionId: String(focus.pid), from: p?.effective.skillPoints ? String(p.effective.skillPoints) : x.from }));
+    setAutoRun(focus.n);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus?.n]);
+  useEffect(() => { if (autoRun) { setAutoRun(0); calc(); } }, [autoRun]);
 
   const cp = charProf(f.professionId);
   const known = cp?.effective.skillPoints ?? null;
@@ -270,13 +281,13 @@ function RoutePlanner({ c, profs, ctxQuery, ctx }: { c: any | null; profs: any[]
 
   return (
     <>
-      <form className="card lv-form" onSubmit={(e) => { e.preventDefault(); if (!budgetBad) calc(); }} aria-label="Calcular ruta">
+      <form ref={formRef} className="card lv-form" onSubmit={(e) => { e.preventDefault(); if (!budgetBad) calc(); }} aria-label="Calcular ruta">
         <h2 className="pc-h2">{c ? `Ruta para ${c.name}` : 'Ruta con tu nivel escrito a mano'}</h2>
         {!c && <p className="small muted">Sin cuenta conectada: indica tu nivel actual y, si los sabes, tu máximo y el nivel del personaje (para avisarte de los rangos del instructor).</p>}
         <div className="pc-fields">
           <label className="field">Profesión
             <select value={f.professionId} onChange={(e) => { const p = charProf(e.target.value); setF({ ...f, professionId: e.target.value, from: p?.effective.skillPoints ? String(p.effective.skillPoints) : f.from }); }}>
-              {profs.map((p) => <option key={p.id} value={p.id}>{p.name}{charProf(String(p.id))?.effective.skillPoints != null ? ` (${charProf(String(p.id)).effective.skillPoints})` : ''}</option>)}
+              {profs.map((p) => <option key={p.id} value={p.id}>{PROFESSION_NAME_ES[p.id] ?? p.name}{charProf(String(p.id))?.effective.skillPoints != null ? ` (${charProf(String(p.id)).effective.skillPoints})` : ''}</option>)}
             </select>
           </label>
           <label className="field">Nivel actual

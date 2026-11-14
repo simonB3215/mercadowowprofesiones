@@ -16,7 +16,7 @@ import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
 import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds } from './leveling.js';
-import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, ownedCharacter, characterProfessions } from './battlenet.js';
+import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, syncCharacterProfile, ownedCharacter, characterProfessions } from './battlenet.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
@@ -542,6 +542,8 @@ async function characterView(db: Db, c: any) {
     id: c.id, name: c.name, level: c.level, className: c.class_name, raceName: c.race_name, faction: c.faction,
     realm: { id: c.realm_id === null ? null : Number(c.realm_id), slug: c.realm_slug, name: c.realm_name }, namespace: c.namespace, surname: c.surname ?? null,
     syncedAt: new Date(c.synced_at).toISOString(),
+    guild: c.guild_name ?? null, media: c.media ?? null, equipment: c.equipment ?? null,
+    profileSyncedAt: c.profile_synced_at ? new Date(c.profile_synced_at).toISOString() : null, profileDetail: c.profile_detail ?? null,
     professionSync: sync[0] ? { status: sync[0].status, httpStatus: sync[0].http_status, detail: sync[0].detail, checkedAt: new Date(sync[0].checked_at).toISOString() } : null,
     professions: await characterProfessions(db, c.id),
   };
@@ -569,6 +571,14 @@ route('POST', '/api/me/characters/:id/professions/sync', async (req, p, _u, db) 
   const c = await ownedCharacter(db, s, p.id);
   const r = await syncProfessions(db, s, c);
   return { result: r, character: await characterView(db, c) };
+});
+/** Actualiza todo desde Blizzard: nivel, retrato, equipo puesto y profesiones. */
+route('POST', '/api/me/characters/:id/sync', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  const [profile, professions] = await Promise.all([syncCharacterProfile(db, s, c), syncProfessions(db, s, c)]);
+  return { result: { profile, professions }, character: await characterView(db, await ownedCharacter(db, s, p.id)) };
 });
 route('PUT', '/api/me/characters/:id/professions/:pid', async (req, p, _u, db) => {
   checkSameOrigin(req);

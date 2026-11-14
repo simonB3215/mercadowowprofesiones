@@ -20,7 +20,8 @@
 import { createCipheriv, createDecipheriv, createHash, hkdfSync, randomBytes } from 'node:crypto';
 import type { Db } from './db.js';
 import { HttpError } from './market.js';
-import { pickName, LOCALE_PREF } from './providers/blizzard.js';
+import { pickName, LOCALE_PREF, hasBlizzardCredentials, createBlizzardClient } from './providers/blizzard.js';
+import { resolveItem, saveAsset } from './assets.js';
 
 export const BNET_COOKIE = 'mw_bnet';
 export const STATE_COOKIE = 'mw_bnet_state';
@@ -378,4 +379,97 @@ export async function characterProfessions(db: Db, characterId: string) {
       effective: { skillPoints: skill, maxSkillPoints: max, source: skill === null ? null : useManual ? 'manual' : 'blizzard' },
     };
   });
+}
+
+// ---------------------------------------------------------------------------
+// Ficha del personaje: retrato y equipo puesto (Forever: /character-media y /equipment, comprobado el 14-11-2026)
+// ---------------------------------------------------------------------------
+
+/** Ranuras en el orden del panel del juego. */
+export const EQUIPMENT_SLOTS = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'SHIRT', 'TABARD', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND', 'RANGED', 'AMMO'] as const;
+
+export interface EquippedItem {
+  slot: string; slotName: string | null; itemId: number; name: string | null; quality: string | null; itemLevel: number | null;
+  inventoryType: string | null; subclass: string | null; binding: string | null; armor: string | null; stats: string[];
+  requirement: string | null; durability: string | null; quantity: number | null;
+}
+
+/** Solo imágenes https de render.worldofwarcraft.com (no se inserta en la página ninguna URL de otro origen). */
+export function parseMedia(j: any): { avatar: string | null; main: string | null } {
+  const assets: any[] = Array.isArray(j?.assets) ? j.assets : [];
+  const pick = (...keys: string[]) => {
+    for (const k of keys) {
+      const v = assets.find((a) => a?.key === k)?.value;
+      if (typeof v === 'string' && /^https:\/\/render\.worldofwarcraft\.com\/[\w./-]+\.(png|jpg)$/.test(v)) return v;
+    }
+    return null;
+  };
+  return { avatar: pick('avatar'), main: pick('main-raw', 'main') };
+}
+
+export function parseEquipment(j: any, region: string): EquippedItem[] {
+  const str = (v: unknown) => (typeof v === 'string' && v ? v : null);
+  const out: EquippedItem[] = [];
+  for (const it of Array.isArray(j?.equipped_items) ? j.equipped_items : []) {
+    const itemId = Number(it?.item?.id);
+    const slot = str(it?.slot?.type);
+    if (!Number.isInteger(itemId) || !slot) continue;
+    out.push({
+      slot, slotName: nameOf(it.slot?.name, region), itemId, name: nameOf(it.name, region), quality: str(it.quality?.type),
+      itemLevel: Number.isInteger(it.level?.value) ? it.level.value : null,
+      inventoryType: nameOf(it.inventory_type?.name, region), subclass: nameOf(it.item_subclass?.name, region),
+      binding: nameOf(it.binding?.name, region), armor: str(it.armor?.display?.display_string),
+      stats: (Array.isArray(it.stats) ? it.stats : []).map((s: any) => str(s?.display?.display_string)).filter((s: string | null): s is string => Boolean(s)),
+      requirement: str(it.requirements?.level?.display_string), durability: str(it.durability?.display_string),
+      quantity: Number.isInteger(it.quantity) ? it.quantity : null,
+    });
+  }
+  const order = (s: string) => { const i = (EQUIPMENT_SLOTS as readonly string[]).indexOf(s); return i < 0 ? 99 : i; };
+  return out.sort((a, b) => order(a.slot) - order(b.slot));
+}
+
+/** Iconos de las piezas que aún no están en visual_asset (Wowhead Forever con respaldo de Blizzard, como sync:icons). */
+async function resolveEquipmentIcons(db: Db, region: string, itemIds: number[]) {
+  if (!itemIds.length) return;
+  const have = await db.query<any>(`select id from visual_asset where game_version='forever' and kind='item' and id = any($1::int[])`, [itemIds]);
+  const missing = itemIds.filter((id) => !have.some((h) => Number(h.id) === id)).slice(0, 25);
+  if (!missing.length) return;
+  const client = hasBlizzardCredentials() ? createBlizzardClient(region, fetchImpl) : null;
+  const ns = `static-forever-${region}`;
+  await Promise.allSettled(missing.map(async (id) => saveAsset(db, 'forever', await resolveItem(id, client, ns, fetchImpl))));
+}
+
+/**
+ * Actualiza la ficha: nivel y hermandad, retrato y equipo. Cada parte que falle conserva el último dato guardado y
+ * deja el motivo en profile_detail; nunca se guarda «sin equipo» por un error.
+ */
+export async function syncCharacterProfile(db: Db, s: BnetSession, character: any) {
+  const base = character.profile_path
+    ?? (character.realm_slug ? `/profile/wow/character/${encodeURIComponent(character.realm_slug)}/${encodeURIComponent(String(character.name).toLowerCase())}` : null);
+  if (!base) return { status: 'error' as const, detail: 'Blizzard no dio el enlace del personaje.' };
+  const [summary, media, equipment] = await Promise.all([
+    profileGet(s, base, character.namespace), profileGet(s, `${base}/character-media`, character.namespace), profileGet(s, `${base}/equipment`, character.namespace),
+  ]);
+  const problems: string[] = [];
+  if (!summary.json) problems.push(`perfil (HTTP ${summary.status})`);
+  if (!media.json) problems.push(`imagen (HTTP ${media.status})`);
+  if (!equipment.json) problems.push(`equipo (HTTP ${equipment.status})`);
+  const level = Number.isInteger(summary.json?.level) ? summary.json.level : null;
+  const guild = summary.json ? (nameOf(summary.json.guild?.name, s.region) ?? null) : undefined;
+  const items = equipment.json ? parseEquipment(equipment.json, s.region) : null;
+  await db.query(
+    `update bnet_character set
+       level = coalesce($2, level),
+       guild_name = case when $3::boolean then $4 else guild_name end,
+       media = coalesce($5::text::jsonb, media),
+       equipment = coalesce($6::text::jsonb, equipment),
+       profile_synced_at = case when $7::boolean then now() else profile_synced_at end,
+       profile_detail = $8
+     where id = $1`,
+    [character.id, level, guild !== undefined, guild ?? null, media.json ? JSON.stringify(parseMedia(media.json)) : null,
+      items ? JSON.stringify(items) : null, Boolean(summary.json || media.json || equipment.json),
+      problems.length ? `No se pudo leer: ${problems.join(', ')}. Se muestra lo último guardado.` : null],
+  );
+  if (items) await resolveEquipmentIcons(db, s.region, [...new Set(items.map((i) => i.itemId))]).catch(() => undefined);
+  return { status: problems.length ? ('parcial' as const) : ('ok' as const), detail: problems };
 }
