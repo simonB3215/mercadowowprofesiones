@@ -176,7 +176,7 @@ export function Leveling() {
                               <li key={m.itemId} className="lv-chip">
                                 <span className="mono">{String(m.quantity)} ×</span>
                                 <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
-                                {m.priceSource === 'manual' && <span className="lv-manual" title="Precio indicado por ti">manual</span>}
+                                {m.priceSource === 'manual' && <span className="lv-manual" title="Precio indicado por ti">manual</span>}{m.priceSource === 'vendedor' && <span className="lv-manual" title="Precio del vendedor (más barato que la casa de subastas)">vendedor</span>}
                               </li>
                             ))}
                           </ul>
@@ -226,7 +226,7 @@ export function Leveling() {
                           <td className="num">{String(m.quantity)}</td>
                           <td className="num">
                             <Money v={m.cost} />
-                            <span className="lv-unit"><Money v={m.unitPrice} /> c/u{m.priceSource === 'manual' ? ' · manual' : ''}</span>
+                            <span className="lv-unit"><Money v={m.unitPrice} /> c/u{m.priceSource === 'manual' ? ' · manual' : m.priceSource === 'vendedor' ? ' · vendedor' : ''}</span>
                           </td>
                         </tr>
                       ))}
@@ -258,7 +258,7 @@ export function Leveling() {
             <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>
             <ul className="small lv-notes">
               <li>En cada nivel se elige la receta que sube un punto más barato. Las veces a fabricar en dificultad amarilla y verde son una <strong>estimación</strong> (fórmula de la comunidad); se redondean hacia arriba.</li>
-              <li>Precios: casa de subastas elegida arriba, campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Un material sin precio nunca se cuenta como gratis.</li>
+              <li>Precios: casa de subastas elegida arriba, campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Un material sin precio nunca se cuenta como gratis.{d.source?.vendor?.items ? ` Los materiales que solo venden los vendedores (${d.source.vendor.items}, Wowhead, ${d.source.vendor.checkedAt}) usan el precio del vendedor si es más barato.` : ''}</li>
               <li>Recetas y dificultad: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead (WoW Forever)</a>, datos del {dt(d.source.fetchedAt)}.</li>
               <li>Por defecto solo se usan recetas del instructor y las que se conocen al aprender la profesión. El objetivo por defecto es 300.</li>
               <li>Herboristería, Desuello y Pesca no aparecen: se suben recolectando.</li>

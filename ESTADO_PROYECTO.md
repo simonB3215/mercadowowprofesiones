@@ -5,7 +5,7 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 137 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
+- 144 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
@@ -34,7 +34,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Perfil (profesiones, recetas conocidas, inventario).
   - Lista de fabricación y compras con inventario compartido.
   - Materiales: vender o usar, y oro por hora con datos del usuario.
-  - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 38 o completa. Las recetas con tiempo de reutilización (transmutaciones, Tela lunar, Fogata básica) no se usan (D29).
+  - Subir de nivel (`#/nivel`, D27): ruta más barata por profesión (9 de fabricación; las de recolección no), receta por tramo, color de dificultad, fabricaciones estimadas, materiales, costo con precios de la casa de subastas, costo del instructor, lista de compra y precios manuales para materiales sin precio. Comprobado con datos reales: Sastrería 1→300 ≈ 463 o con tramos sin datos desde 250; Alquimia 1→300 ≈ 38 o completa. Las recetas con tiempo de reutilización (transmutaciones, Tela lunar, Fogata básica) no se usan (D29). Los materiales que solo venden los vendedores (hilos, tintes, lejía…) usan el precio del vendedor si es más barato que la subasta, con la etiqueta «vendedor» (D35).
   - Reutilización (PB-22, D31): las 13 transmutaciones y Tela lunar llevan la etiqueta «1 cada X» en el comparador y el detalle; el plan de fabricación avisa del tiempo mínimo para repetirlas.
   - Registro real con correcciones sin duplicar.
   - Ajustes.
@@ -58,7 +58,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Rutas guardadas con progreso y recálculo.
   - Sin cuenta, calcula con el nivel escrito a mano. Revisado en el navegador a 1024 y 375 px en ese modo.
   - Con datos reales: Alquimia 1→300 rápida = 15,4 min y 53,90 o; barata = 23,7 min y 38,59 o; con 45 o de presupuesto = 16,1 min.
-  - **El flujo con cuenta real no está probado:** solo con respuestas simuladas de Blizzard (`tests/battlenet.test.ts`).
+  - **Probado con una cuenta real (13-11-2026):** inicio de sesión y lista de personajes en producción. Forever no da reino: el personaje se identifica como `nombre-apellido` y las profesiones responden en `…/character/{nombre-apellido}/professions` (comprobado). La lectura de profesiones con esa ruta está corregida pero falta desplegarla y probarla desde la web.
 - **Servidor MCP** (D30): 7 herramientas de solo lectura para consultar desde Claude el estado del mercado, recetas rentables, detalle, materiales y rutas de subida de nivel. Probado por stdio con los datos reales de Supabase (13-11-2026) y con pruebas automáticas.
 - **Acceso:** contraseña compartida (`APP_PASSWORD`), cookie HttpOnly firmada; el cron usa `CRON_SECRET`.
 
@@ -77,7 +77,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 | Iconos de objetos nuevos | Hay que ejecutar `npm run sync:icons` tras cada `sync:catalog` | Los objetos sin resolver se muestran con un marcador neutro. |
 | Subida de nivel: tramos altos | Por encima de ≈ 250 algunas profesiones necesitan recetas de patrón o materiales de vendedor sin precio en la casa de subastas | Marcar «Incluir recetas de patrón…» o indicar precios manuales. La probabilidad en amarillo y verde es una estimación de la comunidad. |
 | Subida de nivel: datos de Wowhead | Copiados a mano el 13-11-2026 (Wowhead bloquea descargas automáticas) | Repetir la copia si Forever cambia recetas o umbrales. |
-| Battle.net (Mi personaje) | Implementado y probado con respuestas simuladas. Tablas creadas en Supabase (migración `20261115000000`, 13-11-2026). Blizzard no documenta perfiles de Forever ni profesiones en Classic. | Registrar las URL de retorno en el cliente de Blizzard (README) y que el usuario conecte su cuenta. Así se comprueba si `profile-forever-us` lista personajes y si `/professions` responde; si no, usar datos manuales. |
+| Battle.net (Mi personaje) | Conexión y lista de personajes **probadas con una cuenta real** (13-11-2026). Forever no da reino: el personaje es `nombre-apellido` y `/professions` responde con nivel, máximo y recetas conocidas (comprobado). Migraciones `20261115000000` y `20261116000000` aplicadas. | Desplegar la corrección y pulsar «Actualizar personajes» y luego «Leer de Blizzard» para comprobarlo desde la web. |
 | Rutas: tiempos no incluidos | Solo se cuenta el tiempo de fabricación | Sin datos verificados de viajes, compras, aprendizaje ni recolección (PC-17). |
 | Tema claro | Sustituido por el estilo del juego (oscuro) a petición del usuario | Recuperable con los tokens de la primera iteración (historial de git). |
 
@@ -91,11 +91,11 @@ Ver [docs/DECISIONES.md](docs/DECISIONES.md). Las principales:
 - PGlite para desarrollo y pruebas.
 - El catálogo se sincroniza con un script local.
 - Cron diario (plan Hobby).
-- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29); servidor MCP (D30); reutilización en comparador y plan (D31); conexión con Battle.net (D32), datos del personaje con procedencia (D33) y ruta más rápida (D34).
+- Sistema visual e iconos por id (D25); límite de tiempo de las consultas (D26); subida de nivel con datos de Wowhead (D27); precios de venta atípicos (D28); sin recetas con reutilización en la subida de nivel (D29); servidor MCP (D30); reutilización en comparador y plan (D31); conexión con Battle.net (D32), datos del personaje con procedencia (D33), ruta más rápida (D34) y precio de vendedor en la subida de nivel (D35).
 
 ## Siguientes pasos
 
-1. Battle.net: registrar las URL de retorno, conectar una cuenta real y anotar en `docs/VALIDACION_FUENTES.md` qué devuelve Forever (personajes, profesiones).
+1. Battle.net: desplegar la lectura por `nombre-apellido`, comprobar desde la web que se leen las profesiones y que las recetas conocidas se enlazan con Wowhead.
 2. PC-14 y PC-08: descontar inventario y registrar fabricaciones y consumo en el progreso.
 3. Verificar las comisiones en el juego.
 4. PB-23: tablas verificadas de desencantado, prospección y molienda para Forever.

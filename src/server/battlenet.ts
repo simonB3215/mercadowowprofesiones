@@ -225,14 +225,30 @@ async function profileGet(s: BnetSession, path: string, namespace: string): Prom
 const nameOf = (v: unknown, region: string) => pickName(v, LOCALE_PREF[region] ?? ['en_US']).name;
 
 /** Lista de personajes de /profile/user/wow (formato documentado de la Account Profile API). */
+/**
+ * Ruta del perfil del personaje a partir del enlace que da Blizzard («character.href»). En Forever no hay reino:
+ * /profile/wow/character/mati-fernandez. Solo se acepta un enlace de *.api.blizzard.com con esa forma.
+ */
+export function profilePathOf(href: unknown): string | null {
+  if (typeof href !== 'string') return null;
+  try {
+    const u = new URL(href);
+    if (u.protocol !== 'https:' || !/^[a-z]{2}\.api\.blizzard\.com$/.test(u.hostname)) return null;
+    return /^\/profile\/wow\/character\/[^/?#\s]+(\/[^/?#\s]+)?$/.test(u.pathname) ? u.pathname : null;
+  } catch {
+    return null;
+  }
+}
+
 export function parseAccountProfile(j: any, region: string) {
-  const out: Array<{ wowAccountId: number | null; characterId: number; name: string; realmId: number | null; realmSlug: string | null; realmName: string | null; level: number | null; className: string | null; raceName: string | null; faction: string | null; raw: unknown }> = [];
+  const out: Array<{ wowAccountId: number | null; characterId: number; name: string; surname: string | null; profilePath: string | null; realmId: number | null; realmSlug: string | null; realmName: string | null; level: number | null; className: string | null; raceName: string | null; faction: string | null; raw: unknown }> = [];
   for (const acc of Array.isArray(j?.wow_accounts) ? j.wow_accounts : []) {
     for (const c of Array.isArray(acc?.characters) ? acc.characters : []) {
       if (!Number.isFinite(Number(c?.id)) || !c?.name) continue;
       out.push({
         wowAccountId: Number.isFinite(Number(acc.id)) ? Number(acc.id) : null,
         characterId: Number(c.id), name: String(c.name),
+        surname: typeof c.surname === 'string' && c.surname ? c.surname : null, profilePath: profilePathOf(c.character?.href),
         realmId: Number.isFinite(Number(c.realm?.id)) ? Number(c.realm.id) : null,
         realmSlug: c.realm?.slug ?? null, realmName: nameOf(c.realm?.name, region),
         level: Number.isInteger(c.level) ? c.level : null,
@@ -252,12 +268,13 @@ export async function syncCharacters(db: Db, s: BnetSession) {
     tried.push({ namespace: ns, status: r.status, characters: chars.length });
     for (const c of chars) {
       await db.query(
-        `insert into bnet_character (account_id, namespace, wow_account_id, character_id, realm_id, realm_slug, realm_name, name, level, class_name, race_name, faction, raw, synced_at)
-         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::text::jsonb,now())
+        `insert into bnet_character (account_id, namespace, wow_account_id, character_id, realm_id, realm_slug, realm_name, name, level, class_name, race_name, faction, raw, surname, profile_path, synced_at)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::text::jsonb,$14,$15,now())
          on conflict (account_id, namespace, character_id, realm_id) do update set wow_account_id=excluded.wow_account_id, realm_slug=excluded.realm_slug,
+           surname=excluded.surname, profile_path=excluded.profile_path,
            realm_name=excluded.realm_name, name=excluded.name, level=excluded.level, class_name=excluded.class_name, race_name=excluded.race_name,
            faction=excluded.faction, raw=excluded.raw, synced_at=now()`,
-        [s.accountId, ns, c.wowAccountId, c.characterId, c.realmId, c.realmSlug, c.realmName, c.name, c.level, c.className, c.raceName, c.faction, JSON.stringify(c.raw)],
+        [s.accountId, ns, c.wowAccountId, c.characterId, c.realmId, c.realmSlug, c.realmName, c.name, c.level, c.className, c.raceName, c.faction, JSON.stringify(c.raw), c.surname, c.profilePath],
       );
     }
   }
@@ -299,11 +316,14 @@ export async function ownedCharacter(db: Db, s: BnetSession, id: string) {
 }
 
 export async function syncProfessions(db: Db, s: BnetSession, character: any) {
-  if (!character.realm_slug) {
-    await recordSync(db, character.id, 'error', null, 'El personaje no tiene reino en la respuesta de Blizzard.');
+  // Forever: el enlace que dio Blizzard (nombre-apellido, sin reino). Classic/retail: reino + nombre.
+  const base = character.profile_path
+    ?? (character.realm_slug ? `/profile/wow/character/${encodeURIComponent(character.realm_slug)}/${encodeURIComponent(String(character.name).toLowerCase())}` : null);
+  if (!base) {
+    await recordSync(db, character.id, 'error', null, 'Blizzard no dio el enlace del personaje. Vuelve a pulsar «Actualizar personajes».');
     return { status: 'error' as const };
   }
-  const path = `/profile/wow/character/${encodeURIComponent(character.realm_slug)}/${encodeURIComponent(String(character.name).toLowerCase())}/professions`;
+  const path = `${base}/professions`;
   const r = await profileGet(s, path, character.namespace);
   if (!r.json) {
     const status = r.status === 404 ? 'no_disponible' : 'error';

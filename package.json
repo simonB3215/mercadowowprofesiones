@@ -22,7 +22,8 @@
     "sync:icons": "tsx --env-file-if-exists=.env scripts/sync-icons.ts",
     "mcp": "tsx scripts/mcp-server.ts",
     "probe:profile": "tsx --env-file-if-exists=.env scripts/probe-profile.ts",
-    "sync:spells": "tsx scripts/sync-spell-details.ts"
+    "sync:spells": "tsx scripts/sync-spell-details.ts",
+    "sync:vendor": "tsx scripts/sync-vendor-items.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",

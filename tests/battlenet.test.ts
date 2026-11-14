@@ -12,7 +12,7 @@ delete process.env.APP_PASSWORD;
 
 const { getDb, migrate } = await import('../src/server/db.js');
 const { handle } = await import('../src/server/router.js');
-const { setBattlenetFetch, parseProfessions, parseAccountProfile, encryptToken, decryptToken } = await import('../src/server/battlenet.js');
+const { setBattlenetFetch, parseProfessions, parseAccountProfile, profilePathOf, encryptToken, decryptToken } = await import('../src/server/battlenet.js');
 
 const ORIGIN = 'https://app.test';
 const call = (path: string, init: RequestInit = {}) => handle(new Request(ORIGIN + path, { redirect: 'manual', ...init }));
@@ -24,6 +24,8 @@ const jsonCall = async (path: string, cookie: string, method = 'GET', body?: unk
 // --- Blizzard simulado -------------------------------------------------------
 const ACCOUNTS: Record<string, { token: string; sub: string; tag: string; chars: any[] }> = {
   'codigo-A': { token: 'token-secreto-A', sub: '111', tag: 'Alfa#1111', chars: [{ id: 1001, name: 'Alfaro', level: 40, realm: { id: 5, slug: 'nightslayer', name: 'Nightslayer' }, playable_class: { name: 'Mago', id: 8 }, playable_race: { name: 'Humano', id: 1 }, faction: { type: 'ALLIANCE' } }] },
+  // Forma real de WoW Forever (13-11-2026): sin reino, con apellido y el enlace del personaje como nombre-apellido.
+  'codigo-C': { token: 'token-secreto-C', sub: '333', tag: 'Zeta#3333', chars: [{ id: 3003, name: 'Zeta', surname: 'Rojas', level: 33, character: { href: 'https://us.api.blizzard.com/profile/wow/character/zeta-rojas?namespace=profile-forever-us' }, playable_class: { name: 'Cazador', id: 3 }, faction: { type: 'HORDE' } }] },
   'codigo-B': { token: 'token-secreto-B', sub: '222', tag: 'Beta#2222', chars: [{ id: 2002, name: 'Betania', level: 12, realm: { id: 5, slug: 'nightslayer', name: 'Nightslayer' }, playable_class: { name: 'Pícaro', id: 4 } }] },
 };
 const byToken = (auth: string | null) => Object.values(ACCOUNTS).find((a) => auth === `Bearer ${a.token}`);
@@ -45,6 +47,9 @@ const fakeFetch = (async (input: any, init: any = {}) => {
   if (url === 'https://oauth.battle.net/userinfo') return reply(200, { sub: acc.sub, id: Number(acc.sub), battletag: acc.tag });
   const u = new URL(url);
   if (u.pathname === '/profile/user/wow') return reply(200, { wow_accounts: [{ id: 77, characters: acc.chars }] });
+  if (u.pathname === '/profile/wow/character/zeta-rojas/professions') {
+    return reply(200, { primaries: [{ profession: { id: 171, name: 'Alchemy' }, tiers: [{ skill_points: 198, max_skill_points: 225, tier: { id: 2937, name: 'Alchemy' }, known_recipes: [{ id: 1814 }] }] }] });
+  }
   if (u.pathname === '/profile/wow/character/nightslayer/alfaro/professions') {
     return reply(200, { primaries: [{ profession: { id: 197, name: 'Sastrería' }, tiers: [{ skill_points: 120, max_skill_points: 150, tier: { id: 1, name: 'Sastrería' }, known_recipes: [] }] }] });
   }
@@ -291,5 +296,30 @@ describe('Battle.net con APP_PASSWORD', () => {
     } finally {
       delete process.env.APP_PASSWORD;
     }
+  });
+});
+
+describe('Battle.net: personajes de WoW Forever (sin reino)', () => {
+  it('lee el enlace nombre-apellido, no duplica al resincronizar y lee las profesiones', async () => {
+    const C = await connect('codigo-C');
+    await jsonCall('/api/me/characters/sync', C, 'POST', {});
+    const r = await jsonCall('/api/me/characters/sync', C, 'POST', {});
+    expect(r.json.characters).toHaveLength(1);
+    expect(r.json.characters[0]).toMatchObject({ name: 'Zeta', surname: 'Rojas', realm: { id: null, slug: null } });
+    const id = r.json.characters[0].id;
+    expect((await jsonCall(`/api/me/characters/${id}/professions/sync`, C, 'POST', {})).status).toBe(200);
+    expect(calls.some((u) => u.includes('/profile/wow/character/zeta-rojas/professions'))).toBe(true);
+    const d = await jsonCall(`/api/me/characters/${id}`, C);
+    expect(JSON.stringify(d.json)).toContain('198');
+  });
+
+  it('solo acepta enlaces de personaje de api.blizzard.com', () => {
+    expect(profilePathOf('https://us.api.blizzard.com/profile/wow/character/mati-fernandez?namespace=profile-forever-us')).toBe('/profile/wow/character/mati-fernandez');
+    expect(profilePathOf('https://eu.api.blizzard.com/profile/wow/character/nightslayer/alfaro')).toBe('/profile/wow/character/nightslayer/alfaro');
+    expect(profilePathOf('https://malo.example.com/profile/wow/character/x')).toBeNull();
+    expect(profilePathOf('http://us.api.blizzard.com/profile/wow/character/x')).toBeNull();
+    expect(profilePathOf('https://us.api.blizzard.com/data/wow/token')).toBeNull();
+    expect(profilePathOf('https://us.api.blizzard.com/profile/wow/character/a/b/c')).toBeNull();
+    expect(profilePathOf(undefined)).toBeNull();
   });
 });

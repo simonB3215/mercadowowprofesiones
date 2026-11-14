@@ -120,9 +120,9 @@ export function Character() {
               {list.map((c) => (
                 <label key={c.id} className={`pc-char${c.id === charId ? ' on' : ''}`}>
                   <input type="radio" name="pc-char" value={c.id} checked={c.id === charId} onChange={() => setCharId(c.id)} />
-                  <span className="pc-char-name">{c.name}</span>
+                  <span className="pc-char-name">{c.name}{c.surname ? ` ${c.surname}` : ''}</span>
                   <span className="small muted">{[c.level !== null ? `Nivel ${c.level}` : null, c.raceName, c.className].filter(Boolean).join(' · ')}</span>
-                  <span className="small muted">{c.realm.name ?? c.realm.slug}{c.faction ? ` · ${c.faction === 'HORDE' ? 'Horda' : c.faction === 'ALLIANCE' ? 'Alianza' : c.faction}` : ''}</span>
+                  <span className="small muted">{[c.realm.name ?? c.realm.slug, c.faction === 'HORDE' ? 'Horda' : c.faction === 'ALLIANCE' ? 'Alianza' : c.faction].filter(Boolean).join(' · ')}</span>
                 </label>
               ))}
             </div>
@@ -388,7 +388,7 @@ export function RouteView({ d }: { d: any }) {
                     </p>
                     <ul className="lv-mats" aria-label="Materiales">
                       {s.materials.map((m: any) => (
-                        <li key={m.itemId} className="lv-chip"><span className="mono">{String(m.quantity)} ×</span><ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />{m.priceSource === 'manual' && <span className="lv-manual">manual</span>}</li>
+                        <li key={m.itemId} className="lv-chip"><span className="mono">{String(m.quantity)} ×</span><ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />{m.priceSource === 'manual' && <span className="lv-manual">manual</span>}{m.priceSource === 'vendedor' && <span className="lv-manual" title="Precio del vendedor (más barato que la casa de subastas)">vendedor</span>}</li>
                       ))}
                     </ul>
                     <p className="lv-meta">
@@ -420,7 +420,7 @@ export function RouteView({ d }: { d: any }) {
             <table className="lv-shop-table">
               <thead><tr><th>Material</th><th className="num">Cantidad</th><th className="num">Total</th></tr></thead>
               <tbody>{d.shopping.map((m: any) => (
-                <tr key={m.itemId}><td><ItemLabel id={m.itemId} quality={m.quality} px={24} href={`#/materiales/${m.itemId}`} name={m.name ?? `Objeto ${m.itemId}`} /></td><td className="num">{String(m.quantity)}</td><td className="num"><Money v={m.cost} /><span className="lv-unit"><Money v={m.unitPrice} /> c/u</span></td></tr>
+                <tr key={m.itemId}><td><ItemLabel id={m.itemId} quality={m.quality} px={24} href={`#/materiales/${m.itemId}`} name={m.name ?? `Objeto ${m.itemId}`} /></td><td className="num">{String(m.quantity)}</td><td className="num"><Money v={m.cost} /><span className="lv-unit"><Money v={m.unitPrice} /> c/u{m.priceSource === 'vendedor' ? ' · vendedor' : m.priceSource === 'manual' ? ' · manual' : ''}</span></td></tr>
               ))}</tbody>
               <tfoot><tr><th colSpan={2}>Total materiales</th><td className="num"><Money v={d.materialsCost} /></td></tr></tfoot>
             </table>
@@ -436,7 +436,7 @@ export function RouteView({ d }: { d: any }) {
           <li>El tiempo activo solo cuenta las fabricaciones. No incluye {d.notIncluded.join(', ')}: no hay datos verificados para estimarlo. Las recetas con reutilización no se usan, así que no hay esperas.</li>
           {d.recovery && <li>«Si vendieras lo fabricado» es hipotético: no se resta del costo ni decide la ruta (vender depende de la demanda). {d.recovery.stepsBound ? `${d.recovery.stepsBound} paso(s) crean objetos ligados (no se venden en la casa de subastas). ` : ''}{d.recovery.stepsWithoutPrice ? `${d.recovery.stepsWithoutPrice} paso(s) sin precio de venta.` : ''}</li>}
           <li>Probabilidad en amarillo y verde: {d.chanceModel === 'garantizado' ? 'no se usa (solo naranja).' : 'estimación de la comunidad (Blizzard no la publica).'}</li>
-          <li>Precios: campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Recetas: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead</a> ({dt(d.source.fetchedAt)}); tiempos de lanzamiento comprobados el {d.source.castTimes.checkedAt}.</li>
+          <li>Precios: campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Recetas: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead</a> ({dt(d.source.fetchedAt)}); tiempos de lanzamiento comprobados el {d.source.castTimes.checkedAt}.{d.source.vendor?.items ? ` Los materiales que solo venden los vendedores (${d.source.vendor.items}, Wowhead, ${d.source.vendor.checkedAt}) usan el precio del vendedor si es más barato; sin descuentos por reputación.` : ''}</li>
           {d.knownRecipes > 0 && <li>{d.knownRecipes} receta(s) conocida(s) según Blizzard, sin costo de instructor{d.unmatchedKnownRecipes ? `; ${d.unmatchedKnownRecipes} no se pudieron enlazar con Wowhead` : ''}.</li>}
           <li>Algoritmo: {d.algorithm}.</li>
         </ul>

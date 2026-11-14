@@ -77,15 +77,17 @@ Documentación oficial consultada: guía de OAuth, WoW Classic Profile APIs y na
 
 | Elemento | Contrato | Comprobado |
 |---|---|---|
-| Autorización | `GET https://oauth.battle.net/authorize` con `response_type=code`, `client_id`, `redirect_uri`, `scope=openid wow.profile` y `state` | Documentado. Sin inicio de sesión real (lo tiene que hacer el usuario). |
+| Autorización | `GET https://oauth.battle.net/authorize` con `response_type=code`, `client_id`, `redirect_uri`, `scope=openid wow.profile` y `state` | **Probado con una cuenta real en producción (13-11-2026).** La URL de retorno debe estar registrada tal cual en el cliente de Blizzard; si no, Blizzard muestra «400: el tipo de autorización o la URL de llamada no es válido». |
 | Token | `POST https://oauth.battle.net/token`, `grant_type=authorization_code`, Basic `client_id:secret`; devuelve `access_token`, `expires_in` (≈ 24 h) y `scope`. **Sin token de renovación.** | Documentado; probado con respuestas simuladas. |
 | Usuario | `GET https://oauth.battle.net/userinfo` → `sub`, `id`, `battletag` | Documentado. El propietario se identifica por `sub`. |
 | Personajes de la cuenta | `GET /profile/user/wow` con el token del usuario (ámbito `wow.profile`) → `wow_accounts[].characters[]` | Documentado en Classic: `profile-classic1x-{región}` (Era), `profile-classic-{región}` (MoP) y `profile-classicann-{región}` (Aniversario). **Forever no aparece.** Con el token de la aplicación responde 403 en `profile-forever-us`, `profile-classic1x-us`, `profile-classicann-us`, `profile-classic-us` y `profile-us` (`npm run probe:profile`). Hace falta un token de usuario para saber si `profile-forever-us` responde. |
-| Profesiones | `GET /profile/wow/character/{reino}/{nombre}/professions` | Solo documentado en retail (`primaries`/`secondaries` con `tiers[].skill_points`, `max_skill_points`, `known_recipes`). **Las Profile APIs de Classic no incluyen profesiones.** Si responde 404, se guarda «no disponible» y se piden los datos a mano. |
+| Personajes de Forever (real) | `profile-forever-us` **responde 200** con el token del usuario. Cada personaje trae `id`, `name`, **`surname`**, `level`, `faction`, `playable_race`, `playable_class`, `character.href` y `protected_character`, pero **no trae `realm`**: el personaje se identifica como `nombre-apellido` (`/profile/wow/character/mati-fernandez`). | Comprobado con una cuenta real (13-11-2026). Se guarda la ruta de `character.href` (solo `https://*.api.blizzard.com/profile/wow/character/…`) y el apellido; la clave única trata el reino ausente como un valor (migración `20261116000000`). |
+| Perfil y profesiones de Forever (real) | `GET /profile/wow/character/{nombre-apellido}` y `…/professions` con `namespace=profile-forever-us` → **200** con el formato de retail: `primaries`/`secondaries`, `tiers[].skill_points`, `max_skill_points`, `known_recipes[].id` (ids de receta de Blizzard). Los nombres de profesión llegan en inglés aunque se pida `es_MX`. | Comprobado el 13-11-2026 con el token de la aplicación: personaje con Alquimia 198/225 (17 recetas), Herboristería 22/75, Cocina 1/75 y Pesca 13/75. Con el token del usuario no se pudo probar en local (lo cifró la clave de Vercel). |
+| Profesiones (Classic/retail) | `GET /profile/wow/character/{reino}/{nombre}/professions` | Solo documentado en retail (`primaries`/`secondaries` con `tiers[].skill_points`, `max_skill_points`, `known_recipes`). **Las Profile APIs de Classic no incluyen profesiones.** Si responde 404, se guarda «no disponible» y se piden los datos a mano. |
 | Datos dinámicos de Forever | `dynamic-forever-us` | Índices de reinos y de reinos conectados → 404 (13-11-2026). Solo responden las casas de subastas (D21). |
 
 Consecuencias:
-- La lista de personajes y las profesiones de Forever **no están verificadas** con una cuenta real.
+- La lista de personajes y las profesiones de Forever **sí responden** con una cuenta real (13-11-2026), pero sin reino: el enlace del personaje es `nombre-apellido`.
 - El módulo prueba el namespace configurable `BNET_PROFILE_NAMESPACES` (por defecto `profile-forever-{región}`) y registra el código HTTP de cada intento.
 - Sin profesiones de la API, usa datos manuales con procedencia.
 - Forever (Classic) no tiene bonificaciones de habilidad, conocimiento ni especializaciones de profesión, así que el planificador no los modela.
@@ -99,6 +101,13 @@ Consecuencias:
 El tiempo activo de una ruta es fabricaciones esperadas × tiempo de lanzamiento. **No hay datos verificados** de desplazamiento, compra, aprendizaje ni recolección: se muestran como «no incluido».
 
 Los rangos del instructor (Oficial hasta 150, Experto hasta 225 y Artesano hasta 300, con nivel de personaje 10, 20 y 35) son reglas de Classic **sin verificar en Forever** y sin costo conocido. Se muestran como requisito «según las reglas de Classic».
+
+## Precios de vendedor (Wowhead, 13-11-2026)
+
+- Fuente: `https://www.wowhead.com/forever/item={id}&xml`. El bloque `json` trae `source` (5 = vendedor; 1 fabricado, 2 botín, 4 misión…) y `jsonEquip` trae `buyprice` en cobre. Comprobado con Hilo burdo (`[5]`, 10), Lejía (`[5]`, 25), Paño de lino (`[2]`, sin precio) y Madeja de paño rúnico (`[1,2,16]`, sin precio).
+- `buyprice` coincide con `purchase_price` de Blizzard en los 122 materiales comparados; Blizzard da además el tamaño del lote (`purchase_quantity`).
+- 123 de los 543 materiales de la subida de nivel tienen la marca de vendedor; 6 no devolvieron dato. La marca incluye objetos que también se recogen o caen de botín (Loto negro, esencias, hierbas), por eso solo se usan los que solo vienen de vendedor (D35).
+- La página del objeto (`/forever/item=N`) responde 403 (CloudFront), también en el navegador, y no se ha podido comprobar si hay existencias limitadas. Tras unas 550 peticiones seguidas el XML también pasó a 403: `npm run sync:vendor` va a una petición cada 1,5 s, guarda lo leído en una caché temporal y, si lo bloquean, la siguiente ejecución continúa. Descarga completa el 13-11-2026: 543 materiales, 43 solo de vendedor, 80 excluidos y 6 sin dato.
 
 ## Lo que falta y cómo afecta al cálculo
 

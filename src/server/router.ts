@@ -540,7 +540,7 @@ async function characterView(db: Db, c: any) {
   const sync = await db.query<any>(`select status, http_status, detail, checked_at from character_sync where character_id=$1`, [c.id]);
   return {
     id: c.id, name: c.name, level: c.level, className: c.class_name, raceName: c.race_name, faction: c.faction,
-    realm: { id: c.realm_id === null ? null : Number(c.realm_id), slug: c.realm_slug, name: c.realm_name }, namespace: c.namespace,
+    realm: { id: c.realm_id === null ? null : Number(c.realm_id), slug: c.realm_slug, name: c.realm_name }, namespace: c.namespace, surname: c.surname ?? null,
     syncedAt: new Date(c.synced_at).toISOString(),
     professionSync: sync[0] ? { status: sync[0].status, httpStatus: sync[0].http_status, detail: sync[0].detail, checkedAt: new Date(sync[0].checked_at).toISOString() } : null,
     professions: await characterProfessions(db, c.id),

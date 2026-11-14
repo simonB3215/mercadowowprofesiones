@@ -9,6 +9,7 @@ import { commissionFor, type Settings } from './config.js';
 import { planLeveling, type LevelPlan, type LevelRecipe } from '../engine/leveling.js';
 import { planRoute, rankRequirements, type RouteMode, type RouteResult } from '../engine/route.js';
 import { castSecondsOf, SPELL_TOOLS, SPELL_DETAILS_SOURCE } from './spellDetails.js';
+import { bestBuyPrice, VENDOR_SOURCE } from './vendorItems.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 
 /** «id:oro,id:oro» → precios manuales en cobre. Oro con hasta 4 decimales (cobre entero), ≥ 0. */
@@ -117,8 +118,10 @@ async function pricingFor(db: Db, ctx: MarketContext, settings: Settings, prof: 
   // Materiales y objetos creados (estos, para la recuperación hipotética por venta).
   const itemIds = [...new Set(prof.recipes.flatMap((r) => [...r.reagents.map((g) => g.itemId), ...(r.creates ? [r.creates.itemId] : [])]))];
   const snap = await loadSnapshot(db, ctx, itemIds);
-  const price = (id: number) => manual.get(id) ?? resolvePrice(snap, id, settings.buySource).copper;
-  const priceSource = (id: number) => (manual.has(id) ? 'manual' : resolvePrice(snap, id, settings.buySource).copper ? 'casa de subastas' : 'sin datos');
+  // Materiales que solo venden los vendedores (D35): se toma el más barato entre el vendedor y la casa de subastas.
+  const best = (id: number) => bestBuyPrice(id, resolvePrice(snap, id, settings.buySource).copper);
+  const price = (id: number) => manual.get(id) ?? best(id).copper;
+  const priceSource = (id: number) => (manual.has(id) ? 'manual' : best(id).source);
   return { snap, price, priceSource, manual };
 }
 type Pricing = Awaited<ReturnType<typeof pricingFor>>;
@@ -219,7 +222,7 @@ export async function levelingPlan(
   const described = await describePlan(db, ctx, prof, plan, pricing);
   return {
     profession: { id: prof.professionId, name: await professionName(db, ctx.version, prof) },
-    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source },
+    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, vendor: VENDOR_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly,
@@ -307,7 +310,7 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
   if (chosen.plan.incomplete) blockers.push('Hay tramos sin receta con precio: el total no cubre toda la subida (indica precios manuales o incluye recetas de patrón).');
   return {
     profession: { id: prof.professionId, name: await professionName(db, ctx.version, prof) },
-    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, castTimes: SPELL_DETAILS_SOURCE },
+    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, castTimes: SPELL_DETAILS_SOURCE, vendor: VENDOR_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: req.from, to: req.to, maxSkill, mode: chosen.mode, algorithm: chosen.algorithm, evaluated: chosen.evaluated,

@@ -136,6 +136,7 @@ Rutas de la API:
 
 Datos:
 - `npm run sync:spells` regenera los tiempos de lanzamiento.
+- `npm run sync:vendor` regenera los precios de vendedor de los materiales (D35; lento a propósito para que Wowhead no bloquee).
 - `npm run probe:profile` vuelve a comprobar los namespaces de perfil.
 
 ## Despliegue en Supabase y Vercel
