@@ -1,12 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Q } from '../../src/engine/rational.js';
 import { formatMoney, exactGold, formatPct } from '../../src/engine/format.js';
-import { STATUS_LABEL, type Status } from '../../src/engine/calc.js';
+import { STATUS_LABEL, STATUS_HELP, type Status } from '../../src/engine/calc.js';
 import {
   CheckCircle, Question, WarningCircle, TrendDown, MinusCircle, Prohibit, Storefront, TrendUp, Warning, ArrowClockwise, Tray, type Icon,
 } from '@phosphor-icons/react';
 
-export { Q, formatMoney, exactGold, formatPct, STATUS_LABEL };
+export { Q, formatMoney, exactGold, formatPct, STATUS_LABEL, STATUS_HELP };
 export type { Status };
 
 export class ApiError extends Error {
@@ -174,7 +174,7 @@ const STATUS_ICON: Record<Status, Icon> = {
 /** Estado con texto + icono + color (nunca solo color). */
 export function StatusBadge({ s }: { s: Status }) {
   const I = STATUS_ICON[s];
-  return <span className={`badge ${STATUS_CLASS[s]}`}><I size={14} weight="bold" aria-hidden="true" />{STATUS_LABEL[s]}</span>;
+  return <span className={`badge ${STATUS_CLASS[s]}`} title={STATUS_HELP[s]}><I size={14} weight="bold" aria-hidden="true" />{STATUS_LABEL[s]}</span>;
 }
 
 /**
@@ -217,6 +217,18 @@ export function ErrorBox({ error, onRetry }: { error: string; onRetry?: () => vo
 export function Empty({ children, icon: I = Tray }: { children: React.ReactNode; icon?: Icon }) {
   return <div className="empty card"><I size={32} aria-hidden="true" /><div>{children}</div></div>;
 }
+/** Nombre comprensible del origen de un precio (campo de TSM/Blizzard + ámbito). */
+const FIELD_ES: Record<string, string> = {
+  marketValue: 'valor de mercado', minBuyout: 'precio más bajo', recent: 'valor reciente', historical: 'valor histórico',
+  regionMarketValue: 'valor de mercado regional', regionAvgSalePrice: 'precio medio regional', manual: 'precio tuyo', vendor: 'vendedor',
+};
+export function priceSource(field?: string | null, scope?: string | null) {
+  if (field === 'manual' || scope === 'manual') return 'precio tuyo';
+  if (scope === 'sin datos') return 'sin precio';
+  const f = field ? FIELD_ES[field] ?? field : '';
+  return [f, scope].filter(Boolean).join(' · ');
+}
+
 export function PageHead({ title, children, icon }: { title: React.ReactNode; children?: React.ReactNode; icon?: React.ReactNode }) {
   return (
     <div className="page-head">

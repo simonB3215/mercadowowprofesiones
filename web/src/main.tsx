@@ -49,6 +49,22 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
   ]],
 ];
 const NAV: NavItem[] = NAV_GROUPS.flatMap(([, items]) => items);
+/** Para qué sirve cada sección (ayuda emergente del menú). */
+const NAV_HELP: Record<string, string> = {
+  '/inicio': 'Página de inicio',
+  '/': 'Qué recetas dan más oro con los precios actuales',
+  '/catalogo': 'Todas las profesiones y sus recetas',
+  '/materiales': '¿Vender un material o usarlo para fabricar?',
+  '/plan': 'Lista de compra total para fabricar varias recetas',
+  '/nivel': 'Qué fabricar para subir una profesión y cuánto cuesta',
+  '/personaje': 'Tu personaje de Battle.net y la ruta desde tu nivel',
+  '/perfil': 'Indica a mano qué recetas conoces y qué materiales tienes',
+  '/registro': 'Anota tus compras y ventas reales para ver tu ganancia de verdad',
+  '/avanzado': 'Calcula la ganancia media de resultados al azar (desencantar…)',
+  '/datos': 'De cuándo son los precios y qué le falta al catálogo',
+  '/ajustes': 'Comisión de la subasta y criterios de «Buena opción»',
+  '/changelog': 'Novedades de la web',
+};
 const EXTRA_TITLES: Record<string, string> = { '/privacidad': 'Privacidad' };
 
 /** Hay entradas del changelog que este navegador aún no ha visto. */
@@ -138,7 +154,7 @@ function App({ onLogout }: { onLogout?: () => void }) {
               <div key={gi} className="nav-group" role="group" aria-label={group ?? 'Inicio'}>
                 {group && <span className="nav-group-title" aria-hidden="true">{group}</span>}
                 {items.map(([p, l, Ico]) => (
-                  <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={l}>
+                  <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={NAV_HELP[p] && p !== "/inicio" ? `${l}: ${NAV_HELP[p]}` : l}>
                     <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
                     <span className="nav-text">{l}</span>
                     {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { api, useApp, useAsync, Loading, ErrorBox, dt, age } from '../lib.js';
+import { api, useApp, useAsync, Loading, ErrorBox, dt, age, PageHead } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 
 export function DataQuality() {
@@ -8,8 +8,9 @@ export function DataQuality() {
   const cov = useAsync(() => api(`/api/coverage?version=${ctx.version}`), [ctx.version]);
   return (
     <div>
-      <h1>Calidad de datos</h1>
-      <p className="muted small">«Todas las profesiones» no oculta lagunas: aquí se ve la cobertura real, los errores y la antigüedad de cada fuente.</p>
+      <PageHead title="Calidad de datos">
+        Para comprobar de qué fecha son los precios y si al catálogo le falta algo. Si un precio te parece raro, mira aquí su antigüedad. No hace falta para usar la web.
+      </PageHead>
       <MarketStatus />
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Archivos de precios (TSM)</h2>

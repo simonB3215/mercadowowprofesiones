@@ -16,7 +16,7 @@ export function Catalog() {
   for (const x of p.data.professions) (groups[x.kind] ??= []).push(x);
   return (
     <div>
-      <PageHead title="Catálogo de profesiones">Profesiones de WoW Forever disponibles en el catálogo. Pulsa una para abrir el comparador filtrado.</PageHead>
+      <PageHead title="Catálogo de profesiones">Todas las profesiones de WoW Forever. Elige una para ver qué recetas dan oro o para calcular cómo subirla.</PageHead>
       {p.data.missingRequired.length > 0 && (
         <div className="alert warn" role="note">
           <WarningCircle size={20} weight="bold" aria-hidden="true" />
@@ -38,12 +38,15 @@ export function Catalog() {
                   <WowIcon kind="profession" id={x.id} px={44} />
                   <div>
                     <h3>{x.name}</h3>
-                    <p className="small muted" style={{ margin: 0 }}><span className="num-font">{x.recipes}</span> receta(s) · <span className="num-font">{x.complete}</span> sin errores de descarga</p>
+                    <p className="small muted" style={{ margin: 0 }}><span className="num-font">{x.recipes}</span> {x.recipes === 1 ? 'receta' : 'recetas'}{x.complete < x.recipes ? ` · ${x.recipes - x.complete} con datos incompletos` : ''}</p>
                   </div>
                 </div>
                 <div className="actions">
                   {x.recipes > 0
-                    ? <a className="icon-inline" href={`#/?professionId=${x.id}`}>Ver en el comparador <ArrowRight size={16} aria-hidden="true" /></a>
+                    ? <>
+                        <a className="icon-inline" href={`#/?professionId=${x.id}`}>Qué da oro <ArrowRight size={16} aria-hidden="true" /></a>
+                        {k !== 'recoleccion' && <a className="icon-inline" href={`#/nivel?prof=${x.id}`}>Subir de nivel <ArrowRight size={16} aria-hidden="true" /></a>}
+                      </>
                     : <span className="small muted">Sin recetas en el catálogo.</span>}
                 </div>
               </article>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, Loading, ErrorBox, dt } from '../lib.js';
+import { api, useApp, useAsync, Loading, ErrorBox, dt, PageHead } from '../lib.js';
+import { ItemPicker } from '../ItemPicker.js';
 import { ItemLabel } from '../icons.js';
 
 const empty = { name: '', faction: '', professions: [] as any[], knownRecipes: [] as number[], inventory: {} as Record<string, number> };
@@ -15,6 +16,7 @@ export function Profiles() {
   const [recipeResults, setRecipeResults] = useState<any[]>([]);
   const [invId, setInvId] = useState('');
   const [invQty, setInvQty] = useState('');
+  const [invName, setInvName] = useState('');
 
   useEffect(() => {
     const p = list.data?.profiles?.find((x: any) => x.id === profileId);
@@ -29,6 +31,14 @@ export function Profiles() {
     }, 300);
     return () => clearTimeout(t);
   }, [recipeSearch, ctx]);
+
+  // Nombres para mostrar las recetas conocidas y el inventario (el perfil solo guarda los IDs).
+  const recipeKey = [...form.knownRecipes].sort((a: number, b: number) => a - b).join(',');
+  const invKey = Object.keys(form.inventory).sort().join(',');
+  const recipeNames = useAsync(() => (recipeKey ? api(`/api/opportunities?version=${ctx.version}&region=${ctx.region}&ids=${recipeKey}&pageSize=200`) : Promise.resolve({ items: [] })), [recipeKey, ctx.version, ctx.region]);
+  const itemNames = useAsync(() => (invKey ? api(`/api/items?version=${ctx.version}&ids=${invKey}`) : Promise.resolve({ items: [] })), [invKey, ctx.version]);
+  const recipeName = (id: number) => recipeNames.data?.items?.find((x: any) => x.recipeId === id)?.name ?? `Receta ${id}`;
+  const itemName = (id: number) => itemNames.data?.items?.find((x: any) => x.item_id === id)?.name ?? `Objeto ${id}`;
 
   const save = async () => {
     setMsg(null);
@@ -60,7 +70,7 @@ export function Profiles() {
 
   return (
     <div>
-      <h1>Perfiles manuales</h1>
+      <PageHead title="Perfiles manuales" />
       <div className="alert info" role="note">
         <div>
           <p><strong>¿Perfil manual o «Mi personaje»?</strong></p>
@@ -126,23 +136,23 @@ export function Profiles() {
         )}
         <ul className="small">
           {form.knownRecipes.map((id: number) => (
-            <li key={id}><a href={`#/receta/${id}`}>Receta {id}</a> <button className="link danger" onClick={() => setForm({ ...form, knownRecipes: form.knownRecipes.filter((x: number) => x !== id) })}>Quitar</button></li>
+            <li key={id}><a href={`#/receta/${id}`}>{recipeName(id)}</a> <button className="link danger" onClick={() => setForm({ ...form, knownRecipes: form.knownRecipes.filter((x: number) => x !== id) })}>Quitar</button></li>
           ))}
         </ul>
         <h2>Inventario</h2>
-        <p className="small muted">Por identificador de objeto. El inventario reduce las compras, pero el costo económico se sigue calculando a precio de reposición.</p>
+        <p className="small muted">Materiales que ya tienes en la bolsa o el banco. Se descuentan de la lista de compra; el costo de la receta sigue contando su precio de mercado.</p>
         <div className="row">
-          <label className="field">ID del objeto<input type="number" value={invId} onChange={(e) => setInvId(e.target.value)} /></label>
+          <ItemPicker label="Material" value={invId ? { id: Number(invId), name: invName || `Objeto ${invId}` } : null} onPick={(v) => { setInvId(v ? String(v.id) : ''); setInvName(v?.name ?? ''); }} />
           <label className="field">Cantidad<input type="number" min={1} value={invQty} onChange={(e) => setInvQty(e.target.value)} /></label>
           <button onClick={() => {
             const n = Number(invQty);
-            if (!/^\d+$/.test(invId) || !Number.isInteger(n) || n <= 0) { setMsg('ID y cantidad deben ser enteros positivos.'); return; }
-            setForm({ ...form, inventory: { ...form.inventory, [invId]: n } }); setInvId(''); setInvQty('');
+            if (!/^\d+$/.test(invId) || !Number.isInteger(n) || n <= 0) { setMsg('Elige un material y escribe una cantidad mayor que 0.'); return; }
+            setForm({ ...form, inventory: { ...form.inventory, [invId]: n } }); setInvId(''); setInvName(''); setInvQty('');
           }}>Añadir / actualizar</button>
         </div>
         <ul className="small" style={{ listStyle: 'none', paddingLeft: 0 }}>
           {Object.entries(form.inventory).map(([k, v]) => (
-            <li key={k} style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '6px 0' }}><ItemLabel id={Number(k)} px={24} href={`#/materiales/${k}`} name={`Objeto ${k}`} sub={`${String(v)} unid.`} /> <button className="link danger" onClick={() => { const inv = { ...form.inventory }; delete inv[k]; setForm({ ...form, inventory: inv }); }}>Quitar</button></li>
+            <li key={k} style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '6px 0' }}><ItemLabel id={Number(k)} px={24} href={`#/materiales/${k}`} name={itemName(Number(k))} sub={`${String(v)} unid.`} /> <button className="link danger" onClick={() => { const inv = { ...form.inventory }; delete inv[k]; setForm({ ...form, inventory: inv }); }}>Quitar</button></li>
           ))}
           {!Object.keys(form.inventory).length && <li className="muted">Sin inventario registrado.</li>}
         </ul>

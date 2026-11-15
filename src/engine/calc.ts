@@ -158,13 +158,24 @@ export type Status =
   | 'no_vendible';
 
 export const STATUS_LABEL: Record<Status, string> = {
-  candidato: 'Candidato rentable',
-  demanda_incierta: 'Rentable con demanda incierta',
-  margen_insuficiente: 'Margen insuficiente',
-  no_rentable: 'No rentable en este escenario',
-  datos_insuficientes: 'Datos insuficientes',
-  no_fabricable: 'No fabricable por este personaje',
-  no_vendible: 'No vendible en subasta',
+  candidato: 'Buena opción',
+  demanda_incierta: 'Rentable, ventas inciertas',
+  margen_insuficiente: 'Gana poco',
+  no_rentable: 'No da ganancia',
+  datos_insuficientes: 'Faltan precios',
+  no_fabricable: 'Tu personaje no puede',
+  no_vendible: 'No se vende en subasta',
+};
+
+/** Explicación en lenguaje sencillo de cada estado (ayuda emergente y leyenda del comparador). */
+export const STATUS_HELP: Record<Status, string> = {
+  candidato: 'Gana oro, con buen margen y se vende con frecuencia en la región. Cumple tus objetivos de Ajustes.',
+  demanda_incierta: 'Gana oro con los precios actuales, pero se venden pocas al día en la región o no hay datos de ventas: puede tardar en venderse.',
+  margen_insuficiente: 'Gana algo, pero menos que el mínimo que pusiste en Ajustes (ganancia o ROI).',
+  no_rentable: 'Con los precios actuales, fabricarla cuesta lo mismo o más de lo que se cobra al venderla.',
+  datos_insuficientes: 'Falta el precio de algún material o del objeto, o los precios son demasiado antiguos para fiarse.',
+  no_fabricable: 'El perfil manual elegido no conoce esta receta o no cumple un requisito.',
+  no_vendible: 'El objeto no se puede vender en la casa de subastas (por ejemplo, se liga al recogerlo).',
 };
 
 export interface Thresholds {

@@ -26,11 +26,23 @@ export function PlanPage() {
 
   return (
     <div>
-      <PageHead title="Lista de fabricación y compras">Agrupa materiales de varias recetas, aplica el inventario del perfil una sola vez y muestra el capital necesario antes de fabricar. Las cantidades no garantizan ventas.</PageHead>
-      {!profileId && <div className="alert info"><Info size={20} aria-hidden="true" /><div><p>Sin perfil manual seleccionado (arriba): no se descuenta inventario.</p></div></div>}
+      <PageHead title="Lista de fabricación y compras">Junta varias recetas que quieras fabricar y obtén la lista de compra total y el oro que necesitas antes de empezar.</PageHead>
+      {!profileId && entries.length > 0 && <div className="alert info"><Info size={20} aria-hidden="true" /><div><p>Si eliges un perfil manual arriba, se descuentan los materiales que ya tienes.</p></div></div>}
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Recetas del plan</h2>
-        {!entries.length && <div className="empty"><ListChecks size={32} aria-hidden="true" /><div>La lista está vacía. Añade recetas desde su página de detalle.</div></div>}
+        {!entries.length && (
+          <div className="empty">
+            <ListChecks size={32} aria-hidden="true" />
+            <div>
+              <p style={{ margin: 0 }}><strong>Tu lista está vacía.</strong> Para añadir recetas:</p>
+              <ol className="hint-steps" style={{ textAlign: 'left' }}>
+                <li>Abre el <a href="#/">comparador</a> y pulsa una receta.</li>
+                <li>Al final de su ficha, en «Añadir a la lista de fabricación», elige cuántas y pulsa «Añadir».</li>
+                <li>Vuelve aquí y pulsa «Calcular plan».</li>
+              </ol>
+            </div>
+          </div>
+        )}
         {entries.length > 0 && (
           <div className="table-wrap">
             <table className="responsive">
@@ -45,7 +57,7 @@ export function PlanPage() {
                     </td>
                     <td data-label="Unidad">
                       <select aria-label={`Unidad de ${e.name}`} value={e.mode} onChange={(ev) => update(entries.map((x, j) => (j === i ? { ...x, mode: ev.target.value as any } : x)))}>
-                        <option value="ejecuciones">ejecuciones</option><option value="unidades">unidades del resultado</option>
+                        <option value="ejecuciones">veces que la fabricas</option><option value="unidades">unidades del resultado</option>
                       </select>
                     </td>
                     <td><button className="link danger icon-inline" onClick={() => update(entries.filter((_, j) => j !== i))}><Trash size={16} aria-hidden="true" />Quitar</button></td>
@@ -55,7 +67,7 @@ export function PlanPage() {
             </table>
           </div>
         )}
-        <div className="row" style={{ marginTop: 10 }}>
+        <div className="row" style={{ marginTop: 10 }} hidden={!entries.length && !(plans.data?.plans ?? []).length}>
           <button className="primary" onClick={compute} disabled={!entries.length || busy}><Calculator size={18} aria-hidden="true" />{busy ? 'Calculando…' : 'Calcular plan'}</button>
           <button onClick={() => update([])} disabled={!entries.length}><Trash size={18} aria-hidden="true" />Vaciar</button>
           <label className="field">Nombre del plan<input type="text" value={planName} onChange={(e) => setPlanName(e.target.value)} placeholder="Plan" /></label>
@@ -78,29 +90,29 @@ export function PlanPage() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Resumen</h2>
             <dl className="kv">
-              <dt>Costo de reposición total</dt><dd><Money v={result.plan.replacementCost} />{result.plan.incomplete.length ? ' (incompleto)' : ''}</dd>
-              <dt>Desembolso (compras pendientes)</dt><dd><strong><Money v={result.plan.outOfPocket} /></strong></dd>
-              <dt>Ingreso neto estimado</dt><dd><Money v={result.plan.netRevenue} /> <span className="small muted">(comisión {result.commission})</span></dd>
-              <dt>Ganancia estimada (no realizada)</dt><dd><Delta v={result.plan.estimatedProfit} /></dd>
+              <dt>Costo total de los materiales</dt><dd><Money v={result.plan.replacementCost} />{result.plan.incomplete.length ? ' (incompleto)' : ''}</dd>
+              <dt>Oro que necesitas para comprar lo que falta</dt><dd><strong><Money v={result.plan.outOfPocket} /></strong></dd>
+              <dt>Cobrarías al venderlo todo</dt><dd><Money v={result.plan.netRevenue} /> <span className="small muted">(menos la comisión del {Math.round(Number(result.commission) * 100)} %)</span></dd>
+              <dt>Ganancia estimada</dt><dd><Delta v={result.plan.estimatedProfit} /></dd>
             </dl>
             {result.plan.incomplete.length > 0 && <p className="small" style={{ color: 'var(--color-bad)' }}>Total incompleto: faltan precios de {result.plan.incomplete.join(', ')}.</p>}
             <p className="small muted">{result.note}</p>
           </section>
           <section className="card">
-            <h2 style={{ marginTop: 0 }}>Ejecuciones</h2>
+            <h2 style={{ marginTop: 0 }}>Qué fabricar</h2>
             <div className="table-wrap">
               <table className="responsive cards-lg">
-                <thead><tr><th>Receta</th><th className="num">Solicitado</th><th className="num">Ejecuciones</th><th className="num">Unidades</th><th className="num">Excedente</th><th className="num">Costo</th><th className="num">Ingreso neto</th></tr></thead>
+                <thead><tr><th>Receta</th><th className="num">Pedido</th><th className="num">Veces</th><th className="num">Unidades</th><th className="num">Sobran</th><th className="num">Costo</th><th className="num">Cobras</th></tr></thead>
                 <tbody>
                   {result.plan.entries.map((e: any) => (
                     <tr key={e.recipeId}>
                       <td data-label="Receta">{e.name}</td>
-                      <td data-label="Solicitado" className="num">{e.requested} {e.mode}</td>
-                      <td data-label="Ejecuciones" className="num">{e.runs}</td>
+                      <td data-label="Pedido" className="num">{e.requested} {e.mode === 'ejecuciones' ? 'veces' : 'unidades'}</td>
+                      <td data-label="Veces" className="num">{e.runs}</td>
                       <td data-label="Unidades" className="num">{e.unitsProduced}</td>
-                      <td data-label="Excedente" className="num">{e.surplus}</td>
+                      <td data-label="Sobran" className="num">{e.surplus}</td>
                       <td data-label="Costo" className="num"><Money v={e.cost} /></td>
-                      <td data-label="Ingreso neto" className="num"><Money v={e.netRevenue} /></td>
+                      <td data-label="Cobras" className="num"><Money v={e.netRevenue} /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -111,18 +123,18 @@ export function PlanPage() {
             <h2 style={{ marginTop: 0 }}>Lista de compras</h2>
             <div className="table-wrap">
               <table className="responsive cards-lg">
-                <thead><tr><th>Material</th><th className="num">Necesario</th><th className="num">En inventario</th><th className="num">Usado del inventario</th><th className="num">A comprar</th><th className="num">Precio unit.</th><th className="num">Reposición</th><th className="num">Desembolso</th></tr></thead>
+                <thead><tr><th>Material</th><th className="num">Necesitas</th><th className="num">Tienes</th><th className="num">Usas de lo tuyo</th><th className="num">A comprar</th><th className="num">Precio unid.</th><th className="num">Valor total</th><th className="num">Gastas</th></tr></thead>
                 <tbody>
                   {result.plan.materials.map((m: any) => (
                     <tr key={m.itemKey}>
-                      <td data-label="Material" className="cell-main"><ItemLabel id={Number(m.itemKey) || null} href={`#/materiales/${m.itemKey}`} name={m.name ?? `Objeto ${m.itemKey}`} sub={`ID ${m.itemKey}`} /></td>
-                      <td data-label="Necesario" className="num">{m.need}</td>
-                      <td data-label="Inventario" className="num">{m.owned}</td>
-                      <td data-label="Usado" className="num">{m.used}</td>
+                      <td data-label="Material" className="cell-main"><ItemLabel id={Number(m.itemKey) || null} href={`#/materiales/${m.itemKey}`} name={m.name ?? `Objeto ${m.itemKey}`} /></td>
+                      <td data-label="Necesitas" className="num">{m.need}</td>
+                      <td data-label="Tienes" className="num">{m.owned}</td>
+                      <td data-label="Usas de lo tuyo" className="num">{m.used}</td>
                       <td data-label="A comprar" className="num"><strong>{m.toBuy}</strong></td>
                       <td data-label="Precio" className="num"><Money v={m.unitPrice} /></td>
-                      <td data-label="Reposición" className="num"><Money v={m.replacementCost} /></td>
-                      <td data-label="Desembolso" className="num"><Money v={m.outOfPocket} /></td>
+                      <td data-label="Valor total" className="num"><Money v={m.replacementCost} /></td>
+                      <td data-label="Gastas" className="num"><Money v={m.outOfPocket} /></td>
                     </tr>
                   ))}
                 </tbody>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, Loading, ErrorBox } from '../lib.js';
+import { api, useApp, Loading, ErrorBox, PageHead } from '../lib.js';
 
 export function SettingsPage() {
   const { meta, reloadMeta } = useApp();
@@ -13,6 +13,7 @@ export function SettingsPage() {
     setMsg(null);
     try { await api('/api/settings', { method: 'PUT', body: s }); setMsg('Ajustes guardados. Los cálculos se recalculan con estos valores.'); reloadMeta(); } catch (e: any) { setMsg(e.message); }
   };
+  const pctOf = (v: string) => { const n = Number(v); return Number.isFinite(n) && n >= 0 && n < 1 ? ` · ahora: ${+(n * 100).toFixed(2)} %` : ''; };
   const fld = (k: string, label: string, hint?: string, type = 'text') => (
     <label className="field">{label}
       <input type={type} value={s[k]} onChange={(e) => setS({ ...s, [k]: type === 'number' ? e.target.value : e.target.value })} />
@@ -28,36 +29,39 @@ export function SettingsPage() {
   );
   return (
     <div>
-      <h1>Ajustes</h1>
-      <p className="muted small">Los umbrales son preferencias tuyas, no reglas oficiales de TSM. Las comisiones (5 % en las casas de Alianza y Horda, 15 % en Aguasnegras) son supuestos configurables: verifícalas en el juego.</p>
+      <PageHead title="Ajustes">
+        Cambia cómo se calculan las ganancias y cuándo una receta cuenta como «Buena opción». Los valores por defecto sirven para la mayoría; si dudas, no toques nada.
+      </PageHead>
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Precios y comisión</h2>
         <div className="grid grid-3">
-          {fld('commission', 'Comisión Alianza / Horda (decimal)', '0 ≤ t < 1, p. ej. 0.05')}
-          {fld('commissionNeutral', 'Comisión Aguasnegras (decimal)', '0 ≤ t < 1, p. ej. 0.15')}
+          {fld('commission', 'Comisión de la subasta de Alianza y Horda', `Escrita en decimal: 0.05 = 5 %${pctOf(s.commission)}`)}
+          {fld('commissionNeutral', 'Comisión de la subasta de Aguasnegras', `Escrita en decimal: 0.15 = 15 %${pctOf(s.commissionNeutral)}`)}
           {src('buySource', 'Precio de los materiales')}
           {src('sellSource', 'Precio de venta del resultado')}
         </div>
       </section>
       <section className="card">
-        <h2 style={{ marginTop: 0 }}>Objetivos para «candidato rentable»</h2>
+        <h2 style={{ marginTop: 0 }}>Cuándo una receta es «Buena opción»</h2>
+        <p className="small muted">Tiene que cumplir todo: si gana menos sale como «Gana poco», y si se vende menos, como «Rentable, ventas inciertas».</p>
         <div className="grid grid-3">
           {fld('minProfitUnitGold', 'Ganancia mínima por unidad (oro)')}
-          {fld('minRoiPct', 'ROI mínimo (%)')}
-          {fld('minSaleRate', 'Tasa de venta regional mínima', 'Señal comparativa, no probabilidad', 'number')}
-          {fld('minSoldPerDay', 'Vendidos por día (región) mínimo', undefined, 'number')}
+          {fld('minRoiPct', 'ROI mínimo (%)', 'Ganancia ÷ costo. 10 = ganas al menos un 10 % sobre lo invertido')}
+          {fld('minSaleRate', 'Tasa de venta mínima (región)', 'Qué parte de lo publicado llega a venderse, de 0 a 1', 'number')}
+          {fld('minSoldPerDay', 'Ventas al día mínimas (región)', 'Unidades vendidas al día en toda la región', 'number')}
         </div>
       </section>
       <section className="card">
-        <h2 style={{ marginTop: 0 }}>Vigencia de los datos</h2>
+        <h2 style={{ marginTop: 0 }}>Cuándo un precio es demasiado viejo</h2>
+        <p className="small muted">Si los precios tienen más horas que esto, las recetas salen como «Faltan precios».</p>
         <div className="grid grid-3">
-          {fld('maxAgeHoursRealm', 'Antigüedad máx. casa de subastas (h)', 'TSM los actualiza cada pocas horas', 'number')}
-          {fld('maxAgeHoursRegion', 'Antigüedad máx. estadísticas regionales (h)', 'TSM las actualiza a diario', 'number')}
+          {fld('maxAgeHoursRealm', 'Precios de tu casa de subastas (horas)', 'Se actualizan cada hora', 'number')}
+          {fld('maxAgeHoursRegion', 'Estadísticas de la región (horas)', 'Se actualizan una vez al día', 'number')}
         </div>
       </section>
       <div className="row">
         <button className="primary" onClick={save}>Guardar ajustes</button>
-        <button onClick={() => setS(meta.defaults)}>Restaurar valores por defecto</button>
+        <button onClick={() => setS(meta.defaults)}>Volver a los valores por defecto</button>
       </div>
       {msg && <p role="status">{msg}</p>}
     </div>

@@ -14,6 +14,18 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-15', kind: 'mejora', title: 'Toda la web más fácil de entender',
+    items: [
+      'Los estados de las recetas hablan claro: «Buena opción», «Rentable, ventas inciertas», «Gana poco», «No da ganancia», «Faltan precios»… Pasa el ratón por encima para leer qué significa cada uno.',
+      'Comparador: las tarjetas de arriba filtran por estado con un clic, hay un botón «Quitar filtros», una ayuda «Cómo leer la tabla» y la columna «Ventas» dice cuántas se venden al día. En el móvil los filtros empiezan plegados para ver antes los resultados.',
+      'Ficha de receta: nuevo bloque «En resumen» con lo que cuesta, por cuánto se vende, cuánto te queda y cuánto se vende, más el veredicto en una frase. El simulador y las fórmulas quedan plegados.',
+      'Registro real y perfiles manuales: el objeto se elige escribiendo su nombre, ya no hace falta saber su ID. Los perfiles muestran los nombres de las recetas y materiales.',
+      'Textos más sencillos en Fabricación, Catálogo, Materiales, Simulador, Calidad de datos y Ajustes (la comisión se muestra también en %). Fuera los términos técnicos como «marketValue» o «sin errores de descarga».',
+      'Fabricación vacía explica paso a paso cómo añadir recetas. El catálogo enlaza también a «Subir de nivel» de cada profesión.',
+      'El menú explica para qué sirve cada sección al pasar el ratón.',
+    ],
+  },
+  {
     date: '2026-11-14', kind: 'nuevo', title: 'Favoritas, alertas y exportar el comparador',
     items: [
       'Marca recetas con la estrella (en el comparador o en la ficha de la receta) y síguelas en el panel «Favoritas». Con «Solo favoritas» el comparador muestra únicamente esas.',

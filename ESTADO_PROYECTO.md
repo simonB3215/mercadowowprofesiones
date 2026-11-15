@@ -69,6 +69,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - **Probado con una cuenta real (13-11-2026):** inicio de sesión y lista de personajes en producción. Forever no da reino: el personaje se identifica como `nombre-apellido` y las profesiones responden en `…/character/{nombre-apellido}/professions` (comprobado). La lectura de profesiones con esa ruta está corregida pero falta desplegarla y probarla desde la web.
 - **Servidor MCP** (D30): 7 herramientas de solo lectura para consultar desde Claude el estado del mercado, recetas rentables, detalle, materiales y rutas de subida de nivel. Probado por stdio con los datos reales de Supabase (13-11-2026) y con pruebas automáticas.
 - **Acceso:** contraseña compartida (`APP_PASSWORD`), cookie HttpOnly firmada; el cron usa `CRON_SECRET`.
+- **Claridad de la interfaz (15-11-2026):** estados con nombres sencillos y explicación (`STATUS_LABEL` y `STATUS_HELP` en `src/engine/calc.ts`); nombres de origen del precio en español (`PRICE_FIELD_LABEL` y `priceSource()` en `web/src/lib.tsx`). Comparador: tarjetas por estado que filtran (el recuento `counts` de `/api/opportunities` se calcula sin el filtro de estado), «Quitar filtros», «Cómo leer la tabla», columna «Ventas» y filtros plegados en el móvil. Ficha de receta con «En resumen»; simulador y fórmulas plegados. Nuevo `/api/items` (búsqueda por nombre o `ids`) y `web/src/ItemPicker.tsx` en Registro real y en el inventario de los perfiles. Revisado en el navegador a 1280 y 375 px sin cuenta conectada.
 
 ## En curso o bloqueado
 

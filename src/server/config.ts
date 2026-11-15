@@ -105,12 +105,12 @@ export interface Settings {
 export type PriceField = 'marketValue' | 'minBuyout' | 'recent' | 'historical' | 'regionMarketValue' | 'regionAvgSalePrice';
 
 export const PRICE_FIELD_LABEL: Record<PriceField, string> = {
-  marketValue: 'marketValue (casa de subastas)',
-  minBuyout: 'minBuyout (casa de subastas)',
-  recent: 'recent (casa de subastas)',
-  historical: 'historical (casa de subastas)',
-  regionMarketValue: 'marketValue regional',
-  regionAvgSalePrice: 'avgSalePrice regional',
+  marketValue: 'Valor de mercado de tu casa (recomendado)',
+  minBuyout: 'Precio más bajo publicado en tu casa',
+  recent: 'Valor reciente de tu casa',
+  historical: 'Valor histórico de tu casa',
+  regionMarketValue: 'Valor de mercado de la región',
+  regionAvgSalePrice: 'Precio medio de venta en la región',
 };
 
 export const DEFAULT_SETTINGS: Settings = {

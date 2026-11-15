@@ -315,12 +315,16 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
   });
   const ectx = await buildEvalContext(db, ctx, recipes, profile);
   let list = recipes.map((r) => evaluateRecipe(r, ectx));
-  const statusF = u.searchParams.get('status');
-  if (statusF) list = list.filter((e) => statusF.split(',').includes(e.status));
   if (u.searchParams.get('onlyKnown') === '1') list = list.filter((e) => e.character === 'conoce');
   if (u.searchParams.get('hideUnsellable') === '1') list = list.filter((e) => e.channel !== 'vinculado' && e.channel !== 'servicio');
   const quality = u.searchParams.get('quality');
   if (quality) list = list.filter((e) => (e.output?.quality ?? 'DESCONOCIDA') === quality);
+  // El recuento por estado se hace con el resto de filtros pero sin el de estado: así el usuario ve cuántas hay de cada uno
+  // aunque esté mirando solo uno (las tarjetas del comparador sirven para cambiar de estado).
+  const counts: Record<string, number> = {};
+  for (const e of list) counts[e.status] = (counts[e.status] ?? 0) + 1;
+  const statusF = u.searchParams.get('status');
+  if (statusF) list = list.filter((e) => statusF.split(',').includes(e.status));
   const sort = u.searchParams.get('sort') ?? 'profitUnit';
   const dir = u.searchParams.get('dir') === 'asc' ? 1 : -1;
   list.sort((a, b) => {
@@ -333,8 +337,6 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     if (!y) return -1;
     return x.cmp(y) * dir;
   });
-  const counts: Record<string, number> = {};
-  for (const e of list) counts[e.status] = (counts[e.status] ?? 0) + 1;
   // Exportar (CSV) pide la lista entera filtrada de una vez; la tabla va por páginas.
   const pageSize = Math.max(1, Math.min(u.searchParams.get('export') === '1' ? 5000 : 200, int(u.searchParams.get('pageSize'), 50)!));
   const page = Math.max(1, int(u.searchParams.get('page'), 1)!);
@@ -489,6 +491,24 @@ route('GET', '/api/materials', async (_r, _p, u, db) => {
     [version, search],
   );
   return { materials: rows };
+});
+
+/** Buscador de objetos por nombre (para elegir un objeto sin conocer su ID). Mínimo 2 letras, como mucho 20 resultados. */
+route('GET', '/api/items', async (_r, _p, u, db) => {
+  const version = u.searchParams.get('version') ?? 'forever';
+  const byIds = idsParam(u.searchParams.get('ids'));
+  if (byIds?.length) {
+    return { items: await db.query<any>(`select id as item_id, name, quality from item where game_version=$1 and id = any($2::int[])`, [version, byIds]) };
+  }
+  const search = (u.searchParams.get('search') ?? '').trim().toLowerCase().slice(0, 60);
+  if (search.length < 2) return { items: [] };
+  const rows = await db.query<any>(
+    `select id as item_id, name, quality from item
+     where game_version=$1 and name is not null and (lower(name) like '%' || $2 || '%' or lower(coalesce(name_en,'')) like '%' || $2 || '%')
+     order by (lower(name) = $2) desc, (lower(name) like $2 || '%') desc, length(name), id limit 20`,
+    [version, search],
+  );
+  return { items: rows };
 });
 
 // ---------------------------------------------------------------------------

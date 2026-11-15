@@ -119,6 +119,12 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     expect(Object.keys(r.json.counts).length).toBeGreaterThan(2);
     const filtered = await api('GET', `/api/opportunities?${qs}&hideUnsellable=1`);
     expect(filtered.json.items.every((i: any) => i.channel !== 'vinculado' && i.channel !== 'servicio')).toBe(true);
+    // Filtrar por un estado no borra el recuento de los demás (las tarjetas del comparador siguen sirviendo para cambiar).
+    const st = Object.keys(r.json.counts)[0];
+    const byStatus = await api('GET', `/api/opportunities?${qs}&status=${st}`);
+    expect(byStatus.json.items.every((i: any) => i.status === st)).toBe(true);
+    expect(byStatus.json.total).toBe(r.json.counts[st]);
+    expect(byStatus.json.counts).toEqual(r.json.counts);
   });
 
   it('oportunidades: favoritas por ids, orden por margen y ventas, margen en % y exportación completa', async () => {
@@ -181,6 +187,13 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     expect(r.status).toBe(200);
     expect(r.json.alternatives.length).toBeGreaterThan(0);
     expect(r.json.sellNet).not.toBeNull();
+  });
+
+  it('buscador de objetos por nombre', async () => {
+    const r = await api('GET', '/api/items?version=forever&search=hierba de');
+    expect(r.status).toBe(200);
+    expect(r.json.items.some((i: any) => i.item_id === 900004 && i.name === 'Hierba de prueba')).toBe(true);
+    expect((await api('GET', '/api/items?version=forever&search=h')).json.items).toEqual([]);
   });
 
   it('herramientas manuales validan probabilidades', async () => {

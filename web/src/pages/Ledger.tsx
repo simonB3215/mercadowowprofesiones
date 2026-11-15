@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { api, useApp, useAsync, Loading, ErrorBox, GoldInput, formatMoney, Q, dt } from '../lib.js';
+import { api, useApp, useAsync, Loading, ErrorBox, GoldInput, formatMoney, Q, dt, PageHead } from '../lib.js';
+import { ItemPicker } from '../ItemPicker.js';
 
-const KINDS: Record<string, string> = { compra: 'Compra', venta: 'Venta', gasto: 'Gasto', deposito_perdido: 'Depósito perdido', fabricacion: 'Fabricación (unidades)' };
+const KINDS: Record<string, string> = { venta: 'Venta', compra: 'Compra', fabricacion: 'Fabricación (unidades hechas)', gasto: 'Otro gasto', deposito_perdido: 'Depósito perdido (subasta caducada)' };
 const m = (s: string) => formatMoney(Q.of(BigInt(s)));
 
 export function Ledger() {
@@ -14,7 +15,7 @@ export function Ledger() {
     setMsg(null);
     try {
       await api('/api/ledger', { method: 'POST', body: { ...f, quantity: Number(f.quantity), profileId, replacesId: replaces?.id, itemId: f.itemId || null, unitPriceGold: f.unitPriceGold || '0' } });
-      setMsg(replaces ? 'Asiento corregido (el original queda anulado).' : 'Asiento registrado.');
+      setMsg(replaces ? 'Anotación corregida (la original queda anulada).' : 'Anotado.');
       setReplaces(null);
       l.reload();
     } catch (e: any) { setMsg(e.message); }
@@ -23,36 +24,38 @@ export function Ledger() {
     setReplaces(e);
     setF({ kind: e.kind, itemId: e.item_id ?? '', itemName: e.item_name ?? '', quantity: String(e.quantity), unitPriceGold: Q.of(BigInt(e.unit_price_copper), 10000n).toDecimal(4), occurredAt: String(e.occurred_at).slice(0, 10), note: e.note ?? '' });
   };
-  const voidIt = async (id: string) => { if (confirm('¿Anular este asiento?')) { await api(`/api/ledger/${id}/void`, { method: 'POST' }); l.reload(); } };
+  const voidIt = async (id: string) => { if (confirm('¿Anular esta anotación? Dejará de contar en el balance.')) { await api(`/api/ledger/${id}/void`, { method: 'POST' }); l.reload(); } };
 
   return (
     <div>
-      <h1>Registro de resultados reales</h1>
-      <p className="muted small">El beneficio realizado solo existe con compras, ventas y gastos efectivos. Las unidades fabricadas sin vender se muestran como pendientes, no como beneficio.</p>
+      <PageHead title="Registro real">
+        Anota lo que compras, fabricas y vendes de verdad para saber cuánto oro has ganado realmente (las cifras del comparador son estimaciones).
+        Lo fabricado y aún sin vender aparece como «pendiente de venta», no como ganancia.
+      </PageHead>
       {l.loading ? <Loading /> : l.error ? <ErrorBox error={l.error} /> : (
         <section className="card">
-          <h2 style={{ marginTop: 0 }}>Resumen {profileId ? 'del perfil' : '(todos los perfiles)'}</h2>
+          <h2 style={{ marginTop: 0 }}>Tu balance {profileId ? 'con este perfil' : '(todos los perfiles)'}</h2>
           <dl className="kv">
             <dt>Ventas</dt><dd>{m(l.data.summary.sales)}</dd>
             <dt>Compras, gastos y depósitos perdidos</dt><dd>{m(l.data.summary.costs)}</dd>
-            <dt>Beneficio realizado</dt><dd><strong>{m(l.data.summary.realized)}</strong></dd>
+            <dt>Ganancia real</dt><dd><strong>{m(l.data.summary.realized)}</strong></dd>
             <dt>Pendiente de venta</dt><dd>{l.data.summary.pendingToSell.length ? l.data.summary.pendingToSell.map((p: any) => `${p.name ?? p.itemId}: ${p.pending}`).join(', ') : 'nada'}</dd>
           </dl>
         </section>
       )}
       <section className="card">
-        <h2 style={{ marginTop: 0 }}>{replaces ? 'Corregir asiento' : 'Nuevo asiento'}</h2>
+        <h2 style={{ marginTop: 0 }}>{replaces ? 'Corregir una anotación' : 'Anotar una compra, venta o gasto'}</h2>
         <div className="row">
           <label className="field">Tipo<select value={f.kind} onChange={(e) => setF({ ...f, kind: e.target.value })}>{Object.entries(KINDS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></label>
-          <label className="field">ID del objeto<input type="number" value={f.itemId} onChange={(e) => setF({ ...f, itemId: e.target.value })} /></label>
-          <label className="field">Nombre / variante<input type="text" value={f.itemName} onChange={(e) => setF({ ...f, itemName: e.target.value })} /></label>
+          <ItemPicker label="Objeto" value={f.itemId ? { id: Number(f.itemId), name: f.itemName || `Objeto ${f.itemId}` } : null}
+            onPick={(v) => setF({ ...f, itemId: v ? String(v.id) : '', itemName: v ? v.name : '' })} />
           <label className="field">Cantidad<input type="number" min={1} value={f.quantity} onChange={(e) => setF({ ...f, quantity: e.target.value })} /></label>
-          <GoldInput label="Precio unitario (oro)" value={f.unitPriceGold} onChange={(v) => setF({ ...f, unitPriceGold: v })} placeholder="0" />
+          <GoldInput label="Precio por unidad (oro)" value={f.unitPriceGold} onChange={(v) => setF({ ...f, unitPriceGold: v })} placeholder="0" />
           <label className="field">Fecha<input type="date" value={f.occurredAt} onChange={(e) => setF({ ...f, occurredAt: e.target.value })} /></label>
-          <label className="field">Nota<input type="text" value={f.note} onChange={(e) => setF({ ...f, note: e.target.value })} /></label>
+          <label className="field">Nota (opcional)<input type="text" value={f.note} onChange={(e) => setF({ ...f, note: e.target.value })} /></label>
         </div>
         <div className="row" style={{ marginTop: 8 }}>
-          <button className="primary" onClick={submit}>{replaces ? 'Guardar corrección' : 'Registrar'}</button>
+          <button className="primary" onClick={submit}>{replaces ? 'Guardar corrección' : 'Anotar'}</button>
           {replaces && <button onClick={() => setReplaces(null)}>Cancelar corrección</button>}
         </div>
         {msg && <p role="status" className="small">{msg}</p>}

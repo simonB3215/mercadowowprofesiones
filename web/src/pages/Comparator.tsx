@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
+import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, STATUS_HELP, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon, QUALITY_ES } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
-import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass, DownloadSimple } from '@phosphor-icons/react';
+import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass, DownloadSimple, X, Question, TrendDown, Prohibit, Storefront } from '@phosphor-icons/react';
 import { FavButton, FavoriteAlerts, useFavorites } from '../favorites.js';
 import { downloadCsv, goldCell, numCell, toCsv } from '../csv.js';
 import { toQ } from '../lib.js';
@@ -14,22 +14,21 @@ const SORTS: Array<[string, string]> = [
   ['soldPerDay', 'Ventas al día (región)'], ['saleRate', 'Tasa de venta (región)'], ['cost', 'Costo por unidad'],
 ];
 
-/** Indicadores con recuentos reales del servidor (sin inventar series ni porcentajes). */
-function Kpis({ total, counts }: { total: number; counts: Record<string, number> }) {
-  const n = (k: string) => counts?.[k] ?? 0;
-  const items = [
-    { label: 'Recetas con estos filtros', value: total, icon: Scroll, tone: '' },
-    { label: STATUS_LABEL.candidato, value: n('candidato'), icon: CheckCircle, tone: 'ok' },
-    { label: 'Margen insuficiente o no rentable', value: n('margen_insuficiente') + n('no_rentable'), icon: WarningCircle, tone: 'warn' },
-    { label: STATUS_LABEL.datos_insuficientes, value: n('datos_insuficientes'), icon: MinusCircle, tone: 'neutral' },
-  ];
+/** Recuento por estado con recuentos reales del servidor. Cada tarjeta filtra la tabla por ese estado (y otra pulsación lo quita). */
+const STATUS_ORDER: Array<[Status, typeof CheckCircle, string]> = [
+  ['candidato', CheckCircle, 'ok'], ['demanda_incierta', Question, 'info'], ['margen_insuficiente', WarningCircle, 'warn'],
+  ['no_rentable', TrendDown, 'bad'], ['datos_insuficientes', MinusCircle, 'neutral'], ['no_vendible', Storefront, 'neutral'], ['no_fabricable', Prohibit, 'neutral'],
+];
+function StatusFilter({ counts, active, onPick }: { counts: Record<string, number>; active: string; onPick: (s: string) => void }) {
+  const shown = STATUS_ORDER.filter(([k]) => (counts?.[k] ?? 0) > 0 || active === k);
+  if (!shown.length) return null;
   return (
-    <div className="kpis" role="list" aria-label="Resumen de estados">
-      {items.map(({ label, value, icon: I, tone }) => (
-        <div className="kpi" role="listitem" key={label}>
+    <div className="kpis status-filter" role="group" aria-label="Filtrar por estado">
+      {shown.map(([k, I, tone]) => (
+        <button type="button" key={k} className={`kpi${active === k ? ' on' : ''}`} aria-pressed={active === k} title={STATUS_HELP[k]} onClick={() => onPick(active === k ? '' : k)}>
           <span className={`kpi-icon ${tone}`} aria-hidden="true"><I size={20} weight="bold" /></span>
-          <div><div className="kpi-value">{value.toLocaleString('es-ES')}</div><div className="kpi-label">{label}</div></div>
-        </div>
+          <span><span className="kpi-value">{(counts?.[k] ?? 0).toLocaleString('es-ES')}</span><span className="kpi-label">{STATUS_LABEL[k]}</span></span>
+        </button>
       ))}
     </div>
   );
@@ -82,6 +81,10 @@ export function Comparator() {
     () => api(`/api/opportunities?${ctxQuery}&${q.toString()}${profileId ? `&profileId=${profileId}` : ''}${favQuery}&pageSize=50`),
     [ctxQuery, q.toString(), profileId, tick, favQuery],
   );
+  const activeFilters = [search.trim(), f.professionId, f.expansion, f.status, f.quality].filter(Boolean).length + [f.onlyKnown, f.hideUnsellable, f.onlyFav].filter(Boolean).length;
+  // En el móvil los filtros empiezan plegados para que los resultados se vean antes.
+  const [filtersOpen, setFiltersOpen] = useState(() => typeof window === 'undefined' || window.innerWidth > 700);
+  const resetFilters = () => { setSearch(''); setF((x) => ({ ...x, search: '', professionId: '', expansion: '', status: '', quality: '', onlyKnown: false, hideUnsellable: false, onlyFav: false, page: 1 })); };
   const set = (k: string, v: any) => setF((x) => ({ ...x, [k]: v, page: k === 'page' ? v : 1 }));
   const sortBy = (k: string) => setF((x) => ({ ...x, sort: k, dir: x.sort === k && x.dir === 'desc' ? 'asc' : 'desc', page: 1 }));
   const total = data.data?.total ?? 0;
@@ -121,7 +124,8 @@ export function Comparator() {
   return (
     <div>
       <PageHead title="Comparador de recetas">
-        Costo de fabricación frente a ingreso neto de venta. Los valores ausentes se muestran como «—» y nunca se tratan como cero. Las ganancias son estimadas.
+        Qué recetas dan más oro: lo que cuestan los materiales frente a lo que cobras al venderla en tu casa de subastas (ya descontada la comisión).
+        Pulsa una receta para ver el detalle. «—» significa que falta el precio.
       </PageHead>
       <MarketStatus />
       {meta && !meta.error && recipesInCatalog === 0 && (
@@ -136,9 +140,8 @@ export function Comparator() {
           </div>
         </div>
       )}
-      {data.data && <Kpis total={total} counts={data.data.counts} />}
-      <section className="card" aria-labelledby="filtros-title">
-        <h2 id="filtros-title" className="icon-inline" style={{ marginTop: 0, fontSize: '0.95rem' }}><Funnel size={18} aria-hidden="true" /> Filtros</h2>
+      <details className="card cmp-filters" open={filtersOpen} onToggle={(e) => setFiltersOpen((e.target as HTMLDetailsElement).open)}>
+        <summary className="icon-inline"><Funnel size={18} aria-hidden="true" /> Filtros{activeFilters > 0 && <span className="badge b-info">{activeFilters} activo{activeFilters > 1 ? "s" : ""}</span>}</summary>
         <div className="row">
           <label className="field" style={{ flex: '2 1 220px' }}>Buscar por nombre
             <span className="input-icon">
@@ -174,8 +177,11 @@ export function Comparator() {
           <label className="check"><input type="checkbox" checked={f.onlyKnown} onChange={(e) => set('onlyKnown', e.target.checked)} disabled={!profileId} /> Solo recetas conocidas{!profileId && ' (elige un perfil manual arriba)'}</label>
           <label className="check"><input type="checkbox" checked={f.hideUnsellable} onChange={(e) => set('hideUnsellable', e.target.checked)} /> Ocultar resultados no vendibles</label>
           <label className="check"><input type="checkbox" checked={f.onlyFav} onChange={(e) => set('onlyFav', e.target.checked)} /> Solo favoritas ({favs.ids.length})</label>
+          {activeFilters > 0 && (
+            <button type="button" className="link cmp-reset" onClick={resetFilters}><X size={14} aria-hidden="true" />Quitar filtros ({activeFilters})</button>
+          )}
         </div>
-      </section>
+      </details>
 
       <FavoriteAlerts />
       {data.data && (
@@ -187,11 +193,23 @@ export function Comparator() {
         </div>
       )}
       {data.data && (
-        <p className="small muted" aria-live="polite">
-          {total} receta(s).{' '}
-          {Object.entries(data.data.counts as Record<Status, number>).map(([k, n]) => `${STATUS_LABEL[k as Status]}: ${n}`).join(' · ')}
-          {!profileId && ' · Viabilidad del personaje sin confirmar.'}
-        </p>
+        <>
+          <StatusFilter counts={data.data.counts} active={f.status} onPick={(v) => set('status', v)} />
+          <p className="small muted" aria-live="polite">
+            {total.toLocaleString('es-ES')} {total === 1 ? 'receta' : 'recetas'}{f.status ? ` con estado «${STATUS_LABEL[f.status as Status]}»` : ''}.
+            {!profileId && ' Sin perfil manual no se comprueba si tu personaje conoce cada receta.'}
+          </p>
+          <details className="cmp-help small">
+            <summary>Cómo leer la tabla</summary>
+            <ul>
+              <li><strong>Costo/unid.</strong>: lo que cuestan los materiales para fabricar una unidad, con los precios actuales.</li>
+              <li><strong>Precio venta</strong>: precio al que se vende el objeto y cuántas unidades hay publicadas. Si solo hay una publicación, el precio es poco fiable.</li>
+              <li><strong>Ganancia est./unid.</strong>: lo que te queda por unidad tras pagar materiales y la comisión de la subasta. ROI = ganancia ÷ costo.</li>
+              <li><strong>Ventas</strong>: unidades que se venden al día en toda la región (dato de TradeSkillMaster). Pocas ventas = puede tardar en venderse.</li>
+              <li><strong>Estado</strong>: el veredicto. Pulsa las tarjetas de arriba para ver solo un estado; pasa el ratón por encima para leer qué significa.</li>
+            </ul>
+          </details>
+        </>
       )}
       {data.loading && <Loading label="Calculando oportunidades…" rows={data.data ? 0 : 6} />}
       {data.error && <ErrorBox error={data.error} onRetry={data.reload} />}
@@ -210,7 +228,7 @@ export function Comparator() {
                 {th('cost', 'Costo/unid.')}
                 <th className="num">Precio venta</th>
                 {th('profitUnit', 'Ganancia est./unid.')}
-                <th className="num">Demanda</th>
+                <th className="num">Ventas</th>
                 <th>Estado</th>
               </tr>
             </thead>
@@ -250,8 +268,10 @@ export function Comparator() {
                       <div className="small muted">ROI {i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</div>
                       {units !== null && units !== 1 && <div className="small muted">Lote: <Money v={i.profitBatch} /></div>}
                     </td>
-                    <td data-label="Demanda" className="num">
-                      {i.demand ? <>{i.demand.saleRate ?? '—'}<span className="unit">tasa</span><div className="small muted">{i.demand.soldPerDay ?? '—'} ventas/día</div></> : '—'}
+                    <td data-label="Ventas" className="num">
+                      {i.demand?.soldPerDay != null
+                        ? <><strong>{i.demand.soldPerDay}</strong><div className="small muted">al día en la región</div></>
+                        : <span className="small muted">sin datos de ventas</span>}
                       <div className="small muted">Precio de hace {i.sourceTime ? age(hoursSince(i.sourceTime)) : '—'}</div>
                       {i.freshness.stale && <span className="badge b-warn">Desactualizado</span>}
                     </td>

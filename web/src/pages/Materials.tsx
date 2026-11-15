@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q, Money } from '../lib.js';
+import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q, Money, priceSource } from '../lib.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
@@ -37,12 +37,12 @@ function MaterialDetail({ itemId }: { itemId: number }) {
   return (
     <>
       <p><a className="icon-inline" href="#/materiales"><ArrowLeft size={16} aria-hidden="true" />Todos los materiales</a></p>
-      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? `Objeto ${itemId}`}</h1><p className="small muted" style={{ margin: 0 }}>ID {itemId}</p></div></div>
+      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? `Objeto ${itemId}`}</h1><p className="small muted" style={{ margin: 0 }}>¿Te conviene más venderlo tal cual o usarlo para fabricar algo?</p></div></div>
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Vender el material</h2>
         <dl className="kv">
-          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{x.price.field} · {x.price.scope}</span>{x.price.supply && <div className="small"><SupplyText s={x.price.supply} /></div>}</dd>
-          <dt>Valor neto de venta por unidad</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(tras comisión {x.commission})</span></dd>
+          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{priceSource(x.price.field, x.price.scope)}</span>{x.price.supply && <div className="small"><SupplyText s={x.price.supply} /></div>}</dd>
+          <dt>Cobras por unidad al venderlo</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(menos la comisión del {Math.round(Number(x.commission) * 100)} %)</span></dd>
         </dl>
       </section>
       <PriceHistory itemId={itemId} />
@@ -89,7 +89,7 @@ export function Materials({ itemId }: { itemId: number | null }) {
   if (itemId) return <MaterialDetail itemId={itemId} />;
   return (
     <div>
-      <PageHead title="Materiales">Compara vender un material (por ejemplo, de recolección) con usarlo en las recetas del catálogo.</PageHead>
+      <PageHead title="Materiales">¿Tienes materiales (por ejemplo, de recolectar) y no sabes qué hacer con ellos? Pulsa uno para ver si conviene venderlo o usarlo en una receta.</PageHead>
       <label className="field" style={{ maxWidth: 360 }}>Buscar material<span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nombre del material" /></span></label>
       {list.loading ? <Loading rows={6} /> : list.error ? <ErrorBox error={list.error} /> : (
         <div className="table-wrap" style={{ marginTop: 10 }}>
@@ -97,7 +97,7 @@ export function Materials({ itemId }: { itemId: number | null }) {
             <thead><tr><th>Material</th><th className="num">Recetas que lo usan</th></tr></thead>
             <tbody>
               {list.data.materials.map((m: any) => (
-                <tr key={m.item_id}><td data-label="Material" className="cell-main"><ItemLabel id={m.item_id} href={`#/materiales/${m.item_id}`} name={m.name} sub={`ID ${m.item_id}`} /></td><td data-label="Recetas" className="num">{m.uses}</td></tr>
+                <tr key={m.item_id}><td data-label="Material" className="cell-main"><ItemLabel id={m.item_id} href={`#/materiales/${m.item_id}`} name={m.name} /></td><td data-label="Recetas" className="num">{m.uses}</td></tr>
               ))}
               {!list.data.materials.length && <tr><td colSpan={2} className="empty">Sin materiales en el catálogo.</td></tr>}
             </tbody>

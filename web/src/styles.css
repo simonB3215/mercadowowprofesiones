@@ -1,4 +1,5 @@
 /*
+[hidden] { display: none !important; }
  * Sistema visual «estilo del juego» (ver docs/SISTEMA_VISUAL.md y design-system/mercado-wow/MASTER.md).
  * Paneles oscuros translúcidos como los tooltips de WoW, títulos dorados con serifa (Cinzel), botones
  * rojos con borde dorado y colores de calidad del juego. Reglas de la skill UI UX Pro Max para tema oscuro:
@@ -222,7 +223,8 @@ tr:last-child td { border-bottom: none; }
 .market-result.ok { color: var(--color-ok); }
 .market-result.bad { color: var(--color-bad); }
 .cmp-sub { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-.cmp-status { min-width: 150px; max-width: 220px; }
+.cmp-status { min-width: 130px; max-width: 190px; }
+.cmp-status .badge { white-space: normal; text-align: left; }
 .cmp-margin { margin-top: 4px; font-size: var(--text-sm); font-weight: 600; color: var(--color-fg); }
 .cmp-name { display: inline-flex; align-items: flex-start; gap: 6px; }
 .cmp-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-3); margin: var(--space-2) 0; }
@@ -724,4 +726,44 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
   nav.main a, .nav-logout { min-height: 36px; padding-top: 7px; padding-bottom: 7px; }
   .nav-group + .nav-group { margin-top: var(--space-1); }
   .sidebar { gap: var(--space-3); }
+}
+
+/* ---- Claridad: filtro por estado, ayuda y acciones evidentes ---- */
+.status-filter { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: var(--space-3); margin-bottom: var(--space-2); }
+.status-filter .kpi { font: inherit; color: inherit; text-align: left; cursor: pointer; border: 1px solid var(--color-border); min-height: 56px; transition: border-color 150ms, box-shadow 150ms; }
+.status-filter .kpi:hover { border-color: var(--color-primary); filter: none; }
+.status-filter .kpi.on { border-color: var(--color-primary); box-shadow: 0 0 0 1px var(--color-primary) inset; }
+.status-filter .kpi > span:last-child { display: flex; flex-direction: column; min-width: 0; }
+.kpi-icon.bad { background: var(--color-bad-bg); color: var(--color-bad); border-color: rgba(255, 107, 94, 0.3); }
+.cmp-reset { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+.cmp-help { margin: 0 0 var(--space-3); }
+.cmp-help summary { cursor: pointer; color: var(--color-primary); width: fit-content; }
+.cmp-help ul { margin: var(--space-2) 0 0; padding-left: 1.2em; display: grid; gap: 4px; color: var(--color-muted-fg); }
+.hint-steps { margin: var(--space-2) 0 0; padding-left: 1.3em; display: grid; gap: 4px; }
+.rd-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: var(--space-3); }
+.rd-figs > div { display: flex; flex-direction: column; gap: 2px; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); min-width: 0; }
+.rd-fig-label { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); color: var(--color-muted-fg); }
+.rd-fig { font-family: var(--font-num); font-size: 1.15rem; font-weight: 600; color: #fff; }
+.rd-verdict { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-3); }
+.rd-fold > summary { cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px var(--space-3); list-style-position: inside; }
+.rd-fold > summary h2 { display: inline; margin: 0; }
+.rd-fold[open] > summary { margin-bottom: var(--space-3); }
+.item-picker { position: relative; }
+.item-picker-list { position: absolute; z-index: 30; top: 100%; left: 0; right: 0; margin: 4px 0 0; padding: 4px; list-style: none; max-height: 280px; overflow-y: auto;
+  background: #0b0d1c; border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); }
+.item-picker-list li { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 4px; cursor: pointer; min-height: 36px; font-weight: 400; }
+.item-picker-list li:hover, .item-picker-list li.active { background: rgba(255, 209, 0, 0.1); }
+.prof-card .actions { display: flex; flex-wrap: wrap; gap: 4px var(--space-4); }
+@media (max-width: 560px) {
+  .rd-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .rd-figs > div { padding: var(--space-2); }
+  .rd-fig .coins { white-space: normal; }
+  .status-filter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cmp-reset { margin-left: 0; }
+}
+.cmp-filters > summary { cursor: pointer; font-family: var(--font-display, inherit); color: var(--color-primary); font-weight: 600; gap: 8px; min-height: 32px; }
+.cmp-filters[open] > summary { margin-bottom: var(--space-3); }
+@media (max-width: 560px) {
+  .cmp-filters .row > .field { flex: 1 1 100%; }
+  .cmp-filters .row > .field select, .cmp-filters .row > .field input { width: 100%; }
 }
