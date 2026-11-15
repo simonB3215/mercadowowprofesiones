@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery, setHashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
-import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info } from '@phosphor-icons/react';
-import { HowToLearn, PriceTag, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info, Table, Lightning, PiggyBank } from '@phosphor-icons/react';
+import { secondsLabel } from './Character.js';
+import { HowToLearn, MatChip, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 
 export { HowToLearn };
 
@@ -22,7 +23,9 @@ export function SkillColor({ c }: { c: string | null }) {
   return <span className={`skill skill-${c}`}>{c}</span>;
 }
 
-type Tab = 'pasos' | 'compra';
+type Tab = 'guia' | 'pasos' | 'compra';
+type Mode = 'rapida' | 'barata';
+type Applied = { prof: string; from: string; to: string; all: boolean; mode: Mode };
 
 export function Leveling() {
   const { ctxQuery, ctx } = useApp();
@@ -32,11 +35,14 @@ export function Leveling() {
   const [from, setFrom] = useState(init.get('from') ?? '1');
   const [to, setTo] = useState(init.get('to') ?? '');
   const [all, setAll] = useState(init.get('all') === '1');
+  // Prioridad: por defecto la más rápida; la más barata la elige el usuario.
+  const [mode, setMode] = useState<Mode>(init.get('modo') === 'barata' ? 'barata' : 'rapida');
   const [manual, setManual] = useState<Record<string, string>>(loadManual);
-  const [applied, setApplied] = useState<{ prof: string; from: string; to: string; all: boolean } | null>(null);
-  const [tab, setTab] = useState<Tab>('pasos');
+  const [applied, setApplied] = useState<Applied | null>(null);
+  const [tab, setTab] = useState<Tab>('guia');
+  const openStep = (i: number) => { setTab('pasos'); setTimeout(() => document.getElementById(`lv-paso-${i}`)?.scrollIntoView({ block: 'start' }), 50); };
   const [avoided, setAvoided] = useState<Avoided[]>([]);
-  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}` : 'lv:none');
+  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}${applied.mode === 'barata' ? ':b' : ''}` : 'lv:none');
 
   const list: any[] = profs.data?.professions ?? [];
   const current = list.find((p) => String(p.id) === prof) ?? null;
@@ -51,7 +57,7 @@ export function Leveling() {
 
   // Calcula al elegir profesión y al pulsar «Calcular».
   useEffect(() => {
-    if (current && to) setApplied({ prof, from, to, all });
+    if (current && to) setApplied({ prof, from, to, all, mode });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prof, current?.id, to === '' ? '' : 'set']);
 
@@ -61,12 +67,12 @@ export function Leveling() {
   );
   const plan = useAsync(
     () => (applied
-      ? api(`/api/leveling?${ctxQuery}&profession=${applied.prof}&from=${applied.from}&to=${applied.to}&trainerOnly=${applied.all ? '0' : '1'}${manualParam ? `&manual=${encodeURIComponent(manualParam)}` : ''}${avoided.length ? `&exclude=${avoided.map((a) => a.id).join(',')}` : ''}`)
+      ? api(`/api/leveling?${ctxQuery}&profession=${applied.prof}&from=${applied.from}&to=${applied.to}&trainerOnly=${applied.all ? '0' : '1'}&mode=${applied.mode}${manualParam ? `&manual=${encodeURIComponent(manualParam)}` : ''}${avoided.length ? `&exclude=${avoided.map((a) => a.id).join(',')}` : ''}`)
       : Promise.resolve(null)),
     [applied, ctxQuery, manualParam, avoided],
   );
   useEffect(() => {
-    if (applied) setHashQuery('/nivel', new URLSearchParams({ prof: applied.prof, from: applied.from, to: applied.to, ...(applied.all ? { all: '1' } : {}) }));
+    if (applied) setHashQuery('/nivel', new URLSearchParams({ prof: applied.prof, from: applied.from, to: applied.to, ...(applied.all ? { all: '1' } : {}), ...(applied.mode === 'barata' ? { modo: 'barata' } : {}) }));
   }, [applied]);
 
   const setPrice = (id: number, v: string) => {
@@ -89,7 +95,7 @@ export function Leveling() {
         Elige la profesión y los niveles: te decimos qué fabricar, cuántas veces y cuánto cuesta con los precios de tu casa de subastas.
       </PageHead>
 
-      <form className="card lv-form" onSubmit={(e) => { e.preventDefault(); if (!rangeError) setApplied({ prof, from, to, all }); }}>
+      <form className="card lv-form" onSubmit={(e) => { e.preventDefault(); if (!rangeError) setApplied({ prof, from, to, all, mode }); }}>
         {profs.loading && <Loading label="Cargando profesiones…" />}
         {profs.error && <ErrorBox error={profs.error} onRetry={profs.reload} />}
         {!!list.length && (
@@ -111,6 +117,16 @@ export function Leveling() {
               </label>
               <button type="submit" className="primary lv-submit" disabled={!!rangeError}><Calculator size={18} aria-hidden="true" />Calcular ruta</button>
             </div>
+            <fieldset className="pc-mode">
+              <legend className="small muted">Prioridad</legend>
+              {([['rapida', 'Más rápida', <Lightning size={18} aria-hidden="true" />], ['barata', 'Más barata', <PiggyBank size={18} aria-hidden="true" />]] as const).map(([m, label, icon]) => (
+                <label key={m} className={`pc-mode-opt${mode === m ? ' on' : ''}`}>
+                  <input type="radio" name="lv-mode" checked={mode === m}
+                    onChange={() => { setMode(m); if (!rangeError && current) setApplied({ prof, from, to, all, mode: m }); }} />
+                  {icon}{label}
+                </label>
+              ))}
+            </fieldset>
             <label className="check">
               <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
               Incluir recetas de patrón, botín o misión
@@ -127,13 +143,14 @@ export function Leveling() {
           {/* Resumen: una cifra principal y dos secundarias. */}
           <section className="card lv-summary" aria-label="Resumen de costos">
             <div className="lv-summary-main">
-              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to}</span>
+              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {d.mode === 'barata' ? 'más barata' : 'más rápida'}</span>
               <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">Sin datos</span>}</span>
               <span className="lv-summary-label">Costo total estimado</span>
             </div>
             <dl className="lv-summary-parts">
               <div><dt>Materiales</dt><dd><Money v={d.materialsCost} /></dd></div>
               <div><dt>Instructor</dt><dd><Money v={d.trainingCost} /></dd></div>
+              <div><dt>Tiempo de fabricación</dt><dd>{secondsLabel(d.activeSeconds)}</dd></div>
             </dl>
             <p className={`lv-status ${d.incomplete ? 'warn' : 'ok'}`}>
               {d.incomplete
@@ -146,19 +163,22 @@ export function Leveling() {
           <RouteProgress steps={d.steps} done={steps.done} onReset={steps.reset} />
 
           <div className="lv-tabs" role="tablist" aria-label="Vista">
+            <button type="button" role="tab" aria-selected={tab === 'guia'} aria-controls="lv-panel" onClick={() => setTab('guia')}>
+              <Table size={18} aria-hidden="true" />Resumen
+            </button>
             <button type="button" role="tab" aria-selected={tab === 'pasos'} aria-controls="lv-panel" onClick={() => setTab('pasos')}>
-              <ListNumbers size={18} aria-hidden="true" />Pasos <span className="lv-count">{d.steps.length}</span>
+              <ListNumbers size={18} aria-hidden="true" />Pasos<span className="hide-sm"> en detalle</span> <span className="lv-count">{d.steps.length}</span>
             </button>
             <button type="button" role="tab" aria-selected={tab === 'compra'} aria-controls="lv-panel" onClick={() => setTab('compra')}>
-              <ShoppingCart size={18} aria-hidden="true" />Lista de compra <span className="lv-count">{d.shopping.length}</span>
+              <ShoppingCart size={18} aria-hidden="true" /><span className="hide-sm">Lista de compra</span><span className="show-sm">Compra</span> <span className="lv-count">{d.shopping.length}</span>
             </button>
           </div>
 
           <div id="lv-panel" role="tabpanel">
-            {tab === 'pasos' ? (
+            {tab === 'guia' ? <RouteGuide steps={d.steps} done={steps.done} onOpen={openStep} /> : tab === 'pasos' ? (
               <ol className="lv-steps">
                 {d.steps.map((s: any, i: number) => (
-                  <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
+                  <li key={i} id={`lv-paso-${i}`} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
                     <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>
                       <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
                     {s.recipe ? (
@@ -171,13 +191,7 @@ export function Leveling() {
                               name={s.recipe.name ?? s.recipe.nameEn} />
                           </div>
                           <ul className="lv-mats" aria-label="Materiales">
-                            {s.materials.map((m: any) => (
-                              <li key={m.itemId} className="lv-chip">
-                                <span className="mono">{String(m.quantity)} ×</span>
-                                <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
-                                <PriceTag m={m} />
-                              </li>
-                            ))}
+                            {s.materials.map((m: any) => <MatChip key={m.itemId} m={m} />)}
                           </ul>
                           <p className="lv-meta">
                             <HowToLearn r={s.recipe} />
@@ -238,7 +252,8 @@ export function Leveling() {
           <details className="card lv-details">
             <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>
             <ul className="small lv-notes">
-              <li>En cada nivel se elige la receta que sube un punto más barato. Las veces a fabricar en dificultad amarilla y verde son una <strong>estimación</strong> (fórmula de la comunidad); se redondean hacia arriba.</li>
+              <li>{d.mode === 'barata' ? <>Más barata: tramos con la receta que sube más barato.</> : <>Más rápida: tramos con la receta de menor tiempo de fabricación esperado (tiempo de lanzamiento ÷ probabilidad de punto).</>} Se agrupan niveles con una sola receta siempre que eso no cueste más de un 3 % de {d.mode === 'barata' ? 'oro' : 'tiempo'} frente a elegir nivel a nivel.</li>
+              <li>Las veces a fabricar en dificultad amarilla y verde son una <strong>estimación</strong> (fórmula de la comunidad); se redondean hacia arriba.</li>
               <li>Precios: casa de subastas elegida arriba, campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Un material sin precio nunca se cuenta como gratis.{d.source?.vendor?.items ? ` Los materiales que solo venden los vendedores (${d.source.vendor.items}, Wowhead, ${d.source.vendor.checkedAt}) usan el precio del vendedor si es más barato.` : ''}</li>
               <li>Recetas y dificultad: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead (WoW Forever)</a>, datos del {dt(d.source.fetchedAt)}.</li>
               <li>Por defecto solo se usan recetas del instructor y las que se conocen al aprender la profesión. El objetivo por defecto es 300.</li>

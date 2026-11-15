@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Money, Q, toQ } from './lib.js';
 import { ItemLabel } from './icons.js';
 import { downloadCsv, goldCell, toCsv } from './csv.js';
-import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight } from '@phosphor-icons/react';
+import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning } from '@phosphor-icons/react';
 
 // ---------------------------------------------------------------------------
 // Pasos hechos
@@ -103,6 +103,72 @@ export function PriceTag({ m }: { m: any }) {
   return null;
 }
 
+/** Material de un paso: cantidad, nombre, dónde se compra y cuánto sale de lo fabricado en pasos anteriores. */
+export function MatChip({ m }: { m: any }) {
+  const prev = BigInt(m.fromSteps ?? 0);
+  return (
+    <li className="lv-chip">
+      <span className="mono">{String(m.quantity)} ×</span>
+      <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
+      <PriceTag m={m} />
+      {prev > 0n && (
+        <span className="lv-reuse" title="Lo fabricas en un paso anterior de esta ruta: no hace falta comprarlo">
+          <Recycle size={12} aria-hidden="true" />{prev >= BigInt(m.quantity) ? 'de pasos anteriores' : `${String(prev)} de pasos anteriores`}
+        </span>
+      )}
+    </li>
+  );
+}
+
+/**
+ * Resumen de la ruta como en una guía: tramo de niveles, receta, fabricaciones y materiales por fabricación.
+ * Pulsar una fila lleva al detalle del paso.
+ */
+export function RouteGuide({ steps, done, onOpen }: { steps: any[]; done: Set<string>; onOpen: (i: number) => void }) {
+  return (
+    <div className="table-wrap">
+      <table className="responsive rt-guide">
+        <caption className="sr-only">Resumen de la ruta: qué fabricar en cada tramo de niveles</caption>
+        <thead><tr><th>Niveles</th><th>Receta</th><th className="num">Fabricaciones</th><th>Materiales por fabricación</th><th className="num">Costo</th></tr></thead>
+        <tbody>
+          {steps.map((s, i) => {
+            const crafts = s.crafts ? BigInt(s.crafts) : 0n;
+            return (
+              <tr key={i} className={done.has(stepKey(s)) ? 'rt-guide-done' : undefined}>
+                <td data-label="Niveles" className="mono rt-guide-lvl">{s.from} → {s.to}{done.has(stepKey(s)) && <Check size={14} weight="bold" aria-label=" (hecho)" />}</td>
+                {s.recipe ? (
+                  <>
+                    <td data-label="Receta" className="cell-main">
+                      <button type="button" className="link rt-guide-recipe" onClick={() => onOpen(i)} title="Ver el detalle de este paso">
+                        <ItemLabel id={s.recipe.createsItemId} quality={s.recipe.createsQuality} px={24} name={s.recipe.name ?? s.recipe.nameEn} />
+                      </button>
+                    </td>
+                    <td data-label="Fabricaciones" className="num mono">{String(s.crafts)}{!s.certain && <span className="rt-guide-approx" title="Estimado: parte del tramo es amarillo o verde y no siempre da punto">≈</span>}</td>
+                    <td data-label="Por fabricación">
+                      <ul className="rt-guide-mats">
+                        {s.materials.map((m: any) => (
+                          <li key={m.itemId}>
+                            <span className="mono">{crafts > 0n ? String(BigInt(m.quantity) / crafts) : '—'}</span>
+                            <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
+                            {BigInt(m.fromSteps ?? 0) > 0n && <Recycle size={13} className="rt-reuse-icon" aria-label="(fabricado en un paso anterior)" />}
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td data-label="Costo" className="num"><Money v={s.cost} /></td>
+                  </>
+                ) : (
+                  <td colSpan={4} className="rt-guide-gap"><Warning size={16} weight="bold" aria-hidden="true" />Sin datos para estos niveles: mira el detalle.</td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 const WHERE = (m: any) => (m.priceSource === 'vendedor' ? 'Vendedor' : m.priceSource === 'manual' ? 'Precio tuyo' : 'Casa de subastas');
 
 // ---------------------------------------------------------------------------
@@ -117,10 +183,13 @@ function remainingShopping(steps: any[], done: Set<string>): ShopRow[] {
   for (const s of steps) {
     if (!s.recipe || done.has(stepKey(s))) continue;
     for (const m of s.materials) {
+      // Lo fabricado en pasos anteriores no se compra.
+      const buy = BigInt(m.quantity) - BigInt(m.fromSteps ?? 0);
+      if (buy <= 0n) continue;
       const cost = toQ(m.cost);
       const prev = by.get(m.itemId);
-      if (prev) { prev.quantity += BigInt(m.quantity); prev.cost = prev.cost && cost ? prev.cost.add(cost) : null; }
-      else by.set(m.itemId, { itemId: m.itemId, name: m.name, quality: m.quality, quantity: BigInt(m.quantity), unitPrice: toQ(m.unitPrice), cost, priceSource: m.priceSource });
+      if (prev) { prev.quantity += buy; prev.cost = prev.cost && cost ? prev.cost.add(cost) : null; }
+      else by.set(m.itemId, { itemId: m.itemId, name: m.name, quality: m.quality, quantity: buy, unitPrice: toQ(m.unitPrice), cost, priceSource: m.priceSource });
     }
   }
   return [...by.values()].sort((a, b) => (b.cost && a.cost ? b.cost.cmp(a.cost) : 0));

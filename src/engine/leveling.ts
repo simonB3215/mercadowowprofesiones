@@ -8,8 +8,12 @@
  *   - naranja (s < amarillo): 1
  *   - amarillo y verde (amarillo ≤ s < gris): (gris − s) / (gris − amarillo)
  *   - gris (s ≥ gris): 0 (no se usa)
- * Los puntos consecutivos con la misma receta forman un paso. Un precio desconocido nunca cuenta como 0:
- * si ninguna receta disponible tiene todos sus precios, ese tramo queda «sin datos».
+ * Rutas tipo guía: en vez de cambiar de receta en cada punto, se reparte la subida en TRAMOS con una sola receta
+ * (programación dinámica sobre los puntos). Cada tramo paga su costo esperado, el instructor de la receta y una
+ * pequeña penalización por cambiar de receta (proporcional al costo de la ruta), así que solo se cambia cuando
+ * compensa de verdad. Los productos fabricados en un tramo se usan en los siguientes antes de comprar (p. ej. el
+ * Aceite de Fuego para el Elixir de poder de fuego). Un precio desconocido nunca cuenta como 0: si ninguna receta
+ * disponible tiene todos sus precios, ese tramo queda «sin datos».
  */
 import { Q } from './rational.js';
 
@@ -37,7 +41,12 @@ export interface LevelRecipe {
   cooldown?: number;
   /** Tiempo de lanzamiento en segundos (Wowhead); null o ausente = desconocido (no se inventa). */
   castSeconds?: number | null;
+  /** Objeto que fabrica y cantidad mínima por fabricación (para reutilizarlo en pasos posteriores). */
+  creates?: { itemId: number; quantity: number } | null;
 }
+
+/** Material de un paso: cantidad total, la parte que sale de pasos anteriores y el costo de lo que hay que comprar. */
+export interface StepMaterial { itemId: number; quantity: bigint; fromSteps: bigint; unitPrice: Q | null; cost: Q | null }
 
 export interface LevelStep {
   from: number;
@@ -49,8 +58,8 @@ export interface LevelStep {
   /** Fabricaciones esperadas (valor exacto) y redondeadas hacia arriba para comprar. */
   expectedCrafts: Q | null;
   crafts: bigint | null;
-  materials: Array<{ itemId: number; quantity: bigint; unitPrice: Q | null; cost: Q | null }>;
-  /** Costo de materiales de las fabricaciones redondeadas. */
+  materials: StepMaterial[];
+  /** Costo de los materiales que hay que comprar (lo fabricado en pasos anteriores no se vuelve a pagar). */
   cost: Q | null;
   /** Solo en pasos sin receta: por qué. */
   reason: string | null;
@@ -199,9 +208,111 @@ export function planLeveling(recipes: LevelRecipe[], opts: PlanOptions): LevelPl
     if (!costCache.has(r.id)) costCache.set(r.id, craftCost(r, price));
     return costCache.get(r.id)!;
   };
-  if (opts.objective === 'tiempo') return assemblePlan(from, to, pickByTime(pool, opts, costOf, opts.lambda ?? 0), opts);
+  const fast = opts.objective === 'tiempo';
+  const lambda = opts.lambda ?? 0;
+  // Referencia: la mejor elección punto a punto (la más rápida o la más barata, sin agrupar).
+  const ref = assemblePlan(from, to, fast ? pickByTimePerPoint(pool, opts, costOf, lambda) : pickByCostPerPoint(pool, opts, costOf), opts);
+  const metric = (pl: LevelPlan) => (fast ? (pl.activeSeconds ? pl.activeSeconds.toNumber() : Number.POSITIVE_INFINITY) : pl.total.toNumber());
+  const limit = metric(ref) * (1 + MAX_SEGMENT_EXTRA);
+  // Tramos lo más largos posible sin pasar del límite: si la ruta agrupada se aleja más de un 3 % de la referencia,
+  // se baja la penalización por cambiar de receta y se vuelve a calcular.
+  for (const share of PENALTY_SHARES) {
+    const plan = assemblePlan(from, to, fast ? pickByTime(pool, opts, costOf, lambda, share) : pickByCost(pool, opts, costOf, share), opts);
+    if (!Number.isFinite(limit) || metric(plan) <= limit) return plan;
+  }
+  return ref;
+}
 
-  // Más barata: elección exacta por punto.
+/** Como mucho un 3 % más de tiempo (ruta rápida) o de oro (ruta barata) que la mejor ruta punto a punto. */
+export const MAX_SEGMENT_EXTRA = 0.03;
+/** Penalizaciones que se prueban, de más agrupada a menos. */
+const PENALTY_SHARES = [0.01, 0.005, 0.0025, 0.001];
+
+/** Instructor que se paga al empezar a usar la receta (ni las conocidas ni las de patrón). */
+const trainingOf = (r: LevelRecipe, opts: PlanOptions) => (r.availability === 'instructor' && !opts.known?.has(r.id) ? Number(r.trainingCost) : 0);
+
+/**
+ * Reparte [from, to) en tramos de una sola receta minimizando Σ(costo por punto) + instructor + penalización por tramo.
+ * `score(r, s)` = costo (o puntuación) de un punto con la receta en s, null si no se puede usar ahí. Las recetas dan
+ * puntos en un intervalo continuo de niveles, así que basta un mínimo móvil por receta: O(puntos × recetas).
+ * Los niveles sin ninguna receta utilizable se marcan como hueco (sin receta) con el motivo de `greedy`.
+ */
+export function segmentPicks(pool: LevelRecipe[], opts: PlanOptions, score: (r: LevelRecipe, s: number) => number | null,
+  fixed: (r: LevelRecipe) => number, penalty: number, greedy: Pick[]): Pick[] {
+  const { from, to } = opts;
+  const n = to - from;
+  const GAP = 1e18;
+  const best = new Array<number>(n + 1).fill(Infinity);
+  const prev: Array<{ s: number; r: LevelRecipe | null } | null> = new Array(n + 1).fill(null);
+  best[0] = 0;
+  // Por receta: suma acumulada de puntuaciones desde que empezó su tramo válido actual y mínimo móvil de (best[s] − pref[s]).
+  const state = pool.map(() => ({ pref: 0, minVal: Infinity, minS: -1, active: false }));
+  for (let t = 1; t <= n; t++) {
+    const lvl = from + t - 1; // el punto que se gana al llegar a t
+    let b = Infinity; let arg: { s: number; r: LevelRecipe | null } | null = null;
+    for (let k = 0; k < pool.length; k++) {
+      const r = pool[k]; const st = state[k];
+      const sc = score(r, lvl);
+      if (sc === null || !Number.isFinite(sc)) { st.active = false; st.minVal = Infinity; continue; }
+      if (!st.active) { st.active = true; st.pref = 0; st.minVal = Infinity; st.minS = -1; }
+      // El tramo puede empezar en t−1 (antes de sumar este punto).
+      const cand0 = best[t - 1] - st.pref;
+      if (cand0 < st.minVal) { st.minVal = cand0; st.minS = t - 1; }
+      st.pref += sc;
+      const v = st.minVal + st.pref + fixed(r) + penalty;
+      const eps = Number.isFinite(b) ? 1e-9 * Math.max(1, Math.abs(b)) : 0;
+      if (!Number.isFinite(b) ? v < b : v < b - eps || (Math.abs(v - b) <= eps && arg?.r && r.id < arg.r.id)) { b = v; arg = { s: st.minS, r }; }
+    }
+    if (best[t - 1] + GAP < b) { b = best[t - 1] + GAP; arg = { s: t - 1, r: null }; }
+    best[t] = b; prev[t] = arg;
+  }
+  // Reconstrucción.
+  const out: Pick[] = new Array(n);
+  let t = n;
+  while (t > 0) {
+    const a = prev[t]!;
+    for (let i = a.s; i < t; i++) {
+      const lvl = from + i;
+      out[i] = a.r ? { recipe: a.r, chance: chanceFor(a.r, lvl, opts.chanceModel)!, reason: null, missing: [] } : greedy[i];
+    }
+    t = a.s;
+  }
+  return out;
+}
+
+/** Penalización por tramo de partida: un 1 % de lo que cuesta la ruta punto a punto (al menos 1 de plata), para no cambiar de receta por céntimos. */
+export const SEGMENT_PENALTY_SHARE = 0.01;
+const MIN_PENALTY_COPPER = 100;
+
+function greedyTotal(picks: Pick[], from: number, score: (r: LevelRecipe, s: number) => number | null, fixed: (r: LevelRecipe) => number) {
+  let total = 0; const seen = new Set<number>();
+  picks.forEach((p, i) => {
+    if (!p.recipe) return;
+    total += score(p.recipe, from + i) ?? 0;
+    if (!seen.has(p.recipe.id)) { seen.add(p.recipe.id); total += fixed(p.recipe); }
+  });
+  return total;
+}
+
+/** Más barata en tramos: costo esperado de materiales + instructor, con la penalización por cambio de receta. */
+export function pickByCost(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, share = SEGMENT_PENALTY_SHARE): Pick[] {
+  const greedy = pickByCostPerPoint(pool, opts, costOf);
+  const cost = new Map<number, number | null>();
+  const score = (r: LevelRecipe, s: number) => {
+    const chance = chanceFor(r, s, opts.chanceModel);
+    if (!chance) return null;
+    if (!cost.has(r.id)) { const c = costOf(r); cost.set(r.id, c ? c.toNumber() : null); }
+    const c = cost.get(r.id);
+    return c === null || c === undefined ? null : c / (chance.toNumber() * r.skillUps);
+  };
+  const fixed = (r: LevelRecipe) => trainingOf(r, opts);
+  const penalty = Math.max(share > 0 ? MIN_PENALTY_COPPER : 0, share * greedyTotal(greedy, opts.from, score, fixed));
+  return segmentPicks(pool, opts, score, fixed, penalty, greedy);
+}
+
+/** Elección exacta punto a punto (la base para los huecos y para fijar la penalización). */
+export function pickByCostPerPoint(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null): Pick[] {
+  const { from, to, price } = opts;
   const picks: Pick[] = [];
   for (let s = from; s < to; s++) {
     let best: { r: LevelRecipe; perPoint: Q; chance: Q } | null = null;
@@ -226,14 +337,34 @@ export function planLeveling(recipes: LevelRecipe[], opts: PlanOptions): LevelPl
       ? { recipe: best.r, chance: best.chance, reason: null, missing: [] }
       : { recipe: null, chance: null, reason: gapReason(available, opts), missing: [...missing].sort((a, b) => a - b) });
   }
-  return assemblePlan(from, to, picks, opts);
+  return picks;
 }
 
 /**
  * Elección por punto que minimiza tiempo + λ × costo (en coma flotante: solo decide la receta; los importes del plan
  * se recalculan con aritmética exacta). Las recetas sin precio o sin tiempo de lanzamiento no se eligen.
  */
-export function pickByTime(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, lambda: number): Pick[] {
+export function pickByTime(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, lambda: number, share = SEGMENT_PENALTY_SHARE): Pick[] {
+  const greedy = pickByTimePerPoint(pool, opts, costOf, lambda);
+  const cost = new Map<number, number | null>();
+  const score = (r: LevelRecipe, s: number) => {
+    const chance = chanceFor(r, s, opts.chanceModel);
+    if (!chance || r.castSeconds === null || r.castSeconds === undefined) return null;
+    if (!cost.has(r.id)) { const c = costOf(r); cost.set(r.id, c ? c.toNumber() : null); }
+    const c = cost.get(r.id);
+    if (c === null || c === undefined) return null;
+    const per = 1 / (chance.toNumber() * r.skillUps);
+    return r.castSeconds * per + lambda * c * per;
+  };
+  const fixed = (r: LevelRecipe) => lambda * trainingOf(r, opts);
+  const total = greedyTotal(greedy, opts.from, score, fixed);
+  // Sin peso del costo (λ = 0) se penaliza en segundos: un 1 % del tiempo de la ruta (al menos 10 s) por tramo.
+  const penalty = Math.max(lambda > 0 || share <= 0 ? 0 : 10, share * total);
+  return segmentPicks(pool, opts, score, fixed, penalty, greedy);
+}
+
+/** Elección punto a punto por tiempo + λ × costo (base para los huecos y la penalización). */
+export function pickByTimePerPoint(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, lambda: number): Pick[] {
   const picks: Pick[] = [];
   for (let s = opts.from; s < opts.to; s++) {
     let best: { r: LevelRecipe; score: number; c: number; chance: Q } | null = null;
@@ -267,6 +398,8 @@ export function pickByTime(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: L
 export function assemblePlan(from: number, to: number, picks: Pick[], opts: PlanOptions): LevelPlan {
   const { price } = opts;
   const steps: LevelStep[] = [];
+  /** Objetos fabricados en pasos anteriores que aún no se han usado. */
+  const stock = new Map<number, bigint>();
   let i = 0;
   while (i < picks.length) {
     let j = i + 1;
@@ -289,16 +422,22 @@ export function assemblePlan(from: number, to: number, picks: Pick[], opts: Plan
         if (picks[k].chance!.cmp(minChance) < 0) minChance = picks[k].chance!;
       }
       const crafts = expected.ceil();
-      const perCraft = craftCost(r, price)!;
-      const materials = r.reagents.map((g) => {
+      let stepCost = Q.zero;
+      const materials: StepMaterial[] = r.reagents.map((g) => {
         const unitPrice = price(g.itemId);
         const quantity = BigInt(g.quantity) * crafts;
-        return { itemId: g.itemId, quantity, unitPrice, cost: unitPrice ? unitPrice.mul(quantity) : null };
+        const have = stock.get(g.itemId) ?? 0n;
+        const fromSteps = have < quantity ? have : quantity;
+        if (fromSteps > 0n) stock.set(g.itemId, have - fromSteps);
+        const cost = unitPrice ? unitPrice.mul(quantity - fromSteps) : null;
+        if (cost) stepCost = stepCost.add(cost);
+        return { itemId: g.itemId, quantity, fromSteps, unitPrice, cost };
       });
+      if (r.creates && r.creates.quantity > 0) stock.set(r.creates.itemId, (stock.get(r.creates.itemId) ?? 0n) + crafts * BigInt(r.creates.quantity));
       const cast = r.castSeconds;
       steps.push({
         from: sFrom, to: sTo, recipe: r, colorFrom: colorAt(r, sFrom), colorTo: colorAt(r, sTo - 1),
-        expectedCrafts: expected, crafts, materials, cost: perCraft.mul(crafts), reason: null, missingItems: [],
+        expectedCrafts: expected, crafts, materials, cost: stepCost, reason: null, missingItems: [],
         guaranteedCrafts: Q.of(sTo - sFrom, r.skillUps).ceil(), certain: colorAt(r, sTo - 1) === 'naranja', minChance,
         activeSeconds: cast === null || cast === undefined ? null : expected.mul(Q.parse(String(cast))),
         known: Boolean(opts.known?.has(r.id)),
@@ -322,8 +461,10 @@ export function assemblePlan(from: number, to: number, picks: Pick[], opts: Plan
       if (st.recipe.availability === 'instructor' && !st.known) trainingCost = trainingCost.add(Q.of(st.recipe.trainingCost));
     }
     for (const m of st.materials) {
+      const buy = m.quantity - m.fromSteps;
+      if (buy <= 0n) continue;
       const prev = shop.get(m.itemId);
-      shop.set(m.itemId, { itemId: m.itemId, quantity: (prev?.quantity ?? 0n) + m.quantity, unitPrice: m.unitPrice });
+      shop.set(m.itemId, { itemId: m.itemId, quantity: (prev?.quantity ?? 0n) + buy, unitPrice: m.unitPrice });
     }
   }
   const shopping = [...shop.values()]

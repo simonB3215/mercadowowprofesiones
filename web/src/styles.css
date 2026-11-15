@@ -767,3 +767,25 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
   .cmp-filters .row > .field { flex: 1 1 100%; }
   .cmp-filters .row > .field select, .cmp-filters .row > .field input { width: 100%; }
 }
+/* ---- Resumen de la ruta tipo guía ---- */
+.rt-guide td { vertical-align: middle; }
+.rt-guide-lvl { white-space: nowrap; color: var(--color-primary); font-weight: 600; }
+.rt-guide-lvl svg { margin-left: 6px; color: var(--color-ok); vertical-align: -2px; }
+.rt-guide-done td { opacity: 0.6; }
+.rt-guide-recipe { text-align: left; padding: 0; font-weight: 600; }
+.rt-guide-approx { margin-left: 2px; color: var(--color-muted-fg); }
+.rt-guide-mats { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.rt-guide-mats li { display: flex; align-items: center; gap: 6px; }
+.rt-guide-mats .mono { min-width: 1.6em; text-align: right; color: var(--color-muted-fg); }
+.rt-reuse-icon { color: var(--color-ok); }
+.rt-guide-gap { color: var(--color-warn); }
+.rt-guide-gap svg { vertical-align: -3px; margin-right: 6px; }
+.lv-reuse { display: inline-flex; align-items: center; gap: 3px; font-size: var(--text-xs); color: var(--color-ok); border: 1px solid rgba(94, 226, 111, 0.35); border-radius: 999px; padding: 0 6px; }
+@media (max-width: 560px) {
+  .lv-tabs { gap: 0; }
+  .lv-tabs button { flex: 1 1 0; min-width: 0; padding: 8px 6px; gap: 4px; justify-content: center; font-size: var(--text-sm); text-align: center; line-height: 1.2; }
+  .lv-tabs button svg { flex: none; }
+}
+.show-sm { display: none; }
+@media (max-width: 560px) { .hide-sm { display: none; } .show-sm { display: inline; } }
+.lv-step { scroll-margin-top: 120px; }

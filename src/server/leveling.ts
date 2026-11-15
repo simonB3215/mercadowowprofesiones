@@ -77,6 +77,7 @@ const toLevel = (r: WhRecipe): LevelRecipe => {
     id: r.id, name: r.name, learnedAt: availability === 'inicial' ? 1 : r.learnedAt, colors: r.colors, skillUps: Math.max(1, r.skillUps || 1),
     availability, trainingCost: availability === 'instructor' ? BigInt(Math.max(0, Math.floor(r.trainingCost || 0))) : 0n, reagents: r.reagents,
     cooldown: cooldownOf(r), castSeconds: castSecondsOf(r.id),
+    creates: r.creates && r.creates.min > 0 ? { itemId: r.creates.itemId, quantity: r.creates.min } : null,
   };
 };
 
@@ -228,13 +229,15 @@ async function professionName(db: Db, version: string, prof: WhProfession) {
 
 export async function levelingPlan(
   db: Db, ctx: MarketContext, settings: Settings,
-  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q>; exclude?: Set<number> },
+  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q>; exclude?: Set<number>; mode?: 'rapida' | 'barata' },
 ) {
   const prof = professionOf(ctx, opts.professionId);
   const maxSkill = checkRange(prof, opts.from, opts.to);
   const pricing = await pricingFor(db, ctx, settings, prof, opts.manual ?? new Map<number, Q>());
   const recipes = prof.recipes.map(toLevel);
-  const plan = planLeveling(recipes, { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly, exclude: opts.exclude });
+  const mode = opts.mode ?? 'rapida';
+  const plan = planLeveling(recipes, { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly, exclude: opts.exclude,
+    objective: mode === 'rapida' ? 'tiempo' : 'costo', lambda: 0 });
   const described = await describePlan(db, ctx, prof, plan, pricing,
     { pool: recipePool(recipes, { trainerOnly: opts.trainerOnly, exclude: opts.exclude }), model: 'comunidad' });
   return {
@@ -242,7 +245,7 @@ export async function levelingPlan(
     source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, vendor: VENDOR_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
-    from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly,
+    from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly, mode,
     excluded: [...(opts.exclude ?? [])],
     incomplete: plan.incomplete,
     ...costs(plan), activeSeconds: plan.activeSeconds,

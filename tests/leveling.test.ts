@@ -102,6 +102,63 @@ describe('Subida de nivel', () => {
     expect(alts[1].costPerPoint).toBeNull(); // sin precio: al final, nunca como gratis
   });
 
+  it('rutas por tramos: no intercala un paso corto si apenas ahorra (como una guía)', () => {
+    // A sirve de 15 a 60 (10 c); B, solo de 20 a 26 y algo más barata (9 c). Punto a punto saldrían 3 pasos.
+    const a = rec(1, [15, 60, 70, 80], [[100, 1]]);
+    const b = rec(2, [20, 25, 30, 35], [[200, 1]]);
+    const plan = planLeveling([a, b], { from: 15, to: 60, price: prices({ 100: 1000, 200: 900 }), trainerOnly: true });
+    expect(plan.steps.map((s) => [s.from, s.to, s.recipe?.id])).toEqual([[15, 60, 1]]);
+  });
+
+  it('rutas por tramos: sí cambia de receta cuando el ahorro compensa', () => {
+    const a = rec(1, [15, 60, 70, 80], [[100, 1]]);
+    const b = rec(2, [20, 40, 50, 60], [[200, 1]]); // mucho más barata de 20 a 40
+    const plan = planLeveling([a, b], { from: 15, to: 60, price: prices({ 100: 1000, 200: 100 }), trainerOnly: true });
+    expect(plan.steps.map((s) => s.recipe?.id)).toEqual([1, 2, 1]);
+    expect(plan.steps[1].from).toBe(20);
+  });
+
+  it('rutas por tramos: nunca más de un 3 % por encima de la mejor ruta punto a punto', () => {
+    // A sirve de 1 a 100 (10 c/punto). Cinco recetas cortas (2 niveles cada una) ahorran 4,5 c/punto: agruparlo todo en A
+    // costaría un 4,8 % más, así que la ruta tiene que cambiar a ellas aunque salgan pasos cortos.
+    const a = rec(1, [1, 100, 110, 120], [[100, 1]]);
+    const shorts = [20, 35, 50, 65, 80].map((l, k) => rec(2 + k, [l, l + 2, l + 2, l + 2], [[200, 1]]));
+    const price = prices({ 100: 1000, 200: 550 });
+    const plan = planLeveling([a, ...shorts], { from: 1, to: 100, price, trainerOnly: true });
+    expect(plan.total.toNumber()).toBeLessThanOrEqual(94500 * 1.03);
+    expect(plan.steps.filter((s) => s.recipe && s.recipe.id > 1).length).toBe(5);
+  });
+
+  it('prioridad: «tiempo» elige la receta más rápida aunque cueste más; por defecto, la más barata', () => {
+    const slow = rec(1, [1, 50, 60, 70], [[100, 1]], { castSeconds: 10 });
+    const fast = rec(2, [1, 50, 60, 70], [[200, 1]], { castSeconds: 1 });
+    const opts = { from: 1, to: 40, price: prices({ 100: 100, 200: 300 }), trainerOnly: true };
+    expect(planLeveling([slow, fast], { ...opts, objective: 'tiempo', lambda: 0 }).steps.map((s) => s.recipe?.id)).toEqual([2]);
+    expect(planLeveling([slow, fast], opts).steps.map((s) => s.recipe?.id)).toEqual([1]);
+  });
+
+  it('el instructor cuenta al elegir: una receta cara de aprender no se usa para unos pocos puntos', () => {
+    const a = rec(1, [1, 40, 50, 60], [[100, 1]]);
+    const b = rec(2, [10, 40, 50, 60], [[200, 1]], { trainingCost: 100000n });
+    const plan = planLeveling([a, b], { from: 1, to: 30, price: prices({ 100: 100, 200: 50 }), trainerOnly: true });
+    expect(plan.steps.map((s) => s.recipe?.id)).toEqual([1]);
+    expect(plan.trainingCost.isZero()).toBe(true);
+  });
+
+  it('usa lo fabricado en pasos anteriores antes de comprar (productos intermedios)', () => {
+    // Paso 1: Aceite (fabrica 1 aceite, objeto 500). Paso 2: Elixir, que pide 2 aceites por fabricación.
+    const aceite = rec(1, [1, 10, 10, 10], [[100, 2]], { creates: { itemId: 500, quantity: 1 } }); // gris en 10
+    const elixir = rec(2, [10, 30, 40, 50], [[500, 2], [101, 1]]);
+    const plan = planLeveling([aceite, elixir], { from: 1, to: 20, price: prices({ 100: 1, 101: 1, 500: 20 }), trainerOnly: true });
+    expect(plan.steps.map((s) => [s.from, s.to, s.recipe?.id])).toEqual([[1, 10, 1], [10, 20, 2]]);
+    const oil = plan.steps[1].materials.find((m) => m.itemId === 500)!;
+    expect(oil.quantity).toBe(20n);
+    expect(oil.fromSteps).toBe(9n); // los 9 aceites del paso 1
+    expect(oil.cost!.eq(Q.of(11 * 20))).toBe(true); // solo se compran 11
+    expect(plan.shopping.find((m) => m.itemId === 500)!.quantity).toBe(11n);
+    expect(plan.steps[1].cost!.eq(Q.of(11 * 20 + 10))).toBe(true);
+  });
+
   it('rechaza rangos inválidos', () => {
     expect(() => planLeveling([], { from: 10, to: 10, price: () => null, trainerOnly: true })).toThrow();
   });

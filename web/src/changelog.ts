@@ -14,6 +14,17 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-15', kind: 'mejora', title: 'Rutas para subir profesión como una guía',
+    items: [
+      'Las rutas se reparten en tramos largos con una sola receta (por ejemplo, 165 → 195 Elixir de poder de fuego), en vez de cambiar de receta cada pocos puntos. Solo se cambia cuando el ahorro compensa; el costo del instructor también cuenta. Alquimia 1 → 300 (más barata) pasa de 16 a 9 pasos con el mismo costo.',
+      'Lo que fabricas en un paso se usa en los siguientes antes de comprar: el Aceite de Fuego que haces de 130 a 165 sirve para el Elixir de poder de fuego. Se marca con «de pasos anteriores» y no entra en la lista de compra.',
+      'Nueva pestaña «Resumen», la que se ve primero: una tabla con los niveles, la receta, las fabricaciones y los materiales por fabricación. Pulsa una receta para ver su paso en detalle.',
+      'Subir nivel calcula por defecto la ruta más rápida (menos tiempo fabricando). Con «Prioridad: Más barata» eliges la que cuesta menos oro; la elección se guarda en el enlace.',
+      'Agrupar en tramos nunca empeora la ruta más de un 3 % (de tiempo en la rápida, de oro en la barata) frente a elegir nivel a nivel.',
+      'Se aplica a todas las rutas: «Subir nivel» y «Mi personaje», tanto la más barata como la más rápida.',
+    ],
+  },
+  {
     date: '2026-11-15', kind: 'mejora', title: 'Toda la web más fácil de entender',
     items: [
       'Los estados de las recetas hablan claro: «Buena opción», «Rentable, ventas inciertas», «Gana poco», «No da ganancia», «Faltan precios»… Pasa el ratón por encima para leer qué significa cada uno.',

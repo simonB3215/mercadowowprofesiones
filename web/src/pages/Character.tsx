@@ -7,10 +7,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { SkillColor, HowToLearn } from './Leveling.js';
-import { PriceTag, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+import { MatChip, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 import { CharacterSheet, ProfessionTiles, PROFESSION_NAME_ES, useScrollTo } from './CharacterSheet.js';
 import {
-  IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers,
+  IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers, Table,
   ShoppingCart, FloppyDisk, ArrowSquareOut, Trash, PencilSimple, XCircle, Flag,
 } from '@phosphor-icons/react';
 
@@ -340,7 +340,8 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
 }
 
 export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; onAvoid?: (spellId: number, name: string) => void }) {
-  const [tab, setTab] = useState<'pasos' | 'compra'>('pasos');
+  const [tab, setTab] = useState<'guia' | 'pasos' | 'compra'>('guia');
+  const openStep = (i: number) => { setTab('pasos'); setTimeout(() => document.getElementById(`pc-paso-${i}`)?.scrollIntoView({ block: 'start' }), 50); };
   const steps = useStepsDone(`${doneKey}:${d.profession?.id}:${d.to}:${d.mode}`);
   if (d.completed) {
     return <section className="card"><p className="lv-status ok"><CheckCircle size={18} aria-hidden="true" />{d.profession.name}: ya tienes {d.from}, que alcanza el objetivo {d.to}. No hace falta ruta.</p></section>;
@@ -388,13 +389,14 @@ export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; on
 
       <RouteProgress steps={d.steps} done={steps.done} onReset={steps.reset} />
       <div className="lv-tabs" role="tablist" aria-label="Vista">
-        <button type="button" role="tab" aria-selected={tab === 'pasos'} onClick={() => setTab('pasos')}><ListNumbers size={18} aria-hidden="true" />Pasos <span className="lv-count">{d.steps.length}</span></button>
-        <button type="button" role="tab" aria-selected={tab === 'compra'} onClick={() => setTab('compra')}><ShoppingCart size={18} aria-hidden="true" />Lista de compra <span className="lv-count">{d.shopping.length}</span></button>
+        <button type="button" role="tab" aria-selected={tab === 'guia'} onClick={() => setTab('guia')}><Table size={18} aria-hidden="true" />Resumen</button>
+        <button type="button" role="tab" aria-selected={tab === 'pasos'} onClick={() => setTab('pasos')}><ListNumbers size={18} aria-hidden="true" />Pasos<span className="hide-sm"> en detalle</span> <span className="lv-count">{d.steps.length}</span></button>
+        <button type="button" role="tab" aria-selected={tab === 'compra'} onClick={() => setTab('compra')}><ShoppingCart size={18} aria-hidden="true" /><span className="hide-sm">Lista de compra</span><span className="show-sm">Compra</span> <span className="lv-count">{d.shopping.length}</span></button>
       </div>
-      {tab === 'pasos' ? (
+      {tab === 'guia' ? <RouteGuide steps={d.steps} done={steps.done} onOpen={openStep} /> : tab === 'pasos' ? (
         <ol className="lv-steps">
           {d.steps.map((s: any, i: number) => (
-            <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
+            <li key={i} id={`pc-paso-${i}`} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
               <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>{s.recipe && i < d.steps.length - 1 && <span className="lv-unit">Cambia al llegar a {s.to}</span>}
                 <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
               {s.recipe ? (
@@ -412,7 +414,7 @@ export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; on
                     </p>
                     <ul className="lv-mats" aria-label="Materiales">
                       {s.materials.map((m: any) => (
-                        <li key={m.itemId} className="lv-chip"><span className="mono">{String(m.quantity)} ×</span><ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} /><PriceTag m={m} /></li>
+                        <MatChip key={m.itemId} m={m} />
                       ))}
                     </ul>
                     <p className="lv-meta">

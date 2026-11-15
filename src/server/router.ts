@@ -527,8 +527,16 @@ route('GET', '/api/leveling', async (_r, _p, u, db) => {
     trainerOnly: u.searchParams.get('trainerOnly') !== '0',
     manual: parseManualPrices(u.searchParams.get('manual')),
     exclude: parseExclude(u.searchParams.get('exclude')),
+    mode: levelingMode(u.searchParams.get('mode')),
   });
 });
+
+/** «rapida» (por defecto) o «barata»: la prioridad la elige el usuario. */
+function levelingMode(v: string | null): 'rapida' | 'barata' {
+  if (v === null || v === '') return 'rapida';
+  if (v !== 'rapida' && v !== 'barata') throw new HttpError(400, 'Modo inválido: «rapida» o «barata».');
+  return v;
+}
 
 // ---------------------------------------------------------------------------
 // Ruta recomendada (más rápida o más barata) sin cuenta: nivel indicado a mano (PC-08 a PC-12, PC-16)

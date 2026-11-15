@@ -1,7 +1,7 @@
 /**
  * Ruta recomendada para subir una profesión (PC-08 a PC-12, PC-16).
  *
- * - «barata»: la de menor costo esperado por punto (planLeveling con objetivo «costo»).
+ * - «barata»: la de menor costo esperado, en tramos de una sola receta (planLeveling con objetivo «costo»).
  * - «rapida»: la de menor tiempo activo esperado (tiempo de lanzamiento × fabricaciones esperadas).
  *   Con presupuesto: relajación lagrangiana, se minimiza tiempo + λ × costo en cada punto y se busca (bisección
  *   sobre λ) la ruta más rápida cuyo total cabe en el presupuesto. Es una heurística: devuelve la más rápida
@@ -51,12 +51,12 @@ export function planRoute(recipes: LevelRecipe[], opts: RouteOptions): RouteResu
     const plan = cheap();
     const ok = budget ? fits(plan, budget) : null;
     if (ok === false) blockers.push('La ruta más barata evaluada cuesta más que el presupuesto.');
-    return { mode: 'barata', plan, algorithm: 'barata-por-punto-v1', lambda: null, budget, withinBudget: ok, evaluated: 1, blockers, notes };
+    return { mode: 'barata', plan, algorithm: 'barata-por-tramos-v2', lambda: null, budget, withinBudget: ok, evaluated: 1, blockers, notes };
   }
 
   const fastest = planLeveling(recipes, { ...base, objective: 'tiempo', lambda: 0 });
   if (!budget || fits(fastest, budget)) {
-    return { mode: 'rapida', plan: fastest, algorithm: 'rapida-por-punto-v1', lambda: 0, budget, withinBudget: budget ? true : null, evaluated: 1, blockers, notes };
+    return { mode: 'rapida', plan: fastest, algorithm: 'rapida-por-tramos-v2', lambda: 0, budget, withinBudget: budget ? true : null, evaluated: 1, blockers, notes };
   }
 
   // Con presupuesto: la ruta más barata marca si hay solución; la bisección busca la más rápida que cabe.
