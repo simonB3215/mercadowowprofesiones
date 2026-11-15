@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta, Money } from '../lib.js';
-import { ItemLabel, WowIcon, useAsset } from '../icons.js';
+import { ItemLabel, WowIcon, useAsset, QualityText } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass } from '@phosphor-icons/react';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
@@ -141,7 +141,7 @@ export function RecipeDetail({ id }: { id: number }) {
             <h2 style={{ marginTop: 0 }}>Resultado y canal de venta</h2>
             <dl className="kv">
               <dt>Objeto</dt><dd>{e.output ? <ItemLabel id={e.output.itemId} quality={e.output.quality} px={24} name={e.output.name ?? 'Sin nombre'} sub={`ID ${e.output.itemId}`} /> : 'No produce objeto'}</dd>
-              <dt>Calidad</dt><dd>{e.output?.quality ?? 'desconocida'}</dd>
+              <dt>Calidad</dt><dd><QualityText q={e.output?.quality} /></dd>
               <dt>Vinculación</dt><dd>{e.output?.binding ?? 'desconocida'}</dd>
               <dt>Canal</dt><dd>{e.channel === 'subasta' ? 'Subasta' : e.channel === 'vinculado' ? 'Vinculado (no vendible)' : e.channel === 'servicio' ? 'Servicio / efecto aplicado' : 'Desconocido'}</dd>
               <dt>Motivo</dt><dd className="small">{e.channelReason}</dd>

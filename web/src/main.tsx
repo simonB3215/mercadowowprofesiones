@@ -19,23 +19,37 @@ const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ defau
 import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
 import {
-  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise, type Icon,
+  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
+  House, SignOut, type Icon,
 } from '@phosphor-icons/react';
+const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
+const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
 
-const NAV: Array<[string, string, Icon]> = [
-  ['/', 'Comparador', ChartBar],
-  ['/catalogo', 'Catálogo', BookOpen],
-  ['/plan', 'Fabricación', Hammer],
-  ['/materiales', 'Materiales', Package],
-  ['/nivel', 'Subir nivel', ArrowFatLinesUp],
-  ['/personaje', 'Mi personaje', IdentificationCard],
-  ['/perfil', 'Perfil manual', UserCircle],
-  ['/registro', 'Registro real', Receipt],
-  ['/avanzado', 'Simulador', Calculator],
-  ['/datos', 'Calidad de datos', ShieldCheck],
-  ['/ajustes', 'Ajustes', GearSix],
-  ['/changelog', 'Changelog', ClockCounterClockwise],
+type NavItem = [string, string, Icon];
+/** Menú en tres grupos por objetivo. En tableta y móvil los títulos se sustituyen por una línea separadora. */
+const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
+  [null, [['/inicio', 'Inicio', House]]],
+  ['Ganar oro', [
+    ['/', 'Comparador', ChartBar],
+    ['/catalogo', 'Catálogo', BookOpen],
+    ['/materiales', 'Materiales', Package],
+    ['/plan', 'Fabricación', Hammer],
+  ]],
+  ['Subir profesión', [
+    ['/nivel', 'Subir nivel', ArrowFatLinesUp],
+    ['/personaje', 'Mi personaje', IdentificationCard],
+  ]],
+  ['Herramientas', [
+    ['/perfil', 'Perfiles manuales', UserCircle],
+    ['/registro', 'Registro real', Receipt],
+    ['/avanzado', 'Simulador', Calculator],
+    ['/datos', 'Calidad de datos', ShieldCheck],
+    ['/ajustes', 'Ajustes', GearSix],
+    ['/changelog', 'Changelog', ClockCounterClockwise],
+  ]],
 ];
+const NAV: NavItem[] = NAV_GROUPS.flatMap(([, items]) => items);
+const EXTRA_TITLES: Record<string, string> = { '/privacidad': 'Privacidad' };
 
 /** Hay entradas del changelog que este navegador aún no ha visto. */
 function useChangelogUnseen() {
@@ -70,9 +84,10 @@ function ContextBar() {
           {ctx.realm && !(realms.data?.realms ?? []).some((r: any) => r.slug === ctx.realm) && <option value={ctx.realm}>{ctx.realm}</option>}
         </select>
       </label>
-      <label className="field">Personaje
+      <label className="field">
+        <span>Perfil manual <a className="small" href="#/perfil" title="Qué es un perfil manual">(?)</a></span>
         <select value={profileId ?? ''} onChange={(e) => setProfileId(e.target.value || null)}>
-          <option value="">Sin perfil (capacidad sin confirmar)</option>
+          <option value="">Ninguno (no filtra por recetas conocidas)</option>
           {(profiles.data?.profiles ?? []).map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
       </label>
@@ -80,16 +95,19 @@ function ContextBar() {
   );
 }
 
-function App() {
+function App({ onLogout }: { onLogout?: () => void }) {
   const [path, parts] = useRoute();
   const { meta } = useApp();
   useEffect(() => {
-    const t = NAV.find(([p]) => p === '/' + (parts[0] ?? ''))?.[1] ?? 'Receta';
+    const k = '/' + (parts[0] ?? '');
+    const t = NAV.find(([p]) => p === k)?.[1] ?? EXTRA_TITLES[k] ?? 'Receta';
     document.title = `${t} · Mercado de profesiones`;
   }, [path]);
   let page: React.ReactNode;
   switch (parts[0]) {
     case undefined: page = <Comparator />; break;
+    case 'inicio': page = <Home />; break;
+    case 'privacidad': page = <Privacy />; break;
     case 'receta': page = <RecipeDetail id={Number(parts[1])} />; break;
     case 'catalogo': page = <Catalog />; break;
     case 'datos': page = <DataQuality />; break;
@@ -111,19 +129,29 @@ function App() {
       <a className="skip" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
       <div className="shell">
         <aside className="sidebar" aria-label="Navegación principal">
-          <a className="brand" href="#/" aria-label="Mercado de profesiones, WoW Forever: ir al comparador">
+          <a className="brand" href="#/inicio" aria-label="Mercado de profesiones, WoW Forever: ir al inicio">
             <span className="brand-mark" aria-hidden="true"><Coins size={20} weight="fill" /></span>
             <span>Mercado de profesiones<small>WoW Forever</small></span>
           </a>
           <nav className="main" aria-label="Secciones">
-            {NAV.map(([p, l, Ico]) => (
-              <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={l}>
-                <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
-                <span className="nav-text">{l}</span>
-                {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}
-              </a>
+            {NAV_GROUPS.map(([group, items], gi) => (
+              <div key={gi} className="nav-group" role="group" aria-label={group ?? 'Inicio'}>
+                {group && <span className="nav-group-title" aria-hidden="true">{group}</span>}
+                {items.map(([p, l, Ico]) => (
+                  <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={l}>
+                    <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
+                    <span className="nav-text">{l}</span>
+                    {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}
+                  </a>
+                ))}
+              </div>
             ))}
           </nav>
+          {onLogout && (
+            <button type="button" className="nav-logout" onClick={onLogout} title="Cerrar sesión">
+              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Cerrar sesión</span>
+            </button>
+          )}
           <p className="sidebar-foot">Las ganancias son estimaciones; el beneficio realizado está en «Registro real».</p>
         </aside>
         <div className="content">
@@ -140,6 +168,10 @@ function App() {
             Solo World of Warcraft: Forever. Precios: casas de subastas de la API de Blizzard y estadísticas regionales de TradeSkillMaster (importes en cobre).
             Catálogo: Blizzard Game Data API. Iconos: <a href="https://www.wowhead.com/forever" rel="noopener noreferrer" target="_blank">Wowhead (WoW Forever)</a> y Blizzard; arte © Blizzard Entertainment.
             Las ganancias son estimaciones condicionadas a vender al precio utilizado; no son beneficios realizados.
+            <span className="footer-legal">
+              Web de fans sin relación con Blizzard Entertainment. World of Warcraft y Battle.net son marcas de Blizzard Entertainment, Inc.
+              {' · '}<a href="#/privacidad">Privacidad</a>{' · '}<a href="#/changelog">Changelog</a>
+            </span>
           </footer>
         </div>
       </div>
@@ -196,15 +228,13 @@ function Gate() {
   if (state === 'login') return <Login onDone={() => setState('ok')} />;
   return (
     <AppProvider>
-      <App />
-      {required && (
-        <p className="small" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 16px 24px' }}>
-          <button type="button" className="link" onClick={() => api('/api/auth/logout', { method: 'POST' }).finally(() => setState('login'))}>Cerrar sesión</button>
-        </p>
-      )}
+      <App onLogout={required ? () => { api('/api/auth/logout', { method: 'POST' }).finally(() => setState('login')); } : undefined} />
     </AppProvider>
   );
 }
+
+// Entrar sin ruta (la dirección de la web a secas) lleva al inicio; los enlaces al comparador (#/…) siguen igual.
+if (!location.hash) history.replaceState(null, '', '#/inicio');
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

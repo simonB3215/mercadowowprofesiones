@@ -27,7 +27,7 @@ export function PlanPage() {
   return (
     <div>
       <PageHead title="Lista de fabricación y compras">Agrupa materiales de varias recetas, aplica el inventario del perfil una sola vez y muestra el capital necesario antes de fabricar. Las cantidades no garantizan ventas.</PageHead>
-      {!profileId && <div className="alert info"><Info size={20} aria-hidden="true" /><div><p>Sin perfil seleccionado: no se descuenta inventario.</p></div></div>}
+      {!profileId && <div className="alert info"><Info size={20} aria-hidden="true" /><div><p>Sin perfil manual seleccionado (arriba): no se descuenta inventario.</p></div></div>}
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Recetas del plan</h2>
         {!entries.length && <div className="empty"><ListChecks size={32} aria-hidden="true" /><div>La lista está vacía. Añade recetas desde su página de detalle.</div></div>}

@@ -60,8 +60,17 @@ export function Profiles() {
 
   return (
     <div>
-      <h1>Perfil del personaje</h1>
-      <p className="muted small">Perfil manual: profesiones, recetas conocidas e inventario. Los datos desconocidos no se consideran requisitos cumplidos. El nivel de habilidad se guarda como dato de entrada, pero aún no se usa para validar requisitos (no hay reglas verificadas).</p>
+      <h1>Perfiles manuales</h1>
+      <div className="alert info" role="note">
+        <div>
+          <p><strong>¿Perfil manual o «Mi personaje»?</strong></p>
+          <p className="small">
+            <a href="#/personaje">Mi personaje</a> lee tus personajes y profesiones de Battle.net automáticamente y calcula rutas para subirlas.
+            Un perfil manual sirve para el <a href="#/">comparador</a>: le dices qué recetas conoces y qué materiales tienes, y se elige arriba en «Perfil manual» para filtrar y descontar inventario.
+          </p>
+        </div>
+      </div>
+      <p className="muted small">Profesiones, recetas conocidas e inventario. Los datos desconocidos no se consideran requisitos cumplidos. El nivel de habilidad se guarda como dato de entrada, pero aún no se usa para validar requisitos (no hay reglas verificadas).</p>
       <div className="row" style={{ marginBottom: 12 }}>
         <label className="field">Perfil
           <select value={editing ?? ''} onChange={(e) => {

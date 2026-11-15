@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { dt, age, hoursSince } from '../lib.js';
-import { WowIcon } from '../icons.js';
+import { WowIcon, QUALITY_ES } from '../icons.js';
 import { ArrowsClockwise, Lightning, PencilSimple, Warning, UserCircle } from '@phosphor-icons/react';
 
 const SLOT_ES: Record<string, string> = {
@@ -25,7 +25,6 @@ export const PROFESSION_NAME_ES: Record<number, string> = {
   186: 'Minería', 393: 'Desuello', 197: 'Sastrería', 185: 'Cocina', 129: 'Primeros auxilios', 356: 'Pesca',
 };
 
-const QUALITY_ES: Record<string, string> = { POOR: 'Pobre', COMMON: 'Común', UNCOMMON: 'Poco común', RARE: 'Raro', EPIC: 'Épico', LEGENDARY: 'Legendario' };
 const factionEs = (f: string | null) => (f === 'HORDE' ? 'Horda' : f === 'ALLIANCE' ? 'Alianza' : f);
 
 function ItemTip({ it, side }: { it: any; side: 'right' | 'left' | 'up' }) {

@@ -14,6 +14,17 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-14', kind: 'mejora', title: 'Menú más ordenado, página de inicio y privacidad',
+    items: [
+      'Nueva página de inicio con tres accesos: qué fabricar para ganar oro, subir una profesión y Mi personaje. Es lo que se ve al abrir la web.',
+      'El menú se agrupa en «Ganar oro», «Subir profesión» y «Herramientas». «Cerrar sesión» está ahora en el propio menú.',
+      '«Perfil manual» se explica mejor: el selector de arriba se llama así y la página aclara la diferencia con «Mi personaje».',
+      'Las calidades de objeto salen en español y con su color (Pobre, Común, Poco común, Raro, Épico, Legendario).',
+      'Nueva página de privacidad: qué se guarda al conectar Battle.net y cómo borrarlo. El pie indica que es una web de fans sin relación con Blizzard.',
+      'Nuevo icono y vista previa con imagen al compartir el enlace en Discord, WhatsApp o redes.',
+    ],
+  },
+  {
     date: '2026-11-14', kind: 'mejora', title: 'Aviso de versión nueva y novedades',
     items: [
       'Si se publica una actualización mientras tienes la web abierta, aparece arriba «Hay una versión nueva de la web» con el botón «Actualizar ahora».',

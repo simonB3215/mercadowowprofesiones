@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
-import { ItemLabel, WowIcon } from '../icons.js';
+import { ItemLabel, WowIcon, QUALITY_ES } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
 import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass } from '@phosphor-icons/react';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
@@ -131,7 +131,7 @@ export function Comparator() {
           <label className="field">Calidad del objeto
             <select value={f.quality} onChange={(e) => set('quality', e.target.value)}>
               <option value="">Todas</option>
-              {['POOR', 'COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY', 'DESCONOCIDA'].map((x) => <option key={x} value={x}>{x}</option>)}
+              {[...Object.keys(QUALITY_ES), 'DESCONOCIDA'].map((x) => <option key={x} value={x} className={`opt-q-${x.toLowerCase()}`}>{QUALITY_ES[x] ?? 'Desconocida'}</option>)}
             </select>
           </label>
           <label className="field">Ordenar por
@@ -141,7 +141,7 @@ export function Comparator() {
           </label>
         </div>
         <div className="row" style={{ marginTop: 8 }}>
-          <label className="check"><input type="checkbox" checked={f.onlyKnown} onChange={(e) => set('onlyKnown', e.target.checked)} disabled={!profileId} /> Solo recetas conocidas{!profileId && ' (requiere perfil)'}</label>
+          <label className="check"><input type="checkbox" checked={f.onlyKnown} onChange={(e) => set('onlyKnown', e.target.checked)} disabled={!profileId} /> Solo recetas conocidas{!profileId && ' (elige un perfil manual arriba)'}</label>
           <label className="check"><input type="checkbox" checked={f.hideUnsellable} onChange={(e) => set('hideUnsellable', e.target.checked)} /> Ocultar resultados no vendibles</label>
         </div>
       </section>

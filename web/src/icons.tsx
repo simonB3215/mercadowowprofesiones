@@ -80,6 +80,16 @@ const QUALITY_CLASS: Record<string, string> = {
   POOR: 'q-poor', COMMON: 'q-common', UNCOMMON: 'q-uncommon', RARE: 'q-rare', EPIC: 'q-epic', LEGENDARY: 'q-legendary',
 };
 
+/** Calidades de objeto en español, en el orden del juego. */
+export const QUALITY_ES: Record<string, string> = {
+  POOR: 'Pobre', COMMON: 'Común', UNCOMMON: 'Poco común', RARE: 'Raro', EPIC: 'Épico', LEGENDARY: 'Legendario',
+};
+export const qualityName = (q: string | null | undefined) => (q ? QUALITY_ES[q] ?? q : 'Desconocida');
+/** Calidad como en el juego: nombre con su color (el texto basta; el color es un refuerzo). */
+export function QualityText({ q }: { q: string | null | undefined }) {
+  return <span className={q ? `quality-text ${QUALITY_CLASS[q] ?? ''}` : 'muted'}>{qualityName(q)}</span>;
+}
+
 /** Marcador neutro (sin imagen): mismo tamaño que el icono, para no mover el diseño. */
 function Placeholder() {
   return (

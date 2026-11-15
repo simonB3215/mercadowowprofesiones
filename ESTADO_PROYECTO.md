@@ -29,6 +29,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Detalle con fórmulas, procedencia y fecha de cada precio.
   - Historial de precio (gráfico de 7 a 60 días con ficha por día y tabla) en la receta y en Materiales; «N en venta · M publicaciones» junto a cada precio de la casa de subastas. Revisado en el navegador a 800 y 375 px con datos reales.
   - Las rutas sin ningún tramo con precio muestran «Sin datos» en lugar de 0 c.
+  - Página de inicio (`#/inicio`, la que se abre sin ruta), menú en tres grupos (Ganar oro, Subir profesión, Herramientas) con «Cerrar sesión» dentro, calidades en español con su color, página de privacidad (`#/privacidad`), aviso de web de fans en el pie, icono propio y vista previa al compartir (`og.png`, 1200×630). Revisado en el navegador a 1440, 1024 y 375 px.
+  - Aviso «Hay una versión nueva» con «Actualizar ahora» y tarjeta «Novedades de la web» tras actualizar.
   - Apartado «Changelog» (`#/changelog`) con todas las actualizaciones; el menú lo marca con un punto si hay novedades sin ver. Cada actualización visible añade su entrada al principio de `web/src/changelog.ts` en el mismo commit.
   - Simulador de escenarios (guardar, cargar, restaurar).
   - Comprar o fabricar con detección de ciclos.
