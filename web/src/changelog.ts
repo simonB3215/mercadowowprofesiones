@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-14', kind: 'mejora', title: 'Aviso de versión nueva y novedades',
+    items: [
+      'Si se publica una actualización mientras tienes la web abierta, aparece arriba «Hay una versión nueva de la web» con el botón «Actualizar ahora».',
+      'Después de actualizar, una tarjeta «Novedades de la web» resume lo que ha cambiado desde tu última visita. Se cierra con «Entendido».',
+    ],
+  },
+  {
     date: '2026-11-14', kind: 'nuevo', title: 'Apartado «Changelog»',
     items: [
       'Nueva sección con todas las actualizaciones de la web, de la más reciente a la más antigua.',
@@ -98,6 +105,18 @@ export const LATEST_CHANGE = CHANGELOG[0] ? `${CHANGELOG[0].date}|${CHANGELOG[0]
 const SEEN_KEY = 'changelogSeen';
 export function changelogUnseen(): boolean {
   try { return localStorage.getItem(SEEN_KEY) !== LATEST_CHANGE; } catch { return false; }
+}
+/**
+ * Entradas que este navegador aún no ha visto (como mucho `max`). Si nunca vio el changelog, solo la última:
+ * no tiene sentido enseñar todo el historial a quien entra por primera vez.
+ */
+export function unseenEntries(max = 3): ChangeEntry[] {
+  let seen: string | null = null;
+  try { seen = localStorage.getItem(SEEN_KEY); } catch { return []; }
+  if (seen === LATEST_CHANGE) return [];
+  if (!seen) return CHANGELOG.slice(0, 1);
+  const i = CHANGELOG.findIndex((e) => `${e.date}|${e.title}` === seen);
+  return CHANGELOG.slice(0, i < 0 ? max : Math.min(i, max));
 }
 export function markChangelogSeen() {
   try { localStorage.setItem(SEEN_KEY, LATEST_CHANGE); } catch { /* sin almacenamiento */ }

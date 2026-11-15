@@ -17,6 +17,7 @@ const Character = lazy(() => import('./pages/Character.js').then((m) => ({ defau
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
 const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
 import { changelogUnseen } from './changelog.js';
+import { UpdateBanner, WhatsNew } from './Updates.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise, type Icon,
 } from '@phosphor-icons/react';
@@ -126,11 +127,13 @@ function App() {
           <p className="sidebar-foot">Las ganancias son estimaciones; el beneficio realizado está en «Registro real».</p>
         </aside>
         <div className="content">
+          <UpdateBanner />
           <header className="topbar">
             <ContextBar />
           </header>
           <main id="contenido" tabIndex={-1} className="fade-in" key={parts[0] ?? 'inicio'}>
-            {meta?.error && <div className="alert bad" role="alert"><div><p><strong>No se pudo conectar con la API:</strong> {meta.error}</p><p className="small">Comprueba DATABASE_URL y que las migraciones estén aplicadas (npm run migrate).</p></div></div>}
+            <WhatsNew hidden={parts[0] === 'changelog'} />
+            {meta?.error &&<div className="alert bad" role="alert"><div><p><strong>No se pudo conectar con la API:</strong> {meta.error}</p><p className="small">Comprueba DATABASE_URL y que las migraciones estén aplicadas (npm run migrate).</p></div></div>}
             <Suspense fallback={<Loading rows={4} />}>{page}</Suspense>
           </main>
           <footer className="site">
