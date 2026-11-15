@@ -15,8 +15,10 @@ const Ledger = lazy(() => import('./pages/Ledger.js').then((m) => ({ default: m.
 const Leveling = lazy(() => import('./pages/Leveling.js').then((m) => ({ default: m.Leveling })));
 const Character = lazy(() => import('./pages/Character.js').then((m) => ({ default: m.Character })));
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
+const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
+import { changelogUnseen } from './changelog.js';
 import {
-  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, type Icon,
+  ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise, type Icon,
 } from '@phosphor-icons/react';
 
 const NAV: Array<[string, string, Icon]> = [
@@ -31,7 +33,19 @@ const NAV: Array<[string, string, Icon]> = [
   ['/avanzado', 'Simulador', Calculator],
   ['/datos', 'Calidad de datos', ShieldCheck],
   ['/ajustes', 'Ajustes', GearSix],
+  ['/changelog', 'Changelog', ClockCounterClockwise],
 ];
+
+/** Hay entradas del changelog que este navegador aún no ha visto. */
+function useChangelogUnseen() {
+  const [unseen, setUnseen] = useState(changelogUnseen);
+  useEffect(() => {
+    const on = () => setUnseen(changelogUnseen());
+    window.addEventListener('changelog-seen', on);
+    return () => window.removeEventListener('changelog-seen', on);
+  }, []);
+  return unseen;
+}
 
 function ContextBar() {
   const { ctx, setCtx, meta, profileId, setProfileId } = useApp();
@@ -86,9 +100,11 @@ function App() {
     case 'nivel': page = <Leveling />; break;
     case 'personaje': page = <Character />; break;
     case 'ajustes': page = <SettingsPage />; break;
+    case 'changelog': page = <Changelog />; break;
     default: page = <div className="empty card">Página no encontrada. <a href="#/">Volver al comparador</a></div>;
   }
   const active = '/' + (parts[0] === 'receta' ? '' : parts[0] ?? '');
+  const unseen = useChangelogUnseen();
   return (
     <>
       <a className="skip" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
@@ -103,6 +119,7 @@ function App() {
               <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={l}>
                 <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
                 <span className="nav-text">{l}</span>
+                {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}
               </a>
             ))}
           </nav>
