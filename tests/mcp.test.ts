@@ -57,6 +57,9 @@ describe('Servidor MCP', () => {
     const j = JSON.parse(r.text);
     expect(j.completa).toBe(false);
     expect(j.pasos[0].sinDatos).toBeTruthy();
+    expect(j.prioridad).toBe('rapida');
+    const cheap = JSON.parse((await call('ruta_subir_nivel', { profesionId: 197, desde: 1, hasta: 20, prioridad: 'barata' })).text);
+    expect(cheap.prioridad).toBe('barata');
   });
 
   it('los errores de la API llegan como error de la herramienta', async () => {

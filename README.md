@@ -97,7 +97,7 @@ Las pruebas cubren:
 | `detalle_receta` | Materiales con precio y procedencia, equilibrio, precio mínimo publicable, estado |
 | `buscar_material` | Id de un material por nombre |
 | `vender_o_usar_material` | Vender el material frente a usarlo en cada receta |
-| `ruta_subir_nivel` | Ruta más barata para subir una profesión y lista de compra |
+| `ruta_subir_nivel` | Ruta para subir una profesión (más rápida por defecto o más barata) y lista de compra |
 
 Importes en oro con 4 decimales; `null` = sin datos (nunca 0). Casa por defecto: JcJ — Horda (parámetro `casa`).
 

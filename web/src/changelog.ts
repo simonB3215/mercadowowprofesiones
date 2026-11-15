@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-15', kind: 'arreglo', title: 'Consultas desde Claude con prioridad',
+    items: [
+      'La consulta de rutas desde Claude devuelve por defecto la más rápida y permite pedir la más barata, igual que la web.',
+      'Indica el tiempo de fabricación y marca los materiales que salen de pasos anteriores, que ya no se cuentan como compra.',
+    ],
+  },
+  {
     date: '2026-11-15', kind: 'mejora', title: 'Rutas para subir profesión como una guía',
     items: [
       'Las rutas se reparten en tramos largos con una sola receta (por ejemplo, 165 → 195 Elixir de poder de fuego), en vez de cambiar de receta cada pocos puntos. Solo se cambia cuando el ahorro compensa; el costo del instructor también cuenta. Alquimia 1 → 300 (más barata) pasa de 16 a 9 pasos con el mismo costo.',
