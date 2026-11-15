@@ -789,3 +789,7 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .show-sm { display: none; }
 @media (max-width: 560px) { .hide-sm { display: none; } .show-sm { display: inline; } }
 .lv-step { scroll-margin-top: 120px; }
+
+.lv-status.info { color: var(--color-text); }
+.lv-status.info svg { color: var(--gold); }
+.rt-pattern { margin-left: 6px; vertical-align: middle; }

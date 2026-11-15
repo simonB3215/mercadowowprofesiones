@@ -43,6 +43,11 @@ export interface LevelRecipe {
   castSeconds?: number | null;
   /** Objeto que fabrica y cantidad mínima por fabricación (para reutilizarlo en pasos posteriores). */
   creates?: { itemId: number; quantity: number } | null;
+  /**
+   * Solo para recetas de patrón que cubren huecos del instructor: niveles [desde, hasta) en los que se puede usar.
+   * Fuera de ellos no da puntos para la ruta (ahí el instructor ya enseña algo).
+   */
+  onlyAt?: Array<[number, number]>;
 }
 
 /** Material de un paso: cantidad total, la parte que sale de pasos anteriores y el costo de lo que hay que comprar. */
@@ -128,6 +133,7 @@ export function colorAt(r: LevelRecipe, s: number): SkillColor {
 export function skillUpChance(r: LevelRecipe, s: number): Q | null {
   const [orange, yellow, , gray] = r.colors;
   if (s < Math.max(r.learnedAt, orange) || s >= gray) return null;
+  if (r.onlyAt && !r.onlyAt.some(([a, b]) => s >= a && s < b)) return null;
   if (s < yellow) return Q.one;
   if (gray <= yellow) return Q.one;
   return Q.of(gray - s, gray - yellow);
@@ -199,9 +205,32 @@ function gapReason(available: number, opts: PlanOptions): string {
     : 'Ninguna receta conocida da puntos en este nivel.';
 }
 
+/**
+ * Con «solo instructor», los niveles en los que el instructor no enseña ninguna receta que dé puntos (p. ej. Sastrería
+ * 255-300) se cubren con recetas de patrón, botín o misión, pero SOLO en esos niveles (`onlyAt`). Devuelve null si no
+ * hay huecos o ningún patrón los cubre; si no, las recetas a usar con `trainerOnly: false` y los tramos cubiertos.
+ */
+export function fillTrainerGaps(recipes: LevelRecipe[], opts: PlanOptions): { recipes: LevelRecipe[]; filled: Array<[number, number]> } | null {
+  if (!opts.trainerOnly) return null;
+  const base = recipePool(recipes, opts);
+  const extra = recipePool(recipes, { ...opts, trainerOnly: false }).filter((r) => !base.includes(r));
+  const gaps: Array<[number, number]> = [];
+  for (let s = opts.from; s < opts.to; s++) {
+    if (base.some((r) => chanceFor(r, s, opts.chanceModel))) continue;
+    if (!extra.some((r) => chanceFor(r, s, opts.chanceModel))) continue;
+    const last = gaps[gaps.length - 1];
+    if (last && last[1] === s) last[1] = s + 1; else gaps.push([s, s + 1]);
+  }
+  if (!gaps.length) return null;
+  const extraSet = new Set(extra);
+  return { recipes: base.concat(recipes.filter((r) => extraSet.has(r)).map((r) => ({ ...r, onlyAt: gaps }))), filled: gaps };
+}
+
 export function planLeveling(recipes: LevelRecipe[], opts: PlanOptions): LevelPlan {
+  validateRange(opts.from, opts.to);
+  const fill = fillTrainerGaps(recipes, opts);
+  if (fill) return planLeveling(fill.recipes, { ...opts, trainerOnly: false });
   const { from, to, price } = opts;
-  validateRange(from, to);
   const pool = recipePool(recipes, opts);
   const costCache = new Map<number, Q | null>();
   const costOf = (r: LevelRecipe) => {

@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Money, Q, toQ } from './lib.js';
 import { ItemLabel } from './icons.js';
 import { downloadCsv, goldCell, toCsv } from './csv.js';
-import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning } from '@phosphor-icons/react';
+import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning, BookOpen } from '@phosphor-icons/react';
 
 // ---------------------------------------------------------------------------
 // Pasos hechos
@@ -142,6 +142,7 @@ export function RouteGuide({ steps, done, onOpen }: { steps: any[]; done: Set<st
                       <button type="button" className="link rt-guide-recipe" onClick={() => onOpen(i)} title="Ver el detalle de este paso">
                         <ItemLabel id={s.recipe.createsItemId} quality={s.recipe.createsQuality} px={24} name={s.recipe.name ?? s.recipe.nameEn} />
                       </button>
+                      {s.fillsTrainerGap && <span className="badge b-info rt-pattern" title="El instructor no enseña ninguna receta para estos niveles">patrón</span>}
                     </td>
                     <td data-label="Fabricaciones" className="num mono">{String(s.crafts)}{!s.certain && <span className="rt-guide-approx" title="Estimado: parte del tramo es amarillo o verde y no siempre da punto">≈</span>}</td>
                     <td data-label="Por fabricación">
@@ -166,6 +167,17 @@ export function RouteGuide({ steps, done, onOpen }: { steps: any[]; done: Set<st
         </tbody>
       </table>
     </div>
+  );
+}
+
+/** Aviso cuando la ruta usa recetas de patrón para niveles en los que el instructor no enseña ninguna. */
+export function PatternNote({ levels, trainerOnly }: { levels: number; trainerOnly: boolean }) {
+  if (!levels || !trainerOnly) return null;
+  return (
+    <p className="lv-status info">
+      <BookOpen size={18} weight="bold" aria-hidden="true" />
+      El instructor no enseña recetas que den puntos en {levels} niveles: ahí se usan recetas de patrón, botín o misión (marcadas «patrón»). Cada paso dice dónde se consigue.
+    </p>
   );
 }
 

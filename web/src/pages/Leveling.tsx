@@ -3,7 +3,7 @@ import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, ho
 import { ItemLabel } from '../icons.js';
 import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info, Table, Lightning, PiggyBank } from '@phosphor-icons/react';
 import { secondsLabel } from './Character.js';
-import { HowToLearn, MatChip, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+import { HowToLearn, MatChip, PatternNote, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 
 export { HowToLearn };
 
@@ -154,9 +154,10 @@ export function Leveling() {
             </dl>
             <p className={`lv-status ${d.incomplete ? 'warn' : 'ok'}`}>
               {d.incomplete
-                ? <><Warning size={18} weight="bold" aria-hidden="true" />Faltan precios para {gapLevels} niveles: el total no los incluye. Revisa los pasos marcados.</>
+                ? <><Warning size={18} weight="bold" aria-hidden="true" />Hay {gapLevels} niveles sin receta con precio: el total no los incluye. Revisa los pasos marcados.</>
                 : <><CheckCircle size={18} weight="bold" aria-hidden="true" />Ruta completa con precios de la casa de subastas.</>}
             </p>
+            <PatternNote levels={d.patternLevels ?? 0} trainerOnly={d.trainerOnly} />
           </section>
 
           <AvoidedList list={avoided} onRemove={(id) => setAvoided(avoided.filter((a) => a.id !== id))} onClear={() => setAvoided([])} />

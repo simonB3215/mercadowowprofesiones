@@ -169,6 +169,11 @@ export async function knownSpellIds(db: Db, version: string, professionId: numbe
   return { known, unmatched: blizzardRecipeIds.length - matched };
 }
 
+const MINING_ID = 186;
+const MINING_GAP = 'Minería se sube sobre todo recogiendo mineral: fundir solo da puntos en algunos niveles. Para estos niveles, mina vetas que te den puntos (amarillas o naranjas en el juego).';
+/** Niveles cubiertos con recetas de patrón porque el instructor no enseña ninguna que dé puntos. */
+const patternLevels = (plan: LevelPlan) => plan.steps.reduce((n, s) => n + (s.recipe?.onlyAt ? s.to - s.from : 0), 0);
+
 /** Pasos con nombres en español (objetos del catálogo; recetas solo si la coincidencia es única), materiales y procedencia. */
 async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan: LevelPlan, pricing: Pricing,
   alt: { pool: LevelRecipe[]; model: 'comunidad' | 'garantizado' }) {
@@ -195,7 +200,10 @@ async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan
       const match = wh ? byKey.get(reagentKey(wh.creates?.itemId ?? null, wh.reagents)) : undefined;
       const cat = match && match.length === 1 ? match[0] : null;
       return {
-        from: s.from, to: s.to, colorFrom: s.colorFrom, colorTo: s.colorTo, expectedCrafts: s.expectedCrafts, crafts: s.crafts, cost: s.cost, reason: s.reason,
+        from: s.from, to: s.to, colorFrom: s.colorFrom, colorTo: s.colorTo, expectedCrafts: s.expectedCrafts, crafts: s.crafts, cost: s.cost,
+        reason: s.recipe ? null : prof.professionId === MINING_ID && !s.missingItems.length ? MINING_GAP : s.reason,
+        /** Receta de patrón usada porque el instructor no enseña ninguna que dé puntos en estos niveles. */
+        fillsTrainerGap: Boolean(s.recipe?.onlyAt),
         guaranteedCrafts: s.guaranteedCrafts, certain: s.certain, minChance: s.minChance, activeSeconds: s.activeSeconds, known: s.known,
         /** Costo por punto de la receta elegida al empezar el paso (mismo criterio que las alternativas). */
         costPerPointAtStart: s.recipe ? pointCost(s.recipe, s.from, pricing.price, alt.model) : null,
@@ -247,7 +255,7 @@ export async function levelingPlan(
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly, mode,
     excluded: [...(opts.exclude ?? [])],
-    incomplete: plan.incomplete,
+    incomplete: plan.incomplete, patternLevels: patternLevels(plan),
     ...costs(plan), activeSeconds: plan.activeSeconds,
     ...described,
     manualItems: [...pricing.manual.keys()],
@@ -350,7 +358,7 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
     from: req.from, to: req.to, maxSkill, mode: chosen.mode, algorithm: chosen.algorithm, evaluated: chosen.evaluated,
     trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, knownRecipes: req.known?.size ?? 0, excluded: [...(req.exclude ?? [])],
     budget: chosen.budget, withinBudget: chosen.withinBudget,
-    incomplete: chosen.plan.incomplete, certain: chosen.plan.certain,
+    incomplete: chosen.plan.incomplete, certain: chosen.plan.certain, patternLevels: patternLevels(chosen.plan),
     ...costs(chosen.plan),
     activeSeconds: chosen.plan.activeSeconds,
     /** Desembolso = total. La recuperación por venta es hipotética y no se resta. */

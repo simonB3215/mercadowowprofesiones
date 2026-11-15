@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { SkillColor, HowToLearn } from './Leveling.js';
-import { MatChip, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+import { MatChip, PatternNote, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 import { CharacterSheet, ProfessionTiles, PROFESSION_NAME_ES, useScrollTo } from './CharacterSheet.js';
 import {
   IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers, Table,
@@ -371,6 +371,7 @@ export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; on
         <div className="lv-status pc-compare">
           <span><strong>Comparación:</strong> la {d.mode === 'rapida' ? 'más barata' : 'más rápida'} cuesta <Money v={other.total} /> y lleva {secondsLabel(other.activeSeconds)} de fabricación{other.incomplete ? ' (con tramos sin datos)' : ''}.</span>
         </div>
+        <PatternNote levels={d.patternLevels ?? 0} trainerOnly={d.trainerOnly} />
       </section>
 
       {(d.blockers.length > 0 || d.requirements.length > 0) && (

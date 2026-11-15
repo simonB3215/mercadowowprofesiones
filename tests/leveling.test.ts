@@ -137,6 +137,17 @@ describe('Subida de nivel', () => {
     expect(planLeveling([slow, fast], opts).steps.map((s) => s.recipe?.id)).toEqual([1]);
   });
 
+  it('huecos del instructor: se cubren con recetas de patrón solo en esos niveles', () => {
+    const t = rec(1, [1, 30, 40, 50], [[100, 1]]); // instructor: da puntos hasta 50
+    const pat = rec(2, [20, 80, 90, 100], [[200, 1]], { availability: 'otra' }); // patrón: barato pero solo debe usarse de 50 a 60
+    const plan = planLeveling([t, pat], { from: 1, to: 60, price: prices({ 100: 1000, 200: 10 }), trainerOnly: true });
+    expect(plan.incomplete).toBe(false);
+    expect(plan.steps.map((s) => [s.from, s.to, s.recipe?.id])).toEqual([[1, 50, 1], [50, 60, 2]]);
+    expect(plan.steps[1].recipe?.onlyAt).toEqual([[50, 60]]);
+    // Sin hueco, el patrón no se usa aunque sea más barato.
+    expect(planLeveling([t, pat], { from: 1, to: 45, price: prices({ 100: 1000, 200: 10 }), trainerOnly: true }).steps.map((s) => s.recipe?.id)).toEqual([1]);
+  });
+
   it('el instructor cuenta al elegir: una receta cara de aprender no se usa para unos pocos puntos', () => {
     const a = rec(1, [1, 40, 50, 60], [[100, 1]]);
     const b = rec(2, [10, 40, 50, 60], [[200, 1]], { trainingCost: 100000n });

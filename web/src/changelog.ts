@@ -14,6 +14,14 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-15', kind: 'mejora', title: 'Rutas completas hasta el nivel máximo',
+    items: [
+      'Cuando el instructor no enseña ninguna receta que dé puntos (por ejemplo, Sastrería y Herrería a partir de 255-260, o Primeros auxilios desde 210), la ruta usa recetas de patrón, botín o misión solo en esos niveles en vez de dejarlos sin datos. Se marcan «patrón» y cada paso dice dónde se consiguen.',
+      'Todas las profesiones de fabricación tienen ya ruta completa hasta 300 sin tener que activar «Incluir recetas de patrón».',
+      'Minería explica que esos niveles se suben recogiendo mineral, porque fundir solo da puntos en algunos niveles.',
+    ],
+  },
+  {
     date: '2026-11-15', kind: 'arreglo', title: 'Consultas desde Claude con prioridad',
     items: [
       'La consulta de rutas desde Claude devuelve por defecto la más rápida y permite pedir la más barata, igual que la web.',

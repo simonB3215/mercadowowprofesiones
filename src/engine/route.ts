@@ -12,7 +12,7 @@
  * «no incluido» en vez de estimarlo. Las recetas con reutilización no se usan (D29), así que no añaden espera.
  */
 import { Q } from './rational.js';
-import { assemblePlan, chanceFor, craftCost, pickByTime, planLeveling, recipePool, type LevelPlan, type LevelRecipe, type Pick, type PlanOptions } from './leveling.js';
+import { assemblePlan, chanceFor, craftCost, fillTrainerGaps, pickByTime, planLeveling, recipePool, type LevelPlan, type LevelRecipe, type Pick, type PlanOptions } from './leveling.js';
 
 export type RouteMode = 'rapida' | 'barata';
 
@@ -41,6 +41,9 @@ const secs = (p: LevelPlan) => (p.activeSeconds ? p.activeSeconds.toNumber() : N
 const fits = (p: LevelPlan, budget: Q | null | undefined) => !budget || p.total.cmp(budget) <= 0;
 
 export function planRoute(recipes: LevelRecipe[], opts: RouteOptions): RouteResult {
+  // Huecos del instructor cubiertos con recetas de patrón, solo en esos niveles.
+  const fill = fillTrainerGaps(recipes, opts);
+  if (fill) return planRoute(fill.recipes, { ...opts, trainerOnly: false });
   const budget = opts.budget ?? null;
   const base: PlanOptions = { ...opts };
   const notes: string[] = [];
