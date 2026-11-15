@@ -227,7 +227,7 @@ export async function levelingPlan(
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly,
     incomplete: plan.incomplete,
-    materialsCost: plan.materialsCost, trainingCost: plan.trainingCost, total: plan.total, activeSeconds: plan.activeSeconds,
+    ...costs(plan), activeSeconds: plan.activeSeconds,
     ...described,
     manualItems: [...pricing.manual.keys()],
   };
@@ -278,8 +278,19 @@ async function saleRecovery(db: Db, ctx: MarketContext, settings: Settings, prof
   };
 }
 
+/**
+ * Importes del plan para la API. Si ningún tramo tiene receta con precio, no hay nada sumado: se devuelve null
+ * («sin datos») en lugar de 0 c, que parecería una subida gratis.
+ */
+function costs(plan: { steps: Array<{ recipe: unknown }>; materialsCost: Q; trainingCost: Q; total: Q }) {
+  const priced = plan.steps.some((st) => st.recipe);
+  return priced
+    ? { materialsCost: plan.materialsCost, trainingCost: plan.trainingCost, total: plan.total }
+    : { materialsCost: null, trainingCost: null, total: null };
+}
+
 const summary = (r: RouteResult) => ({
-  mode: r.mode, total: r.plan.total, materialsCost: r.plan.materialsCost, trainingCost: r.plan.trainingCost,
+  mode: r.mode, ...costs(r.plan),
   activeSeconds: r.plan.activeSeconds, incomplete: r.plan.incomplete, certain: r.plan.certain, withinBudget: r.withinBudget,
   steps: r.plan.steps.length,
 });
@@ -317,7 +328,7 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
     trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, knownRecipes: req.known?.size ?? 0,
     budget: chosen.budget, withinBudget: chosen.withinBudget,
     incomplete: chosen.plan.incomplete, certain: chosen.plan.certain,
-    materialsCost: chosen.plan.materialsCost, trainingCost: chosen.plan.trainingCost, total: chosen.plan.total,
+    ...costs(chosen.plan),
     activeSeconds: chosen.plan.activeSeconds,
     /** Desembolso = total. La recuperación por venta es hipotética y no se resta. */
     recovery,

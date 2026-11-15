@@ -120,10 +120,11 @@ async function insertRows(db: Db, runId: number, rows: PriceRow[]) {
   for (let i = 0; i < rows.length; i += CHUNK) {
     const c = rows.slice(i, i + CHUNK);
     await db.query(
-      `insert into price_row (run_id,item_id,name,market_value,min_buyout,recent,historical,avg_sale_price,sale_rate,sold_per_day)
-       select $1, * from unnest($2::int[], $3::text[], $4::bigint[], $5::bigint[], $6::bigint[], $7::bigint[], $8::bigint[], $9::numeric[], $10::numeric[])`,
+      `insert into price_row (run_id,item_id,name,market_value,min_buyout,recent,historical,avg_sale_price,sale_rate,sold_per_day,quantity,auctions)
+       select $1, * from unnest($2::int[], $3::text[], $4::bigint[], $5::bigint[], $6::bigint[], $7::bigint[], $8::bigint[], $9::numeric[], $10::numeric[], $11::int[], $12::int[])`,
       [runId, c.map((r) => r.itemId), c.map((r) => r.name), c.map((r) => s(r.marketValue)), c.map((r) => s(r.minBuyout)),
-        c.map((r) => s(r.recent)), c.map((r) => s(r.historical)), c.map((r) => s(r.avgSalePrice)), c.map((r) => r.saleRate), c.map((r) => r.soldPerDay)],
+        c.map((r) => s(r.recent)), c.map((r) => s(r.historical)), c.map((r) => s(r.avgSalePrice)), c.map((r) => r.saleRate), c.map((r) => r.soldPerDay),
+        c.map((r) => r.quantity), c.map((r) => r.auctions)],
     );
   }
 }
@@ -161,14 +162,17 @@ export async function recordHistory(db: Db, ctx: MarketContext, runId: number): 
   await db.tx(async (t) => {
     if (recorded) {
       await t.query(
-        `insert into price_history (game_version, region, realm, item_id, day, samples, market_value_sum, min_buyout_min)
-         select $2, $3, $4, p.item_id, (r.source_time at time zone 'UTC')::date, 1, p.market_value, p.min_buyout
+        `insert into price_history (game_version, region, realm, item_id, day, samples, market_value_sum, min_buyout_min, quantity_sum, quantity_samples)
+         select $2, $3, $4, p.item_id, (r.source_time at time zone 'UTC')::date, 1, p.market_value, p.min_buyout,
+                coalesce(p.quantity, 0), case when p.quantity is null then 0 else 1 end
          from price_row p join ingestion_run r on r.id = p.run_id
          where p.run_id = $1 and p.market_value is not null
          on conflict (game_version, region, realm, item_id, day) do update set
            samples = price_history.samples + 1,
            market_value_sum = price_history.market_value_sum + excluded.market_value_sum,
-           min_buyout_min = least(price_history.min_buyout_min, excluded.min_buyout_min)`,
+           min_buyout_min = least(price_history.min_buyout_min, excluded.min_buyout_min),
+           quantity_sum = price_history.quantity_sum + excluded.quantity_sum,
+           quantity_samples = price_history.quantity_samples + excluded.quantity_samples`,
         [runId, ctx.version, ctx.region, ctx.realm],
       );
     }
@@ -191,6 +195,22 @@ export async function recordHistory(db: Db, ctx: MarketContext, runId: number): 
   return { recorded, days: Number(d?.c ?? 0) };
 }
 
+export interface HistoryDay { day: string; marketValue: bigint | null; minBuyout: bigint | null; quantity: number | null; samples: number }
+
+/** Historial diario de un objeto en la casa elegida (media del valor de mercado, mínimo del día y unidades medias en venta). */
+export async function itemHistory(db: Db, ctx: MarketContext, itemId: number, days: number): Promise<HistoryDay[]> {
+  if (!ctx.realm) return [];
+  const rows = await db.query<any>(
+    `select to_char(day, 'YYYY-MM-DD') as day, samples, floor(market_value_sum / samples)::bigint as mv, min_buyout_min,
+            case when quantity_samples > 0 then round(quantity_sum::numeric / quantity_samples)::int end as qty
+     from price_history where game_version=$1 and region=$2 and realm=$3 and item_id=$4
+       and day > (select max(day) from price_history where game_version=$1 and region=$2 and realm=$3 and item_id=$4) - $5::int
+     order by day`,
+    [ctx.version, ctx.region, ctx.realm, itemId, days],
+  );
+  return rows.map((r) => ({ day: r.day, marketValue: toBig(r.mv), minBuyout: toBig(r.min_buyout_min), quantity: toNum(r.qty), samples: Number(r.samples) }));
+}
+
 export interface RunInfo {
   id: number;
   kind: FileKind;
@@ -207,7 +227,7 @@ export interface MarketSnapshot {
   runs: Partial<Record<FileKind, RunInfo>>;
   lastAttempt: Partial<Record<FileKind, { status: string; at: string; error: string | null }>>;
   /** itemId → precios de la casa de subastas elegida (modo de juego + facción). */
-  local: Map<number, { kind: 'realm_items'; marketValue: bigint | null; minBuyout: bigint | null; recent: bigint | null; historical: bigint | null; name: string | null }>;
+  local: Map<number, { kind: 'realm_items'; marketValue: bigint | null; minBuyout: bigint | null; recent: bigint | null; historical: bigint | null; name: string | null; quantity?: number | null; auctions?: number | null }>;
   region: Map<number, { marketValue: bigint | null; historical: bigint | null; avgSalePrice: bigint | null; saleRate: number | null; soldPerDay: number | null; name: string | null }>;
 }
 
@@ -238,7 +258,7 @@ export async function loadSnapshot(db: Db, ctx: MarketContext, itemIds?: number[
   const params: unknown[] = [ids];
   if (itemIds) params.push(itemIds);
   const rows = await db.query<any>(
-    `select p.run_id, p.item_id, p.name, p.market_value, p.min_buyout, p.recent, p.historical, p.avg_sale_price, p.sale_rate, p.sold_per_day
+    `select p.run_id, p.item_id, p.name, p.market_value, p.min_buyout, p.recent, p.historical, p.avg_sale_price, p.sale_rate, p.sold_per_day, p.quantity, p.auctions
      from price_row p where run_id = any($1::bigint[])${filter}`,
     params,
   );
@@ -252,7 +272,8 @@ export async function loadSnapshot(db: Db, ctx: MarketContext, itemIds?: number[
         saleRate: toNum(r.sale_rate), soldPerDay: toNum(r.sold_per_day), name: r.name,
       });
     } else {
-      snap.local.set(id, { kind: k, marketValue: toBig(r.market_value), minBuyout: toBig(r.min_buyout), recent: toBig(r.recent), historical: toBig(r.historical), name: r.name });
+      snap.local.set(id, { kind: k, marketValue: toBig(r.market_value), minBuyout: toBig(r.min_buyout), recent: toBig(r.recent), historical: toBig(r.historical), name: r.name,
+        quantity: toNum(r.quantity), auctions: toNum(r.auctions) });
     }
   }
   return snap;

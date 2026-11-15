@@ -341,7 +341,7 @@ export function RouteView({ d }: { d: any }) {
       <section className="card lv-summary" aria-label="Resumen de la ruta">
         <div className="lv-summary-main">
           <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {d.mode === 'rapida' ? 'más rápida' : 'más barata'}{d.startSource ? ` · inicio ${d.startSource}` : ''}</span>
-          <span className="lv-total"><Money v={d.total} /></span>
+          <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">Sin datos</span>}</span>
           <span className="lv-summary-label">Costo estimado (materiales + instructor)</span>
         </div>
         <dl className="lv-summary-parts">
@@ -354,7 +354,7 @@ export function RouteView({ d }: { d: any }) {
               <dd>{d.recovery.min ? <><Money v={d.recovery.min} />{toQ(d.recovery.max)?.eq(toQ(d.recovery.min)!) ? null : <> – <Money v={d.recovery.max} /></>}{d.recovery.stepsWithoutPrice + d.recovery.stepsBound > 0 ? ' (parcial)' : ''}</> : 'sin datos'}</dd>
             </div>
           )}
-          {d.budget && <div><dt>Presupuesto</dt><dd><Money v={d.budget} /> {d.withinBudget ? <span className="badge b-ok">cabe</span> : <span className="badge b-bad">no cabe</span>}</dd></div>}
+          {d.budget && d.total && <div><dt>Presupuesto</dt><dd><Money v={d.budget} /> {d.withinBudget ? <span className="badge b-ok">cabe</span> : <span className="badge b-bad">no cabe</span>}</dd></div>}
         </dl>
         <div className="lv-status pc-compare">
           <span><strong>Comparación:</strong> la {d.mode === 'rapida' ? 'más barata' : 'más rápida'} cuesta <Money v={other.total} /> y lleva {secondsLabel(other.activeSeconds)} de fabricación{other.incomplete ? ' (con tramos sin datos)' : ''}.</span>

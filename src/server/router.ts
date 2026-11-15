@@ -4,7 +4,7 @@
  */
 import { getDb, type Db } from './db.js';
 import { VERSIONS, REGION_LABEL, DEFAULT_SETTINGS, PRICE_FIELD_LABEL, findHouse, commissionFor, type Settings } from './config.js';
-import { HttpError, ingest, recordHistory, loadSnapshot, validateContext, ageHours, type MarketContext } from './market.js';
+import { HttpError, ingest, recordHistory, itemHistory, loadSnapshot, validateContext, ageHours, type MarketContext } from './market.js';
 import { tsmUrl, type FileKind } from './providers/tsm.js';
 import { hasBlizzardCredentials, createBlizzardClient } from './providers/blizzard.js';
 import { fetchHouseCsv } from './providers/blizzardAuctions.js';
@@ -331,7 +331,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     profile: profile ? { id: profile.id, name: profile.name } : null,
     items: slice.map((e) => ({
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
-      unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope,
+      unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
       sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined,
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
@@ -446,6 +446,15 @@ route('GET', '/api/materials/:id', async (_r, p, u, db) => {
   alternatives.sort((a, b) => (!a.valuePerUnit ? 1 : !b.valuePerUnit ? -1 : b.valuePerUnit.cmp(a.valuePerUnit)));
   const item = ectx.items.get(itemId);
   return { itemId, name: item?.name ?? ectx.snap.local.get(itemId)?.name ?? null, price: own, sellNet, alternatives, commission: commissionFor(settings, ctx.realm) };
+});
+
+/** Historial diario del precio de un objeto en la casa elegida (solo casas cargadas desde Blizzard). */
+route('GET', '/api/items/:id/history', async (_r, p, u, db) => {
+  const ctx = ctxFrom(u);
+  const itemId = int(p.id);
+  if (!itemId || itemId <= 0) throw new HttpError(400, 'Objeto inválido.');
+  const days = Math.min(60, Math.max(7, int(u.searchParams.get('days') ?? '30') ?? 30));
+  return { itemId, days, realm: ctx.realm, history: await itemHistory(db, ctx, itemId, days) };
 });
 
 route('GET', '/api/materials', async (_r, _p, u, db) => {

@@ -33,6 +33,8 @@ describe('API de subida de nivel', () => {
     expect(r.json.incomplete).toBe(true);
     expect(r.json.steps.every((s: any) => s.recipe === null && s.cost === null)).toBe(true);
     expect(r.json.steps[0].missingItems.length).toBeGreaterThan(0);
+    // Nada sumado: «sin datos», nunca 0 c (parecería una subida gratis).
+    expect(r.json).toMatchObject({ total: null, materialsCost: null, trainingCost: null });
   });
 
   it('con un precio manual para Paño de lino (2589), Sastrería 1→20 tiene receta y costo', async () => {

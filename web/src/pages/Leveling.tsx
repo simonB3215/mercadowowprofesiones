@@ -133,7 +133,7 @@ export function Leveling() {
           <section className="card lv-summary" aria-label="Resumen de costos">
             <div className="lv-summary-main">
               <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to}</span>
-              <span className="lv-total"><Money v={d.total} /></span>
+              <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">Sin datos</span>}</span>
               <span className="lv-summary-label">Costo total estimado</span>
             </div>
             <dl className="lv-summary-parts">

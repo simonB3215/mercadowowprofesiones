@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q, Money } from '../lib.js';
 import { ItemLabel, WowIcon } from '../icons.js';
+import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
@@ -40,10 +41,11 @@ function MaterialDetail({ itemId }: { itemId: number }) {
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Vender el material</h2>
         <dl className="kv">
-          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{x.price.field} · {x.price.scope}</span></dd>
+          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{x.price.field} · {x.price.scope}</span>{x.price.supply && <div className="small"><SupplyText s={x.price.supply} /></div>}</dd>
           <dt>Valor neto de venta por unidad</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(tras comisión {x.commission})</span></dd>
         </dl>
       </section>
+      <PriceHistory itemId={itemId} />
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Usarlo para fabricar</h2>
         <p className="small muted">Valor por unidad del material = (ingreso neto de la receta − costo del resto de materiales) / cantidad usada. Mismos supuestos de precio que la venta directa.</p>

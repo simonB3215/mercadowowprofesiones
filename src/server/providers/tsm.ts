@@ -17,6 +17,9 @@ export const EXPECTED_HEADERS: Record<FileKind, string[]> = {
   region_items: ['itemId', 'name', 'marketValue', 'historical', 'avgSalePrice', 'saleRate', 'soldPerDay', 'updatedAt'],
 };
 
+/** Columnas propias que añade la carga desde Blizzard al CSV por casa (TSM no las publica). */
+export const SUPPLY_COLUMNS = ['quantity', 'auctions'];
+
 export function tsmUrl(gameType: string, region: string, kind: FileKind, realm?: string): string {
   if (!/^[a-z-]+$/.test(gameType) || !/^[a-z]{2}$/.test(region)) throw new Error('Contexto inválido');
   if (kind === 'realm_items') {
@@ -36,6 +39,9 @@ export interface PriceRow {
   avgSalePrice: bigint | null;
   saleRate: string | null;
   soldPerDay: string | null;
+  /** Unidades en venta y publicaciones (solo casas cargadas desde Blizzard; null si no se conocen). */
+  quantity: number | null;
+  auctions: number | null;
 }
 
 export interface ParsedFile {
@@ -56,6 +62,13 @@ function copper(v: string | undefined): bigint | null {
   const b = BigInt(v);
   return b === 0n ? null : b;
 }
+function count(v: string | undefined): number | null {
+  if (v === undefined || v === '') return null;
+  if (!/^\d+$/.test(v)) throw new Error(`cantidad no entera: ${v}`);
+  const n = Number(v);
+  if (!Number.isSafeInteger(n) || n > 2_000_000_000) throw new Error(`cantidad fuera de rango: ${v}`);
+  return n;
+}
 function rate(v: string | undefined): string | null {
   if (v === undefined || v === '') return null;
   if (!/^\d+(\.\d+)?$/.test(v)) throw new Error(`tasa inválida: ${v}`);
@@ -70,7 +83,8 @@ export function parseTsmCsv(kind: FileKind, text: string): ParsedFile {
   if (!records.length) throw new Error('Archivo vacío');
   const header = records[0];
   const expected = EXPECTED_HEADERS[kind];
-  if (header.join(',') !== expected.join(',')) {
+  const withSupply = kind === 'realm_items' && header.join(',') === [...expected, ...SUPPLY_COLUMNS].join(',');
+  if (!withSupply && header.join(',') !== expected.join(',')) {
     throw new Error(`Cabecera inesperada. Esperada: ${expected.join(',')} · Recibida: ${header.join(',')}`);
   }
   const idx = (k: string) => header.indexOf(k);
@@ -100,6 +114,8 @@ export function parseTsmCsv(kind: FileKind, text: string): ParsedFile {
         avgSalePrice: copper(g('avgSalePrice')),
         saleRate: rate(g('saleRate')),
         soldPerDay: rate(g('soldPerDay')),
+        quantity: count(g('quantity')),
+        auctions: count(g('auctions')),
       });
       seen.add(id);
     } catch (e) {

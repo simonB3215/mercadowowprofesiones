@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon } from '../icons.js';
+import { SupplyText } from '../PriceHistory.js';
 import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass } from '@phosphor-icons/react';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
 
@@ -196,6 +197,7 @@ export function Comparator() {
                     </td>
                     <td data-label="Precio venta" className="num">
                       <Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div>
+                      {i.sellSupply && <div className="small"><SupplyText s={i.sellSupply} /></div>}
                       {i.sellCheck && (
                         <span className="badge b-warn" title={i.sellCheck.kind === 'atipico' ? 'Muy por encima del valor regional de TSM' : 'Sin precio regional para confirmarlo'}>
                           {i.sellCheck.kind === 'atipico' ? 'Precio atípico' : 'Sin confirmar'}

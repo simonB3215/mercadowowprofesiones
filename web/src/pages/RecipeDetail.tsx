@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, Loading, ErrorBox, GoldInput, addToDraft, dt, age, hoursSince, formatMoney, Q, Delta, Money } from '../lib.js';
 import { ItemLabel, WowIcon, useAsset } from '../icons.js';
+import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass } from '@phosphor-icons/react';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
 
@@ -24,7 +25,7 @@ function Breakdown({ e, title }: { e: any; title: string }) {
         <dt>Costo del lote (C)</dt><dd><Money v={c.batch} /></dd>
         <dt>Costo por unidad</dt><dd><Money v={c.unit} /></dd>
         <dt>Desembolso por faltantes</dt><dd><Money v={c.outOfPocket} /> <span className="small muted">(reposición ≠ desembolso)</span></dd>
-        <dt>Precio de venta utilizado (P)</dt><dd><Money v={e.sellPrice.copper} /> <span className="small muted">{e.sellPrice.field} · {e.sellPrice.scope}</span></dd>
+        <dt>Precio de venta utilizado (P)</dt><dd><Money v={e.sellPrice.copper} /> <span className="small muted">{e.sellPrice.field} · {e.sellPrice.scope}</span>{e.sellPrice.supply && <div className="small"><SupplyText s={e.sellPrice.supply} /></div>}</dd>
         <dt>Ingreso neto del lote</dt><dd><Money v={p.netRevenue} /></dd>
         <dt>Ganancia estimada por lote</dt><dd><Delta v={p.profitBatch} /></dd>
         <dt>Ganancia estimada por unidad</dt><dd><Delta v={p.profitUnit} /></dd>
@@ -163,6 +164,8 @@ export function RecipeDetail({ id }: { id: number }) {
         )}
       </div>
 
+      {e.output?.itemId && e.channel !== 'vinculado' && <PriceHistory itemId={e.output.itemId} title={`Historial de precio de ${e.output.name ?? 'lo fabricado'}`} />}
+
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Materiales</h2>
         <div className="table-wrap">
@@ -173,7 +176,7 @@ export function RecipeDetail({ id }: { id: number }) {
                 <tr key={r.itemId}>
                   <td data-label="Material" className="cell-main"><ItemLabel id={r.itemId} href={`#/materiales/${r.itemId}`} name={r.name ?? `Objeto ${r.itemId}`} sub={`ID ${r.itemId}${r.variants.length ? ` · otros IDs con el mismo nombre: ${r.variants.join(', ')}` : ''}`} /></td>
                   <td data-label="Cantidad" className="num">{r.quantity === null ? '—' : r.quantity * e.runs}</td>
-                  <td data-label="Precio usado" className="num"><Money v={r.price.copper} /></td>
+                  <td data-label="Precio usado" className="num"><Money v={r.price.copper} />{r.price.supply && <div className="small"><SupplyText s={r.price.supply} /></div>}</td>
                   <td data-label="Procedencia" className="small">{r.price.field} · {r.price.scope}{r.price.sourceTime ? ` · ${dt(r.price.sourceTime)}` : ''}</td>
                   <td data-label="Subtotal" className="num"><Money v={r.subtotal} /></td>
                   <td data-label="Inventario" className="num">{r.owned}</td>

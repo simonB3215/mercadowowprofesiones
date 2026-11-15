@@ -5,7 +5,7 @@
 ## Resumen
 
 La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada en Vercel (https://mercadowowprofesiones.vercel.app), protegida con `APP_PASSWORD`, y conectada a **Supabase**. El código está en GitHub (repositorio público `simonB3215/mercadowowprofesiones`). Comprobado:
-- 146 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (13-11-2026).
+- 148 pruebas automáticas en verde, `tsc` sin errores y `npm run build` correcto (14-11-2026).
 - Catálogo real de Forever en Supabase: 12 profesiones, 2 493 recetas y 2 358 objetos (recetas completas).
 - Precios reales: casas de subastas desde la API de Blizzard (incluida Aguasnegras) y estadísticas regionales de TSM. Casa por defecto: JcJ — Horda.
 - Rediseño visual (12-11-2026): estilo del propio juego (paneles oscuros tipo tooltip, títulos dorados, colores de calidad y monedas de oro, plata y cobre) e iconos de WoW por id. Revisado en el navegador a 1440, 800 y 375 px (ver «Interfaz» abajo y `docs/SISTEMA_VISUAL.md`).
@@ -13,7 +13,7 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
 ## Funciones terminadas (verificadas)
 
 - **Motor de cálculo exacto:** costo por ejecución, lote y unidad; ingreso neto; ganancia; ROI (no definido si C = 0); equilibrio; precio objetivo; mínimo publicable; depósitos perdidos frente a recuperables; reposición frente a desembolso; caída de precio. El caso de referencia da 80 o por lote y 40 o por unidad.
-- **Ingesta de precios:** casa de subastas desde Blizzard (resumen por objeto) con TSM de respaldo; parser CSV con validación de cabeceras; precios 0 → `null`; activación atómica; el fallo conserva el último lote; poda de lotes antiguos; registro de intentos.
+- **Ingesta de precios:** casa de subastas desde Blizzard (resumen por objeto) con TSM de respaldo; parser CSV con validación de cabeceras; precios 0 → `null`; unidades en venta y número de publicaciones por objeto (solo Blizzard; migración `20261118000000`); activación atómica; el fallo conserva el último lote; poda de lotes antiguos; registro de intentos.
 - **Casas de subastas:** 4 modos (Normal, JcJ, Rol, Rol JcJ) × Alianza, Horda y Aguasnegras; comisión separada para Aguasnegras.
 - **Evaluación de recetas:**
   - Canal de venta: subasta, vinculado, servicio o desconocido.
@@ -27,6 +27,8 @@ La aplicación trabaja **solo con World of Warcraft: Forever**. Está desplegada
   - Selector de mercado y personaje.
   - Comparador con búsqueda, filtros, orden (los valores ausentes van al final) y paginación.
   - Detalle con fórmulas, procedencia y fecha de cada precio.
+  - Historial de precio (gráfico de 7 a 60 días con ficha por día y tabla) en la receta y en Materiales; «N en venta · M publicaciones» junto a cada precio de la casa de subastas. Revisado en el navegador a 800 y 375 px con datos reales.
+  - Las rutas sin ningún tramo con precio muestran «Sin datos» en lugar de 0 c.
   - Simulador de escenarios (guardar, cargar, restaurar).
   - Comprar o fabricar con detección de ciclos.
   - Catálogo y cobertura.

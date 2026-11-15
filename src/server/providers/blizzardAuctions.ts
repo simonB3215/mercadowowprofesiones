@@ -4,12 +4,13 @@
  *  - /data/wow/ruleset/{r}/auctions/{casa}              → auctions[].{item.id, buyout, quantity, bid?}
  *  - /data/wow/ruleset/{r}/auctions/{casa}/commodities  → auctions[].{item.id, unit_price, quantity}
  *  - El contenido no depende de {r}: las casas son globales. Se usa r = 2 (Normal).
- * Se resume por objeto en el mismo formato que el CSV por casa de TSM, para reutilizar la ingesta.
+ * Se resume por objeto en el mismo formato que el CSV por casa de TSM, para reutilizar la ingesta, más dos columnas
+ * propias: unidades en venta (`quantity`) y número de publicaciones (`auctions`).
  */
 import type { BlizzardClient } from './blizzard.js';
 
 export const AUCTION_RULESET = 2;
-export const AUCTION_HEADER = 'itemId,name,marketValue,minBuyout,recent,historical,updatedAt';
+export const AUCTION_HEADER = 'itemId,name,marketValue,minBuyout,recent,historical,updatedAt,quantity,auctions';
 
 interface Listing {
   unit: bigint;
@@ -70,7 +71,8 @@ export function toCsv(by: Map<number, Listing[]>, updatedAt: string): string {
     const l = by.get(id)!;
     const min = l.reduce((m, x) => (x.unit < m ? x.unit : m), l[0].unit);
     const mv = marketValue(l)!;
-    lines.push(`${id},,${mv},${min},${min},,${updatedAt}`);
+    const qty = l.reduce((a, x) => a + x.qty, 0n);
+    lines.push(`${id},,${mv},${min},${min},,${updatedAt},${qty},${l.length}`);
   }
   return lines.join('\n') + '\n';
 }

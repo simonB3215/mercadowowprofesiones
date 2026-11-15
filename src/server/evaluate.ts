@@ -71,6 +71,8 @@ export interface PriceInfo {
   scope: 'casa de subastas' | 'región' | 'manual' | 'sin datos';
   sourceTime: string | null;
   observed: Partial<Record<PriceField, string | null>>;
+  /** Oferta en la casa de subastas cuando el precio sale de ella (unidades en venta y publicaciones; null si no se conocen). */
+  supply?: { quantity: number | null; auctions: number | null } | null;
 }
 
 /**
@@ -172,7 +174,8 @@ export function resolvePrice(snap: MarketSnapshot, itemId: number, field: PriceF
   const v = l ? (l as any)[field] as bigint | null : null;
   const scope = !v ? 'sin datos' : 'casa de subastas';
   const st = l ? snap.runs[l.kind]?.sourceTime ?? null : null;
-  return { copper: q(v), field, scope, sourceTime: st, observed: o.observed };
+  const supply = l && (l.quantity != null || l.auctions != null) ? { quantity: l.quantity ?? null, auctions: l.auctions ?? null } : null;
+  return { copper: q(v), field, scope, sourceTime: st, observed: o.observed, supply };
 }
 
 /** Índice nombre → itemIds observados en TSM, para detectar variantes de calidad (no para unir precios). */

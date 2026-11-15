@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { marketValue, summarize, toCsv, fetchHouseCsv } from '../src/server/providers/blizzardAuctions.js';
 import { parseTsmCsv } from '../src/server/providers/tsm.js';
 import { openDb, migrate } from '../src/server/db.js';
-import { ingest, loadSnapshot, recordHistory } from '../src/server/market.js';
+import { ingest, loadSnapshot, recordHistory, itemHistory } from '../src/server/market.js';
 import { FOREVER_REALMS, commissionFor, DEFAULT_SETTINGS, findHouse } from '../src/server/config.js';
 import type { BlizzardClient } from '../src/server/providers/blizzard.js';
 
@@ -31,6 +31,16 @@ describe('Resumen de la casa de subastas de Blizzard', () => {
     expect(p.rejected).toBe(0);
     expect(p.rows.map((r) => [r.itemId, r.minBuyout, r.marketValue, r.historical])).toEqual([[3, 90n, 90n, null], [5, 700n, 700n, null]]);
     expect(p.sourceTime).toBe('2026-11-12T10:00:00Z');
+  });
+  it('el CSV añade unidades en venta y publicaciones; el CSV de TSM sigue valiendo sin ellas', () => {
+    const csv = toCsv(summarize([{ item: { id: 5 }, buyout: 700, quantity: 1 }, { item: { id: 5 }, buyout: 1600, quantity: 2 }], []), '2026-11-12T10:00:00Z');
+    const NL = String.fromCharCode(10);
+    expect(csv.split(NL)[0]).toBe('itemId,name,marketValue,minBuyout,recent,historical,updatedAt,quantity,auctions');
+    expect(parseTsmCsv('realm_items', csv).rows[0]).toMatchObject({ itemId: 5, quantity: 3, auctions: 2 });
+    const tsm = parseTsmCsv('realm_items', ['itemId,name,marketValue,minBuyout,recent,historical,updatedAt', '5,,10,10,10,,2026-11-12T10:00:00Z', ''].join(NL));
+    expect(tsm.rows[0]).toMatchObject({ quantity: null, auctions: null });
+    const bad = ['itemId,name,marketValue,minBuyout,recent,historical,updatedAt,quantity,auctions', '5,,10,10,10,,2026-11-12T10:00:00Z,-1,1', ''].join(NL);
+    expect(parseTsmCsv('realm_items', bad).rejected).toBe(1);
   });
 });
 
@@ -64,6 +74,7 @@ describe('Casas de subastas de WoW Forever', () => {
     expect(s.runs.realm_items!.provider).toBe('blizzard');
     expect(s.runs.realm_items!.sourceTime).toBe('2026-11-12T10:05:00.000Z');
     expect(s.local.get(2589)!.minBuyout).toBe(25n);
+    expect(s.local.get(2589)).toMatchObject({ quantity: 41, auctions: 2 });
   });
 });
 
@@ -88,5 +99,23 @@ describe('Historial propio de la casa de subastas', () => {
     const s = await loadSnapshot(db, ctx);
     expect(s.local.get(1)!.historical).toBe(350n); // (200 + 500) / 2
     expect(s.local.get(2)!.historical).toBe(70n);
+  });
+
+  it('historial diario por objeto con las unidades medias en venta (cuando se conocen)', async () => {
+    const db = await openDb('pglite:memory');
+    await migrate(db);
+    const ext = (mv: number, qty: number, at: string) =>
+      ['itemId,name,marketValue,minBuyout,recent,historical,updatedAt,quantity,auctions', `9,,${mv},${mv - 10},${mv},,${at},${qty},3`, ''].join(String.fromCharCode(10));
+    for (const [mv, qty, at] of [[100, 10, '2026-11-10T10:00:00Z'], [300, 30, '2026-11-10T12:00:00Z'], [500, 7, '2026-11-12T09:00:00Z']] as const) {
+      const r = await ingest(db, ctx, 'realm_items', { text: ext(mv, qty, at), provider: 'blizzard' });
+      await recordHistory(db, ctx, r.runId);
+    }
+    expect(await itemHistory(db, ctx, 9, 30)).toEqual([
+      { day: '2026-11-10', marketValue: 200n, minBuyout: 90n, quantity: 20, samples: 2 },
+      { day: '2026-11-12', marketValue: 500n, minBuyout: 490n, quantity: 7, samples: 1 },
+    ]);
+    // La ventana cuenta desde el último día con datos: con 2 días solo queda el 12.
+    expect((await itemHistory(db, ctx, 9, 2)).map((d) => d.day)).toEqual(['2026-11-12']);
+    expect(await itemHistory(db, { ...ctx, realm: null }, 9, 30)).toEqual([]);
   });
 });
