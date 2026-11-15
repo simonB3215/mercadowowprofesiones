@@ -6,7 +6,7 @@ import type { Db } from './db.js';
 import { HttpError, loadSnapshot, type MarketContext } from './market.js';
 import { resolvePrice } from './evaluate.js';
 import { commissionFor, type Settings } from './config.js';
-import { planLeveling, type LevelPlan, type LevelRecipe } from '../engine/leveling.js';
+import { alternativesAt, planLeveling, pointCost, recipePool, type LevelPlan, type LevelRecipe } from '../engine/leveling.js';
 import { planRoute, rankRequirements, type RouteMode, type RouteResult } from '../engine/route.js';
 import { castSecondsOf, SPELL_TOOLS, SPELL_DETAILS_SOURCE } from './spellDetails.js';
 import { bestBuyPrice, VENDOR_SOURCE } from './vendorItems.js';
@@ -169,9 +169,13 @@ export async function knownSpellIds(db: Db, version: string, professionId: numbe
 }
 
 /** Pasos con nombres en español (objetos del catálogo; recetas solo si la coincidencia es única), materiales y procedencia. */
-async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan: LevelPlan, pricing: Pricing) {
+async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan: LevelPlan, pricing: Pricing,
+  alt: { pool: LevelRecipe[]; model: 'comunidad' | 'garantizado' }) {
   const whById = new Map(prof.recipes.map((r) => [r.id, r]));
   const usedItems = new Set<number>();
+  // Otras recetas posibles al empezar cada paso (para cambiarla con «Evitar esta receta»).
+  const alts = plan.steps.map((s) => (s.recipe ? alternativesAt(alt.pool, s.from, s.recipe.id, pricing.price, alt.model) : []));
+  for (const a of alts) for (const x of a) { const c = whById.get(x.recipe.id)?.creates?.itemId; if (c) usedItems.add(c); }
   for (const s of plan.steps) {
     for (const m of s.materials) usedItems.add(m.itemId);
     for (const id of s.missingItems) usedItems.add(id);
@@ -183,16 +187,27 @@ async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan
   const byKey = await catalogByKey(db, ctx.version, prof.professionId);
   const itemName = (id: number) => itemById.get(id)?.name ?? pricing.snap.local.get(id)?.name ?? null;
   const { priceSource } = pricing;
+  const catName = (w: WhRecipe) => { const m = byKey.get(reagentKey(w.creates?.itemId ?? null, w.reagents)); return m && m.length === 1 ? m[0].name : null; };
   return {
-    steps: plan.steps.map((s) => {
+    steps: plan.steps.map((s, i) => {
       const wh = s.recipe ? whById.get(s.recipe.id)! : null;
       const match = wh ? byKey.get(reagentKey(wh.creates?.itemId ?? null, wh.reagents)) : undefined;
       const cat = match && match.length === 1 ? match[0] : null;
       return {
         from: s.from, to: s.to, colorFrom: s.colorFrom, colorTo: s.colorTo, expectedCrafts: s.expectedCrafts, crafts: s.crafts, cost: s.cost, reason: s.reason,
         guaranteedCrafts: s.guaranteedCrafts, certain: s.certain, minChance: s.minChance, activeSeconds: s.activeSeconds, known: s.known,
+        /** Costo por punto de la receta elegida al empezar el paso (mismo criterio que las alternativas). */
+        costPerPointAtStart: s.recipe ? pointCost(s.recipe, s.from, pricing.price, alt.model) : null,
+        alternatives: alts[i].map((a) => {
+          const w = whById.get(a.recipe.id)!;
+          return {
+            spellId: w.id, nameEn: w.name, name: catName(w), wowheadUrl: `https://www.wowhead.com/forever/spell=${w.id}`,
+            availability: a.recipe.availability, sources: w.source, color: a.color, chance: a.chance, costPerPoint: a.costPerPoint,
+            createsName: w.creates ? itemName(w.creates.itemId) : null,
+          };
+        }),
         recipe: wh && s.recipe ? {
-          spellId: wh.id, nameEn: wh.name, name: cat?.name ?? null, catalogRecipeId: cat?.id ?? null,
+          spellId: wh.id, nameEn: wh.name, name: cat?.name ?? null, catalogRecipeId: cat?.id ?? null, sources: wh.source,
           wowheadUrl: `https://www.wowhead.com/forever/spell=${wh.id}`, learnedAt: wh.learnedAt, colors: wh.colors,
           availability: s.recipe.availability, trainingCost: s.recipe.trainingCost, skillUps: s.recipe.skillUps,
           castSeconds: s.recipe.castSeconds ?? null, tools: SPELL_TOOLS.get(wh.id) ?? [],
@@ -213,19 +228,22 @@ async function professionName(db: Db, version: string, prof: WhProfession) {
 
 export async function levelingPlan(
   db: Db, ctx: MarketContext, settings: Settings,
-  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q> },
+  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q>; exclude?: Set<number> },
 ) {
   const prof = professionOf(ctx, opts.professionId);
   const maxSkill = checkRange(prof, opts.from, opts.to);
   const pricing = await pricingFor(db, ctx, settings, prof, opts.manual ?? new Map<number, Q>());
-  const plan = planLeveling(prof.recipes.map(toLevel), { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly });
-  const described = await describePlan(db, ctx, prof, plan, pricing);
+  const recipes = prof.recipes.map(toLevel);
+  const plan = planLeveling(recipes, { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly, exclude: opts.exclude });
+  const described = await describePlan(db, ctx, prof, plan, pricing,
+    { pool: recipePool(recipes, { trainerOnly: opts.trainerOnly, exclude: opts.exclude }), model: 'comunidad' });
   return {
     profession: { id: prof.professionId, name: await professionName(db, ctx.version, prof) },
     source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, vendor: VENDOR_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly,
+    excluded: [...(opts.exclude ?? [])],
     incomplete: plan.incomplete,
     ...costs(plan), activeSeconds: plan.activeSeconds,
     ...described,
@@ -244,6 +262,8 @@ export interface RouteRequest {
   manual?: Map<number, Q>;
   /** Recetas que el personaje ya conoce (ids de hechizo de Wowhead). */
   known?: Set<number>;
+  /** Recetas que el usuario prefiere no usar (ids de hechizo). */
+  exclude?: Set<number>;
   /** Máximo actual de la profesión del personaje (null = desconocido) y nivel del personaje. */
   currentMax?: number | null;
   characterLevel?: number | null;
@@ -309,11 +329,11 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
   if (req.budget && req.budget.sign() < 0) throw new HttpError(400, 'El presupuesto no puede ser negativo.');
   const pricing = await pricingFor(db, ctx, settings, prof, req.manual ?? new Map<number, Q>());
   const recipes = prof.recipes.map(toLevel);
-  const base = { from: req.from, to: req.to, price: pricing.price, trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, known: req.known, budget: req.budget };
+  const base = { from: req.from, to: req.to, price: pricing.price, trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, known: req.known, exclude: req.exclude, budget: req.budget };
   const fast = planRoute(recipes, { ...base, mode: 'rapida' });
   const cheap = planRoute(recipes, { ...base, mode: 'barata' });
   const chosen = req.mode === 'rapida' ? fast : cheap;
-  const described = await describePlan(db, ctx, prof, chosen.plan, pricing);
+  const described = await describePlan(db, ctx, prof, chosen.plan, pricing, { pool: recipePool(recipes, base), model: req.chanceModel });
   const recovery = await saleRecovery(db, ctx, settings, prof, chosen.plan, pricing);
   const requirements = rankRequirements(req.from, req.to, req.currentMax ?? null, req.characterLevel ?? null);
   const blockers = [...chosen.blockers];
@@ -325,7 +345,7 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: req.from, to: req.to, maxSkill, mode: chosen.mode, algorithm: chosen.algorithm, evaluated: chosen.evaluated,
-    trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, knownRecipes: req.known?.size ?? 0,
+    trainerOnly: req.trainerOnly, chanceModel: req.chanceModel, knownRecipes: req.known?.size ?? 0, excluded: [...(req.exclude ?? [])],
     budget: chosen.budget, withinBudget: chosen.withinBudget,
     incomplete: chosen.plan.incomplete, certain: chosen.plan.certain,
     ...costs(chosen.plan),

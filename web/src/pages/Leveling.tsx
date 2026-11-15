@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery, setHashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info } from '@phosphor-icons/react';
+import { HowToLearn, PriceTag, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+
+export { HowToLearn };
 
 const MANUAL_KEY = 'levelingManualPrices';
 
@@ -19,16 +22,6 @@ export function SkillColor({ c }: { c: string | null }) {
   return <span className={`skill skill-${c}`}>{c}</span>;
 }
 
-/** Cómo se consigue la receta, en una frase corta. */
-export function HowToLearn({ r }: { r: any }) {
-  if (r.availability === 'instructor') {
-    const cost = String(r.trainingCost ?? '0'); // cobre como texto (bigint serializado)
-    return <>Instructor (nivel {r.learnedAt}){cost !== '0' && <>{' · '}<Money v={{ n: cost, d: '1' }} /></>}</>;
-  }
-  if (r.availability === 'inicial') return <span title="Wowhead no indica su fuente; se deduce que se conoce al aprender la profesión.">Se conoce al aprender la profesión</span>;
-  return <span className="lv-warn-text" title="Requiere patrón, botín, misión u otra fuente: no está garantizada.">Patrón, botín o misión (nivel {r.learnedAt})</span>;
-}
-
 type Tab = 'pasos' | 'compra';
 
 export function Leveling() {
@@ -42,6 +35,8 @@ export function Leveling() {
   const [manual, setManual] = useState<Record<string, string>>(loadManual);
   const [applied, setApplied] = useState<{ prof: string; from: string; to: string; all: boolean } | null>(null);
   const [tab, setTab] = useState<Tab>('pasos');
+  const [avoided, setAvoided] = useState<Avoided[]>([]);
+  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}` : 'lv:none');
 
   const list: any[] = profs.data?.professions ?? [];
   const current = list.find((p) => String(p.id) === prof) ?? null;
@@ -66,9 +61,9 @@ export function Leveling() {
   );
   const plan = useAsync(
     () => (applied
-      ? api(`/api/leveling?${ctxQuery}&profession=${applied.prof}&from=${applied.from}&to=${applied.to}&trainerOnly=${applied.all ? '0' : '1'}${manualParam ? `&manual=${encodeURIComponent(manualParam)}` : ''}`)
+      ? api(`/api/leveling?${ctxQuery}&profession=${applied.prof}&from=${applied.from}&to=${applied.to}&trainerOnly=${applied.all ? '0' : '1'}${manualParam ? `&manual=${encodeURIComponent(manualParam)}` : ''}${avoided.length ? `&exclude=${avoided.map((a) => a.id).join(',')}` : ''}`)
       : Promise.resolve(null)),
-    [applied, ctxQuery, manualParam],
+    [applied, ctxQuery, manualParam, avoided],
   );
   useEffect(() => {
     if (applied) setHashQuery('/nivel', new URLSearchParams({ prof: applied.prof, from: applied.from, to: applied.to, ...(applied.all ? { all: '1' } : {}) }));
@@ -147,6 +142,9 @@ export function Leveling() {
             </p>
           </section>
 
+          <AvoidedList list={avoided} onRemove={(id) => setAvoided(avoided.filter((a) => a.id !== id))} onClear={() => setAvoided([])} />
+          <RouteProgress steps={d.steps} done={steps.done} onReset={steps.reset} />
+
           <div className="lv-tabs" role="tablist" aria-label="Vista">
             <button type="button" role="tab" aria-selected={tab === 'pasos'} aria-controls="lv-panel" onClick={() => setTab('pasos')}>
               <ListNumbers size={18} aria-hidden="true" />Pasos <span className="lv-count">{d.steps.length}</span>
@@ -160,8 +158,9 @@ export function Leveling() {
             {tab === 'pasos' ? (
               <ol className="lv-steps">
                 {d.steps.map((s: any, i: number) => (
-                  <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}`}>
-                    <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span></div>
+                  <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
+                    <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>
+                      <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
                     {s.recipe ? (
                       <>
                         <div className="lv-main">
@@ -176,7 +175,7 @@ export function Leveling() {
                               <li key={m.itemId} className="lv-chip">
                                 <span className="mono">{String(m.quantity)} ×</span>
                                 <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
-                                {m.priceSource === 'manual' && <span className="lv-manual" title="Precio indicado por ti">manual</span>}{m.priceSource === 'vendedor' && <span className="lv-manual" title="Precio del vendedor (más barato que la casa de subastas)">vendedor</span>}
+                                <PriceTag m={m} />
                               </li>
                             ))}
                           </ul>
@@ -187,6 +186,7 @@ export function Leveling() {
                             <span aria-hidden="true">·</span>
                             <a href={s.recipe.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">Wowhead<ArrowSquareOut size={12} aria-hidden="true" /></a>
                           </p>
+                          <StepAlternatives s={s} onAvoid={(id, name) => setAvoided([...avoided.filter((a) => a.id !== id), { id, name }])} />
                         </div>
                         <div className="lv-cost"><Money v={s.cost} /></div>
                       </>
@@ -215,26 +215,7 @@ export function Leveling() {
                 ))}
               </ol>
             ) : (
-              <section className="card lv-shop">
-                {!d.shopping.length ? <p className="muted">No hay materiales con precio para comprar.</p> : (
-                  <table className="lv-shop-table">
-                    <thead><tr><th>Material</th><th className="num">Cantidad</th><th className="num">Total</th></tr></thead>
-                    <tbody>
-                      {d.shopping.map((m: any) => (
-                        <tr key={m.itemId}>
-                          <td><ItemLabel id={m.itemId} quality={m.quality} px={24} href={`#/materiales/${m.itemId}`} name={m.name ?? `Objeto ${m.itemId}`} /></td>
-                          <td className="num">{String(m.quantity)}</td>
-                          <td className="num">
-                            <Money v={m.cost} />
-                            <span className="lv-unit"><Money v={m.unitPrice} /> c/u{m.priceSource === 'manual' ? ' · manual' : m.priceSource === 'vendedor' ? ' · vendedor' : ''}</span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                    <tfoot><tr><th colSpan={2}>Total materiales</th><td className="num"><Money v={d.materialsCost} /></td></tr></tfoot>
-                  </table>
-                )}
-              </section>
+              <ShoppingPanel d={d} done={steps.done} />
             )}
           </div>
 

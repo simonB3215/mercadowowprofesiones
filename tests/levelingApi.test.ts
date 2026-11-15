@@ -45,6 +45,19 @@ describe('API de subida de nivel', () => {
     expect(first.materials.every((m: any) => m.priceSource === 'manual')).toBe(true);
   });
 
+  it('«exclude» quita la receta elegida y la respuesta trae alternativas y fuentes', async () => {
+    const r = await api(`/api/leveling?${qs}&profession=197&from=1&to=20&manual=2589:0.01`);
+    const first = r.json.steps[0];
+    expect(Array.isArray(first.recipe.sources)).toBe(true);
+    expect(Array.isArray(first.alternatives)).toBe(true);
+    const id = first.recipe.spellId;
+    const r2 = await api(`/api/leveling?${qs}&profession=197&from=1&to=20&manual=2589:0.01&exclude=${id}`);
+    expect(r2.status).toBe(200);
+    expect(r2.json.excluded).toEqual([id]);
+    expect(r2.json.steps.some((s: any) => s.recipe?.spellId === id)).toBe(false);
+    expect((await api(`/api/leveling?${qs}&profession=197&exclude=${Array.from({ length: 51 }, (_, i) => i + 1).join(',')}`)).status).toBe(400);
+  });
+
   it('valida profesión, rango y precios manuales', async () => {
     expect((await api(`/api/leveling?${qs}&profession=182&from=1&to=20`)).status).toBe(404); // Herboristería: se sube recolectando
     expect((await api(`/api/leveling?${qs}&profession=197&from=20&to=20`)).status).toBe(400);

@@ -14,6 +14,16 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-14', kind: 'nuevo', title: 'Seguir la ruta paso a paso y lista de compra para llevar',
+    items: [
+      'En «Subir nivel» y en «Mi personaje» cada paso tiene una casilla «Hecho». Arriba se ve cuántos pasos llevas y el nivel alcanzado; se guarda en este navegador.',
+      'La lista de compra puede mostrar solo lo que falta (sin los pasos hechos), copiarse como texto con «Copiar lista» o descargarse en CSV para Excel.',
+      'Nueva columna «Dónde»: casa de subastas, vendedor (con enlace a Wowhead para ver qué PNJ lo vende) o precio tuyo.',
+      'Las recetas que no enseña el instructor dicen si son patrón de vendedor, botín o misión, con un enlace «ver dónde».',
+      'Cada paso muestra otras recetas posibles con su costo por punto. Con «Evitar esta receta» la ruta se recalcula sin ella, y «Permitir» la vuelve a incluir.',
+    ],
+  },
+  {
     date: '2026-11-14', kind: 'mejora', title: 'Menú más ordenado, página de inicio y privacidad',
     items: [
       'Nueva página de inicio con tres accesos: qué fabricar para ganar oro, subir una profesión y Mi personaje. Es lo que se ve al abrir la web.',

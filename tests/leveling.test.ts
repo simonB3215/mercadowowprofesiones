@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Q } from '../src/engine/rational.js';
-import { planLeveling, skillUpChance, colorAt, type LevelRecipe } from '../src/engine/leveling.js';
+import { planLeveling, skillUpChance, colorAt, alternativesAt, recipePool, type LevelRecipe } from '../src/engine/leveling.js';
 
 const rec = (id: number, colors: [number, number, number, number], reagents: Array<[number, number]>, extra: Partial<LevelRecipe> = {}): LevelRecipe => ({
   id, name: `R${id}`, learnedAt: colors[0], colors, skillUps: 1, availability: 'instructor', trainingCost: 0n,
@@ -84,6 +84,22 @@ describe('Subida de nivel', () => {
     expect(plan.steps.map((s) => s.recipe?.id)).toEqual([2]);
     const soloTransmutar = planLeveling([transmutar], { from: 1, to: 5, price: prices({ 100: 1 }), trainerOnly: false });
     expect(soloTransmutar.steps.map((s) => s.recipe)).toEqual([null]);
+  });
+
+  it('evitar una receta: el plan usa la siguiente y las alternativas se ordenan por costo por punto', () => {
+    const barata = rec(1, [1, 20, 25, 30], [[100, 1]]); // 5 c
+    const media = rec(2, [1, 20, 25, 30], [[101, 1]]); // 20 c
+    const sinPrecio = rec(3, [1, 20, 25, 30], [[999, 1]]);
+    const price = prices({ 100: 5, 101: 20 });
+    const normal = planLeveling([barata, media, sinPrecio], { from: 1, to: 10, price, trainerOnly: true });
+    expect(normal.steps[0].recipe?.id).toBe(1);
+    const sin1 = planLeveling([barata, media, sinPrecio], { from: 1, to: 10, price, trainerOnly: true, exclude: new Set([1]) });
+    expect(sin1.steps[0].recipe?.id).toBe(2);
+    const pool = recipePool([barata, media, sinPrecio], { trainerOnly: true });
+    const alts = alternativesAt(pool, 1, 1, price);
+    expect(alts.map((a) => a.recipe.id)).toEqual([2, 3]);
+    expect(alts[0].costPerPoint!.eq(Q.of(20))).toBe(true);
+    expect(alts[1].costPerPoint).toBeNull(); // sin precio: al final, nunca como gratis
   });
 
   it('rechaza rangos inválidos', () => {

@@ -3,10 +3,11 @@
  * procedencia), calcular la ruta más rápida o más barata, guardarla y registrar el progreso.
  * Sin conexión (o sin credenciales en el servidor) funciona en modo manual: el nivel se escribe a mano.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
 import { SkillColor, HowToLearn } from './Leveling.js';
+import { PriceTag, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 import { CharacterSheet, ProfessionTiles, PROFESSION_NAME_ES, useScrollTo } from './CharacterSheet.js';
 import {
   IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers,
@@ -230,6 +231,7 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [avoided, setAvoided] = useState<Avoided[]>([]);
   const plans = useAsync(() => (c ? api(`/api/me/plans?character=${c.id}`) : Promise.resolve(null)), [c?.id, saved]);
 
   // Profesión por defecto: la primera del personaje que tenga datos de subida; si no, la primera de la lista.
@@ -259,6 +261,7 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
   const body = () => ({
     ...ctx, professionId: Number(f.professionId), to: Number(f.to), mode: f.mode, budget: f.budget.trim() || null, chance: f.chance,
     trainerOnly: !f.all, useKnown: f.useKnown, ...(c && (known === null || String(known) !== f.from) ? { from: f.from } : {}),
+    ...(avoided.length ? { exclude: avoided.map((a) => a.id) } : {}),
   });
   const calc = async () => {
     setLoading(true); setErr(null);
@@ -269,6 +272,7 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
         if (f.budget.trim()) q.set('budget', f.budget.trim());
         if (f.currentMax) q.set('currentMax', f.currentMax);
         if (f.characterLevel) q.set('characterLevel', f.characterLevel);
+        if (avoided.length) q.set('exclude', avoided.map((a) => a.id).join(','));
         setResult(await api(`/api/route?${ctxQuery}&${q}`));
       }
     } catch (e) { setErr((e as Error).message); setResult(null); } finally { setLoading(false); }
@@ -276,6 +280,9 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
   const save = async () => {
     try { const r = await api('/api/me/plans', { method: 'POST', body: { ...body(), characterId: c.id } }); setSaved(r.plan.id); } catch (e) { setErr((e as Error).message); }
   };
+  // Al evitar o permitir una receta se recalcula la ruta ya mostrada.
+  const firstAvoid = useRef(true);
+  useEffect(() => { if (firstAvoid.current) { firstAvoid.current = false; return; } if (result) calc(); }, [avoided]);
   const budgetBad = f.budget.trim() !== '' && !/^\d{1,7}(\.\d{1,4})?$/.test(f.budget.trim());
   const current = profs.find((p) => String(p.id) === f.professionId);
 
@@ -323,14 +330,18 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
       </form>
       {err && <ErrorBox error={err} />}
       {loading && <Loading label="Calculando la ruta…" rows={5} />}
-      {result && !loading && <RouteView d={result} />}
+      {result && !loading && <>
+        <AvoidedList list={avoided} onRemove={(id) => setAvoided(avoided.filter((a) => a.id !== id))} onClear={() => setAvoided([])} />
+        <RouteView d={result} doneKey={`ch:${c?.id ?? 'manual'}`} onAvoid={(id, name) => setAvoided([...avoided.filter((a) => a.id !== id), { id, name }])} />
+      </>}
       {c && plans.data && <SavedPlans plans={plans.data.plans} profs={profs} onChanged={() => setSaved(String(Date.now()))} />}
     </>
   );
 }
 
-export function RouteView({ d }: { d: any }) {
+export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; onAvoid?: (spellId: number, name: string) => void }) {
   const [tab, setTab] = useState<'pasos' | 'compra'>('pasos');
+  const steps = useStepsDone(`${doneKey}:${d.profession?.id}:${d.to}:${d.mode}`);
   if (d.completed) {
     return <section className="card"><p className="lv-status ok"><CheckCircle size={18} aria-hidden="true" />{d.profession.name}: ya tienes {d.from}, que alcanza el objetivo {d.to}. No hace falta ruta.</p></section>;
   }
@@ -375,6 +386,7 @@ export function RouteView({ d }: { d: any }) {
         </section>
       )}
 
+      <RouteProgress steps={d.steps} done={steps.done} onReset={steps.reset} />
       <div className="lv-tabs" role="tablist" aria-label="Vista">
         <button type="button" role="tab" aria-selected={tab === 'pasos'} onClick={() => setTab('pasos')}><ListNumbers size={18} aria-hidden="true" />Pasos <span className="lv-count">{d.steps.length}</span></button>
         <button type="button" role="tab" aria-selected={tab === 'compra'} onClick={() => setTab('compra')}><ShoppingCart size={18} aria-hidden="true" />Lista de compra <span className="lv-count">{d.shopping.length}</span></button>
@@ -382,8 +394,9 @@ export function RouteView({ d }: { d: any }) {
       {tab === 'pasos' ? (
         <ol className="lv-steps">
           {d.steps.map((s: any, i: number) => (
-            <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}`}>
-              <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>{s.recipe && i < d.steps.length - 1 && <span className="lv-unit">Cambia al llegar a {s.to}</span>}</div>
+            <li key={i} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
+              <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>{s.recipe && i < d.steps.length - 1 && <span className="lv-unit">Cambia al llegar a {s.to}</span>}
+                <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
               {s.recipe ? (
                 <>
                   <div className="lv-main">
@@ -399,7 +412,7 @@ export function RouteView({ d }: { d: any }) {
                     </p>
                     <ul className="lv-mats" aria-label="Materiales">
                       {s.materials.map((m: any) => (
-                        <li key={m.itemId} className="lv-chip"><span className="mono">{String(m.quantity)} ×</span><ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />{m.priceSource === 'manual' && <span className="lv-manual">manual</span>}{m.priceSource === 'vendedor' && <span className="lv-manual" title="Precio del vendedor (más barato que la casa de subastas)">vendedor</span>}</li>
+                        <li key={m.itemId} className="lv-chip"><span className="mono">{String(m.quantity)} ×</span><ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} /><PriceTag m={m} /></li>
                       ))}
                     </ul>
                     <p className="lv-meta">
@@ -412,6 +425,7 @@ export function RouteView({ d }: { d: any }) {
                       <span aria-hidden="true">·</span>
                       <a href={s.recipe.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">Wowhead<ArrowSquareOut size={12} aria-hidden="true" /></a>
                     </p>
+                    <StepAlternatives s={s} onAvoid={onAvoid} />
                   </div>
                   <div className="lv-cost"><Money v={s.cost} /></div>
                 </>
@@ -426,17 +440,7 @@ export function RouteView({ d }: { d: any }) {
           ))}
         </ol>
       ) : (
-        <section className="card lv-shop">
-          {!d.shopping.length ? <p className="muted">No hay materiales con precio para comprar.</p> : (
-            <table className="lv-shop-table">
-              <thead><tr><th>Material</th><th className="num">Cantidad</th><th className="num">Total</th></tr></thead>
-              <tbody>{d.shopping.map((m: any) => (
-                <tr key={m.itemId}><td><ItemLabel id={m.itemId} quality={m.quality} px={24} href={`#/materiales/${m.itemId}`} name={m.name ?? `Objeto ${m.itemId}`} /></td><td className="num">{String(m.quantity)}</td><td className="num"><Money v={m.cost} /><span className="lv-unit"><Money v={m.unitPrice} /> c/u{m.priceSource === 'vendedor' ? ' · vendedor' : m.priceSource === 'manual' ? ' · manual' : ''}</span></td></tr>
-              ))}</tbody>
-              <tfoot><tr><th colSpan={2}>Total materiales</th><td className="num"><Money v={d.materialsCost} /></td></tr></tfoot>
-            </table>
-          )}
-        </section>
+        <ShoppingPanel d={d} done={steps.done} />
       )}
       <details className="card lv-details">
         <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>
@@ -503,7 +507,7 @@ function SavedPlans({ plans, profs, onChanged }: { plans: any[]; profs: any[]; o
               {p.progress.map((e: any, i: number) => <li key={i}>{dt(e.at)}: nivel {e.observedSkill} ({e.source === 'blizzard' ? 'Blizzard' : 'manual'}){e.note ? ` · ${e.note}` : ''}</li>)}
             </ol>
           )}
-          {p.status === 'completado' ? <p className="lv-status ok"><CheckCircle size={18} aria-hidden="true" />Objetivo alcanzado.</p> : p.result && <RouteView d={p.result} />}
+          {p.status === 'completado' ? <p className="lv-status ok"><CheckCircle size={18} aria-hidden="true" />Objetivo alcanzado.</p> : p.result && <RouteView d={p.result} doneKey={`plan:${p.id}`} />}
         </div>
       )}
     </section>

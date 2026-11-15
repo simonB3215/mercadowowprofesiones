@@ -87,6 +87,8 @@ export interface PlanOptions {
   chanceModel?: 'comunidad' | 'garantizado';
   /** Recetas (id de hechizo) que el personaje ya conoce: siempre disponibles y sin costo de instructor. */
   known?: Set<number>;
+  /** Recetas (id de hechizo) que el usuario no quiere usar: se buscan otras para esos niveles. */
+  exclude?: Set<number>;
 }
 
 export interface LevelPlan {
@@ -143,10 +145,37 @@ export function craftCost(r: LevelRecipe, price: (itemId: number) => Q | null): 
 export interface Pick { recipe: LevelRecipe | null; chance: Q | null; reason: string | null; missing: number[] }
 
 /** Recetas utilizables: nunca sin materiales ni con reutilización; patrones solo si se permiten o el personaje los conoce. */
-export function recipePool(recipes: LevelRecipe[], opts: { trainerOnly: boolean; known?: Set<number> }): LevelRecipe[] {
+export function recipePool(recipes: LevelRecipe[], opts: { trainerOnly: boolean; known?: Set<number>; exclude?: Set<number> }): LevelRecipe[] {
   return recipes.filter((r) =>
-    r.reagents.length > 0 && !(r.cooldown && r.cooldown > 0) &&
+    r.reagents.length > 0 && !(r.cooldown && r.cooldown > 0) && !opts.exclude?.has(r.id) &&
     (!opts.trainerOnly || r.availability !== 'otra' || Boolean(opts.known?.has(r.id))));
+}
+
+export interface Alternative { recipe: LevelRecipe; chance: Q; costPerPoint: Q | null; color: SkillColor }
+
+/**
+ * Otras recetas que dan puntos en el nivel `s` (para ofrecer un cambio en un paso): costo esperado por punto
+ * = costo de una fabricación ÷ (probabilidad × puntos por fabricación). Primero las que tienen precio, de más barata
+ * a más cara; las que no tienen precio al final (nunca cuentan como gratis).
+ */
+/** Costo esperado de un punto con la receta en el nivel `s` (null si no da puntos o le falta algún precio). */
+export function pointCost(r: LevelRecipe, s: number, price: (itemId: number) => Q | null, model: PlanOptions['chanceModel'] = 'comunidad'): Q | null {
+  const chance = chanceFor(r, s, model);
+  const cost = chance ? craftCost(r, price) : null;
+  return chance && cost ? cost.div(chance.mul(Q.of(r.skillUps))) : null;
+}
+
+export function alternativesAt(pool: LevelRecipe[], s: number, chosenId: number, price: (itemId: number) => Q | null,
+  model: PlanOptions['chanceModel'] = 'comunidad', limit = 3): Alternative[] {
+  const out: Alternative[] = [];
+  for (const r of pool) {
+    if (r.id === chosenId) continue;
+    const chance = chanceFor(r, s, model);
+    if (!chance) continue;
+    out.push({ recipe: r, chance, costPerPoint: pointCost(r, s, price, model), color: colorAt(r, s) });
+  }
+  out.sort((a, b) => (a.costPerPoint && b.costPerPoint ? a.costPerPoint.cmp(b.costPerPoint) : a.costPerPoint ? -1 : b.costPerPoint ? 1 : a.recipe.id - b.recipe.id));
+  return out.slice(0, limit);
 }
 
 function validateRange(from: number, to: number) {

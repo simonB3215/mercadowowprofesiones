@@ -488,12 +488,21 @@ route('GET', '/api/leveling', async (_r, _p, u, db) => {
     to: int(u.searchParams.get('to'), 300)!,
     trainerOnly: u.searchParams.get('trainerOnly') !== '0',
     manual: parseManualPrices(u.searchParams.get('manual')),
+    exclude: parseExclude(u.searchParams.get('exclude')),
   });
 });
 
 // ---------------------------------------------------------------------------
 // Ruta recomendada (más rápida o más barata) sin cuenta: nivel indicado a mano (PC-08 a PC-12, PC-16)
 // ---------------------------------------------------------------------------
+
+/** Recetas a evitar (ids de hechizo): «1,2,3» o lista JSON; como mucho 50. */
+function parseExclude(v: unknown): Set<number> {
+  const list = Array.isArray(v) ? v : typeof v === 'string' ? v.split(',') : [];
+  const ids = list.map((x) => Number(String(x).trim())).filter((n) => Number.isInteger(n) && n > 0);
+  if (ids.length > 50) throw new HttpError(400, 'Como mucho 50 recetas a evitar.');
+  return new Set(ids);
+}
 
 /** Opciones de la ruta desde la petición (query o cuerpo JSON). El presupuesto llega en oro. */
 function routeOptions(get: (k: string) => unknown) {
@@ -512,7 +521,7 @@ function routeOptions(get: (k: string) => unknown) {
   return {
     mode: mode as 'rapida' | 'barata', chanceModel: chance as 'comunidad' | 'garantizado', budget, budgetGold: budgetRaw,
     trainerOnly: bool('trainerOnly', true), useKnown: bool('useKnown', true),
-    manualRaw: s('manual'), manual: parseManualPrices(s('manual')),
+    manualRaw: s('manual'), manual: parseManualPrices(s('manual')), exclude: parseExclude(get('exclude')),
   };
 }
 
@@ -643,11 +652,11 @@ async function characterRoute(db: Db, s: Awaited<ReturnType<typeof requireSessio
   }
   const result = await routePlan(db, ctx, await loadSettings(db), {
     professionId, from: Math.max(1, observed), to, mode: o.mode, budget: o.budget, trainerOnly: o.trainerOnly, chanceModel: o.chanceModel,
-    manual: o.manual, known, currentMax: prof?.effective.maxSkillPoints ?? null, characterLevel: c.level ?? null,
+    manual: o.manual, known, exclude: o.exclude, currentMax: prof?.effective.maxSkillPoints ?? null, characterLevel: c.level ?? null,
   });
   return {
     result: { ...result, startSkill: observed, startSource, unmatchedKnownRecipes: unmatchedKnown },
-    constraints: { ...ctx, professionId, to, mode: o.mode, budget: o.budgetGold, trainerOnly: o.trainerOnly, chanceModel: o.chanceModel, useKnown: o.useKnown, manual: o.manualRaw },
+    constraints: { ...ctx, professionId, to, mode: o.mode, budget: o.budgetGold, trainerOnly: o.trainerOnly, chanceModel: o.chanceModel, useKnown: o.useKnown, manual: o.manualRaw, exclude: [...o.exclude] },
     startSkill: observed, startSource,
   };
 }
