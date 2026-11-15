@@ -223,6 +223,44 @@ tr:last-child td { border-bottom: none; }
 .market-result.bad { color: var(--color-bad); }
 .cmp-sub { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .cmp-status { min-width: 150px; max-width: 220px; }
+.cmp-margin { margin-top: 4px; font-size: var(--text-sm); font-weight: 600; color: var(--color-fg); }
+.cmp-name { display: inline-flex; align-items: flex-start; gap: 6px; }
+.cmp-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-3); margin: var(--space-2) 0; }
+.cmp-toolbar button { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Favoritas */
+.fav-btn { background: none; border: none; box-shadow: none; padding: 4px; min-height: 0; color: var(--color-muted-fg); display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; cursor: pointer; }
+.fav-btn:hover:not(:disabled) { color: var(--gold); filter: none; background: rgba(255, 209, 0, 0.08); }
+.fav-btn.on { color: var(--gold); }
+.fav-btn.with-label { border: 1px solid var(--gold-line); padding: 6px 12px; min-height: 36px; font-size: var(--text-sm); }
+.fav-panel { margin-bottom: var(--space-3); }
+.fav-panel > summary { cursor: pointer; list-style: none; }
+.fav-panel > summary::-webkit-details-marker { display: none; }
+.fav-h { margin: 0; font-size: 0.95rem; gap: 8px; }
+.fav-badge { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; }
+.fav-panel[open] > summary { margin-bottom: var(--space-2); }
+.fav-table { width: 100%; }
+.fav-table td, .fav-table th { padding: 8px var(--space-3); vertical-align: middle; }
+.fav-row-hit td { background: rgba(63, 191, 63, 0.08); }
+.fav-threshold { display: inline-flex; align-items: center; gap: 6px; }
+.fav-threshold input { width: 110px; }
+.fav-bell { color: var(--color-muted-fg); flex: none; }
+.fav-bell.on { color: #3fbf3f; }
+.fav-hit { border-left: 3px solid #3fbf3f; }
+.fav-hits { margin: var(--space-2) 0; padding-left: 1.1rem; display: grid; gap: 4px; }
+@media (max-width: 720px) {
+  .fav-table thead { display: none; }
+  .fav-table tr { display: grid; grid-template-columns: 1fr auto; gap: 4px var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border); }
+  .fav-table td { padding: 0; border: none; text-align: left; }
+  .fav-table td:first-child { grid-column: 1 / -1; }
+  .fav-table td:nth-child(3) { text-align: right; }
+  .fav-table td:nth-child(4) { grid-column: 1 / -1; }
+  .fav-table td:nth-child(5) { grid-column: 1; }
+  .fav-table td:nth-child(6) { grid-column: 2; align-self: center; }
+  .fav-threshold input { width: 100%; max-width: 160px; }
+  .cmp-toolbar { justify-content: stretch; }
+  .cmp-toolbar button { flex: 1; justify-content: center; }
+}
 /* Tablas → tarjetas cuando no caben con los importes en una línea. Umbral general: 720 px de tabla;
  * las tablas anchas lo suben con la clase `.cards-lg` (1000 px, p. ej. el comparador). */
 @container tabla (max-width: 720px) {

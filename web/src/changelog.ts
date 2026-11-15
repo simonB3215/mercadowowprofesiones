@@ -14,6 +14,17 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-14', kind: 'nuevo', title: 'Favoritas, alertas y exportar el comparador',
+    items: [
+      'Marca recetas con la estrella (en el comparador o en la ficha de la receta) y síguelas en el panel «Favoritas». Con «Solo favoritas» el comparador muestra únicamente esas.',
+      'Alertas: escribe la ganancia mínima por unidad que te interesa y, cuando una favorita llegue a ella, se avisa en el comparador y en la página de inicio. Se comprueba al abrir la web y con cada actualización de precios. Un precio atípico no avisa.',
+      'Las favoritas se guardan en este navegador.',
+      '«Exportar CSV» descarga la lista entera con los filtros y el orden que tengas, para abrirla en Excel.',
+      'Nuevos órdenes: margen (%), ventas al día y tasa de venta de la región.',
+      'La columna de estado muestra el margen en porcentaje de cada receta.',
+    ],
+  },
+  {
     date: '2026-11-14', kind: 'nuevo', title: 'Seguir la ruta paso a paso y lista de compra para llevar',
     items: [
       'En «Subir nivel» y en «Mi personaje» cada paso tiene una casilla «Hecho». Arriba se ve cuántos pasos llevas y el nivel alcanzado; se guarda en este navegador.',

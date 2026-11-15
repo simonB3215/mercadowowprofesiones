@@ -281,12 +281,28 @@ route('GET', '/api/coverage', async (_r, _p, u, db) => {
 // Oportunidades y detalle
 // ---------------------------------------------------------------------------
 
+/** Margen = ganancia por unidad ÷ precio de venta (en %). null si falta alguno o el precio es 0. */
+const marginOf = (e: Evaluation): Q | null =>
+  e.profit.profitUnit && e.sellPrice.copper && e.sellPrice.copper.sign() > 0 ? e.profit.profitUnit.div(e.sellPrice.copper).mul(Q.of(100)) : null;
+const numQ = (n: number | null | undefined) => (n === null || n === undefined || !Number.isFinite(n) ? null : Q.parse(n.toFixed(6)));
+
 const metricKey = (e: Evaluation, sort: string): Q | null => {
   if (sort === 'roi') return e.profit.roiPct;
+  if (sort === 'margin') return marginOf(e);
+  if (sort === 'soldPerDay') return numQ(e.demand?.soldPerDay);
+  if (sort === 'saleRate') return numQ(e.demand?.saleRate);
   if (sort === 'profitBatch') return e.profit.profitBatch;
   if (sort === 'cost') return e.cost.unit;
   return e.profit.profitUnit;
 };
+
+/** Lista de ids de receta («1,2,3»), como mucho 200 (favoritas). undefined si no se pide. */
+function idsParam(v: string | null): number[] | undefined {
+  if (v === null) return undefined;
+  const ids = v.split(',').map((x) => Number(x.trim())).filter((n) => Number.isInteger(n) && n > 0);
+  if (ids.length > 200) throw new HttpError(400, 'Como mucho 200 recetas.');
+  return ids;
+}
 
 route('GET', '/api/opportunities', async (_r, _p, u, db) => {
   const ctx = ctxFrom(u);
@@ -295,6 +311,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     professionId: int(u.searchParams.get('professionId')),
     expansion: u.searchParams.get('expansion') || undefined,
     search: (u.searchParams.get('search') || '').slice(0, 80) || undefined,
+    recipeIds: idsParam(u.searchParams.get('ids')),
   });
   const ectx = await buildEvalContext(db, ctx, recipes, profile);
   let list = recipes.map((r) => evaluateRecipe(r, ectx));
@@ -318,7 +335,8 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
   });
   const counts: Record<string, number> = {};
   for (const e of list) counts[e.status] = (counts[e.status] ?? 0) + 1;
-  const pageSize = Math.min(200, int(u.searchParams.get('pageSize'), 50)!);
+  // Exportar (CSV) pide la lista entera filtrada de una vez; la tabla va por páginas.
+  const pageSize = Math.max(1, Math.min(u.searchParams.get('export') === '1' ? 5000 : 200, int(u.searchParams.get('pageSize'), 50)!));
   const page = Math.max(1, int(u.searchParams.get('page'), 1)!);
   const slice = list.slice((page - 1) * pageSize, page * pageSize);
   return {
@@ -333,7 +351,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
       sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown,
-      profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined,
+      profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined, marginPct: marginOf(e),
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
     })),
   };

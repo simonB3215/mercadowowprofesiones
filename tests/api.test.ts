@@ -121,6 +121,24 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     expect(filtered.json.items.every((i: any) => i.channel !== 'vinculado' && i.channel !== 'servicio')).toBe(true);
   });
 
+  it('oportunidades: favoritas por ids, orden por margen y ventas, margen en % y exportación completa', async () => {
+    const fav = await api('GET', `/api/opportunities?${qs}&ids=800002,800003`);
+    expect(fav.status).toBe(200);
+    expect(fav.json.items.map((i: any) => i.recipeId).sort()).toEqual([800002, 800003]);
+    for (const sort of ['margin', 'soldPerDay', 'saleRate']) {
+      const r = await api('GET', `/api/opportunities?${qs}&sort=${sort}`);
+      expect(r.status).toBe(200);
+    }
+    const m = await api('GET', `/api/opportunities?${qs}&sort=margin`);
+    const withMargin = m.json.items.filter((i: any) => i.marginPct);
+    for (const i of withMargin) expect('n' in i.marginPct).toBe(true);
+    const firstNull = m.json.items.findIndex((i: any) => i.marginPct === null && !i.sellCheck);
+    if (firstNull >= 0) expect(m.json.items.slice(firstNull).filter((i: any) => !i.sellCheck).every((i: any) => i.marginPct === null)).toBe(true);
+    const all = await api('GET', `/api/opportunities?${qs}&export=1&pageSize=5000`);
+    expect(all.json.items.length).toBe(all.json.total);
+    expect((await api('GET', `/api/opportunities?${qs}&ids=${Array.from({ length: 201 }, (_, i) => i + 1).join(',')}`)).status).toBe(400);
+  });
+
   it('perfil: sin la receta → no fabricable; con la receta → conoce', async () => {
     const p = await api('POST', '/api/profiles', { name: 'Prueba', faction: 'horde', professions: [{ professionId: 1, skill: 100 }], knownRecipes: [800003] });
     const id = p.json.id;

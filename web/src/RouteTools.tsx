@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Money, Q, toQ } from './lib.js';
 import { ItemLabel } from './icons.js';
+import { downloadCsv, goldCell, toCsv } from './csv.js';
 import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight } from '@phosphor-icons/react';
 
 // ---------------------------------------------------------------------------
@@ -126,17 +127,8 @@ function remainingShopping(steps: any[], done: Set<string>): ShopRow[] {
 }
 const fromApi = (m: any): ShopRow => ({ itemId: m.itemId, name: m.name, quality: m.quality, quantity: BigInt(m.quantity), unitPrice: toQ(m.unitPrice), cost: toQ(m.cost), priceSource: m.priceSource });
 
-const COPPER = Q.of(10000);
-const goldNum = (q: Q | null) => (q ? q.div(COPPER).toDecimal(4).replace('.', ',') : '');
 const nameOf = (m: ShopRow) => m.name ?? `Objeto ${m.itemId}`;
 
-function download(filename: string, text: string) {
-  const blob = new Blob(['﻿' + text], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 async function copyText(text: string): Promise<boolean> {
   try { await navigator.clipboard.writeText(text); return true; } catch { /* sin permiso: método antiguo */ }
   try {
@@ -157,11 +149,8 @@ export function ShoppingPanel({ d, done }: { d: any; done: Set<string> }) {
   const title = `${d.profession.name} ${d.from} → ${d.to}`;
 
   const asText = () => [`Lista de compra · ${title}${missing ? ' (lo que falta)' : ''}`, ...rows.map((m) => `${String(m.quantity)} × ${nameOf(m)}`)].join('\n');
-  const asCsv = () => {
-    const esc = (v: string) => (/[;"\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
-    const head = 'Material;Id;Cantidad;Precio unidad (oro);Total (oro);Dónde';
-    return [head, ...rows.map((m) => [nameOf(m), String(m.itemId), String(m.quantity), goldNum(m.unitPrice), goldNum(m.cost), WHERE(m)].map(esc).join(';'))].join('\r\n');
-  };
+  const asCsv = () => toCsv(['Material', 'Id', 'Cantidad', 'Precio unidad (oro)', 'Total (oro)', 'Dónde'],
+    rows.map((m) => [nameOf(m), String(m.itemId), String(m.quantity), goldCell(m.unitPrice), goldCell(m.cost), WHERE(m)]));
   const onCopy = async () => { setCopied((await copyText(asText())) ? 'ok' : 'error'); setTimeout(() => setCopied(null), 2500); };
   const slug = `${d.profession.name}-${d.from}-${d.to}`.toLowerCase().normalize('NFD').replace(/[^a-z0-9-]+/g, '');
 
@@ -173,7 +162,7 @@ export function ShoppingPanel({ d, done }: { d: any; done: Set<string> }) {
         )}
         <div className="rt-shop-buttons">
           <button type="button" onClick={onCopy} disabled={!rows.length}>{copied === 'ok' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copied === 'ok' ? 'Copiado' : 'Copiar lista'}</button>
-          <button type="button" onClick={() => download(`lista-compra-${slug}${missing ? '-falta' : ''}.csv`, asCsv())} disabled={!rows.length}><DownloadSimple size={16} aria-hidden="true" />Descargar CSV</button>
+          <button type="button" onClick={() => downloadCsv(`lista-compra-${slug}${missing ? '-falta' : ''}.csv`, asCsv())} disabled={!rows.length}><DownloadSimple size={16} aria-hidden="true" />Descargar CSV</button>
         </div>
         <span className="sr-only" aria-live="polite">{copied === 'ok' ? 'Lista copiada al portapapeles' : copied === 'error' ? 'No se pudo copiar' : ''}</span>
         {copied === 'error' && <span className="small lv-error">No se pudo copiar: el navegador no lo permite.</span>}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
+import { FavoriteAlerts } from '../favorites.js';
 import { CHANGELOG } from '../changelog.js';
 import { Coins, ChartBar, ArrowFatLinesUp, IdentificationCard, ArrowRight, ClockCounterClockwise, type Icon } from '@phosphor-icons/react';
 
@@ -38,6 +39,7 @@ export function Home() {
         ))}
       </div>
 
+      <FavoriteAlerts compact />
       <MarketStatus />
 
       {latest && (
