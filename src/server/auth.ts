@@ -1,8 +1,9 @@
 /**
  * Acceso con contraseña compartida (APP_PASSWORD).
  * - Sin APP_PASSWORD la API es abierta (desarrollo local y pruebas).
- * - Con APP_PASSWORD, todas las rutas /api exigen la cookie de sesión, salvo /api/auth/* y el cron
- *   (que tiene su propio CRON_SECRET).
+ * - Con APP_PASSWORD, consultar es abierto (GET y cálculos que no guardan nada) y lo de Battle.net usa su propia
+ *   sesión por cuenta; solo los cambios en datos compartidos (ajustes, sincronizar precios, casas, perfiles,
+ *   escenarios, planes y registro) exigen la cookie de sesión. El cron tiene su propio CRON_SECRET.
  * - La sesión es una cookie HttpOnly con un HMAC derivado de la contraseña: no hay estado en el servidor
  *   y cambiar la contraseña invalida todas las sesiones.
  */
@@ -54,5 +55,14 @@ export function clearCookie(req: Request): string {
   return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0${isHttps(req) ? '; Secure' : ''}`;
 }
 
-/** Rutas que no exigen sesión. */
-export const isPublicPath = (pathname: string) => /^\/api\/auth(\/|$)/.test(pathname) || /^\/api\/cron\//.test(pathname);
+/** Cálculos por POST que no guardan nada. */
+const OPEN_POSTS = new Set(['/api/calculate', '/api/crafting-plan', '/api/tools/expected']);
+
+/** Peticiones que no exigen la contraseña: todo menos los cambios en datos compartidos. */
+export function isOpenRequest(method: string, pathname: string): boolean {
+  if (/^\/api\/auth(\/|$)/.test(pathname) || /^\/api\/cron\//.test(pathname)) return true;
+  // Battle.net: cada usuario solo accede a lo suyo con su propia sesión (requireSession en battlenet.ts).
+  if (/^\/api\/(battlenet|me)(\/|$)/.test(pathname)) return true;
+  if (method === 'GET' || method === 'HEAD') return true;
+  return method === 'POST' && OPEN_POSTS.has(pathname);
+}

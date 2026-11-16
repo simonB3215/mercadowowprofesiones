@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { handle } from '../src/server/router.js';
+import { isOpenRequest } from '../src/server/auth.js';
 
 // Las rutas protegidas devuelven 401 antes de tocar la base de datos, así que no hace falta PGlite.
 const call = (path: string, init: RequestInit = {}) => handle(new Request('https://app.test' + path, init));
@@ -9,11 +10,21 @@ describe('Acceso con APP_PASSWORD', () => {
   beforeAll(() => { process.env.APP_PASSWORD = 'clave-de-prueba-123'; });
   afterAll(() => { if (prev === undefined) delete process.env.APP_PASSWORD; else process.env.APP_PASSWORD = prev; });
 
-  it('sin sesión, la API responde 401 y el estado indica que hace falta entrar', async () => {
-    expect((await call('/api/meta')).status).toBe(401);
-    expect((await call('/api/opportunities?version=forever&region=us')).status).toBe(401);
-    expect((await call('/api/ledger', { method: 'POST', body: '{}' })).status).toBe(401);
+  it('sin sesión se puede consultar; los cambios en datos compartidos responden 401', async () => {
+    for (const [m, p] of [['PUT', '/api/settings'], ['POST', '/api/sync/prices'], ['POST', '/api/realms'], ['POST', '/api/profiles'], ['PUT', '/api/profiles/x'],
+      ['DELETE', '/api/profiles/x'], ['POST', '/api/scenarios'], ['POST', '/api/plans'], ['DELETE', '/api/plans/x'], ['POST', '/api/ledger'], ['POST', '/api/ledger/x/void']]) {
+      const r = await call(p, { method: m, body: m === 'DELETE' ? undefined : '{}' });
+      expect(r.status, `${m} ${p}`).toBe(401);
+      expect((await r.json()).auth).toBe(true);
+    }
     expect(await (await call('/api/auth/status')).json()).toEqual({ required: true, authenticated: false });
+  });
+
+  it('qué peticiones quedan abiertas sin contraseña', () => {
+    for (const p of ['/api/meta', '/api/opportunities', '/api/recipes/1', '/api/leveling', '/api/buy-or-craft', '/api/ledger', '/api/settings']) expect(isOpenRequest('GET', p), p).toBe(true);
+    for (const p of ['/api/calculate', '/api/crafting-plan', '/api/tools/expected', '/api/me/characters/sync', '/api/battlenet/disconnect', '/api/auth/login']) expect(isOpenRequest('POST', p), p).toBe(true);
+    expect(isOpenRequest('PUT', '/api/me/characters/1/professions/2')).toBe(true); // protegido por la sesión de Battle.net
+    for (const [m, p] of [['PUT', '/api/settings'], ['POST', '/api/sync/prices'], ['POST', '/api/ledger'], ['DELETE', '/api/plans/x'], ['POST', '/api/profiles']]) expect(isOpenRequest(m, p), `${m} ${p}`).toBe(false);
   });
 
   it('contraseña incorrecta: 401 sin cookie', async () => {
@@ -32,7 +43,7 @@ describe('Acceso con APP_PASSWORD', () => {
     const cookie = c.split(';')[0];
     expect(await (await call('/api/auth/status', { headers: { cookie } })).json()).toEqual({ required: true, authenticated: true });
     // Una cookie falsificada no sirve
-    expect((await call('/api/meta', { headers: { cookie: 'mw_session=falsa' } })).status).toBe(401);
+    expect((await call('/api/ledger', { method: 'POST', body: '{}', headers: { cookie: 'mw_session=falsa' } })).status).toBe(401);
   });
 
   it('cambiar la contraseña invalida las sesiones anteriores', async () => {

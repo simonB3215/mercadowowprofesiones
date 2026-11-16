@@ -83,7 +83,7 @@ Las pruebas cubren:
 - **Motor exacto:** caso de referencia de 80 oro, varias unidades, precio ausente, costo cero, cantidades inválidas, ciclos, plan con inventario compartido.
 - **Ingesta de TSM con filas reales de WoW Forever:** cabeceras, comillas, fallo de sincronización que conserva el último lote, aislamiento por casa de subastas y región.
 - **API completa sobre PGlite** con un catálogo de prueba ficticio que solo existe en las pruebas (`tests/helpers/seed.ts`).
-- **Acceso con contraseña** (`APP_PASSWORD`).
+- **Consulta abierta; contraseña de administrador** (`APP_PASSWORD`) solo para cambiar datos compartidos.
 
 ## Servidor MCP (consultar los datos desde Claude)
 
@@ -147,7 +147,7 @@ Datos:
    - Con la CLI de Supabase: `npx supabase link` y `npx supabase db push`. Las migraciones están en `supabase/migrations/`.
 2. **Vercel:** importa el repositorio. `vercel.json` ya define el build (`npm run build` → `dist/web`), la función `api/index.ts`, las reescrituras y el cron.
 3. **Variables en Vercel** (*Settings → Environment Variables*):
-   - `APP_PASSWORD`: contraseña de acceso a la web. Sin ella, cualquiera con la URL podría usar y modificar la app.
+   - `APP_PASSWORD`: contraseña de administrador. Consultar es abierto; con ella se protegen los cambios en datos compartidos (ajustes, sincronizar precios, casas, perfiles, escenarios, planes y registro). Sin ella, cualquiera con la URL podría modificarlos.
    - `DATABASE_URL`
    - `BLIZZARD_CLIENT_ID` y `BLIZZARD_CLIENT_SECRET`
    - `CRON_SECRET`
@@ -180,7 +180,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 
 | Método | Ruta | Uso |
 |---|---|---|
-| GET/POST | `/api/auth/status`, `/api/auth/login`, `/api/auth/logout` | Acceso con `APP_PASSWORD` (cookie HttpOnly; el resto de rutas devuelve 401 sin sesión) |
+| GET/POST | `/api/auth/status`, `/api/auth/login`, `/api/auth/logout` | Modo administrador con `APP_PASSWORD` (cookie HttpOnly). Sin sesión se puede consultar (GET y cálculos); los cambios en datos compartidos devuelven 401. Battle.net y `/api/me` usan su propia sesión por cuenta |
 | GET | `/api/meta` | Versión (WoW Forever), regiones, ajustes, estado del catálogo |
 | GET/POST | `/api/realms` | Casas de subastas de WoW Forever; añadir otra validada contra TSM |
 | GET | `/api/market/status` | Lotes activos, antigüedad y último intento |

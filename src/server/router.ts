@@ -18,7 +18,7 @@ import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
 import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo } from './leveling.js';
 import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, syncCharacterProfile, ownedCharacter, characterProfessions } from './battlenet.js';
-import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
+import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isOpenRequest } from './auth.js';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL, db: Db) => Promise<unknown>;
 const routes: Array<{ method: string; pattern: RegExp; keys: string[]; handler: Handler }> = [];
@@ -1151,8 +1151,8 @@ export async function handle(req: Request): Promise<Response> {
       res.headers.append('set-cookie', clearCookie(req));
       return res;
     }
-    if (!isPublicPath(pathname) && !isAuthenticated(req)) {
-      return json({ error: 'Inicia sesión para usar la aplicación.', auth: true }, 401);
+    if (!isOpenRequest(req.method, pathname) && !isAuthenticated(req)) {
+      return json({ error: 'Esta acción cambia datos compartidos y necesita la contraseña de administrador.', auth: true }, 401);
     }
     for (const r of routes) {
       if (r.method !== req.method) continue;

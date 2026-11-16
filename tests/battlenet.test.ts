@@ -294,13 +294,16 @@ describe('Parsers de Blizzard (tolerantes)', () => {
 });
 
 describe('Battle.net con APP_PASSWORD', () => {
-  it('las rutas de Battle.net y /api/me exigen la contraseña de la aplicación; solo la vuelta de OAuth es pública', async () => {
+  it('Battle.net no pide la contraseña de la aplicación, pero /api/me sigue exigiendo la sesión de Battle.net de cada usuario', async () => {
     process.env.APP_PASSWORD = 'clave-de-prueba-123';
     try {
-      expect((await call('/api/battlenet/start?region=us')).status).toBe(401);
-      expect((await call('/api/battlenet/status')).status).toBe(401);
-      expect((await call('/api/me/characters')).status).toBe(401);
-      expect((await call('/api/route?version=forever&region=us&profession=197')).status).toBe(401);
+      expect((await call('/api/battlenet/start?region=us')).status).toBe(302);
+      expect((await call('/api/battlenet/status')).status).toBe(200);
+      const me = await call('/api/me/characters');
+      expect(me.status).toBe(401);
+      const body = await me.json();
+      expect(body.auth).toBeUndefined(); // es la sesión de Battle.net, no la contraseña de administrador
+      expect((await call('/api/me/characters/sync', { method: 'POST' })).status).toBe(401);
       // La vuelta desde Battle.net no lleva la cookie Strict de la aplicación: es pública, pero sin state válido no hace nada.
       const cb = await call('/api/auth/battlenet/callback?code=codigo-A&state=x');
       expect(cb.status).toBe(302);

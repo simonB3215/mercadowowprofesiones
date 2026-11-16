@@ -114,7 +114,7 @@ function ContextBar() {
   );
 }
 
-function App({ onLogout }: { onLogout?: () => void }) {
+function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => void }) {
   const [path, parts] = useRoute();
   const { meta } = useApp();
   useEffect(() => {
@@ -168,8 +168,13 @@ function App({ onLogout }: { onLogout?: () => void }) {
             ))}
           </nav>
           {onLogout && (
-            <button type="button" className="nav-logout" onClick={onLogout} title="Cerrar sesión">
-              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Cerrar sesión</span>
+            <button type="button" className="nav-logout" onClick={onLogout} title="Salir del modo administrador">
+              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Salir de administrador</span>
+            </button>
+          )}
+          {onLogin && (
+            <button type="button" className="nav-logout" onClick={onLogin} title="Contraseña para cambiar ajustes, sincronizar precios y editar datos compartidos">
+              <LockKey size={20} aria-hidden="true" /><span className="nav-text">Entrar como administrador</span>
             </button>
           )}
           <p className="sidebar-foot">Las ganancias son estimaciones; el beneficio realizado está en «Registro real».</p>
@@ -199,12 +204,16 @@ function App({ onLogout }: { onLogout?: () => void }) {
   );
 }
 
-/** Pantalla de acceso cuando el servidor tiene APP_PASSWORD. */
-function Login({ onDone }: { onDone: () => void }) {
+/** Contraseña de administrador (APP_PASSWORD): solo hace falta para cambiar datos compartidos. Se abre encima de la página. */
+function Login({ onDone, onCancel }: { onDone: () => void; onCancel: () => void }) {
   const [pw, setPw] = useState('');
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  useEffect(() => { document.title = 'Acceso · Mercado de profesiones'; }, []);
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [onCancel]);
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -218,37 +227,42 @@ function Login({ onDone }: { onDone: () => void }) {
     }
   };
   return (
-    <main className="login" id="contenido">
-      <form className="card" onSubmit={submit} aria-labelledby="login-title">
-        <h1 id="login-title"><span className="brand-mark" aria-hidden="true"><LockKey size={20} weight="fill" /></span> Mercado de profesiones</h1>
-        <p className="muted small">Esta aplicación es privada. Introduce la contraseña de acceso.</p>
+    <div className="login" role="dialog" aria-modal="true" aria-labelledby="login-title" onMouseDown={(e) => { if (e.target === e.currentTarget) onCancel(); }}>
+      <form className="card" onSubmit={submit}>
+        <h1 id="login-title"><span className="brand-mark" aria-hidden="true"><LockKey size={20} weight="fill" /></span> Modo administrador</h1>
+        <p className="muted small">Consultar la web no necesita contraseña. Solo hace falta para cambiar los ajustes, sincronizar precios y editar perfiles, fabricación o el registro, que son comunes para todos.</p>
         <label>
           Contraseña
           <input type="password" autoComplete="current-password" value={pw} onChange={(e) => setPw(e.target.value)} required autoFocus />
         </label>
         {err && <p className="alert bad" role="alert">{err}</p>}
-        <button type="submit" className="primary" disabled={busy || !pw}>{busy ? 'Comprobando…' : 'Entrar'}</button>
+        <div className="row">
+          <button type="submit" className="primary" disabled={busy || !pw}>{busy ? 'Comprobando…' : 'Entrar'}</button>
+          <button type="button" onClick={onCancel}>Cancelar</button>
+        </div>
       </form>
-    </main>
+    </div>
   );
 }
 
+/** Se entra sin contraseña. La de administrador se pide al pulsar «Entrar como administrador» o cuando un cambio la necesita. */
 function Gate() {
-  const [state, setState] = useState<'loading' | 'login' | 'ok'>('loading');
-  const [required, setRequired] = useState(false);
+  const [auth, setAuth] = useState({ required: false, authenticated: true });
+  const [showLogin, setShowLogin] = useState(false);
   useEffect(() => {
-    api<{ required: boolean; authenticated: boolean }>('/api/auth/status')
-      .then((s) => { setRequired(s.required); setState(s.authenticated ? 'ok' : 'login'); })
-      .catch(() => setState('ok')); // si la API no responde, la app muestra su propio error de conexión
-    const onAuth = () => setState('login');
+    api<{ required: boolean; authenticated: boolean }>('/api/auth/status').then(setAuth).catch(() => {}); // sin API, la app muestra su propio error
+    const onAuth = () => { setAuth((a) => ({ ...a, authenticated: false })); setShowLogin(true); };
     window.addEventListener('auth-required', onAuth);
     return () => window.removeEventListener('auth-required', onAuth);
   }, []);
-  if (state === 'loading') return null;
-  if (state === 'login') return <Login onDone={() => setState('ok')} />;
+  const admin = auth.required && auth.authenticated;
   return (
     <AppProvider>
-      <App onLogout={required ? () => { api('/api/auth/logout', { method: 'POST' }).finally(() => setState('login')); } : undefined} />
+      <App
+        onLogout={admin ? () => { api('/api/auth/logout', { method: 'POST' }).finally(() => setAuth({ required: true, authenticated: false })); } : undefined}
+        onLogin={auth.required && !auth.authenticated ? () => setShowLogin(true) : undefined}
+      />
+      {showLogin && <Login onDone={() => { setAuth({ required: true, authenticated: true }); setShowLogin(false); }} onCancel={() => setShowLogin(false)} />}
     </AppProvider>
   );
 }

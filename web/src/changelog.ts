@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-16', kind: 'mejora', title: 'Entrar sin contraseña',
+    items: [
+      'La web ya no pide contraseña al entrar: cualquiera puede consultar el comparador, las recetas, subir nivel, comprar o fabricar y conectar su personaje de Battle.net.',
+      'La contraseña de administrador solo se pide para cambiar lo que es común para todos: los ajustes, sincronizar precios, añadir casas de subastas y editar perfiles manuales, la fabricación y el registro real. Se puede introducir con «Entrar como administrador» en el menú, o aparece sola al intentar uno de esos cambios.',
+    ],
+  },
+  {
     date: '2026-11-16', kind: 'nuevo', title: '¿Comprarlo o fabricarlo?',
     items: [
       'Nueva sección «Comprar o fabricar» (menú Ganar oro): eliges un objeto que necesitas para usarlo (pociones, comida…) y cuántas unidades, y te dice si sale más barato comprarlo en la subasta o fabricarlo, cuánto te ahorras y por qué.',
