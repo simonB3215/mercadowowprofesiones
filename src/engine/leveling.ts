@@ -375,6 +375,8 @@ export function pickByCostPerPoint(pool: LevelRecipe[], opts: PlanOptions, costO
  */
 export function pickByTime(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, lambda: number, share = SEGMENT_PENALTY_SHARE): Pick[] {
   const greedy = pickByTimePerPoint(pool, opts, costOf, lambda);
+  // Con λ = 0 el costo solo desempata: entre recetas igual de rápidas, la más barata (antes ganaba el id menor).
+  const w = lambda > 0 ? lambda : TIE_SECONDS_PER_COPPER;
   const cost = new Map<number, number | null>();
   const score = (r: LevelRecipe, s: number) => {
     const chance = chanceFor(r, s, opts.chanceModel);
@@ -383,14 +385,20 @@ export function pickByTime(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: L
     const c = cost.get(r.id);
     if (c === null || c === undefined) return null;
     const per = 1 / (chance.toNumber() * r.skillUps);
-    return r.castSeconds * per + lambda * c * per;
+    return r.castSeconds * per + w * c * per;
   };
-  const fixed = (r: LevelRecipe) => lambda * trainingOf(r, opts);
+  const fixed = (r: LevelRecipe) => w * trainingOf(r, opts);
   const total = greedyTotal(greedy, opts.from, score, fixed);
   // Sin peso del costo (λ = 0) se penaliza en segundos: un 1 % del tiempo de la ruta (al menos 10 s) por tramo.
   const penalty = Math.max(lambda > 0 || share <= 0 ? 0 : 10, share * total);
   return segmentPicks(pool, opts, score, fixed, penalty, greedy);
 }
+
+/**
+ * Peso mínimo del costo en la ruta más rápida: 1 de oro = 0,01 s. Nunca cambia cuál es más rápida (un tramo se
+ * penaliza con al menos 10 s), solo elige la más barata entre recetas que tardan lo mismo.
+ */
+const TIE_SECONDS_PER_COPPER = 1e-6;
 
 /** Elección punto a punto por tiempo + λ × costo (base para los huecos y la penalización). */
 export function pickByTimePerPoint(pool: LevelRecipe[], opts: PlanOptions, costOf: (r: LevelRecipe) => Q | null, lambda: number): Pick[] {
