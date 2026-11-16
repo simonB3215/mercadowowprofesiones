@@ -138,15 +138,27 @@ export function createServer(): McpServer {
     };
   }));
 
+  /** Instructor, inicial u objeto de receta (cuál, cómo se consigue, precio al vendedor y página de Wowhead). */
+  const learnText = (l: any) => {
+    if (!l) return 'desconocido (sin coincidencia en Wowhead)';
+    if (l.availability === 'instructor') return `instructor (nivel ${l.learnedAt}, ${gold(l.trainingCost)} oro); no necesita objeto de receta`;
+    if (l.availability === 'inicial') return 'se conoce al aprender la profesión; no necesita objeto de receta';
+    const ri = l.recipeItem;
+    if (!ri) return `necesita un objeto de receta (patrón, botín o misión), nivel ${l.learnedAt}; dónde: ${l.wowheadUrl}#taught-by-item`;
+    const how: Record<string, string> = { vendedor: 'se compra a un vendedor', 'botín': 'cae de botín', 'misión': 'recompensa de misión', fabricado: 'la fabrica otro jugador', otra: 'otra fuente' };
+    const ways = ri.obtain.map((o: any) => `${how[o.how] ?? o.how}${o.how === 'vendedor' && ri.buyPrice ? ` por ${gold(ri.buyPrice)} oro` : ''} (${o.url})`);
+    return `necesita el objeto de receta «${ri.nameEn}» (nivel ${l.learnedAt}): ${ways.join('; ') || ri.wowheadUrl}`;
+  };
+
   server.registerTool('detalle_receta', {
     title: 'Detalle de una receta',
-    description: 'Materiales con su precio y procedencia, costo, ingreso neto, ganancia, ROI, precio de equilibrio, demanda, antigüedad de los precios y estado con motivos.',
+    description: 'Cómo se aprende (instructor u objeto de receta: cuál, dónde se consigue y su precio), materiales con su precio y procedencia, costo, ingreso neto, ganancia, ROI, precio de equilibrio, demanda, antigüedad de los precios y estado con motivos.',
     inputSchema: { recetaId: z.number().int().describe('Id de la receta (de «recetas_rentables»).'), casa },
     annotations: { readOnlyHint: true },
   }, safe(async ({ recetaId, casa: c }: { recetaId: number; casa?: string }) => {
-    const { evaluation: e, settings } = await get(`/api/recipes/${recetaId}`, ctx(c));
+    const { evaluation: e, settings, learn } = await get(`/api/recipes/${recetaId}`, ctx(c));
     return {
-      recetaId: e.recipeId, receta: e.name, profesion: e.profession, objeto: e.output, unidadesPorFabricacion: e.unitsPerRun, rendimiento: e.yieldRange,
+      recetaId: e.recipeId, receta: e.name, profesion: e.profession, comoSeAprende: learnText(learn), objeto: e.output, unidadesPorFabricacion: e.unitsPerRun, rendimiento: e.yieldRange,
       materiales: e.reagents.map((g: any) => ({
         objetoId: g.itemId, nombre: g.name, cantidad: g.quantity, precioUnidad: gold(g.price.copper), campo: g.price.field, ambito: g.price.scope,
         preciosDe: g.price.sourceTime, subtotal: gold(g.subtotal),
@@ -192,28 +204,28 @@ export function createServer(): McpServer {
 
   server.registerTool('ruta_subir_nivel', {
     title: 'Ruta para subir de nivel',
-    description: 'Ruta para subir una profesión con los precios actuales, en tramos largos de una sola receta (como una guía): receta por tramo, fabricaciones, materiales, costo, costo del instructor, tiempo de fabricación y lista de compra. Por defecto la más rápida; con prioridad «barata», la que cuesta menos oro. Lo fabricado en pasos anteriores se reutiliza y no entra en la lista de compra. No usa recetas con tiempo de reutilización.',
+    description: 'Ruta para subir una profesión con los precios actuales, en tramos largos de una sola receta (como una guía): receta por tramo, fabricaciones, materiales, costo, costo del instructor, tiempo de fabricación y lista de compra. Por defecto la ruta de una guía publicada para WoW Forever (lo que no cubre se completa con la más rápida); con prioridad «rapida», la de menos tiempo; con «barata», la que cuesta menos oro. Cada paso dice si necesita un objeto de receta y dónde se consigue. Lo fabricado en pasos anteriores se reutiliza y no entra en la lista de compra. No usa recetas con tiempo de reutilización.',
     inputSchema: {
       profesionId: z.number().int().describe('171 Alquimia, 164 Herrería, 333 Encantamiento, 202 Ingeniería, 165 Peletería, 197 Sastrería, 185 Cocina, 129 Primeros auxilios, 186 Minería.'),
       desde: z.number().int().min(1).optional().describe('Nivel actual (defecto 1).'),
       hasta: z.number().int().optional().describe('Nivel objetivo (defecto 300).'),
       incluirPatrones: z.boolean().optional().describe('Incluir recetas de patrón, botín o misión (defecto: solo instructor e iniciales).'),
-      prioridad: z.enum(['rapida', 'barata']).optional().describe('«rapida» (defecto): menos tiempo fabricando. «barata»: menos oro.'),
+      prioridad: z.enum(['guia', 'rapida', 'barata']).optional().describe('«guia» (defecto): ruta de una guía publicada. «rapida»: menos tiempo fabricando. «barata»: menos oro.'),
       casa,
     },
     annotations: { readOnlyHint: true },
-  }, safe(async (a: { profesionId: number; desde?: number; hasta?: number; incluirPatrones?: boolean; prioridad?: 'rapida' | 'barata'; casa?: string }) => {
-    const r = await get('/api/leveling', { ...ctx(a.casa), profession: a.profesionId, from: a.desde ?? 1, to: a.hasta ?? 300, trainerOnly: a.incluirPatrones ? 0 : 1, mode: a.prioridad ?? 'rapida' });
+  }, safe(async (a: { profesionId: number; desde?: number; hasta?: number; incluirPatrones?: boolean; prioridad?: 'guia' | 'rapida' | 'barata'; casa?: string }) => {
+    const r = await get('/api/leveling', { ...ctx(a.casa), profession: a.profesionId, from: a.desde ?? 1, to: a.hasta ?? 300, trainerOnly: a.incluirPatrones ? 0 : 1, ...(a.prioridad ? { mode: a.prioridad } : {}) });
     const prev = (m: any) => { const n = BigInt(m.fromSteps ?? 0); return n <= 0n ? '' : n >= BigInt(m.quantity) ? ' (de pasos anteriores, no se compra)' : ` (${n} de pasos anteriores)`; };
     const minutes = (v: QJson) => (isQ(v) ? Math.ceil(Q.fromJSON(v).toNumber() / 60) : null);
     const nm = (m: any) => m.name ?? `Objeto ${m.itemId}`;
     return {
-      profesion: r.profession.name, desde: r.from, hasta: r.to, prioridad: r.mode, soloInstructor: r.trainerOnly, campoDePrecio: r.priceField, preciosDe: r.priceSourceTime,
+      profesion: r.profession.name, desde: r.from, hasta: r.to, prioridad: r.mode, guia: r.guide ? { fuente: r.guide.url, actualizada: r.guide.updated, nivelesCalculados: r.guide.filledLevels } : null, soloInstructor: r.trainerOnly, campoDePrecio: r.priceField, preciosDe: r.priceSourceTime,
       completa: !r.incomplete, totalMateriales: gold(r.materialsCost), totalInstructor: gold(r.trainingCost), total: gold(r.total), minutosDeFabricacion: minutes(r.activeSeconds),
       pasos: r.steps.map((s: any) => s.recipe ? {
         niveles: `${s.from}→${s.to}`, receta: s.recipe.name ?? s.recipe.nameEn, recetaIngles: s.recipe.nameEn, fabricaciones: s.crafts,
         dificultad: s.colorFrom === s.colorTo ? s.colorFrom : `${s.colorFrom}→${s.colorTo}`,
-        comoSeAprende: s.recipe.availability === 'instructor' ? `instructor (nivel ${s.recipe.learnedAt}, ${gold(s.recipe.trainingCost)} oro)` : s.recipe.availability === 'inicial' ? 'se conoce al aprender la profesión' : 'patrón, botín o misión',
+        comoSeAprende: learnText(s.recipe),
         materiales: s.materials.map((m: any) => `${m.quantity} × ${nm(m)}${prev(m)}${m.unitPrice || prev(m) ? '' : ' (sin precio)'}`), costo: gold(s.cost), wowhead: s.recipe.wowheadUrl,
       } : { niveles: `${s.from}→${s.to}`, sinDatos: s.reason, materialesSinPrecio: s.missingItems.map(nm) }),
       listaDeCompra: r.shopping.map((m: any) => ({ objetoId: m.itemId, nombre: nm(m), cantidad: m.quantity, precioUnidad: gold(m.unitPrice), costo: gold(m.cost), fuente: m.priceSource })),

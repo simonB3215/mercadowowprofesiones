@@ -3,6 +3,7 @@ import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, STATUS_
 import { ItemLabel, WowIcon, useAsset, QualityText } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { FavButton } from '../favorites.js';
+import { RecipeItemInfo } from '../RouteTools.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass, Coins, Tag, TrendUp, ChartLineUp } from '@phosphor-icons/react';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
 
@@ -111,6 +112,23 @@ function Summary({ e, commission }: { e: any; commission: string }) {
   );
 }
 
+/** Si hace falta comprar o conseguir la receta (objeto de patrón, diseño…) y dónde; o si la enseña el instructor. */
+function LearnCard({ l }: { l: any }) {
+  let body: React.ReactNode;
+  if (!l) body = <span className="muted">No se pudo enlazar con los datos de Wowhead: revisa la ficha de la receta.</span>;
+  else if (l.availability === 'instructor') body = <>No necesita objeto de receta: la enseña el instructor de la profesión desde el nivel {l.learnedAt}{l.trainingCost !== '0' && <> por <Money v={{ n: l.trainingCost, d: '1' }} /></>}.</>;
+  else if (l.availability === 'inicial') body = <>No necesita objeto de receta: se conoce al aprender la profesión.</>;
+  else if (l.recipeItem) body = <RecipeItemInfo ri={l.recipeItem} learnedAt={l.learnedAt} long />;
+  else body = <span className="lv-warn-text">Necesita un objeto de receta (patrón, botín o misión), nivel {l.learnedAt}. <a href={`${l.wowheadUrl}#taught-by-item`} target="_blank" rel="noreferrer" className="icon-inline">Ver en Wowhead cuál y dónde<ArrowSquareOut size={12} aria-hidden="true" /></a></span>;
+  return (
+    <section className="card rd-learn" aria-label="Cómo se aprende">
+      <h2 style={{ marginTop: 0 }}>¿Necesita receta?</h2>
+      <p style={{ margin: 0 }}>{body}</p>
+      {l?.recipeItem && <p className="small muted" style={{ margin: '8px 0 0' }}>Datos de Wowhead (WoW Forever). El precio del vendedor no incluye descuentos por reputación; algunas recetas de vendedor tienen existencias limitadas.</p>}
+    </section>
+  );
+}
+
 export function RecipeDetail({ id }: { id: number }) {
   const { ctx, ctxQuery, profileId } = useApp();
   const d = useAsync(() => api(`/api/recipes/${id}?${ctxQuery}${profileId ? `&profileId=${profileId}` : ''}`), [id, ctxQuery, profileId]);
@@ -164,6 +182,7 @@ export function RecipeDetail({ id }: { id: number }) {
       <p><a className="icon-inline" href={backHref()}><ArrowLeft size={16} aria-hidden="true" />Volver al comparador</a></p>
       <RecipeHeader e={e} />
       <Summary e={e} commission={d.data.settings.commission} />
+      <LearnCard l={d.data.learn} />
 
       <div className="grid grid-2">
         <Breakdown e={e} title={scenario ? 'Cálculo con los precios actuales' : 'Cálculo detallado'} />

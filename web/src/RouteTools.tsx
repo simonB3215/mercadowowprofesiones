@@ -82,12 +82,35 @@ export function HowToLearn({ r }: { r: any }) {
     return <>Instructor (nivel {r.learnedAt}){cost !== '0' && <>{' · '}<Money v={{ n: cost, d: '1' }} /></>}</>;
   }
   if (r.availability === 'inicial') return <span title="Wowhead no indica su fuente; se deduce que se conoce al aprender la profesión.">Se conoce al aprender la profesión</span>;
+  if (r.recipeItem) return <RecipeItemInfo ri={r.recipeItem} learnedAt={r.learnedAt} />;
   const labels = [...new Set(((r.sources ?? []) as number[]).map((c) => SOURCE_LABEL[c]).filter(Boolean))];
   const text = labels.length ? labels.join(', ') : 'patrón, botín o misión';
   return (
     <span className="lv-warn-text" title="No la enseña el instructor: hay que conseguir la receta (no está garantizada).">
       {text[0].toUpperCase() + text.slice(1)} (nivel {r.learnedAt})
       {r.wowheadUrl && <> · <a href={`${r.wowheadUrl}#taught-by-item`} target="_blank" rel="noreferrer" className="icon-inline">ver dónde<ArrowSquareOut size={12} aria-hidden="true" /></a></>}
+    </span>
+  );
+}
+
+const OBTAIN_LINK: Record<string, string> = { vendedor: 'quién la vende y dónde', 'botín': 'quién la suelta', 'misión': 'qué misión la da', fabricado: 'quién la fabrica', otra: 'dónde se consigue' };
+const OBTAIN_TEXT: Record<string, string> = { vendedor: 'se compra a un vendedor', 'botín': 'cae de botín', 'misión': 'recompensa de misión', fabricado: 'la fabrica otro jugador', otra: 'otra fuente' };
+
+/** Objeto de receta que hay que conseguir (no la enseña el instructor): nombre, cómo se consigue, precio y dónde. */
+export function RecipeItemInfo({ ri, learnedAt, long }: { ri: any; learnedAt: number; long?: boolean }) {
+  return (
+    <span className="lv-warn-text rt-learn" title="No la enseña el instructor: hay que conseguir este objeto y usarlo para aprender la receta.">
+      {long ? 'Necesitas el objeto de receta ' : 'Necesita '}
+      <a href={ri.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">«{ri.nameEn}»<ArrowSquareOut size={12} aria-hidden="true" /></a>
+      {' '}(nivel {learnedAt}).{' '}
+      {ri.obtain.length ? ri.obtain.map((o: any, i: number) => (
+        <React.Fragment key={o.how}>
+          {i > 0 && '; '}
+          {i === 0 ? OBTAIN_TEXT[o.how][0].toUpperCase() + OBTAIN_TEXT[o.how].slice(1) : OBTAIN_TEXT[o.how]}
+          {o.how === 'vendedor' && ri.buyPrice && <> por <Money v={{ n: ri.buyPrice, d: '1' }} /></>}
+          {' · '}<a href={o.url} target="_blank" rel="noreferrer" className="icon-inline">{OBTAIN_LINK[o.how]}<ArrowSquareOut size={12} aria-hidden="true" /></a>
+        </React.Fragment>
+      )) : <a href={ri.wowheadUrl} target="_blank" rel="noreferrer">Dónde se consigue</a>}
     </span>
   );
 }
@@ -143,6 +166,8 @@ export function RouteGuide({ steps, done, onOpen }: { steps: any[]; done: Set<st
                         <ItemLabel id={s.recipe.createsItemId} quality={s.recipe.createsQuality} px={24} name={s.recipe.name ?? s.recipe.nameEn} />
                       </button>
                       {s.fillsTrainerGap && <span className="badge b-info rt-pattern" title="El instructor no enseña ninguna receta para estos niveles">patrón</span>}
+                      {s.inGuide === false && s.recipe && <span className="badge rt-pattern" title="La guía no cubre estos niveles: receta de la ruta más rápida">calculado</span>}
+                      {s.recipe?.availability === 'otra' && <div className="small rt-need"><HowToLearn r={s.recipe} /></div>}
                     </td>
                     <td data-label="Fabricaciones" className="num mono">{String(s.crafts)}{!s.certain && <span className="rt-guide-approx" title="Estimado: parte del tramo es amarillo o verde y no siempre da punto">≈</span>}</td>
                     <td data-label="Por fabricación">

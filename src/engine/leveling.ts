@@ -252,6 +252,55 @@ export function planLeveling(recipes: LevelRecipe[], opts: PlanOptions): LevelPl
   return ref;
 }
 
+/** Paso de una guía publicada: niveles [from, to) con una receta (id de hechizo). */
+export interface GuideStep { from: number; to: number; spellId: number }
+
+/**
+ * Ruta de una guía publicada: en cada nivel, la receta de la guía si da puntos ahí; los niveles que la guía no cubre
+ * (o en los que su receta no da puntos según los datos) se completan con la ruta más rápida calculada.
+ * Recetas de misión o botín con umbral naranja 0: Wowhead no da su nivel de aprendizaje real (pone el amarillo), así
+ * que se usan desde donde empieza el paso de la guía. Devuelve el plan y los niveles completados por el cálculo.
+ */
+export function planGuide(recipes: LevelRecipe[], guide: GuideStep[], opts: PlanOptions): { plan: LevelPlan; filledLevels: number; guideIds: Set<number> } {
+  validateRange(opts.from, opts.to);
+  const { from, to } = opts;
+  const byId = new Map(recipes.map((r) => [r.id, r]));
+  const fallback = planLeveling(recipes, { ...opts, objective: 'tiempo', lambda: 0 });
+  const picks: Pick[] = [];
+  for (const st of fallback.steps) {
+    for (let s = st.from; s < st.to; s++) {
+      picks.push(st.recipe ? { recipe: st.recipe, chance: chanceFor(st.recipe, s, opts.chanceModel), reason: null, missing: [] }
+        : { recipe: null, chance: null, reason: st.reason, missing: st.missingItems });
+    }
+  }
+  const relaxed = new Map<string, LevelRecipe>();
+  const guideIds = new Set<number>();
+  let filledLevels = 0;
+  const usable = (g: GuideStep | undefined) => {
+    const base = g ? byId.get(g.spellId) : undefined;
+    if (!base || !g || opts.exclude?.has(base.id)) return undefined;
+    if (base.availability !== 'otra' || base.colors[0] !== 0 || base.learnedAt <= g.from) return base;
+    const key = `${base.id}:${g.from}`;
+    if (!relaxed.has(key)) relaxed.set(key, { ...base, learnedAt: g.from });
+    return relaxed.get(key);
+  };
+  let last: LevelRecipe | undefined;
+  for (let s = from; s < to; s++) {
+    const g = guide.find((x) => s >= x.from && s < x.to);
+    const r = usable(g);
+    let chance = r ? chanceFor(r, s, opts.chanceModel) : null;
+    let use = r;
+    // Dentro de lo que cubre la guía: si su receta aún no da puntos aquí (p. ej. se aprende más tarde en Forever), se
+    // sigue con la anterior. Fuera de la guía, la ruta más rápida.
+    if (!chance && last && g) { chance = chanceFor(last, s, opts.chanceModel); use = last; }
+    if (use && chance) { picks[s - from] = { recipe: use, chance, reason: null, missing: [] }; guideIds.add(use.id); last = use; }
+    else filledLevels++;
+  }
+  // Una receta relajada y la original son objetos distintos: se unifican para que los tramos seguidos se junten.
+  for (const p of picks) if (p.recipe && relaxed.size) { const same = [...relaxed.values()].find((x) => x.id === p.recipe!.id); if (same) p.recipe = same; }
+  return { plan: assemblePlan(from, to, picks, opts), filledLevels, guideIds };
+}
+
 /** Como mucho un 3 % más de tiempo (ruta rápida) o de oro (ruta barata) que la mejor ruta punto a punto. */
 export const MAX_SEGMENT_EXTRA = 0.03;
 /** Penalizaciones que se prueban, de más agrupada a menos. */

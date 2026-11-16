@@ -52,12 +52,16 @@ describe('Servidor MCP', () => {
   });
 
   it('sin precios, la ruta de subida de nivel no inventa costos', async () => {
-    const r = await call('ruta_subir_nivel', { profesionId: 197, desde: 1, hasta: 20 });
+    const r = await call('ruta_subir_nivel', { profesionId: 197, desde: 1, hasta: 20, prioridad: 'rapida' });
     expect(r.isError).toBe(false);
     const j = JSON.parse(r.text);
     expect(j.completa).toBe(false);
     expect(j.pasos[0].sinDatos).toBeTruthy();
     expect(j.prioridad).toBe('rapida');
+    const guide = JSON.parse((await call('ruta_subir_nivel', { profesionId: 197, desde: 1, hasta: 20 })).text);
+    expect(guide.prioridad).toBe('guia');
+    expect(guide.completa).toBe(false);
+    expect(guide.total).toBeNull();
     const cheap = JSON.parse((await call('ruta_subir_nivel', { profesionId: 197, desde: 1, hasta: 20, prioridad: 'barata' })).text);
     expect(cheap.prioridad).toBe('barata');
   });

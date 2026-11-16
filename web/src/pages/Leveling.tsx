@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, Loading, ErrorBox, PageHead, Money, toQ, age, hoursSince, dt, hashQuery, setHashQuery } from '../lib.js';
 import { ItemLabel } from '../icons.js';
-import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info, Table, Lightning, PiggyBank } from '@phosphor-icons/react';
+import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info, Table, Lightning, PiggyBank, BookOpen } from '@phosphor-icons/react';
 import { secondsLabel } from './Character.js';
 import { HowToLearn, MatChip, PatternNote, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 
@@ -24,7 +24,8 @@ export function SkillColor({ c }: { c: string | null }) {
 }
 
 type Tab = 'guia' | 'pasos' | 'compra';
-type Mode = 'rapida' | 'barata';
+type Mode = 'guia' | 'rapida' | 'barata';
+const MODE_LABEL: Record<Mode, string> = { guia: 'guía', rapida: 'más rápida', barata: 'más barata' };
 type Applied = { prof: string; from: string; to: string; all: boolean; mode: Mode };
 
 export function Leveling() {
@@ -36,13 +37,13 @@ export function Leveling() {
   const [to, setTo] = useState(init.get('to') ?? '');
   const [all, setAll] = useState(init.get('all') === '1');
   // Prioridad: por defecto la más rápida; la más barata la elige el usuario.
-  const [mode, setMode] = useState<Mode>(init.get('modo') === 'barata' ? 'barata' : 'rapida');
+  const [mode, setMode] = useState<Mode>(init.get('modo') === 'barata' ? 'barata' : init.get('modo') === 'rapida' ? 'rapida' : 'guia');
   const [manual, setManual] = useState<Record<string, string>>(loadManual);
   const [applied, setApplied] = useState<Applied | null>(null);
   const [tab, setTab] = useState<Tab>('guia');
   const openStep = (i: number) => { setTab('pasos'); setTimeout(() => document.getElementById(`lv-paso-${i}`)?.scrollIntoView({ block: 'start' }), 50); };
   const [avoided, setAvoided] = useState<Avoided[]>([]);
-  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}${applied.mode === 'barata' ? ':b' : ''}` : 'lv:none');
+  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}${applied.mode === 'barata' ? ':b' : applied.mode === 'guia' ? ':g' : ''}` : 'lv:none');
 
   const list: any[] = profs.data?.professions ?? [];
   const current = list.find((p) => String(p.id) === prof) ?? null;
@@ -72,7 +73,7 @@ export function Leveling() {
     [applied, ctxQuery, manualParam, avoided],
   );
   useEffect(() => {
-    if (applied) setHashQuery('/nivel', new URLSearchParams({ prof: applied.prof, from: applied.from, to: applied.to, ...(applied.all ? { all: '1' } : {}), ...(applied.mode === 'barata' ? { modo: 'barata' } : {}) }));
+    if (applied) setHashQuery('/nivel', new URLSearchParams({ prof: applied.prof, from: applied.from, to: applied.to, ...(applied.all ? { all: '1' } : {}), ...(applied.mode !== 'guia' ? { modo: applied.mode } : {}) }));
   }, [applied]);
 
   const setPrice = (id: number, v: string) => {
@@ -119,7 +120,7 @@ export function Leveling() {
             </div>
             <fieldset className="pc-mode">
               <legend className="small muted">Prioridad</legend>
-              {([['rapida', 'Más rápida', <Lightning size={18} aria-hidden="true" />], ['barata', 'Más barata', <PiggyBank size={18} aria-hidden="true" />]] as const).map(([m, label, icon]) => (
+              {([['guia', 'Guía', <BookOpen size={18} aria-hidden="true" />], ['rapida', 'Más rápida', <Lightning size={18} aria-hidden="true" />], ['barata', 'Más barata', <PiggyBank size={18} aria-hidden="true" />]] as const).map(([m, label, icon]) => (
                 <label key={m} className={`pc-mode-opt${mode === m ? ' on' : ''}`}>
                   <input type="radio" name="lv-mode" checked={mode === m}
                     onChange={() => { setMode(m); if (!rangeError && current) setApplied({ prof, from, to, all, mode: m }); }} />
@@ -143,7 +144,7 @@ export function Leveling() {
           {/* Resumen: una cifra principal y dos secundarias. */}
           <section className="card lv-summary" aria-label="Resumen de costos">
             <div className="lv-summary-main">
-              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {d.mode === 'barata' ? 'más barata' : 'más rápida'}</span>
+              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {MODE_LABEL[d.mode as Mode] ?? d.mode}</span>
               <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">Sin datos</span>}</span>
               <span className="lv-summary-label">Costo total estimado</span>
             </div>
@@ -157,7 +158,15 @@ export function Leveling() {
                 ? <><Warning size={18} weight="bold" aria-hidden="true" />Hay {gapLevels} niveles sin receta con precio: el total no los incluye. Revisa los pasos marcados.</>
                 : <><CheckCircle size={18} weight="bold" aria-hidden="true" />Ruta completa con precios de la casa de subastas.</>}
             </p>
-            <PatternNote levels={d.patternLevels ?? 0} trainerOnly={d.trainerOnly} />
+            {d.guide && (
+              <p className="lv-status info">
+                <BookOpen size={18} weight="bold" aria-hidden="true" />
+                <span>Ruta de la guía de <a href={d.guide.url} target="_blank" rel="noreferrer" className="icon-inline">{d.guide.name}<ArrowSquareOut size={12} aria-hidden="true" /></a> para WoW Forever (actualizada el {String(d.guide.updated).split('-').reverse().join('/')}). Las fabricaciones y el costo se calculan con los precios actuales.{d.guide.filledLevels > 0 && <> La guía no cubre {d.guide.filledLevels} niveles: ahí se usa la ruta más rápida (pasos marcados «calculado»).</>}</span>
+              </p>
+            )}
+            {applied?.mode === 'guia' && !d.guide && <p className="lv-status info"><Info size={18} weight="bold" aria-hidden="true" />No hay guía publicada para esta profesión: se muestra la ruta más rápida.</p>}
+            {d.unpricedSteps > 0 && <p className="lv-status warn"><Warning size={18} weight="bold" aria-hidden="true" />{d.unpricedSteps} paso(s) tienen materiales sin precio en la casa de subastas: el total no los incluye.</p>}
+            {!d.guide && <PatternNote levels={d.patternLevels ?? 0} trainerOnly={d.trainerOnly} />}
           </section>
 
           <AvoidedList list={avoided} onRemove={(id) => setAvoided(avoided.filter((a) => a.id !== id))} onClear={() => setAvoided([])} />
@@ -253,7 +262,7 @@ export function Leveling() {
           <details className="card lv-details">
             <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>
             <ul className="small lv-notes">
-              <li>{d.mode === 'barata' ? <>Más barata: tramos con la receta que sube más barato.</> : <>Más rápida: tramos con la receta de menor tiempo de fabricación esperado (tiempo de lanzamiento ÷ probabilidad de punto).</>} Se agrupan niveles con una sola receta siempre que eso no cueste más de un 3 % de {d.mode === 'barata' ? 'oro' : 'tiempo'} frente a elegir nivel a nivel.</li>
+              <li>{d.mode === 'guia' ? <>Guía: los tramos y recetas de una guía publicada para WoW Forever; si su receta aún no da puntos en un nivel, se sigue con la anterior, y lo que la guía no cubre se completa con la ruta más rápida.</> : d.mode === 'barata' ? <>Más barata: tramos con la receta que sube más barato.</> : <>Más rápida: tramos con la receta de menor tiempo de fabricación esperado (tiempo de lanzamiento ÷ probabilidad de punto).</>} Se agrupan niveles con una sola receta siempre que eso no cueste más de un 3 % de {d.mode === 'barata' ? 'oro' : 'tiempo'} frente a elegir nivel a nivel.</li>
               <li>Las veces a fabricar en dificultad amarilla y verde son una <strong>estimación</strong> (fórmula de la comunidad); se redondean hacia arriba.</li>
               <li>Precios: casa de subastas elegida arriba, campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Un material sin precio nunca se cuenta como gratis.{d.source?.vendor?.items ? ` Los materiales que solo venden los vendedores (${d.source.vendor.items}, Wowhead, ${d.source.vendor.checkedAt}) usan el precio del vendedor si es más barato.` : ''}</li>
               <li>Recetas y dificultad: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead (WoW Forever)</a>, datos del {dt(d.source.fetchedAt)}.</li>

@@ -6,10 +6,11 @@ import type { Db } from './db.js';
 import { HttpError, loadSnapshot, type MarketContext } from './market.js';
 import { resolvePrice } from './evaluate.js';
 import { commissionFor, type Settings } from './config.js';
-import { alternativesAt, planLeveling, pointCost, recipePool, type LevelPlan, type LevelRecipe } from '../engine/leveling.js';
+import { alternativesAt, planGuide, planLeveling, pointCost, recipePool, type LevelPlan, type LevelRecipe } from '../engine/leveling.js';
 import { planRoute, rankRequirements, type RouteMode, type RouteResult } from '../engine/route.js';
 import { castSecondsOf, SPELL_TOOLS, SPELL_DETAILS_SOURCE } from './spellDetails.js';
 import { bestBuyPrice, VENDOR_SOURCE } from './vendorItems.js';
+import { recipeItemFor, RECIPE_ITEMS_SOURCE } from './recipeItems.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 
 /** «id:oro,id:oro» → precios manuales en cobre. Oro con hasta 4 decimales (cobre entero), ≥ 0. */
@@ -26,6 +27,7 @@ export function parseManualPrices(raw: string | null | undefined): Map<number, Q
   return out;
 }
 import dataset from '../../data/leveling/forever-wowhead.json' with { type: 'json' };
+import guidesData from '../../data/leveling/forever-guides.json' with { type: 'json' };
 import { SPELL_COOLDOWNS as COOLDOWNS, reagentKey } from './cooldowns.js';
 /**
  * Reutilización de una receta: la comprobada en Wowhead (se revisaron todas las recetas del conjunto de datos).
@@ -50,6 +52,10 @@ interface WhRecipe {
 }
 interface WhProfession { professionId: number; slug: string; sourceUrl: string; fetchedAt: string; recipes: WhRecipe[] }
 const DATA = dataset as unknown as { gameVersion: string; source: string; professions: WhProfession[] };
+/** Rutas de guías publicadas para Forever (datos fijos; ver data/leveling/forever-guides.json). */
+const GUIDES = guidesData as unknown as { source: { name: string; url: string }; professions: Record<string, { url: string; updated: string; steps: Array<{ from: number; to: number; spellId: number; name: string; guideCrafts: number | null }> }> };
+export const guideFor = (professionId: number) => GUIDES.professions[String(professionId)] ?? null;
+export type LevelingMode = 'guia' | 'rapida' | 'barata';
 
 /** En los listados de Wowhead, la fuente 6 es «instructor». El resto (patrones, botín, misiones…) no se enseña. */
 const TRAINER_SOURCE = 6;
@@ -176,7 +182,7 @@ const patternLevels = (plan: LevelPlan) => plan.steps.reduce((n, s) => n + (s.re
 
 /** Pasos con nombres en español (objetos del catálogo; recetas solo si la coincidencia es única), materiales y procedencia. */
 async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan: LevelPlan, pricing: Pricing,
-  alt: { pool: LevelRecipe[]; model: 'comunidad' | 'garantizado' }) {
+  alt: { pool: LevelRecipe[]; model: 'comunidad' | 'garantizado'; guide?: boolean }) {
   const whById = new Map(prof.recipes.map((r) => [r.id, r]));
   const usedItems = new Set<number>();
   // Otras recetas posibles al empezar cada paso (para cambiarla con «Evitar esta receta»).
@@ -194,16 +200,19 @@ async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan
   const itemName = (id: number) => itemById.get(id)?.name ?? pricing.snap.local.get(id)?.name ?? null;
   const { priceSource } = pricing;
   const catName = (w: WhRecipe) => { const m = byKey.get(reagentKey(w.creates?.itemId ?? null, w.reagents)); return m && m.length === 1 ? m[0].name : null; };
+  const guideIds = alt.guide ? new Set((guideFor(prof.professionId)?.steps ?? []).map((g) => g.spellId)) : null;
   return {
     steps: plan.steps.map((s, i) => {
       const wh = s.recipe ? whById.get(s.recipe.id)! : null;
       const match = wh ? byKey.get(reagentKey(wh.creates?.itemId ?? null, wh.reagents)) : undefined;
       const cat = match && match.length === 1 ? match[0] : null;
       return {
-        from: s.from, to: s.to, colorFrom: s.colorFrom, colorTo: s.colorTo, expectedCrafts: s.expectedCrafts, crafts: s.crafts, cost: s.cost,
+        from: s.from, to: s.to, colorFrom: s.colorFrom, colorTo: s.colorTo, expectedCrafts: s.expectedCrafts, crafts: s.crafts, cost: unpriced(s) ? null : s.cost,
         reason: s.recipe ? null : prof.professionId === MINING_ID && !s.missingItems.length ? MINING_GAP : s.reason,
         /** Receta de patrón usada porque el instructor no enseña ninguna que dé puntos en estos niveles. */
         fillsTrainerGap: Boolean(s.recipe?.onlyAt),
+        /** La receta del paso es de la guía publicada de la profesión. */
+        inGuide: guideIds ? Boolean(s.recipe && guideIds.has(s.recipe.id)) : null,
         guaranteedCrafts: s.guaranteedCrafts, certain: s.certain, minChance: s.minChance, activeSeconds: s.activeSeconds, known: s.known,
         /** Costo por punto de la receta elegida al empezar el paso (mismo criterio que las alternativas). */
         costPerPointAtStart: s.recipe ? pointCost(s.recipe, s.from, pricing.price, alt.model) : null,
@@ -211,12 +220,12 @@ async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan
           const w = whById.get(a.recipe.id)!;
           return {
             spellId: w.id, nameEn: w.name, name: catName(w), wowheadUrl: `https://www.wowhead.com/forever/spell=${w.id}`,
-            availability: a.recipe.availability, sources: w.source, color: a.color, chance: a.chance, costPerPoint: a.costPerPoint,
+            availability: a.recipe.availability, sources: w.source, recipeItem: recipeItemFor(w.id), color: a.color, chance: a.chance, costPerPoint: a.costPerPoint,
             createsName: w.creates ? itemName(w.creates.itemId) : null,
           };
         }),
         recipe: wh && s.recipe ? {
-          spellId: wh.id, nameEn: wh.name, name: cat?.name ?? null, catalogRecipeId: cat?.id ?? null, sources: wh.source,
+          spellId: wh.id, nameEn: wh.name, name: cat?.name ?? null, catalogRecipeId: cat?.id ?? null, sources: wh.source, recipeItem: recipeItemFor(wh.id),
           wowheadUrl: `https://www.wowhead.com/forever/spell=${wh.id}`, learnedAt: wh.learnedAt, colors: wh.colors,
           availability: s.recipe.availability, trainingCost: s.recipe.trainingCost, skillUps: s.recipe.skillUps,
           castSeconds: s.recipe.castSeconds ?? null, tools: SPELL_TOOLS.get(wh.id) ?? [],
@@ -231,31 +240,65 @@ async function describePlan(db: Db, ctx: MarketContext, prof: WhProfession, plan
   };
 }
 
+/**
+ * Cómo se aprende una receta del catálogo de Blizzard: se busca la receta de Wowhead con el mismo objeto y los mismos
+ * materiales. null si no hay una coincidencia única (no se adivina).
+ */
+export async function learnInfo(db: Db, version: string, recipeId: number) {
+  if (version !== DATA.gameVersion) return null;
+  const rows = await db.query<any>(
+    `select r.profession_id, r.crafted_item_id, coalesce(json_agg(json_build_object('itemId', g.item_id, 'quantity', g.quantity)) filter (where g.item_id is not null), '[]') as reagents
+     from recipe r left join recipe_reagent g on g.game_version=r.game_version and g.recipe_id=r.id and not g.optional
+     where r.game_version=$1 and r.id=$2 group by r.id, r.profession_id, r.crafted_item_id`, [version, recipeId]);
+  const c = rows[0];
+  const prof = c && DATA.professions.find((p) => p.professionId === Number(c.profession_id));
+  if (!prof) return null;
+  const reagents = (typeof c.reagents === 'string' ? JSON.parse(c.reagents) : c.reagents) as any[];
+  const key = reagentKey(c.crafted_item_id === null ? null : Number(c.crafted_item_id), reagents.map((g) => ({ itemId: Number(g.itemId), quantity: Number(g.quantity) })));
+  const hits = prof.recipes.filter((w: WhRecipe) => reagentKey(w.creates?.itemId ?? null, w.reagents) === key);
+  if (hits.length !== 1) return null;
+  const w = hits[0];
+  const availability = availabilityOf(w);
+  return {
+    spellId: w.id, availability, learnedAt: availability === 'inicial' ? 1 : w.learnedAt, sources: w.source,
+    trainingCost: availability === 'instructor' ? String(Math.max(0, Math.floor(w.trainingCost || 0))) : '0',
+    wowheadUrl: `https://www.wowhead.com/forever/spell=${w.id}`, recipeItem: availability === 'otra' ? recipeItemFor(w.id) : null,
+  };
+}
+
 async function professionName(db: Db, version: string, prof: WhProfession) {
   return (await levelingProfessions(db, version)).professions.find((p) => p.id === prof.professionId)?.name ?? prof.slug;
 }
 
 export async function levelingPlan(
   db: Db, ctx: MarketContext, settings: Settings,
-  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q>; exclude?: Set<number>; mode?: 'rapida' | 'barata' },
+  opts: { professionId: number; from: number; to: number; trainerOnly: boolean; manual?: Map<number, Q>; exclude?: Set<number>; mode?: LevelingMode },
 ) {
   const prof = professionOf(ctx, opts.professionId);
   const maxSkill = checkRange(prof, opts.from, opts.to);
   const pricing = await pricingFor(db, ctx, settings, prof, opts.manual ?? new Map<number, Q>());
   const recipes = prof.recipes.map(toLevel);
-  const mode = opts.mode ?? 'rapida';
-  const plan = planLeveling(recipes, { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly, exclude: opts.exclude,
-    objective: mode === 'rapida' ? 'tiempo' : 'costo', lambda: 0 });
+  const guide = guideFor(prof.professionId);
+  // Sin guía para la profesión (p. ej. Minería), «guía» usa la más rápida.
+  const mode: LevelingMode = opts.mode === 'guia' && !guide ? 'rapida' : opts.mode ?? (guide ? 'guia' : 'rapida');
+  const popts = { from: opts.from, to: opts.to, price: pricing.price, trainerOnly: opts.trainerOnly, exclude: opts.exclude };
+  const guided = mode === 'guia' && guide ? planGuide(recipes, guide.steps, popts) : null;
+  const plan = guided ? guided.plan : planLeveling(recipes, { ...popts, objective: mode === 'rapida' ? 'tiempo' : 'costo', lambda: 0 });
   const described = await describePlan(db, ctx, prof, plan, pricing,
-    { pool: recipePool(recipes, { trainerOnly: opts.trainerOnly, exclude: opts.exclude }), model: 'comunidad' });
+    { pool: recipePool(recipes, { trainerOnly: opts.trainerOnly, exclude: opts.exclude }), model: 'comunidad', guide: Boolean(guided) });
   return {
     profession: { id: prof.professionId, name: await professionName(db, ctx.version, prof) },
-    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, vendor: VENDOR_SOURCE },
+    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, vendor: VENDOR_SOURCE, recipeItems: RECIPE_ITEMS_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: plan.from, to: plan.to, maxSkill, trainerOnly: opts.trainerOnly, mode,
+    /** Guía usada (modo «guia») y niveles que no cubre y se completan con la ruta más rápida. */
+    guide: guided && guide ? { name: GUIDES.source.name, url: guide.url, updated: guide.updated, filledLevels: guided.filledLevels } : null,
+    hasGuide: Boolean(guide),
+    /** Pasos con algún material sin precio: el total no lo incluye. */
+    unpricedSteps: plan.steps.filter(unpriced).length,
     excluded: [...(opts.exclude ?? [])],
-    incomplete: plan.incomplete, patternLevels: patternLevels(plan),
+    incomplete: plan.incomplete || plan.steps.some(unpriced), patternLevels: patternLevels(plan),
     ...costs(plan), activeSeconds: plan.activeSeconds,
     ...described,
     manualItems: [...pricing.manual.keys()],
@@ -313,8 +356,13 @@ async function saleRecovery(db: Db, ctx: MarketContext, settings: Settings, prof
  * Importes del plan para la API. Si ningún tramo tiene receta con precio, no hay nada sumado: se devuelve null
  * («sin datos») en lugar de 0 c, que parecería una subida gratis.
  */
-function costs(plan: { steps: Array<{ recipe: unknown }>; materialsCost: Q; trainingCost: Q; total: Q }) {
-  const priced = plan.steps.some((st) => st.recipe);
+/** Paso con receta y algún material que hay que comprar sin precio (solo en la ruta de guía). */
+const unpriced = (st: { recipe: unknown; materials: Array<{ unitPrice: Q | null; quantity: bigint; fromSteps: bigint }> }) =>
+  Boolean(st.recipe) && st.materials.some((m) => !m.unitPrice && m.quantity > m.fromSteps);
+
+function costs(plan: { steps: Array<{ recipe: unknown; materials: Array<{ unitPrice: Q | null; quantity: bigint; fromSteps: bigint }> }>; materialsCost: Q; trainingCost: Q; total: Q }) {
+  // Sin ningún paso con todos sus precios no se suma nada: «sin datos», nunca 0 (parecería una subida gratis).
+  const priced = plan.steps.some((st) => st.recipe && !unpriced(st));
   return priced
     ? { materialsCost: plan.materialsCost, trainingCost: plan.trainingCost, total: plan.total }
     : { materialsCost: null, trainingCost: null, total: null };
@@ -352,7 +400,7 @@ export async function routePlan(db: Db, ctx: MarketContext, settings: Settings, 
   if (chosen.plan.incomplete) blockers.push('Hay tramos sin receta con precio: el total no cubre toda la subida (indica precios manuales o incluye recetas de patrón).');
   return {
     profession: { id: prof.professionId, name: await professionName(db, ctx.version, prof) },
-    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, castTimes: SPELL_DETAILS_SOURCE, vendor: VENDOR_SOURCE },
+    source: { url: prof.sourceUrl, fetchedAt: prof.fetchedAt, name: DATA.source, castTimes: SPELL_DETAILS_SOURCE, vendor: VENDOR_SOURCE, recipeItems: RECIPE_ITEMS_SOURCE },
     priceField: settings.buySource,
     priceSourceTime: pricing.snap.runs.realm_items?.sourceTime ?? null,
     from: req.from, to: req.to, maxSkill, mode: chosen.mode, algorithm: chosen.algorithm, evaluated: chosen.evaluated,

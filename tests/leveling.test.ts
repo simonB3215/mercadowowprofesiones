@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Q } from '../src/engine/rational.js';
-import { planLeveling, skillUpChance, colorAt, alternativesAt, recipePool, type LevelRecipe } from '../src/engine/leveling.js';
+import { planGuide, planLeveling, skillUpChance, colorAt, alternativesAt, recipePool, type LevelRecipe } from '../src/engine/leveling.js';
 
 const rec = (id: number, colors: [number, number, number, number], reagents: Array<[number, number]>, extra: Partial<LevelRecipe> = {}): LevelRecipe => ({
   id, name: `R${id}`, learnedAt: colors[0], colors, skillUps: 1, availability: 'instructor', trainingCost: 0n,
@@ -173,4 +173,26 @@ describe('Subida de nivel', () => {
   it('rechaza rangos inválidos', () => {
     expect(() => planLeveling([], { from: 10, to: 10, price: () => null, trainerOnly: true })).toThrow();
   });
+
+  it('ruta de guía: usa sus recetas, sigue con la anterior si la siguiente aún no da puntos y completa lo que no cubre', () => {
+    const a = rec(1, [1, 30, 40, 50], [[100, 1]]);
+    const b = rec(2, [20, 45, 55, 65], [[101, 1]]);
+    const late = rec(3, [40, 60, 70, 80], [[102, 1]]); // la guía la pone en 30-40, pero se aprende en 40
+    const cheap = rec(4, [1, 60, 70, 80], [[103, 1]]); // la más rápida/barata, nunca en la guía
+    for (const r of [a, b, late, cheap]) r.castSeconds = 3;
+    const price = prices({ 100: 50, 101: 50, 102: 50, 103: 1 });
+    const guide = [{ from: 1, to: 20, spellId: 1 }, { from: 20, to: 30, spellId: 2 }, { from: 30, to: 40, spellId: 3 }];
+    const { plan, filledLevels, guideIds } = planGuide([a, b, late, cheap], guide, { from: 1, to: 50, price, trainerOnly: true });
+    expect(plan.steps.map((st) => [st.from, st.to, st.recipe?.id])).toEqual([[1, 20, 1], [20, 40, 2], [40, 50, 4]]);
+    expect(filledLevels).toBe(10);
+    expect([...guideIds].sort()).toEqual([1, 2]);
+  });
+
+  it('ruta de guía: receta de misión con umbral naranja 0 se usa desde donde la pone la guía', () => {
+    const quest = rec(1, [0, 265, 270, 280], [[100, 1]], { learnedAt: 265, availability: 'otra' });
+    const { plan, filledLevels } = planGuide([quest], [{ from: 240, to: 270, spellId: 1 }], { from: 240, to: 270, price: prices({ 100: 5 }), trainerOnly: true });
+    expect(filledLevels).toBe(0);
+    expect(plan.steps.map((st) => [st.from, st.to, st.recipe?.id])).toEqual([[240, 270, 1]]);
+  });
 });
+

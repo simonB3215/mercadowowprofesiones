@@ -28,13 +28,24 @@ describe('API de subida de nivel', () => {
   });
 
   it('sin precios cargados no inventa costos: todo el tramo queda sin datos', async () => {
-    const r = await api(`/api/leveling?${qs}&profession=197&from=1&to=20`);
+    const r = await api(`/api/leveling?${qs}&profession=197&from=1&to=20&mode=rapida`);
     expect(r.status).toBe(200);
     expect(r.json.incomplete).toBe(true);
     expect(r.json.steps.every((s: any) => s.recipe === null && s.cost === null)).toBe(true);
     expect(r.json.steps[0].missingItems.length).toBeGreaterThan(0);
     // Nada sumado: «sin datos», nunca 0 c (parecería una subida gratis).
     expect(r.json).toMatchObject({ total: null, materialsCost: null, trainingCost: null });
+  });
+
+  it('por defecto, la ruta de la guía: sus recetas aunque falten precios, sin inventar costos', async () => {
+    const r = await api(`/api/leveling?${qs}&profession=197&from=1&to=60`);
+    expect(r.status).toBe(200);
+    expect(r.json.mode).toBe('guia');
+    expect(r.json.guide).toMatchObject({ filledLevels: 0 });
+    expect(r.json.steps.map((s: any) => [s.from, s.to, s.recipe?.nameEn, s.inGuide])).toEqual([[1, 30, 'Bolt of Linen Cloth', true], [30, 55, 'Linen Belt', true], [55, 60, 'Bolt of Woolen Cloth', true]]);
+    // Sin precio del paño: esos pasos no suman costo; el cinturón usa las madejas de antes y el hilo del vendedor.
+    expect(r.json.steps.map((s: any) => s.cost === null)).toEqual([true, false, true]);
+    expect(r.json).toMatchObject({ incomplete: true, unpricedSteps: 2 });
   });
 
   it('con un precio manual para Paño de lino (2589), Sastrería 1→20 tiene receta y costo', async () => {

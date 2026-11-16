@@ -1,0 +1,954 @@
+{
+ "description": "Rutas de subida de nivel de guías publicadas para WoW Forever (ruta principal, sin alternativas). spellId: receta de forever-wowhead.json; guideCrafts: fabricaciones que indica la guía (null si no las da). Datos fijos: no se actualizan.",
+ "source": {
+  "name": "WoW Forever Guides",
+  "url": "https://wowforeverguides.com/professions"
+ },
+ "checkedAt": "2026-11-16",
+ "professions": {
+  "129": {
+   "url": "https://wowforeverguides.com/professions/first-aid/leveling",
+   "updated": "2026-11-09",
+   "steps": [
+    {
+     "from": 1,
+     "to": 40,
+     "spellId": 3275,
+     "name": "Linen Bandage",
+     "guideCrafts": 50
+    },
+    {
+     "from": 40,
+     "to": 80,
+     "spellId": 3276,
+     "name": "Heavy Linen Bandage",
+     "guideCrafts": 52
+    },
+    {
+     "from": 80,
+     "to": 115,
+     "spellId": 3277,
+     "name": "Wool Bandage",
+     "guideCrafts": 50
+    },
+    {
+     "from": 115,
+     "to": 150,
+     "spellId": 3278,
+     "name": "Heavy Wool Bandage",
+     "guideCrafts": 50
+    },
+    {
+     "from": 150,
+     "to": 180,
+     "spellId": 7928,
+     "name": "Silk Bandage",
+     "guideCrafts": 42
+    },
+    {
+     "from": 180,
+     "to": 210,
+     "spellId": 7929,
+     "name": "Heavy Silk Bandage",
+     "guideCrafts": 46
+    },
+    {
+     "from": 210,
+     "to": 240,
+     "spellId": 10840,
+     "name": "Mageweave Bandage",
+     "guideCrafts": 48
+    },
+    {
+     "from": 240,
+     "to": 260,
+     "spellId": 10841,
+     "name": "Heavy Mageweave Bandage",
+     "guideCrafts": 30
+    },
+    {
+     "from": 260,
+     "to": 275,
+     "spellId": 18629,
+     "name": "Runecloth Bandage",
+     "guideCrafts": 20
+    },
+    {
+     "from": 275,
+     "to": 300,
+     "spellId": 1244436,
+     "name": "Major Healing Potion",
+     "guideCrafts": 30
+    }
+   ]
+  },
+  "164": {
+   "url": "https://wowforeverguides.com/professions/blacksmithing/leveling",
+   "updated": "2026-11-10",
+   "steps": [
+    {
+     "from": 1,
+     "to": 25,
+     "spellId": 2660,
+     "name": "Rough Sharpening Stone",
+     "guideCrafts": 26
+    },
+    {
+     "from": 25,
+     "to": 50,
+     "spellId": 3320,
+     "name": "Rough Grinding Stone",
+     "guideCrafts": 26
+    },
+    {
+     "from": 50,
+     "to": 67,
+     "spellId": 3326,
+     "name": "Coarse Grinding Stone",
+     "guideCrafts": 36
+    },
+    {
+     "from": 67,
+     "to": 75,
+     "spellId": 3323,
+     "name": "Runed Copper Gauntlets",
+     "guideCrafts": 8
+    },
+    {
+     "from": 75,
+     "to": 95,
+     "spellId": 2666,
+     "name": "Runed Copper Belt",
+     "guideCrafts": 22
+    },
+    {
+     "from": 95,
+     "to": 100,
+     "spellId": 2672,
+     "name": "Patterned Bronze Bracers",
+     "guideCrafts": 5
+    },
+    {
+     "from": 100,
+     "to": 112,
+     "spellId": 3337,
+     "name": "Heavy Grinding Stone",
+     "guideCrafts": 36
+    },
+    {
+     "from": 112,
+     "to": 125,
+     "spellId": 2672,
+     "name": "Patterned Bronze Bracers",
+     "guideCrafts": 13
+    },
+    {
+     "from": 125,
+     "to": 140,
+     "spellId": 2742,
+     "name": "Bronze Shortsword",
+     "guideCrafts": 21
+    },
+    {
+     "from": 140,
+     "to": 170,
+     "spellId": 9985,
+     "name": "Bronze Warhammer",
+     "guideCrafts": 36
+    },
+    {
+     "from": 170,
+     "to": 175,
+     "spellId": 3501,
+     "name": "Green Iron Bracers",
+     "guideCrafts": 7
+    },
+    {
+     "from": 175,
+     "to": 180,
+     "spellId": 9920,
+     "name": "Solid Grinding Stone",
+     "guideCrafts": 7
+    },
+    {
+     "from": 180,
+     "to": 195,
+     "spellId": 7223,
+     "name": "Golden Scale Bracers",
+     "guideCrafts": 18
+    },
+    {
+     "from": 195,
+     "to": 210,
+     "spellId": 9928,
+     "name": "Heavy Mithril Gauntlet",
+     "guideCrafts": 19
+    },
+    {
+     "from": 210,
+     "to": 215,
+     "spellId": 9935,
+     "name": "Steel Plate Helm",
+     "guideCrafts": 6
+    },
+    {
+     "from": 215,
+     "to": 225,
+     "spellId": 9959,
+     "name": "Heavy Mithril Breastplate",
+     "guideCrafts": 10
+    },
+    {
+     "from": 225,
+     "to": 230,
+     "spellId": 16641,
+     "name": "Dense Sharpening Stone",
+     "guideCrafts": 5
+    },
+    {
+     "from": 230,
+     "to": 240,
+     "spellId": 9968,
+     "name": "Heavy Mithril Boots",
+     "guideCrafts": 14
+    },
+    {
+     "from": 240,
+     "to": 245,
+     "spellId": 16647,
+     "name": "Imperial Plate Belt",
+     "guideCrafts": 5
+    },
+    {
+     "from": 245,
+     "to": 270,
+     "spellId": 16649,
+     "name": "Imperial Plate Bracers",
+     "guideCrafts": 26
+    },
+    {
+     "from": 270,
+     "to": 290,
+     "spellId": 16657,
+     "name": "Imperial Plate Boots",
+     "guideCrafts": 20
+    },
+    {
+     "from": 290,
+     "to": 300,
+     "spellId": 16730,
+     "name": "Imperial Plate Leggings",
+     "guideCrafts": 10
+    }
+   ]
+  },
+  "165": {
+   "url": "https://wowforeverguides.com/professions/leatherworking/leveling",
+   "updated": "2026-11-10",
+   "steps": [
+    {
+     "from": 1,
+     "to": 30,
+     "spellId": 2881,
+     "name": "Light Leather",
+     "guideCrafts": 33
+    },
+    {
+     "from": 30,
+     "to": 45,
+     "spellId": 2152,
+     "name": "Light Armor Kit",
+     "guideCrafts": 21
+    },
+    {
+     "from": 45,
+     "to": 75,
+     "spellId": 3756,
+     "name": "Embossed Leather Gloves",
+     "guideCrafts": 31
+    },
+    {
+     "from": 75,
+     "to": 80,
+     "spellId": 20648,
+     "name": "Medium Leather",
+     "guideCrafts": 7
+    },
+    {
+     "from": 80,
+     "to": 90,
+     "spellId": 3817,
+     "name": "Cured Medium Hide",
+     "guideCrafts": 10
+    },
+    {
+     "from": 90,
+     "to": 100,
+     "spellId": 3763,
+     "name": "Fine Leather Belt",
+     "guideCrafts": 15
+    },
+    {
+     "from": 100,
+     "to": 115,
+     "spellId": 2168,
+     "name": "Dark Leather Cloak",
+     "guideCrafts": 16
+    },
+    {
+     "from": 115,
+     "to": 125,
+     "spellId": 3766,
+     "name": "Dark Leather Belt",
+     "guideCrafts": 10
+    },
+    {
+     "from": 125,
+     "to": 130,
+     "spellId": 20649,
+     "name": "Heavy Leather",
+     "guideCrafts": 7
+    },
+    {
+     "from": 130,
+     "to": 140,
+     "spellId": 3818,
+     "name": "Cured Heavy Hide",
+     "guideCrafts": 12
+    },
+    {
+     "from": 140,
+     "to": 155,
+     "spellId": 3764,
+     "name": "Hillman's Leather Gloves",
+     "guideCrafts": 18
+    },
+    {
+     "from": 155,
+     "to": 165,
+     "spellId": 7151,
+     "name": "Barbaric Shoulders",
+     "guideCrafts": 10
+    },
+    {
+     "from": 165,
+     "to": 195,
+     "spellId": 7156,
+     "name": "Guardian Gloves",
+     "guideCrafts": 34
+    },
+    {
+     "from": 195,
+     "to": 210,
+     "spellId": 10507,
+     "name": "Nightscape Headband",
+     "guideCrafts": 19
+    },
+    {
+     "from": 210,
+     "to": 225,
+     "spellId": 10548,
+     "name": "Nightscape Pants",
+     "guideCrafts": 15
+    },
+    {
+     "from": 225,
+     "to": 235,
+     "spellId": 10558,
+     "name": "Nightscape Boots",
+     "guideCrafts": 11
+    },
+    {
+     "from": 235,
+     "to": 265,
+     "spellId": 19049,
+     "name": "Wicked Leather Gauntlets",
+     "guideCrafts": 34
+    },
+    {
+     "from": 265,
+     "to": 300,
+     "spellId": 19082,
+     "name": "Runic Leather Headband",
+     "guideCrafts": 47
+    }
+   ]
+  },
+  "171": {
+   "url": "https://wowforeverguides.com/professions/alchemy/leveling",
+   "updated": "2026-11-09",
+   "steps": [
+    {
+     "from": 1,
+     "to": 10,
+     "spellId": 1245246,
+     "name": "Minor Arcane Elixir",
+     "guideCrafts": 9
+    },
+    {
+     "from": 10,
+     "to": 55,
+     "spellId": 7183,
+     "name": "Elixir of Minor Defense",
+     "guideCrafts": 45
+    },
+    {
+     "from": 55,
+     "to": 65,
+     "spellId": 2331,
+     "name": "Minor Mana Potion",
+     "guideCrafts": 10
+    },
+    {
+     "from": 65,
+     "to": 90,
+     "spellId": 2334,
+     "name": "Elixir of Minor Fortitude",
+     "guideCrafts": 27
+    },
+    {
+     "from": 90,
+     "to": 120,
+     "spellId": 3171,
+     "name": "Elixir of Wisdom",
+     "guideCrafts": 30
+    },
+    {
+     "from": 120,
+     "to": 130,
+     "spellId": 3173,
+     "name": "Lesser Mana Potion",
+     "guideCrafts": 10
+    },
+    {
+     "from": 130,
+     "to": 150,
+     "spellId": 7837,
+     "name": "Fire Oil",
+     "guideCrafts": 20
+    },
+    {
+     "from": 150,
+     "to": 165,
+     "spellId": 7845,
+     "name": "Elixir of Fire Power",
+     "guideCrafts": 15
+    },
+    {
+     "from": 165,
+     "to": 195,
+     "spellId": 3452,
+     "name": "Mana Potion",
+     "guideCrafts": 34
+    },
+    {
+     "from": 195,
+     "to": 230,
+     "spellId": 7259,
+     "name": "Nature Protection Potion",
+     "guideCrafts": 43
+    },
+    {
+     "from": 230,
+     "to": 240,
+     "spellId": 11448,
+     "name": "Greater Mana Potion",
+     "guideCrafts": 16
+    },
+    {
+     "from": 240,
+     "to": 265,
+     "spellId": 11460,
+     "name": "Draught of Detect Undead",
+     "guideCrafts": 33
+    },
+    {
+     "from": 265,
+     "to": 300,
+     "spellId": 17553,
+     "name": "Superior Mana Potion",
+     "guideCrafts": 49
+    }
+   ]
+  },
+  "185": {
+   "url": "https://wowforeverguides.com/professions/cooking/leveling",
+   "updated": "2026-10-18",
+   "steps": [
+    {
+     "from": 1,
+     "to": 45,
+     "spellId": 2538,
+     "name": "Charred Wolf Meat",
+     "guideCrafts": null
+    },
+    {
+     "from": 45,
+     "to": 100,
+     "spellId": 8607,
+     "name": "Smoked Bear Meat",
+     "guideCrafts": null
+    },
+    {
+     "from": 100,
+     "to": 140,
+     "spellId": 7755,
+     "name": "Bristle Whisker Catfish",
+     "guideCrafts": null
+    },
+    {
+     "from": 140,
+     "to": 170,
+     "spellId": 3376,
+     "name": "Curiously Tasty Omelet",
+     "guideCrafts": null
+    },
+    {
+     "from": 170,
+     "to": 190,
+     "spellId": 3399,
+     "name": "Tasty Lion Steak",
+     "guideCrafts": null
+    },
+    {
+     "from": 190,
+     "to": 215,
+     "spellId": 3400,
+     "name": "Soothing Turtle Bisque",
+     "guideCrafts": null
+    },
+    {
+     "from": 215,
+     "to": 240,
+     "spellId": 15910,
+     "name": "Heavy Kodo Stew",
+     "guideCrafts": null
+    },
+    {
+     "from": 240,
+     "to": 265,
+     "spellId": 18239,
+     "name": "Cooked Glossy Mightfish",
+     "guideCrafts": null
+    },
+    {
+     "from": 265,
+     "to": 300,
+     "spellId": 18243,
+     "name": "Nightfin Soup",
+     "guideCrafts": null
+    }
+   ]
+  },
+  "197": {
+   "url": "https://wowforeverguides.com/professions/tailoring/leveling",
+   "updated": "2026-11-09",
+   "steps": [
+    {
+     "from": 1,
+     "to": 30,
+     "spellId": 2963,
+     "name": "Bolt of Linen Cloth",
+     "guideCrafts": 30
+    },
+    {
+     "from": 30,
+     "to": 55,
+     "spellId": 8776,
+     "name": "Linen Belt",
+     "guideCrafts": 26
+    },
+    {
+     "from": 55,
+     "to": 80,
+     "spellId": 2964,
+     "name": "Bolt of Woolen Cloth",
+     "guideCrafts": 31
+    },
+    {
+     "from": 80,
+     "to": 95,
+     "spellId": 2402,
+     "name": "Woolen Cape",
+     "guideCrafts": 20
+    },
+    {
+     "from": 95,
+     "to": 100,
+     "spellId": 3848,
+     "name": "Double-Stitched Woolen Shoulders",
+     "guideCrafts": 5
+    },
+    {
+     "from": 100,
+     "to": 120,
+     "spellId": 3839,
+     "name": "Bolt of Silk Cloth",
+     "guideCrafts": 40
+    },
+    {
+     "from": 120,
+     "to": 140,
+     "spellId": 3852,
+     "name": "Gloves of Meditation",
+     "guideCrafts": 26
+    },
+    {
+     "from": 140,
+     "to": 150,
+     "spellId": 3865,
+     "name": "Bolt of Mageweave",
+     "guideCrafts": 17
+    },
+    {
+     "from": 150,
+     "to": 170,
+     "spellId": 8791,
+     "name": "Crimson Silk Vest",
+     "guideCrafts": 20
+    },
+    {
+     "from": 170,
+     "to": 190,
+     "spellId": 8799,
+     "name": "Crimson Silk Pantaloons",
+     "guideCrafts": 24
+    },
+    {
+     "from": 190,
+     "to": 215,
+     "spellId": 12053,
+     "name": "Black Mageweave Gloves",
+     "guideCrafts": 37
+    },
+    {
+     "from": 215,
+     "to": 225,
+     "spellId": 12065,
+     "name": "Mageweave Bag",
+     "guideCrafts": 21
+    },
+    {
+     "from": 225,
+     "to": 240,
+     "spellId": 18402,
+     "name": "Runecloth Belt",
+     "guideCrafts": 21
+    },
+    {
+     "from": 240,
+     "to": 265,
+     "spellId": 18417,
+     "name": "Runecloth Gloves",
+     "guideCrafts": 37
+    }
+   ]
+  },
+  "202": {
+   "url": "https://wowforeverguides.com/professions/engineering/leveling",
+   "updated": "2026-11-10",
+   "steps": [
+    {
+     "from": 1,
+     "to": 30,
+     "spellId": 3918,
+     "name": "Rough Blasting Powder",
+     "guideCrafts": 60
+    },
+    {
+     "from": 30,
+     "to": 50,
+     "spellId": 3922,
+     "name": "Handful of Copper Bolts",
+     "guideCrafts": 30
+    },
+    {
+     "from": 50,
+     "to": 51,
+     "spellId": 7430,
+     "name": "Arclight Spanner",
+     "guideCrafts": 1
+    },
+    {
+     "from": 51,
+     "to": 75,
+     "spellId": 3923,
+     "name": "Rough Copper Bomb",
+     "guideCrafts": 30
+    },
+    {
+     "from": 75,
+     "to": 90,
+     "spellId": 3929,
+     "name": "Coarse Blasting Powder",
+     "guideCrafts": 48
+    },
+    {
+     "from": 90,
+     "to": 100,
+     "spellId": 3931,
+     "name": "Coarse Dynamite",
+     "guideCrafts": 16
+    },
+    {
+     "from": 100,
+     "to": 105,
+     "spellId": 3973,
+     "name": "Silver Contact",
+     "guideCrafts": 5
+    },
+    {
+     "from": 105,
+     "to": 125,
+     "spellId": 3938,
+     "name": "Bronze Tube",
+     "guideCrafts": 26
+    },
+    {
+     "from": 125,
+     "to": 135,
+     "spellId": 3978,
+     "name": "Standard Scope",
+     "guideCrafts": 10
+    },
+    {
+     "from": 135,
+     "to": 140,
+     "spellId": 3945,
+     "name": "Heavy Blasting Powder",
+     "guideCrafts": 30
+    },
+    {
+     "from": 140,
+     "to": 150,
+     "spellId": 3942,
+     "name": "Whirring Bronze Gizmo",
+     "guideCrafts": 15
+    },
+    {
+     "from": 150,
+     "to": 160,
+     "spellId": 3953,
+     "name": "Bronze Framework",
+     "guideCrafts": 15
+    },
+    {
+     "from": 160,
+     "to": 175,
+     "spellId": 3955,
+     "name": "Explosive Sheep",
+     "guideCrafts": 15
+    },
+    {
+     "from": 175,
+     "to": 194,
+     "spellId": 12585,
+     "name": "Solid Blasting Powder",
+     "guideCrafts": 52
+    },
+    {
+     "from": 194,
+     "to": 195,
+     "spellId": 12590,
+     "name": "Gyromatic Micro-Adjustor",
+     "guideCrafts": 2
+    },
+    {
+     "from": 195,
+     "to": 200,
+     "spellId": 12589,
+     "name": "Mithril Tube",
+     "guideCrafts": 6
+    },
+    {
+     "from": 200,
+     "to": 215,
+     "spellId": 12591,
+     "name": "Unstable Trigger",
+     "guideCrafts": 19
+    },
+    {
+     "from": 215,
+     "to": 238,
+     "spellId": 12599,
+     "name": "Mithril Casing",
+     "guideCrafts": 34
+    },
+    {
+     "from": 238,
+     "to": 250,
+     "spellId": 12619,
+     "name": "Hi-Explosive Bomb",
+     "guideCrafts": 16
+    },
+    {
+     "from": 250,
+     "to": 260,
+     "spellId": 19788,
+     "name": "Dense Blasting Powder",
+     "guideCrafts": 30
+    },
+    {
+     "from": 260,
+     "to": 285,
+     "spellId": 19791,
+     "name": "Thorium Widget",
+     "guideCrafts": 26
+    },
+    {
+     "from": 285,
+     "to": 300,
+     "spellId": 19795,
+     "name": "Thorium Tube",
+     "guideCrafts": 16
+    }
+   ]
+  },
+  "333": {
+   "url": "https://wowforeverguides.com/professions/enchanting/leveling",
+   "updated": "2026-11-10",
+   "steps": [
+    {
+     "from": 1,
+     "to": 2,
+     "spellId": 7421,
+     "name": "Runed Copper Rod",
+     "guideCrafts": 1
+    },
+    {
+     "from": 2,
+     "to": 20,
+     "spellId": 7418,
+     "name": "Enchant Bracer - Inferior Stamina",
+     "guideCrafts": 18
+    },
+    {
+     "from": 20,
+     "to": 70,
+     "spellId": 7420,
+     "name": "Enchant Chest - Inferior Stamina",
+     "guideCrafts": 50
+    },
+    {
+     "from": 70,
+     "to": 109,
+     "spellId": 7426,
+     "name": "Enchant Chest - Minor Absorption",
+     "guideCrafts": 46
+    },
+    {
+     "from": 109,
+     "to": 110,
+     "spellId": 7795,
+     "name": "Runed Silver Rod",
+     "guideCrafts": 1
+    },
+    {
+     "from": 110,
+     "to": 130,
+     "spellId": 7771,
+     "name": "Enchant Cloak - Minor Protection",
+     "guideCrafts": 28
+    },
+    {
+     "from": 130,
+     "to": 150,
+     "spellId": 7863,
+     "name": "Enchant Boots - Minor Stamina",
+     "guideCrafts": 20
+    },
+    {
+     "from": 150,
+     "to": 151,
+     "spellId": 13628,
+     "name": "Runed Golden Rod",
+     "guideCrafts": 1
+    },
+    {
+     "from": 151,
+     "to": 165,
+     "spellId": 25125,
+     "name": "Minor Mana Oil",
+     "guideCrafts": 15
+    },
+    {
+     "from": 165,
+     "to": 200,
+     "spellId": 13637,
+     "name": "Enchant Boots - Lesser Agility",
+     "guideCrafts": 43
+    },
+    {
+     "from": 200,
+     "to": 201,
+     "spellId": 13702,
+     "name": "Runed Truesilver Rod",
+     "guideCrafts": 1
+    },
+    {
+     "from": 201,
+     "to": 220,
+     "spellId": 25126,
+     "name": "Lesser Wizard Oil",
+     "guideCrafts": 23
+    },
+    {
+     "from": 220,
+     "to": 225,
+     "spellId": 13746,
+     "name": "Enchant Cloak - Greater Defense",
+     "guideCrafts": 5
+    },
+    {
+     "from": 225,
+     "to": 230,
+     "spellId": 13815,
+     "name": "Enchant Gloves - Agility",
+     "guideCrafts": 5
+    },
+    {
+     "from": 230,
+     "to": 235,
+     "spellId": 13836,
+     "name": "Enchant Boots - Stamina",
+     "guideCrafts": 5
+    },
+    {
+     "from": 235,
+     "to": 250,
+     "spellId": 13858,
+     "name": "Enchant Chest - Superior Stamina",
+     "guideCrafts": 17
+    },
+    {
+     "from": 250,
+     "to": 265,
+     "spellId": 25127,
+     "name": "Lesser Mana Oil",
+     "guideCrafts": 16
+    },
+    {
+     "from": 265,
+     "to": 294,
+     "spellId": 20017,
+     "name": "Enchant Shield - Greater Stamina",
+     "guideCrafts": 31
+    },
+    {
+     "from": 294,
+     "to": 295,
+     "spellId": 20051,
+     "name": "Runed Arcanite Rod",
+     "guideCrafts": 1
+    },
+    {
+     "from": 295,
+     "to": 300,
+     "spellId": 20015,
+     "name": "Enchant Cloak - Superior Defense",
+     "guideCrafts": 5
+    }
+   ]
+  }
+ }
+}

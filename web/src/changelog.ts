@@ -14,6 +14,22 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-16', kind: 'nuevo', title: 'Rutas de guía para subir profesión',
+    items: [
+      'Subir nivel muestra por defecto la ruta de una guía publicada para WoW Forever (wowforeverguides.com): los mismos tramos y recetas, con las fabricaciones, la lista de compra y el costo calculados con los precios actuales. «Más rápida» y «Más barata» siguen disponibles como alternativas.',
+      'Si la receta de la guía aún no da puntos en un nivel según los datos de Forever, se sigue con la anterior; lo que la guía no cubre (por ejemplo, Sastrería desde 265) se completa con la ruta más rápida y se marca «calculado». Minería no tiene guía: muestra la más rápida.',
+      'Los pasos con recetas que no enseña el instructor dicen en el resumen qué receta hay que conseguir y dónde.',
+    ],
+  },
+  {
+    date: '2026-11-16', kind: 'nuevo', title: '¿Necesita receta? y dónde se consigue',
+    items: [
+      'El detalle de cada receta dice si la enseña el instructor (nivel y costo) o si hay que conseguir el objeto de receta (patrón, diseño, fórmula…): cuál es, si se compra a un vendedor y por cuánto, si cae de botín o es de misión, con enlace a Wowhead para ver quién la vende y dónde.',
+      'Las rutas para subir de nivel muestran lo mismo en cada paso que usa una receta que no enseña el instructor.',
+      'Las consultas desde Claude («detalle_receta» y «ruta_subir_nivel») también lo indican.',
+    ],
+  },
+  {
     date: '2026-11-15', kind: 'mejora', title: 'Ruta más rápida sin gastar de más',
     items: [
       'La ruta más rápida sigue buscando el menor tiempo (casi una fabricación por punto, como las guías), pero entre recetas que tardan lo mismo elige la más barata. Antes podía elegir una más cara sin ganar tiempo.',

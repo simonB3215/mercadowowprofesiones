@@ -15,7 +15,7 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
-import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds } from './leveling.js';
+import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo } from './leveling.js';
 import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, syncCharacterProfile, ownedCharacter, characterProfessions } from './battlenet.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isPublicPath } from './auth.js';
 
@@ -421,7 +421,8 @@ route('GET', '/api/recipes/:id', async (_r, p, u, db) => {
   const ctx = ctxFrom(u);
   const { base, profile, ectx, rawRecipe } = await evaluateOne(db, ctx, int(p.id)!, u.searchParams.get('profileId'), {});
   const sourcing = await sourcingFor(db, ctx, base, profile);
-  return { evaluation: base, sourcing, market: ectx.snap.runs, settings: { ...ectx.settings, commission: commissionFor(ectx.settings, ctx.realm) }, rawRecipe };
+  const learn = await learnInfo(db, ctx.version, int(p.id)!);
+  return { evaluation: base, sourcing, learn, market: ectx.snap.runs, settings: { ...ectx.settings, commission: commissionFor(ectx.settings, ctx.realm) }, rawRecipe };
 });
 
 route('POST', '/api/calculate', async (req, _p, _u, db) => {
@@ -532,9 +533,10 @@ route('GET', '/api/leveling', async (_r, _p, u, db) => {
 });
 
 /** «rapida» (por defecto) o «barata»: la prioridad la elige el usuario. */
-function levelingMode(v: string | null): 'rapida' | 'barata' {
-  if (v === null || v === '') return 'rapida';
-  if (v !== 'rapida' && v !== 'barata') throw new HttpError(400, 'Modo inválido: «rapida» o «barata».');
+function levelingMode(v: string | null): 'guia' | 'rapida' | 'barata' | undefined {
+  // Sin modo: la guía de la profesión si la hay (la decide levelingPlan).
+  if (v === null || v === '') return undefined;
+  if (v !== 'guia' && v !== 'rapida' && v !== 'barata') throw new HttpError(400, 'Modo inválido: «guia», «rapida» o «barata».');
   return v;
 }
 

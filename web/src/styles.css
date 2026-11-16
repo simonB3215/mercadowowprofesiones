@@ -793,3 +793,4 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .lv-status.info { color: var(--color-text); }
 .lv-status.info svg { color: var(--gold); }
 .rt-pattern { margin-left: 6px; vertical-align: middle; }
+.rt-need { margin-top: 4px; line-height: 1.4; }
