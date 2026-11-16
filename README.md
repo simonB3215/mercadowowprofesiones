@@ -189,6 +189,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/professions`, `/api/coverage` | Catálogo y cobertura |
 | GET | `/api/opportunities` | Comparador con filtros, orden y paginación |
 | GET | `/api/recipes/{id}` | Detalle, desglose y comparación comprar/fabricar |
+| GET | `/api/buy-or-craft?recipeId=…` o `?itemId=…&qty=&profileId=` | ¿Comprar el objeto terminado o fabricarlo? (para usarlo, no venderlo) |
 | POST | `/api/calculate` | Escenario con valores manuales |
 | POST | `/api/crafting-plan` | Lista de fabricación y compras |
 | GET | `/api/materials`, `/api/materials/{id}` | Vender un material frente a usarlo |

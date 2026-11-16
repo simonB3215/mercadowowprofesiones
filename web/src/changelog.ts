@@ -14,6 +14,16 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-16', kind: 'nuevo', title: '¿Comprarlo o fabricarlo?',
+    items: [
+      'Nueva sección «Comprar o fabricar» (menú Ganar oro): eliges un objeto que necesitas para usarlo (pociones, comida…) y cuántas unidades, y te dice si sale más barato comprarlo en la subasta o fabricarlo, cuánto te ahorras y por qué.',
+      'Fabricar cuenta cada material por lo más barato entre comprarlo o fabricarlo tú; los que ya tienes valen lo que sacarías vendiéndolos. Si tu perfil no conoce la receta, se suma lo que cuesta (instructor, vendedor o subasta) y se indica desde cuántas unidades compensa.',
+      'Avisa si hay menos unidades en venta de las que necesitas, y si el objeto se liga al recogerlo (solo se puede fabricar). Si la diferencia es menor del 5 %, dice que da igual.',
+      'El detalle de cada receta incluye el mismo bloque, con la cantidad que quieras.',
+      'Arreglado: en los buscadores de objetos se borraba lo escrito tras haber elegido uno, y la lista de resultados quedaba tapada por la tarjeta de abajo.',
+    ],
+  },
+  {
     date: '2026-11-16', kind: 'nuevo', title: 'Rutas de guía para subir profesión',
     items: [
       'Subir nivel muestra por defecto la ruta de una guía publicada para WoW Forever (wowforeverguides.com): los mismos tramos y recetas, con las fabricaciones, la lista de compra y el costo calculados con los precios actuales. «Más rápida» y «Más barata» siguen disponibles como alternativas.',

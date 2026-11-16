@@ -9,14 +9,15 @@ import { MagnifyingGlass } from '@phosphor-icons/react';
 
 interface Hit { item_id: number; name: string; quality: string | null }
 
-export function ItemPicker({ label, value, onPick }: { label: string; value: { id: number; name: string } | null; onPick: (v: { id: number; name: string } | null) => void }) {
+export function ItemPicker({ label, value, onPick, craftable }: { label: string; value: { id: number; name: string } | null; onPick: (v: { id: number; name: string } | null) => void; craftable?: boolean }) {
   const { ctx } = useApp();
   const [text, setText] = useState(value?.name ?? '');
   const [hits, setHits] = useState<Hit[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const listId = useId();
-  useEffect(() => { setText(value?.name ?? ''); }, [value?.id]);
+  // Solo al elegir un objeto: si se borra la elección porque se está escribiendo, no se pisa el texto.
+  useEffect(() => { if (value) setText(value.name); }, [value?.id]);
   useEffect(() => {
     const q = text.trim();
     if (value && q === value.name) { setHits([]); return; }
@@ -24,7 +25,7 @@ export function ItemPicker({ label, value, onPick }: { label: string; value: { i
     if (q.length < 2) { setHits([]); return; }
     let live = true;
     const t = setTimeout(() => {
-      api(`/api/items?version=${ctx.version}&search=${encodeURIComponent(q)}`).then((r) => { if (live) { setHits(r.items); setActive(-1); } }).catch(() => live && setHits([]));
+      api(`/api/items?version=${ctx.version}&search=${encodeURIComponent(q)}${craftable ? '&craftable=1' : ''}`).then((r) => { if (live) { setHits(r.items); setActive(-1); } }).catch(() => live && setHits([]));
     }, 250);
     return () => { live = false; clearTimeout(t); };
   }, [text, ctx.version]);

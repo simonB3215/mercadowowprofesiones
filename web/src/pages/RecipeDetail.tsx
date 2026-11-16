@@ -4,6 +4,7 @@ import { ItemLabel, WowIcon, useAsset, QualityText } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { FavButton } from '../favorites.js';
 import { RecipeItemInfo } from '../RouteTools.js';
+import { BuyOrCraftCard } from '../BuyOrCraft.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass, Coins, Tag, TrendUp, ChartLineUp } from '@phosphor-icons/react';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
 
@@ -183,6 +184,7 @@ export function RecipeDetail({ id }: { id: number }) {
       <RecipeHeader e={e} />
       <Summary e={e} commission={d.data.settings.commission} />
       <LearnCard l={d.data.learn} />
+      {e.output && <BuyOrCraftCard recipeId={id} />}
 
       <div className="grid grid-2">
         <Breakdown e={e} title={scenario ? 'Cálculo con los precios actuales' : 'Cálculo detallado'} />

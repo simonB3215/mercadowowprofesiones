@@ -12,6 +12,7 @@ import { buildEvalContext, evaluateRecipe, loadRecipes, loadSettings, resolvePri
 import { requiredProfessions, PROFESSION_ES } from './catalog/rules.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
+import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -425,6 +426,95 @@ route('GET', '/api/recipes/:id', async (_r, p, u, db) => {
   return { evaluation: base, sourcing, learn, market: ectx.snap.runs, settings: { ...ectx.settings, commission: commissionFor(ectx.settings, ctx.realm) }, rawRecipe };
 });
 
+// ---------------------------------------------------------------------------
+// ¿Comprar el objeto o fabricarlo? (para usarlo, no para venderlo)
+// ---------------------------------------------------------------------------
+
+async function buyOrCraftFor(db: Db, ctx: MarketContext, recipeId: number, quantity: number, profile: Profile | null) {
+  const recipes = await loadRecipes(db, ctx.version, { recipeIds: [recipeId] });
+  if (!recipes.length) throw new HttpError(404, 'Receta no encontrada en el catálogo de esta versión.');
+  const ectx = await buildEvalContext(db, ctx, recipes, profile);
+  const ev = evaluateRecipe(recipes[0], ectx);
+  const sourcing = await sourcingFor(db, ctx, ev, profile);
+  const learn = await learnInfo(db, ctx.version, recipeId);
+  const outId = ev.output?.itemId ?? null;
+  const buy = outId !== null ? resolvePrice(ectx.snap, outId, ectx.settings.buySource) : null;
+  const cheapest = outId !== null ? resolvePrice(ectx.snap, outId, 'minBuyout') : null;
+  // Costo por unidad fabricando: cada material por lo más barato entre comprarlo o fabricarlo.
+  let craftUnit: Q | null = null;
+  const complete = ev.unitsPerRun !== null && ev.reagents.length > 0 && ev.reagents.every((r) => r.quantity !== null);
+  if (complete) {
+    let total: Q | null = Q.zero;
+    for (const r of ev.reagents) {
+      const n = sourcing.find((s) => s.itemId === r.itemId)?.node;
+      total = total && n?.unitCost ? total.add(n.unitCost.mul(r.quantity!)) : null;
+    }
+    craftUnit = total ? total.div(ev.unitsPerRun!) : null;
+  }
+  // Lo que cuesta aprender la receta: instructor, objeto de receta del vendedor o, si no, su precio en la subasta.
+  let learnCost: Q | null = null;
+  let learnFrom: 'instructor' | 'vendedor' | 'subasta' | 'inicial' | null = null;
+  if (learn?.availability === 'inicial') { learnCost = Q.zero; learnFrom = 'inicial'; }
+  else if (learn?.availability === 'instructor') { learnCost = Q.parse(learn.trainingCost); learnFrom = 'instructor'; }
+  else if (learn?.recipeItem) {
+    if (learn.recipeItem.buyPrice) { learnCost = Q.parse(learn.recipeItem.buyPrice); learnFrom = 'vendedor'; }
+    else {
+      const p = resolvePrice(ectx.snap, learn.recipeItem.itemId, ectx.settings.buySource).copper;
+      if (p) { learnCost = p; learnFrom = 'subasta'; }
+    }
+  }
+  // Sin perfil no se sabe si la conoces: se compara sin aprenderla y se indica desde cuántas unidades compensaría.
+  const needsLearning = ev.character === 'no_conoce' || ev.character === 'requisito_no_cumplido';
+  const result = buyOrCraft({
+    quantity, buyUnit: buy?.copper ?? null, buyAvailable: buy?.supply?.quantity ?? null,
+    canBuy: ev.channel !== 'vinculado', craftUnit, learnCost, needsLearning,
+  });
+  if (ev.channel === 'servicio') result.reasons.unshift('La receta no produce un objeto: no hay nada que comprar.');
+  return {
+    recipeId: ev.recipeId, name: ev.name, profession: ev.profession, professionId: ev.professionId, output: ev.output, unitsPerRun: ev.unitsPerRun, quantity,
+    buyUnit: buy?.copper ?? null, buyField: buy?.field ?? null, buyScope: buy?.scope ?? null, buySupply: buy?.supply ?? null,
+    cheapestNow: cheapest?.copper ?? null, craftUnit, character: ev.character, needsLearning,
+    learn: learn ? { availability: learn.availability, cost: learnCost, from: learnFrom, learnedAt: learn.learnedAt, recipeItem: learn.recipeItem } : null,
+    materials: ev.reagents.map((r) => {
+      const n = sourcing.find((s) => s.itemId === r.itemId)?.node;
+      return { itemId: r.itemId, name: r.name, quantity: r.quantity, choice: n?.choice ?? 'sin_datos', unitCost: n?.unitCost ?? null, owned: r.owned };
+    }),
+    ...result,
+  };
+}
+
+function quantityParam(u: URL) {
+  const n = int(u.searchParams.get('qty'), 1)!;
+  if (n < 1 || n > 10000) throw new HttpError(400, 'La cantidad debe estar entre 1 y 10000.');
+  return n;
+}
+
+/** Comprar o fabricar por receta (recipeId) o por objeto (itemId: compara todas las recetas que lo fabrican). */
+route('GET', '/api/buy-or-craft', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const qty = quantityParam(u);
+  const profile = await loadProfile(db, u.searchParams.get('profileId'));
+  const recipeId = int(u.searchParams.get('recipeId'));
+  const itemId = int(u.searchParams.get('itemId'));
+  let ids: number[];
+  if (recipeId) ids = [recipeId];
+  else if (itemId) {
+    const rs = await db.query<any>(
+      `select id from recipe where game_version=$1 and fetch_error is null and (crafted_item_id=$2 or alliance_item_id=$2 or horde_item_id=$2) order by id limit 10`, [ctx.version, itemId]);
+    ids = rs.map((r) => Number(r.id));
+  } else throw new HttpError(400, 'Indica recipeId o itemId.');
+  const options = [];
+  for (const id of ids) options.push(await buyOrCraftFor(db, ctx, id, qty, profile));
+  // Primero la receta más barata de fabricar (las que no tienen precio, al final).
+  options.sort((a, b) => (!a.craftTotal ? 1 : !b.craftTotal ? -1 : a.craftTotal.cmp(b.craftTotal)));
+  let item = null;
+  if (itemId) {
+    const it = await db.query<any>(`select id, name, quality from item where game_version=$1 and id=$2`, [ctx.version, itemId]);
+    item = it[0] ? { itemId: Number(it[0].id), name: it[0].name, quality: it[0].quality } : { itemId, name: null, quality: null };
+  }
+  return { ctx, quantity: qty, item, profile: profile ? { id: profile.id, name: profile.name } : null, options };
+});
+
 route('POST', '/api/calculate', async (req, _p, _u, db) => {
   const b = await body(req);
   const ctx = ctxFrom(b);
@@ -503,9 +593,12 @@ route('GET', '/api/items', async (_r, _p, u, db) => {
   }
   const search = (u.searchParams.get('search') ?? '').trim().toLowerCase().slice(0, 60);
   if (search.length < 2) return { items: [] };
+  // craftable=1: solo objetos que fabrica alguna receta (buscador de «Comprar o fabricar»).
+  const craftable = u.searchParams.get('craftable') === '1'
+    ? ` and exists (select 1 from recipe r where r.game_version=item.game_version and r.fetch_error is null and item.id in (r.crafted_item_id, r.alliance_item_id, r.horde_item_id))` : '';
   const rows = await db.query<any>(
     `select id as item_id, name, quality from item
-     where game_version=$1 and name is not null and (lower(name) like '%' || $2 || '%' or lower(coalesce(name_en,'')) like '%' || $2 || '%')
+     where game_version=$1 and name is not null${craftable} and (lower(name) like '%' || $2 || '%' or lower(coalesce(name_en,'')) like '%' || $2 || '%')
      order by (lower(name) = $2) desc, (lower(name) like $2 || '%') desc, length(name), id limit 20`,
     [version, search],
   );

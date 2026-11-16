@@ -196,6 +196,26 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     expect((await api('GET', '/api/items?version=forever&search=h')).json.items).toEqual([]);
   });
 
+  it('comprar o fabricar: por receta, por objeto y objeto ligado', async () => {
+    const boc = (x: string) => api('GET', `/api/buy-or-craft?${qs}${x}`);
+    const r = await boc('&recipeId=800003&qty=10');
+    expect(r.status).toBe(200);
+    const o = r.json.options[0];
+    // Comprar: 60000 × 10; fabricar: como mucho 11600 × 10 (materiales al mejor precio)
+    expect(q(o.buyTotal).eq(Q.of(600000))).toBe(true);
+    expect(q(o.craftTotal).cmp(Q.of(116000))).toBeLessThanOrEqual(0);
+    expect(o.verdict).toBe('fabricar');
+    const byItem = await boc('&itemId=900005&qty=10');
+    expect(byItem.json.options.map((x: any) => x.recipeId)).toContain(800003);
+    expect(byItem.json.item.itemId).toBe(900005);
+    expect((await boc('&recipeId=800005')).json.options[0].verdict).toBe('solo_fabricar');
+    expect((await boc('&recipeId=800003&qty=0')).status).toBe(400);
+    expect((await boc('')).status).toBe(400);
+    const craftable = await api('GET', '/api/items?version=forever&search=prueba&craftable=1');
+    expect(craftable.json.items.some((i: any) => i.item_id === 900005)).toBe(true);
+    expect(craftable.json.items.some((i: any) => i.item_id === 900004)).toBe(false);
+  });
+
   it('herramientas manuales validan probabilidades', async () => {
     const r = await api('POST', '/api/tools/expected', { scenarios: [{ label: 'a', probability: '0.5', netRevenueGold: '10' }] });
     expect(r.json.expected).toBeNull();
