@@ -75,3 +75,19 @@ describe('Reutilización de recetas (PB-22)', () => {
     expect(una.json.warnings.join(' ')).not.toMatch(/reutilización/);
   });
 });
+
+describe('oro al día según la espera (Transmutaciones)', () => {
+  it('24 h ÷ espera, con un máximo de fabricaciones; espera desconocida → null', async () => {
+    const { craftsPerDay, goldPerDay, MAX_CRAFTS_PER_DAY } = await import('../src/engine/cooldown.js');
+    const { Q } = await import('../src/engine/rational.js');
+    expect(craftsPerDay(169200)!.eq(Q.of(24, 47))).toBe(true); // 47 h
+    expect(craftsPerDay(82800)!.eq(Q.of(24, 23))).toBe(true); // 23 h
+    expect(craftsPerDay(600)!.eq(Q.of(MAX_CRAFTS_PER_DAY))).toBe(true); // 10 min → tope
+    expect(craftsPerDay(0)!.eq(Q.of(MAX_CRAFTS_PER_DAY))).toBe(true);
+    expect(craftsPerDay(null)).toBeNull();
+    // 44,9167 o por fabricación cada 47 h ≈ 22,94 o al día
+    expect(goldPerDay(Q.parse('449167'), 169200)!.toDecimal(0)).toBe('229361');
+    expect(goldPerDay(null, 82800)).toBeNull();
+    expect(goldPerDay(Q.of(-1000), 82800)!.sign()).toBe(-1);
+  });
+});

@@ -14,6 +14,7 @@ import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { buildItemTooltip } from './itemTooltip.js';
+import { transmutations } from './transmutations.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -489,6 +490,13 @@ function quantityParam(u: URL) {
   if (n < 1 || n > 10000) throw new HttpError(400, 'La cantidad debe estar entre 1 y 10000.');
   return n;
 }
+
+/** Transmutaciones y demás recetas con reutilización, con la ganancia por fabricación y el oro al día. */
+route('GET', '/api/transmutations', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const profile = await loadProfile(db, u.searchParams.get('profileId'));
+  return { ctx, profile: profile ? { id: profile.id, name: profile.name } : null, ...(await transmutations(db, ctx, profile)) };
+});
 
 /** Comprar o fabricar por receta (recipeId) o por objeto (itemId: compara todas las recetas que lo fabrican). */
 route('GET', '/api/buy-or-craft', async (_r, _p, u, db) => {

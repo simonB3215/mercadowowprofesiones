@@ -14,6 +14,15 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-17', kind: 'nuevo', title: 'Transmutaciones',
+    items: [
+      'Nueva sección «Transmutaciones» (menú Ganar oro): todas las recetas que solo se pueden fabricar cada cierto tiempo, de cualquier profesión (las transmutaciones de Alquimia y la Tela lunar de Sastrería), con su espera, costo, precio de venta y ganancia por fabricación.',
+      'Calcula el oro al día según la espera (por ejemplo, la arcanita se hace cada 47 h: media fabricación al día) y destaca arriba las que más dan.',
+      'Indica cómo se aprende cada una, si tu perfil ya la conoce y si se vende poco. Se puede filtrar por «solo con ganancia» y «solo las que conoce el perfil».',
+      'Aviso: no está confirmado si en WoW Forever las transmutaciones comparten la espera; si la comparten, no se puede sumar el oro de varias.',
+    ],
+  },
+  {
     date: '2026-11-17', kind: 'nuevo', title: 'Descripción de los objetos al pasar el ratón',
     items: [
       'Al pasar el ratón por encima de cualquier objeto o material (icono o nombre) aparece su descripción, como en el juego: vinculación, ranura y tipo, armadura o daño, estadísticas, efecto de uso, nivel requerido y durabilidad.',

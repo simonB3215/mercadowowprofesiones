@@ -189,6 +189,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/professions`, `/api/coverage` | Catálogo y cobertura |
 | GET | `/api/opportunities` | Comparador con filtros, orden y paginación |
 | GET | `/api/recipes/{id}` | Detalle, desglose y comparación comprar/fabricar |
+| GET | `/api/transmutations?version=&region=&realm=&profileId=` | Recetas con reutilización (transmutaciones, Tela lunar…) con ganancia por fabricación y oro al día |
 | GET | `/api/items/{id}/tooltip?version=&region=&realm=` | Descripción del objeto para la ventana al pasar el ratón (y su precio en la casa si se indica) |
 | GET | `/api/buy-or-craft?recipeId=…` o `?itemId=…&qty=&profileId=` | ¿Comprar el objeto terminado o fabricarlo? (para usarlo, no venderlo) |
 | POST | `/api/calculate` | Escenario con valores manuales |

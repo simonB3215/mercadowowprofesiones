@@ -820,3 +820,8 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .item-tip .it-market { border-top: 1px solid rgba(138, 122, 82, 0.4); padding-top: 6px; }
 .item-tip .q-poor { color: var(--q-poor); } .item-tip .q-common { color: var(--q-common); } .item-tip .q-uncommon { color: var(--q-uncommon); }
 .item-tip .q-rare { color: var(--q-rare); } .item-tip .q-epic { color: var(--q-epic); } .item-tip .q-legendary { color: var(--q-legendary); }
+
+/* Transmutaciones */
+.tm-best-item { display: flex; flex-direction: column; gap: 4px; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); text-decoration: none; color: inherit; min-width: 0; }
+.tm-best-item:hover { border-color: var(--gold-line); }
+.tm-loss td { opacity: 0.8; }

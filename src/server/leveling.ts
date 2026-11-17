@@ -257,13 +257,31 @@ export async function learnInfo(db: Db, version: string, recipeId: number) {
   const key = reagentKey(c.crafted_item_id === null ? null : Number(c.crafted_item_id), reagents.map((g) => ({ itemId: Number(g.itemId), quantity: Number(g.quantity) })));
   const hits = prof.recipes.filter((w: WhRecipe) => reagentKey(w.creates?.itemId ?? null, w.reagents) === key);
   if (hits.length !== 1) return null;
-  const w = hits[0];
+  return learnFromWh(hits[0]);
+}
+
+/** Cómo se aprende una receta de Wowhead: instructor (nivel y costo), al empezar, u objeto de receta (cuál y dónde). */
+function learnFromWh(w: WhRecipe) {
   const availability = availabilityOf(w);
   return {
     spellId: w.id, availability, learnedAt: availability === 'inicial' ? 1 : w.learnedAt, sources: w.source,
     trainingCost: availability === 'instructor' ? String(Math.max(0, Math.floor(w.trainingCost || 0))) : '0',
     wowheadUrl: `https://www.wowhead.com/forever/spell=${w.id}`, recipeItem: availability === 'otra' ? recipeItemFor(w.id) : null,
   };
+}
+
+/**
+ * Recetas con reutilización (transmutaciones, Tela lunar…) que crean un objeto, de todas las profesiones (PT-01).
+ * La espera es la comprobada en Wowhead; las que no crean objeto (p. ej. Fogata básica) se excluyen.
+ */
+export function cooldownRecipes(version: string) {
+  if (version !== DATA.gameVersion) return [];
+  return DATA.professions.flatMap((p) => p.recipes
+    .filter((r) => (COOLDOWNS.get(r.id) ?? 0) > 0 && r.creates?.itemId && r.reagents.length)
+    .map((r) => ({
+      professionId: p.professionId, spellId: r.id, nameEn: r.name, cooldown: COOLDOWNS.get(r.id)!,
+      createsItemId: r.creates!.itemId, key: reagentKey(r.creates!.itemId, r.reagents), tools: SPELL_TOOLS.get(r.id) ?? [], learn: learnFromWh(r),
+    })));
 }
 
 async function professionName(db: Db, version: string, prof: WhProfession) {

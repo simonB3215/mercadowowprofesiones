@@ -788,3 +788,5 @@ Como jugador, quiero preguntar a Claude qué transmutar hoy.
 **Aceptación:** Pruebas del cálculo de oro al día (esperas de 10 min, 23 h, 47 h y 95 h; tope de fabricaciones; espera desconocida), del grupo de espera y de la API sobre el catálogo de prueba. Entrada en `web/src/changelog.ts`, README (API) y `ESTADO_PROYECTO.md`. Revisado en el navegador a 1280 y 375 px con precios reales.
 
 **Orden propuesto:** PT-01 → PT-02 → PT-03 → PT-04 → PT-10 (primera versión útil); después PT-05, PT-07, PT-06; por último PT-08 y PT-09.
+
+**Estado (17-11-2026):** PT-01, PT-03, PT-04 y PT-10 hechos. PT-02 sin resolver: Wowhead no publica la categoría de reutilización (tooltip sin grupo, páginas HTML bloqueadas), así que la web avisa de que no está confirmado y no suma el oro de varias. El salero de Peletería no está en los datos de recetas con espera (pendiente de PT-01). PT-05 a PT-09 pendientes.

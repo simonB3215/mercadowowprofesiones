@@ -15,6 +15,7 @@ const Ledger = lazy(() => import('./pages/Ledger.js').then((m) => ({ default: m.
 const Leveling = lazy(() => import('./pages/Leveling.js').then((m) => ({ default: m.Leveling })));
 const Character = lazy(() => import('./pages/Character.js').then((m) => ({ default: m.Character })));
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
+const TransmutationsPage = lazy(() => import('./pages/Transmutations.js').then((m) => ({ default: m.Transmutations })));
 const BuyOrCraftPage = lazy(() => import('./pages/BuyOrCraft.js').then((m) => ({ default: m.BuyOrCraft })));
 const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
 import { changelogUnseen } from './changelog.js';
@@ -22,7 +23,7 @@ import { UpdateBanner, WhatsNew } from './Updates.js';
 import { ItemTipHost } from './ItemTooltip.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
-  House, SignOut, Scales, type Icon,
+  House, SignOut, Scales, Flask, type Icon,
 } from '@phosphor-icons/react';
 const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
 const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
@@ -36,6 +37,7 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
     ['/catalogo', 'Catálogo', BookOpen],
     ['/materiales', 'Materiales', Package],
     ['/comprar', 'Comprar o fabricar', Scales],
+    ['/transmutaciones', 'Transmutaciones', Flask],
     ['/plan', 'Fabricación', Hammer],
   ]],
   ['Subir profesión', [
@@ -58,6 +60,7 @@ const NAV_HELP: Record<string, string> = {
   '/': 'Qué recetas dan más oro con los precios actuales',
   '/catalogo': 'Todas las profesiones y sus recetas',
   '/materiales': '¿Vender un material o usarlo para fabricar?',
+  '/transmutaciones': 'Transmutaciones y recetas con espera: cuánto oro dan al día',
   '/comprar': '¿Te sale más barato comprar un objeto o fabricarlo?',
   '/plan': 'Lista de compra total para fabricar varias recetas',
   '/nivel': 'Qué fabricar para subir una profesión y cuánto cuesta',
@@ -132,6 +135,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
     case 'catalogo': page = <Catalog />; break;
     case 'datos': page = <DataQuality />; break;
     case 'perfil': page = <Profiles />; break;
+    case 'transmutaciones': page = <TransmutationsPage />; break;
     case 'comprar': page = <BuyOrCraftPage />; break;
     case 'plan': page = <PlanPage />; break;
     case 'materiales': page = <Materials itemId={parts[1] ? Number(parts[1]) : null} />; break;

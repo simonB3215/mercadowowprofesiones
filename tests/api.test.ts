@@ -247,4 +247,24 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     const r2 = await api('GET', `/api/opportunities?${qs}`);
     expect(r2.json.items.some((i: any) => i.status === 'candidato' || i.status === 'demanda_incierta')).toBe(true);
   });
+
+  // Al final: añade una receta al catálogo de prueba (no altera los recuentos de las pruebas anteriores).
+  it('transmutaciones: enlaza la receta de Wowhead con el catálogo por objeto + materiales y calcula el oro al día', async () => {
+    const empty = await api('GET', `/api/transmutations?${qs}`);
+    expect(empty.status).toBe(200);
+    expect(empty.json.items).toEqual([]);
+    expect(empty.json.unmatched.length).toBeGreaterThanOrEqual(14);
+    expect(empty.json.note).toMatch(/No está confirmado/);
+    const db = await getDb();
+    // Transmutar: arcanita (hechizo 17187, 47 h): Barra de torio + Cristal arcano → Barra de arcanita.
+    await db.query(`insert into item (game_version,id,name,quality) values ('forever',12360,'Barra de arcanita','UNCOMMON'),('forever',12359,'Barra de torio','COMMON'),('forever',12363,'Cristal arcano','UNCOMMON') on conflict do nothing`);
+    await db.query(`insert into recipe (game_version,id,profession_id,skill_tier_id,category,name,crafted_item_id,qty_min,qty_max,raw) values ('forever',800099,1,11,'Prueba','Transmutar: arcanita',12360,1,1,'{}'::jsonb)`);
+    await db.query(`insert into recipe_reagent (game_version,recipe_id,slot,item_id,quantity) values ('forever',800099,0,12359,1),('forever',800099,1,12363,1)`);
+    const r = await api('GET', `/api/transmutations?${qs}`);
+    const t = r.json.items.find((i: any) => i.recipeId === 800099);
+    expect(t).toMatchObject({ spellId: 17187, cooldown: 169200, tools: ['Piedra filosofal'] });
+    expect(q(t.craftsPerDay).eq(Q.of(24, 47))).toBe(true);
+    expect(t.goldPerDay).toBeNull(); // sin precios en el catálogo de prueba: nunca 0
+    expect(r.json.unmatched.some((u: any) => u.spellId === 17187)).toBe(false);
+  });
 });
