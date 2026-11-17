@@ -202,6 +202,28 @@ export function createServer(): McpServer {
     };
   }));
 
+  server.registerTool('transmutaciones', {
+    title: 'Transmutaciones',
+    description: 'Transmutaciones de Alquimia y demás recetas con tiempo de reutilización (Tela lunar…): espera, costo, precio de venta, ganancia por fabricación, oro al día (ganancia × 24 h ÷ espera, máximo 10 fabricaciones al día), ventas y estado. Todas las transmutaciones comparten la espera (indicado por un jugador; Wowhead no lo publica): «queHacer» da la mejor de cada espera, que sí se pueden sumar. También si conviene comprar cada resultado o transmutarlo.',
+    inputSchema: { casa, soloConGanancia: z.boolean().optional().describe('Quitar las que pierden oro.'), profesionId: z.number().int().optional().describe('Solo esa profesión (id de «profesiones»).') },
+    annotations: { readOnlyHint: true },
+  }, safe(async ({ casa: c, soloConGanancia, profesionId }: { casa?: string; soloConGanancia?: boolean; profesionId?: number }) => {
+    const r = await get('/api/transmutations', ctx(c));
+    const items = r.items.filter((i: any) => profesionId === undefined || i.professionId === profesionId).filter((i: any) => !soloConGanancia || (isQ(i.profitPerCraft) && Q.fromJSON(i.profitPerCraft).sign() > 0));
+    return {
+      casa: r.ctx.realm, nota: r.note,
+      queHacer: { recetas: r.plan.map((p: any) => ({ receta: p.name, oroAlDia: gold(p.goldPerDay), gananciaPorFabricacion: gold(p.profitPerCraft), espera: cooldownLabel(p.cooldown), esperaCompartida: Boolean(p.group) })), oroAlDiaTotal: gold(r.planTotal) },
+      recetas: items.map((i: any) => ({
+        recetaId: i.recipeId, receta: i.name, profesion: i.profession, espera: cooldownLabel(i.cooldown), esperaCompartida: Boolean(i.group), laMejorDeSuEspera: i.bestInGroup,
+        costo: gold(i.cost), precioVenta: gold(i.sellPrice), gananciaPorFabricacion: gold(i.profitPerCraft), oroAlDia: gold(i.goldPerDay),
+        ventasPorDia: i.demand?.soldPerDay ?? null, seVendeUnaCadaDias: i.daysPerSale, estado: i.status, motivos: i.reasons,
+        comoSeAprende: i.learn.availability === 'instructor' ? `instructor (nivel ${i.learn.learnedAt})` : i.learn.recipeItem ? `objeto de receta «${i.learn.recipeItem.nameEn}»` : i.learn.availability,
+        herramientas: i.tools,
+      })),
+      comprarOTransmutar: r.buyOrMake.map((b: any) => ({ objeto: b.name, comprar: gold(b.buyUnit), hacer: gold(b.makeUnit), con: b.via?.name ?? null, mejor: b.verdict, ahorro: gold(b.savings) })),
+    };
+  }));
+
   server.registerTool('ruta_subir_nivel', {
     title: 'Ruta para subir de nivel',
     description: 'Ruta para subir una profesión con los precios actuales, en tramos largos de una sola receta (como una guía): receta por tramo, fabricaciones, materiales, costo, costo del instructor, tiempo de fabricación y lista de compra. Por defecto la ruta de una guía publicada para WoW Forever (lo que no cubre se completa con la más rápida); con prioridad «rapida», la de menos tiempo; con «barata», la que cuesta menos oro. Cada paso dice si necesita un objeto de receta y dónde se consigue. Lo fabricado en pasos anteriores se reutiliza y no entra en la lista de compra. No usa recetas con tiempo de reutilización.',

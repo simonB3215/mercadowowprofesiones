@@ -789,4 +789,10 @@ Como jugador, quiero preguntar a Claude qué transmutar hoy.
 
 **Orden propuesto:** PT-01 → PT-02 → PT-03 → PT-04 → PT-10 (primera versión útil); después PT-05, PT-07, PT-06; por último PT-08 y PT-09.
 
-**Estado (17-11-2026):** PT-01, PT-03, PT-04 y PT-10 hechos. PT-02 sin resolver: Wowhead no publica la categoría de reutilización (tooltip sin grupo, páginas HTML bloqueadas), así que la web avisa de que no está confirmado y no suma el oro de varias. El salero de Peletería no está en los datos de recetas con espera (pendiente de PT-01). PT-05 a PT-09 pendientes.
+**Estado (17-11-2026):** PT-01 a PT-10 hechos, con estas diferencias:
+- **PT-02:** Wowhead no publica la categoría de reutilización. Un jugador confirmó que en Forever todas las transmutaciones comparten la espera; la web lo cita así. La Tela lunar va aparte.
+- **PT-06:** compara comprar cada resultado con la receta más barata que lo crea, en un solo paso. No hay cadenas de varias transmutaciones: con la espera compartida solo se puede hacer una.
+- **PT-07:** indica «se vende 1 cada N días» y no los días para vender una semana de producción.
+- **PT-08:** «La hice ahora» se guarda en el navegador, no en la cuenta. Bloquea todas las transmutaciones hasta que pase la espera de la que se hizo.
+
+El salero de Peletería sigue sin estar en los datos de recetas con espera.

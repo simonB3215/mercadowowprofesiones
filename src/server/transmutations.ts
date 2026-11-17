@@ -1,24 +1,48 @@
 /**
- * «Transmutaciones» (PT-01 a PT-04): recetas con reutilización de todas las profesiones, evaluadas con los precios de la
- * casa elegida, con la ganancia por fabricación y el oro al día que permite su espera.
+ * «Transmutaciones» (PT-01 a PT-07): recetas con reutilización de todas las profesiones, evaluadas con los precios de la
+ * casa elegida, con la ganancia por fabricación, el oro al día que permite su espera, la mejor de cada grupo de espera
+ * compartida, si conviene comprar el resultado o transmutarlo y un aviso cuando se vende poco.
  * Las recetas de Wowhead (con la espera comprobada) se enlazan con el catálogo de Blizzard por objeto + materiales.
  */
 import type { Db } from './db.js';
 import type { MarketContext } from './market.js';
-import { buildEvalContext, evaluateRecipe, loadRecipes, type Profile } from './evaluate.js';
+import { buildEvalContext, evaluateRecipe, loadRecipes, resolvePrice, type Profile } from './evaluate.js';
+import { buyOrCraft } from '../engine/buyOrCraft.js';
+import { Q } from '../engine/rational.js';
 import { cooldownRecipes } from './leveling.js';
 import { reagentKey } from './cooldowns.js';
 import { goldPerDay, craftsPerDay, MAX_CRAFTS_PER_DAY } from '../engine/cooldown.js';
 
 const TOOL_ES: Record<string, string> = { "Philosopher's Stone": 'Piedra filosofal' };
 
-/** PT-02: Wowhead no indica la categoría de reutilización; no se sabe si las transmutaciones comparten espera en Forever. */
+/**
+ * PT-02: grupos de espera compartida. Wowhead no publica la categoría de reutilización; que todas las transmutaciones de
+ * Alquimia comparten la espera en WoW Forever lo indicó un jugador (17-11-2026). El resto de recetas van por su cuenta.
+ */
+export const TRANSMUTE_GROUP = 'transmutaciones';
+export const groupOf = (nameEn: string): string | null => (/^Transmute:/i.test(nameEn) ? TRANSMUTE_GROUP : null);
 export const SHARED_COOLDOWN_NOTE =
-  'No está confirmado si en WoW Forever las transmutaciones comparten la espera (Wowhead no lo indica). Si la comparten, solo puedes hacer una dentro de cada grupo de espera: no sumes el oro al día de varias.';
+  'En WoW Forever todas las transmutaciones comparten la espera: al hacer una, no puedes hacer ninguna otra hasta que pase la espera de la que hiciste. Conviene hacer la que más oro da al día. (Lo indicó un jugador; Wowhead no publica este dato.)';
+
+/**
+ * La mejor de cada grupo (PT-05): la de más oro al día con ganancia y demanda suficiente («candidato»); si ninguna lo es,
+ * la de más oro al día con ganancia. Las recetas sin grupo son cada una su propio grupo.
+ */
+export function bestPerGroup<T extends { recipeId: number; group: string | null; status: string; goldPerDay: Q | null }>(items: T[]): Map<string, T> {
+  const best = new Map<string, T>();
+  const score = (i: T) => (i.status === 'candidato' ? 1 : 0);
+  for (const i of items) {
+    if (!i.goldPerDay || i.goldPerDay.sign() <= 0) continue;
+    const k = i.group ?? `receta:${i.recipeId}`;
+    const b = best.get(k);
+    if (!b || score(i) > score(b) || (score(i) === score(b) && i.goldPerDay.cmp(b.goldPerDay!) > 0)) best.set(k, i);
+  }
+  return best;
+}
 
 export async function transmutations(db: Db, ctx: MarketContext, profile: Profile | null) {
   const wh = cooldownRecipes(ctx.version);
-  if (!wh.length) return { items: [], unmatched: [], note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: null };
+  if (!wh.length) return { items: [], groups: {}, plan: [], planTotal: null, buyOrMake: [], unmatched: [], note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: null };
   // Recetas del catálogo que crean esos objetos, con sus materiales obligatorios, para enlazarlas por objeto + materiales.
   const created = [...new Set(wh.map((w) => w.createsItemId))];
   const cand = await db.query<any>(
@@ -39,7 +63,11 @@ export async function transmutations(db: Db, ctx: MarketContext, profile: Profil
   const items = matched.filter((m) => m.recipeId !== null && byId.has(m.recipeId)).map(({ w, recipeId }) => {
     const ev = evaluateRecipe(byId.get(recipeId!)!, ectx);
     const profit = ev.profit.profitBatch; // una fabricación (runs = 1)
+    const sold = ev.demand?.soldPerDay ?? null;
     return {
+      group: groupOf(w.nameEn),
+      /** PT-07: se vende menos de una al día en la región: cada cuántos días se vende una (orientativo). */
+      daysPerSale: sold !== null && sold > 0 && sold < 1 ? Math.round((1 / sold) * 10) / 10 : null,
       recipeId: ev.recipeId, spellId: w.spellId, name: ev.name, profession: ev.profession, professionId: ev.professionId,
       output: ev.output, unitsPerRun: ev.unitsPerRun, cooldown: w.cooldown, craftsPerDay: craftsPerDay(w.cooldown),
       cost: ev.cost.batch, sellPrice: ev.sellPrice.copper, sellScope: ev.sellPrice.scope, sellSupply: ev.sellPrice.supply ?? null,
@@ -51,8 +79,30 @@ export async function transmutations(db: Db, ctx: MarketContext, profile: Profil
   });
   // Más oro al día primero; las que no se pueden calcular, al final.
   items.sort((a, b) => (!a.goldPerDay && !b.goldPerDay ? a.name.localeCompare(b.name) : !a.goldPerDay ? 1 : !b.goldPerDay ? -1 : b.goldPerDay.cmp(a.goldPerDay)));
+  const best = bestPerGroup(items);
+  const bestIds = new Set([...best.values()].map((b) => b.recipeId));
+  // Las mejores de cada grupo se pueden hacer a la vez: su oro al día sí se suma.
+  const plan = [...best.values()].sort((a, b) => b.goldPerDay!.cmp(a.goldPerDay!));
+  const planTotal = plan.reduce((t, i) => t.add(i.goldPerDay!), Q.zero);
+
+  // PT-06: si necesitas el resultado para ti, ¿comprarlo o transmutarlo? (la receta más barata que lo crea, por unidad).
+  const outputs = new Map<number, typeof items>();
+  for (const i of items) if (i.output?.itemId) outputs.set(i.output.itemId, [...(outputs.get(i.output.itemId) ?? []), i]);
+  const buyOrMake = [...outputs.entries()].map(([itemId, rs]) => {
+    const unit = (i: (typeof items)[number]) => (i.cost && i.unitsPerRun ? i.cost.div(i.unitsPerRun) : null);
+    const cheapest = rs.filter((r) => unit(r)).sort((a, b) => unit(a)!.cmp(unit(b)!))[0] ?? null;
+    const buy = resolvePrice(ectx.snap, itemId, ectx.settings.buySource);
+    const r = buyOrCraft({ quantity: 1, buyUnit: buy.copper, buyAvailable: buy.supply?.quantity ?? null, canBuy: true, craftUnit: cheapest ? unit(cheapest) : null, learnCost: null, needsLearning: false });
+    return { itemId, name: rs[0].output?.name ?? null, quality: rs[0].output?.quality ?? null, buyUnit: buy.copper, makeUnit: cheapest ? unit(cheapest) : null,
+      via: cheapest ? { recipeId: cheapest.recipeId, name: cheapest.name, cooldown: cheapest.cooldown, group: cheapest.group } : null, verdict: r.verdict, savings: r.savings };
+  }).sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
   return {
-    items,
+    items: items.map((i) => ({ ...i, bestInGroup: bestIds.has(i.recipeId) })),
+    groups: { [TRANSMUTE_GROUP]: { label: 'Transmutaciones de Alquimia', confirmedBy: 'jugador', checkedAt: '2026-11-17' } },
+    /** Qué hacer: la mejor de cada grupo y el oro al día que suman. */
+    plan: plan.map((i) => ({ recipeId: i.recipeId, name: i.name, group: i.group, cooldown: i.cooldown, goldPerDay: i.goldPerDay, profitPerCraft: i.profitPerCraft, output: i.output })),
+    planTotal: plan.length ? planTotal : null,
+    buyOrMake,
     /** Recetas con espera de Wowhead que no coinciden con ninguna del catálogo (no se pueden evaluar). */
     unmatched: matched.filter((m) => m.recipeId === null).map((m) => ({ spellId: m.w.spellId, name: m.w.nameEn, professionId: m.w.professionId, cooldown: m.w.cooldown })),
     note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: ectx.snap.runs,

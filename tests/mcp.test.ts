@@ -27,7 +27,7 @@ describe('Servidor MCP', () => {
   it('expone solo herramientas de lectura', async () => {
     const { tools } = await client.listTools();
     expect(tools.map((t) => t.name).sort()).toEqual(
-      ['buscar_material', 'detalle_receta', 'estado_mercado', 'profesiones', 'recetas_rentables', 'ruta_subir_nivel', 'vender_o_usar_material'],
+      ['buscar_material', 'detalle_receta', 'estado_mercado', 'profesiones', 'recetas_rentables', 'ruta_subir_nivel', 'transmutaciones', 'vender_o_usar_material'],
     );
     for (const t of tools) expect(t.annotations?.readOnlyHint).toBe(true);
   });

@@ -91,3 +91,25 @@ describe('oro al día según la espera (Transmutaciones)', () => {
     expect(goldPerDay(Q.of(-1000), 82800)!.sign()).toBe(-1);
   });
 });
+
+describe('espera compartida de las transmutaciones', () => {
+  it('agrupa las transmutaciones y elige la mejor de cada grupo', async () => {
+    const { groupOf, bestPerGroup, TRANSMUTE_GROUP } = await import('../src/server/transmutations.js');
+    const { Q } = await import('../src/engine/rational.js');
+    expect(groupOf('Transmute: Arcanite')).toBe(TRANSMUTE_GROUP);
+    expect(groupOf('Transmute: Iron to Gold')).toBe(TRANSMUTE_GROUP);
+    expect(groupOf('Mooncloth')).toBeNull();
+    const it = (recipeId: number, group: string | null, status: string, g: number | null) => ({ recipeId, group, status, goldPerDay: g === null ? null : Q.of(g) });
+    const best = bestPerGroup([
+      it(1, TRANSMUTE_GROUP, 'candidato', 100),
+      it(2, TRANSMUTE_GROUP, 'candidato', 300),
+      it(3, TRANSMUTE_GROUP, 'riesgo', 900), // más oro pero sin demanda suficiente: pierde ante una «candidato»
+      it(4, null, 'riesgo', 50), // sin grupo: va por su cuenta
+      it(5, null, 'candidato', -10), // pierde oro: nunca se recomienda
+      it(6, null, 'candidato', null), // sin datos
+    ]);
+    expect([...best.values()].map((b) => b.recipeId).sort()).toEqual([2, 4]);
+    // Si ninguna del grupo es «candidato», la de más oro al día con ganancia.
+    expect(bestPerGroup([it(1, TRANSMUTE_GROUP, 'riesgo', 10), it(2, TRANSMUTE_GROUP, 'riesgo', 20)]).get(TRANSMUTE_GROUP)!.recipeId).toBe(2);
+  });
+});

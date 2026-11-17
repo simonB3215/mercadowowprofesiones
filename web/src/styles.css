@@ -825,3 +825,8 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .tm-best-item { display: flex; flex-direction: column; gap: 4px; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); text-decoration: none; color: inherit; min-width: 0; }
 .tm-best-item:hover { border-color: var(--gold-line); }
 .tm-loss td { opacity: 0.8; }
+.tm-avail { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: 4px; }
+.tm-wait { color: var(--color-warn); }
+.tm-done-btn { margin-top: 4px; min-height: 32px; padding: 4px 10px; font-size: var(--text-sm); display: inline-flex; align-items: center; gap: 6px; }
+.link-button { background: none; border: 0; padding: 0; min-height: 0; color: var(--color-primary); text-decoration: underline; cursor: pointer; font-size: inherit; display: inline-flex; align-items: center; gap: 4px; }
+.link-button:hover { color: var(--color-primary-hover); }

@@ -14,12 +14,23 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-17', kind: 'mejora', title: 'Transmutaciones: cuál hacer y cuándo vuelve a estar disponible',
+    items: [
+      'Las transmutaciones de Alquimia comparten la espera en WoW Forever (al hacer una no puedes hacer otra hasta que pase): la página lo tiene en cuenta y destaca «La mejor transmutación», la que más oro da al día con ventas suficientes. La Tela lunar va aparte.',
+      'Nuevo resumen arriba, «Qué hacer para sacar más oro»: la mejor transmutación y la Tela lunar, con el oro al día que suman juntas.',
+      'Botón «La hice ahora»: guarda cuándo la hiciste y muestra «Hasta el …» en todas las transmutaciones hasta que pase la espera. Se guarda solo en este navegador (Blizzard no da las esperas del personaje).',
+      'Nueva tabla «¿Lo necesitas para ti?»: si te sale más barato comprar cada resultado o transmutarlo, y cuánto ahorras.',
+      'Si algo se vende menos de una vez al día, indica cada cuántos días se vende uno.',
+      'También se puede preguntar a Claude qué transmutar (herramienta «transmutaciones»).',
+    ],
+  },
+  {
     date: '2026-11-17', kind: 'nuevo', title: 'Transmutaciones',
     items: [
       'Nueva sección «Transmutaciones» (menú Ganar oro): todas las recetas que solo se pueden fabricar cada cierto tiempo, de cualquier profesión (las transmutaciones de Alquimia y la Tela lunar de Sastrería), con su espera, costo, precio de venta y ganancia por fabricación.',
       'Calcula el oro al día según la espera (por ejemplo, la arcanita se hace cada 47 h: media fabricación al día) y destaca arriba las que más dan.',
       'Indica cómo se aprende cada una, si tu perfil ya la conoce y si se vende poco. Se puede filtrar por «solo con ganancia» y «solo las que conoce el perfil».',
-      'Aviso: no está confirmado si en WoW Forever las transmutaciones comparten la espera; si la comparten, no se puede sumar el oro de varias.',
+      'Aviso: no estaba confirmado si las transmutaciones comparten la espera (después se confirmó que sí; ver la entrada de arriba).',
     ],
   },
   {
