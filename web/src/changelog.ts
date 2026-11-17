@@ -14,6 +14,14 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-17', kind: 'nuevo', title: 'Descripción de los objetos al pasar el ratón',
+    items: [
+      'Al pasar el ratón por encima de cualquier objeto o material (icono o nombre) aparece su descripción, como en el juego: vinculación, ranura y tipo, armadura o daño, estadísticas, efecto de uso, nivel requerido y durabilidad.',
+      'Debajo, lo que paga el vendedor por él y su precio en tu casa de subastas, con las unidades en venta.',
+      'Con el teclado aparece al enfocar el nombre, y en el móvil al tocar el icono.',
+    ],
+  },
+  {
     date: '2026-11-16', kind: 'mejora', title: 'Entrar sin contraseña',
     items: [
       'La web ya no pide contraseña al entrar: cualquiera puede consultar el comparador, las recetas, subir nivel, comprar o fabricar y conectar su personaje de Battle.net.',

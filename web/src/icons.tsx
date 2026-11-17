@@ -8,6 +8,7 @@
  * Para iconos de interfaz (buscar, filtrar, ordenar…) se usa Phosphor, nunca emojis.
  */
 import React, { useEffect, useState } from 'react';
+import { itemTipProps } from './itemTip.js';
 
 type Kind = 'item' | 'profession';
 type Size = 'small' | 'medium' | 'large';
@@ -103,8 +104,9 @@ function Placeholder() {
 /**
  * Icono de un objeto o profesión de WoW Forever por id. Es decorativo (alt vacío): el nombre
  * va siempre al lado en texto. `px` es el tamaño mostrado; se descarga la imagen más pequeña que lo cubre.
+ * Los iconos de objeto muestran su descripción al pasar el ratón o tocarlos (`tip={false}` lo desactiva).
  */
-export function WowIcon({ kind = 'item', id, px = 28, quality, className = '' }: { kind?: Kind; id: number | null | undefined; px?: number; quality?: string | null; className?: string }) {
+export function WowIcon({ kind = 'item', id, px = 28, quality, className = '', tip = true }: { kind?: Kind; id: number | null | undefined; px?: number; quality?: string | null; className?: string; tip?: boolean }) {
   const size: Size = px <= 18 ? 'small' : px <= 36 ? 'medium' : 'large';
   const a = useAsset(kind, id, size);
   const [stage, setStage] = useState<0 | 1 | 2>(0); // 0 principal, 1 respaldo de Blizzard, 2 marcador neutro
@@ -113,7 +115,8 @@ export function WowIcon({ kind = 'item', id, px = 28, quality, className = '' }:
   const onError = () => setStage((s) => (s === 0 && a?.fallback ? 1 : 2));
   const q = quality ? QUALITY_CLASS[quality] ?? '' : '';
   return (
-    <span className={`wow-icon ${q} ${className}`} style={{ width: px, height: px }} data-source={a?.source ?? (a === undefined ? 'cargando' : 'ninguno')}>
+    <span className={`wow-icon ${q} ${className}`} style={{ width: px, height: px }} data-source={a?.source ?? (a === undefined ? 'cargando' : 'ninguno')}
+      {...(kind === 'item' && tip ? itemTipProps(id) : {})}>
       {src ? (
         <img src={src} width={px} height={px} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={onError} />
       ) : a === undefined ? null : (
@@ -123,14 +126,14 @@ export function WowIcon({ kind = 'item', id, px = 28, quality, className = '' }:
   );
 }
 
-/** Nombre con icono: el texto siempre está presente aunque la imagen falle. */
+/** Nombre con icono: el texto siempre está presente aunque la imagen falle. Al pasar el ratón (o enfocar el enlace) muestra la descripción del objeto. */
 export function ItemLabel({ id, name, quality, href, px = 28, sub }: { id: number | null | undefined; name: React.ReactNode; quality?: string | null; href?: string; px?: number; sub?: React.ReactNode }) {
   const label = href ? <a href={href}>{name}</a> : <span>{name}</span>;
   // Como en el juego, el nombre toma el color de la calidad del objeto (si se conoce).
   const q = quality ? QUALITY_CLASS[quality] ?? '' : '';
   return (
-    <span className={`item-label ${q}`.trim()}>
-      <WowIcon id={id} px={px} quality={quality} />
+    <span className={`item-label ${q}`.trim()} {...itemTipProps(id)}>
+      <WowIcon id={id} px={px} quality={quality} tip={false} />
       <span className="item-label-text">
         {label}
         {sub && <span className="small muted">{sub}</span>}

@@ -59,7 +59,7 @@ export function ItemPicker({ label, value, onPick, craftable }: { label: string;
           {hits.map((h, i) => (
             <li key={h.item_id} id={`${listId}-${i}`} role="option" aria-selected={i === active} className={i === active ? 'active' : ''}
               onMouseDown={(e) => { e.preventDefault(); pick(h); }}>
-              <WowIcon id={h.item_id} px={20} quality={h.quality} /><span style={h.quality ? { color: `var(--q-${h.quality.toLowerCase()})` } : undefined}>{h.name}</span>
+              <WowIcon id={h.item_id} px={20} quality={h.quality} tip={false} /><span style={h.quality ? { color: `var(--q-${h.quality.toLowerCase()})` } : undefined}>{h.name}</span>
             </li>
           ))}
         </ul>

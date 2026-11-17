@@ -805,3 +805,18 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .boc-verdict.t-warn { color: var(--color-warn, inherit); }
 .boc-verdict span { color: var(--color-fg, inherit); }
 .boc-figs .boc-best { border-color: var(--color-ok); box-shadow: inset 0 0 0 1px var(--color-ok); }
+
+/* Descripción del objeto al pasar el ratón (como el tooltip del juego) */
+.item-tip { position: fixed; z-index: 90; width: 280px; max-width: calc(100vw - 16px); padding: 10px 12px; border-radius: var(--radius-sm);
+  background: rgba(6, 8, 20, 0.97); border: 1px solid #8a7a52; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); pointer-events: none; font-size: var(--text-sm); line-height: 1.35; }
+.item-tip p { margin: 0 0 2px; color: #fff; }
+.item-tip .it-name { font-weight: 700; font-size: 0.95rem; }
+.item-tip .it-row { display: flex; justify-content: space-between; gap: var(--space-2); }
+.item-tip .it-green { color: var(--q-uncommon); }
+.item-tip .it-gold { color: var(--gold); }
+.item-tip .it-red { color: var(--color-bad, #ff6b6b); }
+.item-tip .it-muted { color: var(--color-muted-fg); }
+.item-tip .it-sell, .item-tip .it-market { margin-top: 6px; color: var(--color-muted-fg); }
+.item-tip .it-market { border-top: 1px solid rgba(138, 122, 82, 0.4); padding-top: 6px; }
+.item-tip .q-poor { color: var(--q-poor); } .item-tip .q-common { color: var(--q-common); } .item-tip .q-uncommon { color: var(--q-uncommon); }
+.item-tip .q-rare { color: var(--q-rare); } .item-tip .q-epic { color: var(--q-epic); } .item-tip .q-legendary { color: var(--q-legendary); }

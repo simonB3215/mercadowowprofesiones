@@ -19,6 +19,7 @@ const BuyOrCraftPage = lazy(() => import('./pages/BuyOrCraft.js').then((m) => ({
 const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
 import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
+import { ItemTipHost } from './ItemTooltip.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
   House, SignOut, Scales, type Icon,
@@ -181,6 +182,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
         </aside>
         <div className="content">
           <UpdateBanner />
+          <ItemTipHost />
           <header className="topbar">
             <ContextBar />
           </header>

@@ -13,6 +13,7 @@ import { requiredProfessions, PROFESSION_ES } from './catalog/rules.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js';
 import { buyOrCraft } from '../engine/buyOrCraft.js';
+import { buildItemTooltip } from './itemTooltip.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -557,6 +558,25 @@ route('GET', '/api/materials/:id', async (_r, p, u, db) => {
   alternatives.sort((a, b) => (!a.valuePerUnit ? 1 : !b.valuePerUnit ? -1 : b.valuePerUnit.cmp(a.valuePerUnit)));
   const item = ectx.items.get(itemId);
   return { itemId, name: item?.name ?? ectx.snap.local.get(itemId)?.name ?? null, price: own, sellNet, alternatives, commission: commissionFor(settings, ctx.realm) };
+});
+
+/** Descripción del objeto para la ventana al pasar el ratón; con casa de subastas, también su precio ahí. */
+route('GET', '/api/items/:id/tooltip', async (_r, p, u, db) => {
+  const version = u.searchParams.get('version') ?? 'forever';
+  const itemId = int(p.id);
+  if (!itemId || itemId <= 0) throw new HttpError(400, 'Objeto inválido.');
+  const rows = await db.query<any>(`select id, name, quality, item_class, item_subclass, raw from item where game_version=$1 and id=$2`, [version, itemId]);
+  if (!rows.length) throw new HttpError(404, 'Objeto no encontrado en el catálogo.');
+  const tip = buildItemTooltip({ ...rows[0], id: Number(rows[0].id) });
+  let market: { price: Q | null; field: string; scope: string; supply: unknown } | null = null;
+  if (u.searchParams.get('region')) {
+    const ctx = ctxFrom(u);
+    const snap = await loadSnapshot(db, ctx, [itemId]);
+    const settings = await loadSettings(db);
+    const pr = resolvePrice(snap, itemId, settings.buySource);
+    market = { price: pr.copper, field: pr.field, scope: pr.scope, supply: pr.supply ?? null };
+  }
+  return { ...tip, market };
 });
 
 /** Historial diario del precio de un objeto en la casa elegida (solo casas cargadas desde Blizzard). */

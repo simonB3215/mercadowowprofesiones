@@ -676,3 +676,115 @@ Como jugador, quiero planificar conocimiento sin confundirlo con habilidad.
 Como jugador, quiero mantener planes independientes para mis personajes.
 
 **Aceptación:** Aislar perfiles, inventario, objetivos y rutas por propietario y contexto. Validar soporte por versión antes de activarlo. No asumir transferencias de materiales vinculados ni mezclar progreso entre personajes.
+
+## Transmutaciones y recetas con reutilización (PT-01 a PT-10)
+
+Propuesto el 17-11-2026. Un apartado «Transmutaciones» que reúna, para todas las profesiones, las recetas que solo se pueden fabricar cada cierto tiempo, y diga cuáles dan oro y cuánto **al día**, no solo por fabricación.
+
+**Datos de partida** (`data/leveling/forever-cooldowns.json`, comprobados en Wowhead): 15 recetas con reutilización en WoW Forever.
+
+| Profesión | Recetas | Reutilización |
+|---|---|---|
+| Alquimia | Transmutar: fuego elemental | 10 min |
+| Alquimia | Hierro a oro, mitril a veraplata | 1 h |
+| Alquimia | 8 de esencias (aire↔fuego, fuego→tierra, tierra↔agua, agua→aire, no-muerte↔agua, vida↔tierra) | 23 h |
+| Alquimia | Arcanita, legionita | 47 h |
+| Sastrería | Tela lunar | 95 h |
+| Cocina | Fogata básica | 5 min (no crea objeto: se excluye) |
+
+Con los precios de JcJ — Horda del 17-11-2026: arcanita +44,9 o y legionita +41,3 o por fabricación; vida a tierra y no-muerte a agua +3,5 o; aire a fuego, tierra a vida y agua a no-muerte pierden oro.
+
+### Resumen
+
+| ID | Elemento | Prioridad | Depende de |
+|---|---|---|---|
+| PT-01 | Inventario de recetas con reutilización | P0 | — |
+| PT-02 | Comprobar si comparten reutilización | P0 | PT-01 |
+| PT-03 | API de transmutaciones con oro al día | P0 | PT-01 |
+| PT-04 | Página «Transmutaciones» | P0 | PT-03 |
+| PT-05 | Mejor opción por grupo de reutilización | P1 | PT-02, PT-03 |
+| PT-06 | Cadenas de esencias y comprar o transmutar | P1 | PT-03 |
+| PT-07 | Ventas lentas y días para vender | P1 | PT-03 |
+| PT-08 | Recetas del personaje y próxima disponibilidad | P2 | PT-04 |
+| PT-09 | Consulta desde Claude (MCP) | P2 | PT-03 |
+| PT-10 | Pruebas, changelog y documentación | P0 | todas |
+
+### PT-01 — Inventario de recetas con reutilización
+
+**Prioridad:** P0. **Dependencias:** —.
+
+Como jugador, quiero ver todas las recetas que tienen tiempo de espera, de cualquier profesión, en un solo sitio.
+
+**Aceptación:** Lista generada desde `forever-cooldowns.json` y enlazada con el catálogo por objeto + materiales (`catalogCooldown`). Incluye las que no se llaman «Transmutar» pero tienen espera (Tela lunar). Excluye las que no crean objeto (Fogata básica). Las recetas del catálogo sin coincidencia en Wowhead aparecen como «reutilización desconocida», nunca como 0. Revisar si hay esperas de objetos y no de recetas (p. ej. el salero de Peletería para la sal refinada) y documentar si se pueden incluir.
+
+### PT-02 — Comprobar si comparten reutilización
+
+**Prioridad:** P0. **Dependencias:** PT-01.
+
+Como jugador, quiero saber si hacer una transmutación bloquea las demás, para elegir bien cuál hago.
+
+**Aceptación:** Averiguar en Wowhead (categoría de reutilización del hechizo) qué recetas comparten espera en Forever; guardarlo como `group` en los datos con fecha y fuente. Si no se puede confirmar, la web lo dice («sin confirmar si comparten espera») y no suma el oro de varias como si se pudieran hacer a la vez.
+
+### PT-03 — API de transmutaciones con oro al día
+
+**Prioridad:** P0. **Dependencias:** PT-01.
+
+Como jugador, quiero comparar transmutaciones con esperas distintas.
+
+**Aceptación:** `GET /api/transmutations` (contexto de casa, perfil opcional) devuelve por receta: profesión, espera, costo (materiales al mejor precio entre comprar y fabricar), precio de venta, ganancia por fabricación tras comisión, **oro al día** = ganancia × (24 h ÷ espera), con un máximo razonable para esperas cortas (p. ej. 10 fabricaciones al día; configurable), ventas al día de la región, estado y motivos, cómo se aprende (`learnInfo`) y grupo de espera. Reutiliza `evaluateRecipe`, sin consultar el mercado una vez por receta.
+
+### PT-04 — Página «Transmutaciones»
+
+**Prioridad:** P0. **Dependencias:** PT-03.
+
+Como jugador, quiero una página clara para decidir qué transmutar hoy.
+
+**Aceptación:** Entrada «Transmutaciones» en «Ganar oro». Tabla agrupada por profesión con: receta, espera, costo, venta, ganancia por fabricación, oro al día, ventas al día y estado. Orden por oro al día por defecto; filtros «solo con ganancia» y «solo las que conozco» (con perfil). Las que pierden oro se ven en rojo con el motivo. Antigüedad de los precios visible; con datos desactualizados no se recomienda nada. Enlace al detalle de cada receta. Funciona a 375 px sin desplazamiento horizontal.
+
+### PT-05 — Mejor opción por grupo de reutilización
+
+**Prioridad:** P1. **Dependencias:** PT-02, PT-03.
+
+Como jugador, quiero que me digan cuál hacer cuando varias comparten espera.
+
+**Aceptación:** Por cada grupo confirmado, destacar «La mejor de este grupo» (más oro al día con demanda suficiente). Un resumen arriba: «Hoy: Arcanita (+22 o/día) y Vida a tierra (+3,6 o/día)». Si el grupo no está confirmado, se muestra como sugerencia con el aviso.
+
+### PT-06 — Cadenas de esencias y comprar o transmutar
+
+**Prioridad:** P1. **Dependencias:** PT-03.
+
+Como jugador, quiero saber si me conviene transmutar una esencia o comprarla.
+
+**Aceptación:** Para cada esencia, comparar comprarla con obtenerla transmutando otra (reutilizando `resolveSourcing` con detección de ciclos: aire→fuego→tierra→agua→aire). Mostrar la ruta más barata y el ahorro. No proponer cadenas que necesiten varias transmutaciones del mismo grupo el mismo día sin indicarlo.
+
+### PT-07 — Ventas lentas y días para vender
+
+**Prioridad:** P1. **Dependencias:** PT-03.
+
+Como jugador, quiero saber si lo que transmuto se va a vender.
+
+**Aceptación:** Con ventas al día de la región por debajo del mínimo (p. ej. legionita, 0,66/día) mostrar «demanda incierta» y una estimación orientativa de días para vender lo que se produce en una semana, aclarando que es regional y no una garantía. Avisar si la ganancia depende de una sola publicación (precio atípico).
+
+### PT-08 — Recetas del personaje y próxima disponibilidad
+
+**Prioridad:** P2. **Dependencias:** PT-04.
+
+Como jugador, quiero saber cuándo puedo volver a transmutar.
+
+**Aceptación:** Con perfil o Battle.net, marcar las recetas que conoce y las que le faltan (y cómo conseguirlas). Botón «La hice ahora» que guarda la hora por personaje (en su cuenta, no en datos compartidos) y muestra «disponible el … a las …». Blizzard no expone las esperas activas: se indica que es un registro manual.
+
+### PT-09 — Consulta desde Claude (MCP)
+
+**Prioridad:** P2. **Dependencias:** PT-03.
+
+Como jugador, quiero preguntar a Claude qué transmutar hoy.
+
+**Aceptación:** Herramienta MCP `transmutaciones` de solo lectura con los mismos datos que PT-03 (casa, solo rentables, profesión) y los avisos de grupo y demanda.
+
+### PT-10 — Pruebas, changelog y documentación
+
+**Prioridad:** P0. **Dependencias:** todas.
+
+**Aceptación:** Pruebas del cálculo de oro al día (esperas de 10 min, 23 h, 47 h y 95 h; tope de fabricaciones; espera desconocida), del grupo de espera y de la API sobre el catálogo de prueba. Entrada en `web/src/changelog.ts`, README (API) y `ESTADO_PROYECTO.md`. Revisado en el navegador a 1280 y 375 px con precios reales.
+
+**Orden propuesto:** PT-01 → PT-02 → PT-03 → PT-04 → PT-10 (primera versión útil); después PT-05, PT-07, PT-06; por último PT-08 y PT-09.

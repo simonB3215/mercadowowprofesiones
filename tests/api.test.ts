@@ -216,6 +216,15 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     expect(craftable.json.items.some((i: any) => i.item_id === 900004)).toBe(false);
   });
 
+  it('descripción del objeto para la ventana emergente, con precio de la casa', async () => {
+    const r = await api('GET', `/api/items/900005/tooltip?${qs}`);
+    expect(r.status).toBe(200);
+    expect(r.json).toMatchObject({ itemId: 900005, partial: true });
+    expect(q(r.json.market.price).eq(Q.of(60000))).toBe(true);
+    expect((await api('GET', '/api/items/900005/tooltip?version=forever')).json.market).toBeNull();
+    expect((await api('GET', '/api/items/123/tooltip?version=forever')).status).toBe(404);
+  });
+
   it('herramientas manuales validan probabilidades', async () => {
     const r = await api('POST', '/api/tools/expected', { scenarios: [{ label: 'a', probability: '0.5', netRevenueGold: '10' }] });
     expect(r.json.expected).toBeNull();

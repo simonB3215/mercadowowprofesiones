@@ -66,7 +66,7 @@ function Slot({ slot, it, side, open, setOpen }: { slot: string; it: any | undef
         onFocus={() => setOpen(slot)} onBlur={() => { if (lastPointer.current !== 'touch') setOpen(null); }}
         onClick={(e) => { if (lastPointer.current !== 'mouse' && lastPointer.current !== '' && !isOpen) { e.preventDefault(); setOpen(slot); } }}
       >
-        <WowIcon id={it.itemId} px={44} quality={it.quality} className="pc-slot-icon" />
+        <WowIcon id={it.itemId} px={44} quality={it.quality} className="pc-slot-icon" tip={false} />
       </a>
       {isOpen && <div onClick={() => setOpen(null)}><ItemTip it={it} side={side} /></div>}
     </li>
