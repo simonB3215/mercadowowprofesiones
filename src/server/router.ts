@@ -15,7 +15,7 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { buildItemTooltip } from './itemTooltip.js';
 import { transmutations } from './transmutations.js';
-import { gameChanges } from './gameChanges.js';
+import { gameChanges, patchNotes } from './gameChanges.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -494,6 +494,8 @@ function quantityParam(u: URL) {
 
 /** Cambios del juego: mejoras, empeoramientos y correcciones de clases y razas (foros oficiales de Blizzard). */
 route('GET', '/api/game-changes', async (_r, _p, _u, db) => gameChanges(db));
+/** Notas completas de los últimos hotfixes de WoW Forever (página de inicio). */
+route('GET', '/api/patch-notes', async (_r, _p, u, db) => patchNotes(db, { days: Number(u.searchParams.get('days')) || 3 }));
 
 /** Transmutaciones y demás recetas con reutilización, con la ganancia por fabricación y el oro al día. */
 route('GET', '/api/transmutations', async (_r, _p, u, db) => {

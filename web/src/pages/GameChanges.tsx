@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { translateUrl } from '../PatchNotes.js';
 import { api, useAsync, Loading, ErrorBox, Empty, PageHead, hashQuery, setHashQuery, dt } from '../lib.js';
 import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, type Icon } from '@phosphor-icons/react';
 
@@ -12,10 +13,6 @@ const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: str
 };
 const SOURCE: Record<string, string> = { hotfix: 'Hotfix', beta: 'Beta' };
 const PAGE = 150;
-
-/** Google Translate con el texto del cambio (y su contexto y notas), del inglés al español. Solo texto público de Blizzard. */
-const translateUrl = (c: any) =>
-  `https://translate.google.com/?sl=en&tl=es&op=translate&text=${encodeURIComponent([c.context, c.text, ...c.notes].filter(Boolean).join('\n\n').slice(0, 4500))}`;
 
 const longDate =(d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 

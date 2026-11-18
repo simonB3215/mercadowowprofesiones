@@ -860,3 +860,19 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .gc-text { margin: 6px 0 0; overflow-wrap: anywhere; }
 .gc-note { margin: 4px 0 0; padding-left: 10px; border-left: 2px solid var(--color-border); font-style: italic; overflow-wrap: anywhere; }
 .gc-more { margin-top: var(--space-3); }
+
+/* Notas del parche del juego (inicio) */
+.pn { margin: var(--space-4) 0; }
+.pn-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.pn-head h2 { margin: 0; font-size: 1.15rem; }
+.pn > p { margin: 6px 0 8px; }
+.pn-err { display: flex; align-items: center; gap: 6px; color: var(--color-warn); }
+.pn-day { border-top: 1px solid var(--color-border); padding: 8px 0; }
+.pn-day summary { cursor: pointer; font-weight: 600; text-transform: capitalize; }
+.pn-section h3 { margin: 10px 0 4px; font-size: 0.95rem; color: var(--gold-soft); }
+.pn-section ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.pn-section li { overflow-wrap: anywhere; }
+.pn-path { font-weight: 600; margin-right: 6px; }
+.pn-section .badge { margin-right: 4px; vertical-align: 1px; }
+.pn-tr { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.pn-note { margin: 2px 0 0; padding-left: 10px; border-left: 2px solid var(--color-border); font-style: italic; }

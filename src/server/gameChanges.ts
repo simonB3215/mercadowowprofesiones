@@ -364,3 +364,50 @@ export async function gameChanges(db: Db, opts: { fetcher?: Fetcher; now?: numbe
     note: 'Texto original de Blizzard (en inglés). «Mejora» y «Empeora» se deducen del texto y pueden equivocarse: revisa el original.',
   };
 }
+
+// ---------- Notas del parche completas (página de inicio) ----------
+
+export const SECTION_ES: Record<string, string> = {
+  Camping: 'Acampada', Classes: 'Clases', Races: 'Razas', Dungeons: 'Mazmorras', Raids: 'Bandas',
+  'Enemies and NPCs': 'Enemigos y PNJ', Items: 'Objetos', Legacy: 'Legado', 'Player versus Player': 'JcJ',
+  Professions: 'Profesiones', Quests: 'Misiones', 'User Interface': 'Interfaz', World: 'Mundo',
+  'Customer Support': 'Atención al cliente', 'Bug Fixes': 'Correcciones', General: 'General',
+};
+/** Nombre en español de una etiqueta del foro (sección, clase, especialización, raza o profesión). */
+const PROF_ES: Record<string, string> = {
+  Alchemy: 'Alquimia', Blacksmithing: 'Herrería', Enchanting: 'Encantamiento', Engineering: 'Ingeniería',
+  Herbalism: 'Herboristería', Leatherworking: 'Peletería', Mining: 'Minería', Skinning: 'Desuello',
+  Tailoring: 'Sastrería', Cooking: 'Cocina', Fishing: 'Pesca', 'First Aid': 'Primeros auxilios',
+};
+export const labelEs = (s: string) => SECTION_ES[s] ?? CLASS_ES[s] ?? RACE_ES[s] ?? SPEC_ES[s] ?? PROF_ES[s] ?? s;
+
+export interface PatchNoteItem { path: string[]; pathEs: string[]; text: string; notes: string[]; context: string | null; effect: Effect | null }
+export interface PatchNoteDay { date: string; sections: Array<{ name: string; nameEs: string; items: PatchNoteItem[] }>; total: number }
+
+/** Todas las notas de los últimos `days` días de hotfixes, por sección (en el orden del foro). */
+export function patchNotesOf(t: ForumTopic, days: number): PatchNoteDay[] {
+  const first = t.posts.find((p) => p.n === 1) ?? t.posts[0];
+  if (!first) return [];
+  const byDate = new Map<string, Map<string, PatchNoteItem[]>>();
+  for (const c of parsePost(first.cooked, first.created.slice(0, 10))) {
+    const sec = c.section ?? 'General';
+    if (/known issues/i.test(sec)) continue;
+    const secs = byDate.get(c.date) ?? new Map<string, PatchNoteItem[]>();
+    byDate.set(c.date, secs);
+    const isPlayer = c.path.some((p) => CLASS_ES[p] || RACE_ES[p]) || /^(class|race)/i.test(sec);
+    secs.set(sec, [...(secs.get(sec) ?? []), { path: c.path, pathEs: c.path.map(labelEs), text: c.text, notes: c.notes, context: c.context, effect: isPlayer ? classify(c.text) : null }]);
+  }
+  return [...byDate.keys()].sort().reverse().slice(0, days).map((date) => {
+    const sections = [...byDate.get(date)!.entries()].map(([name, items]) => ({ name, nameEs: labelEs(name), items }));
+    return { date, sections, total: sections.reduce((n, s) => n + s.items.length, 0) };
+  });
+}
+
+export async function patchNotes(db: Db, opts: { days?: number; fetcher?: Fetcher; now?: number } = {}) {
+  const src = GAME_CHANGE_SOURCES.find((s) => s.kind === 'hotfix')!;
+  const { topic, error, stale } = await loadTopic(db, src.topicId, opts.fetcher ?? defaultFetcher, opts.now ?? Date.now());
+  return {
+    source: { label: src.label, url: `${FORUM_BASE}/t/${src.topicId}`, fetchedAt: topic?.fetchedAt ?? null, error, stale },
+    days: topic ? patchNotesOf(topic, Math.min(Math.max(opts.days ?? 3, 1), 30)) : [],
+  };
+}

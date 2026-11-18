@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'nuevo', title: 'Notas del parche del juego en el inicio',
+    items: [
+      'La página de inicio muestra, debajo de los accesos, las notas del parche de WoW Forever de los últimos 3 días: todos los hotfixes oficiales de Blizzard (clases, mazmorras, objetos, profesiones, misiones…), por sección.',
+      'Los cambios de clases y razas llevan su etiqueta (Mejora, Empeora o Mixto), y cada nota tiene «Traducir» para verla en español con Google Translate.',
+    ],
+  },
+  {
     date: '2026-11-18', kind: 'mejora', title: 'Cambios del juego: traducir con Google',
     items: [
       'Cada cambio tiene un enlace «Traducir» que lo abre en Google Translate (del inglés al español), con sus notas de los desarrolladores.',

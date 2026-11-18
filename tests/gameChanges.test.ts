@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { openDb, migrate } from '../src/server/db.js';
-import { parsePost, classify, numbersOf, changesOfTopic, gameChanges, parseDateHeading, type Fetcher } from '../src/server/gameChanges.js';
+import { parsePost, patchNotesOf, classify, numbersOf, changesOfTopic, gameChanges, parseDateHeading, type Fetcher } from '../src/server/gameChanges.js';
 
 // HTML con la misma forma que los hilos de Blizzard (texto inventado).
 const HOTFIX = `
@@ -72,6 +72,17 @@ describe('cambios del juego: lectura del foro', () => {
     expect(numbersOf(shield)).toBeNull();
     expect(classify(shield)).toBe('empeora');
     expect(numbersOf('Hot Streak duration increased to 20 seconds (was 15 seconds).')).toMatchObject({ now: 20, was: 15 });
+  });
+
+  it('notas del parche completas por día y sección, la más reciente primero', () => {
+    const days = patchNotesOf({ topicId: 1, title: 't', fetchedAt: '', posts: [{ n: 1, created: '2026-11-01T00:00:00Z', cooked: HOTFIX }] }, 1);
+    expect(days).toHaveLength(1);
+    expect(days[0].date).toBe('2026-11-17');
+    expect(days[0].sections.map((s) => s.nameEs)).toEqual(['Clases', 'Mazmorras']); // también lo que no es de clases
+    const storm = days[0].sections[0].items.find((i) => i.text.startsWith('Stormstrike'))!;
+    expect(storm).toMatchObject({ pathEs: ['Chamán', 'Mejora'], effect: 'mejora' });
+    expect(days[0].sections[1].items[0]).toMatchObject({ text: 'Something about a dungeon.', effect: null });
+    expect(days[0].total).toBe(3);
   });
 
   it('guarda una copia del foro y la usa si el foro falla', async () => {
