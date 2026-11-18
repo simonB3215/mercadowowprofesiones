@@ -14,6 +14,12 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'mejora', title: 'Cambios del juego: traducir con Google',
+    items: [
+      'Cada cambio tiene un enlace «Traducir» que lo abre en Google Translate (del inglés al español), con sus notas de los desarrolladores.',
+    ],
+  },
+  {
     date: '2026-11-18', kind: 'nuevo', title: 'Cambios del juego: buffs y nerfs de clases y razas',
     items: [
       'Nueva sección «Cambios del juego» (menú El juego): todos los cambios de cada clase, especialización y raza de WoW Forever, de los hilos oficiales de Blizzard: los hotfixes desde el lanzamiento y las notas de la beta.',

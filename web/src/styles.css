@@ -855,6 +855,7 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .gc-item { padding: var(--space-3); }
 .gc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .gc-link { margin-left: auto; }
+.gc-link-plain { display: inline-flex; align-items: center; gap: 3px; }
 .gc-context { margin: 6px 0 0; }
 .gc-text { margin: 6px 0 0; overflow-wrap: anywhere; }
 .gc-note { margin: 4px 0 0; padding-left: 10px; border-left: 2px solid var(--color-border); font-style: italic; overflow-wrap: anywhere; }

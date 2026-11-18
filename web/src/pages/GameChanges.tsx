@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { api, useAsync, Loading, ErrorBox, Empty, PageHead, hashQuery, setHashQuery, dt } from '../lib.js';
-import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, type Icon } from '@phosphor-icons/react';
+import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, type Icon } from '@phosphor-icons/react';
 
 type Effect = 'mejora' | 'empeora' | 'mixto' | 'correccion' | 'cambio';
 const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: string }> = {
@@ -13,7 +13,11 @@ const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: str
 const SOURCE: Record<string, string> = { hotfix: 'Hotfix', beta: 'Beta' };
 const PAGE = 150;
 
-const longDate = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+/** Google Translate con el texto del cambio (y su contexto y notas), del inglés al español. Solo texto público de Blizzard. */
+const translateUrl = (c: any) =>
+  `https://translate.google.com/?sl=en&tl=es&op=translate&text=${encodeURIComponent([c.context, c.text, ...c.notes].filter(Boolean).join('\n\n').slice(0, 4500))}`;
+
+const longDate =(d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 /** «Cambios del juego»: buffs y nerfs de clases y razas sacados de los hilos oficiales de Blizzard. */
 export function GameChanges() {
@@ -174,7 +178,8 @@ export function GameChanges() {
                           <span className={`badge ${e.cls}`} title={e.help}><e.icon size={13} weight="bold" aria-hidden="true" />{e.label}</span>
                           <strong>{whoLabel(c)}</strong>
                           <span className="muted small">{SOURCE[c.source]}</span>
-                          <a className="small gc-link" href={c.url} target="_blank" rel="noreferrer">Original<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                          <a className="small gc-link" href={translateUrl(c)} target="_blank" rel="noreferrer" title="Abrir este cambio en Google Translate (inglés → español)"><Translate size={13} aria-hidden="true" />Traducir</a>
+                          <a className="small gc-link-plain" href={c.url} target="_blank" rel="noreferrer">Original<ArrowSquareOut size={12} aria-hidden="true" /></a>
                         </div>
                         {c.context && <p className="small muted gc-context">{c.context}</p>}
                         <p className="gc-text" lang="en">{c.text}</p>
