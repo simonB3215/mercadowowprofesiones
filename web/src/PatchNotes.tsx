@@ -14,15 +14,58 @@ const EFFECT: Record<string, { label: string; cls: string; icon: typeof ArrowUp 
 
 const longDate = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 
-/** Notas del parche del juego (hotfixes oficiales de Blizzard) de los últimos días, para la página de inicio. */
+const MAX_HIGHLIGHTS = 5;
+
+/** Resumen del último hotfix para la página de inicio: notas por sección y los buffs y nerfs de clases y razas. */
+export function PatchNotesSummary() {
+  const d = useAsync(() => api<any>('/api/patch-notes?days=1'), []);
+  const day = d.data?.days?.[0];
+  const highlights: any[] = day ? day.sections.flatMap((s: any) => s.items).filter((it: any) => it.effect && EFFECT[it.effect]) : [];
+  return (
+    <section className="card pn pn-compact" aria-labelledby="pn-title">
+      <div className="pn-head">
+        <h2 id="pn-title" className="icon-inline"><Scroll size={22} aria-hidden="true" />Notas del parche del juego</h2>
+        {day && <span className="small muted">Último hotfix: <time dateTime={day.date}>{longDate(day.date)}</time> · {day.total} cambios</span>}
+      </div>
+      {d.loading && <p className="small muted">Leyendo el foro de Blizzard…</p>}
+      {(d.error || (d.data && !day)) && <p className="small pn-err"><Warning size={14} aria-hidden="true" />No se pudieron cargar las notas del parche.</p>}
+      {day && (
+        <>
+          <ul className="pn-chips" aria-label="Cambios por sección">
+            {day.sections.map((s: any) => <li key={s.name}>{s.nameEs} <strong>{s.items.length}</strong></li>)}
+          </ul>
+          {highlights.length === 0 && <p className="small muted">Este hotfix no trae buffs ni nerfs de clases o razas.</p>}
+          {highlights.length > 0 && (
+            <ul className="pn-highlights">
+              {highlights.slice(0, MAX_HIGHLIGHTS).map((it: any, k: number) => {
+                const e = EFFECT[it.effect];
+                return (
+                  <li key={k}>
+                    <span className={`badge ${e.cls}`}><e.icon size={12} weight="bold" aria-hidden="true" />{e.label}</span>
+                    {it.pathEs.length > 0 && <span className="pn-path">{it.pathEs.join(' › ')}</span>}
+                    <span className="pn-clamp" lang="en" title={it.text}>{it.text}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          <a className="pn-more icon-inline" href="#/cambios?vista=notas">
+            Ver todas las notas{highlights.length > MAX_HIGHLIGHTS ? ` (${highlights.length - MAX_HIGHLIGHTS} buffs y nerfs más)` : ''}<ArrowRight size={14} weight="bold" aria-hidden="true" />
+          </a>
+        </>
+      )}
+    </section>
+  );
+}
+
+/** Notas del parche del juego (hotfixes oficiales de Blizzard) de los últimos días, completas. */
 export function PatchNotes({ days = 3 }: { days?: number }) {
   const d = useAsync(() => api<any>(`/api/patch-notes?days=${days}`), [days]);
   const data = d.data;
   return (
-    <section className="card pn" aria-labelledby="pn-title">
+    <section className="card pn" aria-labelledby="pn-title-full">
       <div className="pn-head">
-        <h2 id="pn-title" className="icon-inline"><Scroll size={22} aria-hidden="true" />Notas del parche del juego</h2>
-        <a href="#/cambios" className="small icon-inline">Buffs y nerfs por clase y raza<ArrowRight size={14} aria-hidden="true" /></a>
+        <h2 id="pn-title-full" className="icon-inline"><Scroll size={22} aria-hidden="true" />Notas del parche del juego</h2>
       </div>
       <p className="small muted">
         Últimos hotfixes de WoW Forever publicados por Blizzard, en inglés (como los publica Blizzard). Usa «Traducir» para verlos en español.

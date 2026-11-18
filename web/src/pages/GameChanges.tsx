@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { translateUrl } from '../PatchNotes.js';
+import { translateUrl, PatchNotes } from '../PatchNotes.js';
 import { api, useAsync, Loading, ErrorBox, Empty, PageHead, hashQuery, setHashQuery, dt } from '../lib.js';
-import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, type Icon } from '@phosphor-icons/react';
+import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, Notepad, UsersThree, type Icon } from '@phosphor-icons/react';
 
 type Effect = 'mejora' | 'empeora' | 'mixto' | 'correccion' | 'cambio';
 const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: string }> = {
@@ -24,6 +24,7 @@ export function GameChanges() {
   const [effect, setEffect] = useState(init.get('efecto') ?? '');
   const [source, setSource] = useState(init.get('origen') ?? '');
   const [q, setQ] = useState(init.get('q') ?? '');
+  const [view, setView] = useState(init.get('vista') === 'notas' ? 'notas' : 'clases');
   const [limit, setLimit] = useState(PAGE);
 
   const update = (k: string, v: string, set: (v: string) => void) => {
@@ -85,12 +86,23 @@ export function GameChanges() {
   return (
     <div>
       <PageHead title="Cambios del juego" icon={<Scroll size={26} aria-hidden="true" />}>
-        Mejoras (buffs), empeoramientos (nerfs) y correcciones de cada clase y raza de WoW Forever, sacados de los hilos oficiales de Blizzard.
+        Notas del parche y mejoras (buffs), empeoramientos (nerfs) y correcciones de cada clase y raza de WoW Forever, sacados de los hilos oficiales de Blizzard.
       </PageHead>
 
-      {d.loading && <Loading label="Leyendo los foros de Blizzard…" rows={4} />}
-      {d.error && <ErrorBox error={d.error} onRetry={d.reload} />}
-      {data && (
+      <div className="lv-tabs" role="tablist" aria-label="Vista">
+        <button type="button" role="tab" aria-selected={view === 'clases'} aria-controls="gc-panel" onClick={() => update('vista', '', () => setView('clases'))}>
+          <UsersThree size={18} aria-hidden="true" />Buffs y nerfs por clase y raza
+        </button>
+        <button type="button" role="tab" aria-selected={view === 'notas'} aria-controls="gc-panel" onClick={() => update('vista', 'notas', setView)}>
+          <Notepad size={18} aria-hidden="true" />Notas del parche
+        </button>
+      </div>
+
+      <div id="gc-panel" role="tabpanel">
+      {view === 'notas' && <PatchNotes days={7} />}
+      {view === 'clases' && d.loading && <Loading label="Leyendo los foros de Blizzard…" rows={4} />}
+      {view === 'clases' && d.error && <ErrorBox error={d.error} onRetry={d.reload} />}
+      {view === 'clases' && data && (
         <>
           <div className="card gc-sources">
             <p className="small icon-inline"><Info size={16} aria-hidden="true" />{data.note}</p>
@@ -193,6 +205,7 @@ export function GameChanges() {
           )}
         </>
       )}
+      </div>
     </div>
   );
 }

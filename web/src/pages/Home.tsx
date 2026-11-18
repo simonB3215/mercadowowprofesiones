@@ -3,7 +3,7 @@ import { useApp } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { FavoriteAlerts } from '../favorites.js';
 import { CHANGELOG } from '../changelog.js';
-import { PatchNotes } from '../PatchNotes.js';
+import { PatchNotesSummary } from '../PatchNotes.js';
 import { Coins, ChartBar, ArrowFatLinesUp, IdentificationCard, ArrowRight, ClockCounterClockwise, type Icon } from '@phosphor-icons/react';
 
 const ACTIONS: Array<{ href: string; icon: Icon; title: string; text: string; cta: string }> = [
@@ -40,7 +40,7 @@ export function Home() {
         ))}
       </div>
 
-      <PatchNotes />
+      <PatchNotesSummary />
 
       <FavoriteAlerts compact />
       <MarketStatus />

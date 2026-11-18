@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'mejora', title: 'Inicio más corto: resumen del último parche',
+    items: [
+      'El inicio ya no muestra las notas del parche completas: solo un resumen del último hotfix, con cuántos cambios hay en cada sección y hasta 5 buffs y nerfs de clases y razas.',
+      '«Ver todas las notas» lleva a la nueva pestaña «Notas del parche» de «Cambios del juego», con los hotfixes de los últimos 7 días.',
+    ],
+  },
+  {
     date: '2026-11-18', kind: 'nuevo', title: 'Notas del parche del juego en el inicio',
     items: [
       'La página de inicio muestra, debajo de los accesos, las notas del parche de WoW Forever de los últimos 3 días: todos los hotfixes oficiales de Blizzard (clases, mazmorras, objetos, profesiones, misiones…), por sección.',
