@@ -5,6 +5,7 @@ Web en español para consultar los crafteables de las profesiones de **World of 
 - **Precios de la casa de subastas:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis) (`dynamic-forever-us`, foto de cada casa, incluida la neutral de Aguasnegras). Si falla o no hay credenciales, los CSV públicos de [TradeSkillMaster](https://tradeskillmaster.com/public-data) (`/forever/…`), que no publican Aguasnegras.
 - **Demanda:** estadísticas regionales de TSM (tasa de venta y ventas por día).
 - **Catálogo:** [Blizzard Game Data API](https://community.developer.battle.net/documentation/world-of-warcraft/game-data-apis), namespace `static-forever-us`. Necesita credenciales.
+- **Cambios del juego:** hilos oficiales de Blizzard en los [foros de EE. UU.](https://us.forums.blizzard.com/en/wow/t/2403040) (hotfixes de WoW Forever y notas de la beta), leídos con el JSON público del foro y guardados una hora en `forum_topic_cache`.
 - **Subida de nivel:** recetas, niveles de aprendizaje y umbrales de dificultad de [Wowhead (WoW Forever)](https://www.wowhead.com/forever), guardados en `data/leveling/forever-wowhead.json` (copiados a mano; ver `docs/VALIDACION_FUENTES.md`).
 - **Base de datos:** Supabase (PostgreSQL). **Despliegue:** Vercel.
 
@@ -190,6 +191,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/professions`, `/api/coverage` | Catálogo y cobertura |
 | GET | `/api/opportunities` | Comparador con filtros, orden y paginación |
 | GET | `/api/recipes/{id}` | Detalle, desglose y comparación comprar/fabricar |
+| GET | `/api/game-changes` | Buffs, nerfs y correcciones de clases y razas (foros oficiales de Blizzard), con la clasificación estimada |
 | GET | `/api/transmutations?version=&region=&realm=&profileId=` | Recetas con reutilización (transmutaciones, Tela lunar…) con ganancia por fabricación y oro al día |
 | GET | `/api/items/{id}/tooltip?version=&region=&realm=` | Descripción del objeto para la ventana al pasar el ratón (y su precio en la casa si se indica) |
 | GET | `/api/buy-or-craft?recipeId=…` o `?itemId=…&qty=&profileId=` | ¿Comprar el objeto terminado o fabricarlo? (para usarlo, no venderlo) |

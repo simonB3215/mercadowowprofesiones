@@ -15,6 +15,7 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { buildItemTooltip } from './itemTooltip.js';
 import { transmutations } from './transmutations.js';
+import { gameChanges } from './gameChanges.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -490,6 +491,9 @@ function quantityParam(u: URL) {
   if (n < 1 || n > 10000) throw new HttpError(400, 'La cantidad debe estar entre 1 y 10000.');
   return n;
 }
+
+/** Cambios del juego: mejoras, empeoramientos y correcciones de clases y razas (foros oficiales de Blizzard). */
+route('GET', '/api/game-changes', async (_r, _p, _u, db) => gameChanges(db));
 
 /** Transmutaciones y demás recetas con reutilización, con la ganancia por fabricación y el oro al día. */
 route('GET', '/api/transmutations', async (_r, _p, u, db) => {

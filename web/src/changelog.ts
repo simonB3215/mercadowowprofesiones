@@ -14,6 +14,15 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'nuevo', title: 'Cambios del juego: buffs y nerfs de clases y razas',
+    items: [
+      'Nueva sección «Cambios del juego» (menú El juego): todos los cambios de cada clase, especialización y raza de WoW Forever, de los hilos oficiales de Blizzard: los hotfixes desde el lanzamiento y las notas de la beta.',
+      'Cada cambio lleva una etiqueta: Mejora (buff), Empeora (nerf), Mixto, Corrección o Cambio. Se deduce del texto (por ejemplo, que baje una espera es una mejora), así que puede equivocarse: cada uno enlaza al original.',
+      'Filtra por clase o raza, efecto y origen, o busca una habilidad. El «Balance por clase y raza» cuenta cuántas mejoras y empeoramientos tiene cada una.',
+      'El texto es el original de Blizzard, en inglés (no lo publican en español). Se actualiza solo: como mucho una hora después de que Blizzard añada algo.',
+    ],
+  },
+  {
     date: '2026-11-18', kind: 'mejora', title: 'Lista de compra: lo que ya tienes, y el Salero',
     items: [
       'En la lista de compra de las rutas de subida («Subir nivel» y «Mi personaje») hay una columna «Tienes»: escribe lo que ya tienes en la bolsa o el banco y se descuenta de lo que hay que comprar, con el total a comprar y cuánto te ahorras.',

@@ -839,3 +839,23 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .rt-owned-all td:first-child { opacity: 0.7; }
 .lv-shop-table tfoot .rt-owned-saved th, .lv-shop-table tfoot .rt-owned-saved td { border-top: 0; color: var(--color-ok); font-weight: 600; }
 @media (max-width: 720px) { .rt-owned-input { width: 4.5em; } .rt-owned-note { padding: var(--space-2) var(--space-3); } }
+
+/* Cambios del juego (buffs y nerfs de clases y razas) */
+.gc-sources p { margin: 0 0 6px; }
+.gc-sources ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.gc-sources a, .gc-link { display: inline-flex; align-items: center; gap: 3px; }
+.gc-err { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; color: var(--color-warn); }
+.gc-filters { margin: var(--space-3) 0; }
+.gc-search { flex: 1 1 220px; }
+.gc-balance summary { cursor: pointer; font-weight: 600; }
+.gc-balance table { margin-top: 8px; }
+.gc-up { color: var(--color-ok); }
+.gc-down { color: var(--color-bad); }
+.gc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.gc-item { padding: var(--space-3); }
+.gc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.gc-link { margin-left: auto; }
+.gc-context { margin: 6px 0 0; }
+.gc-text { margin: 6px 0 0; overflow-wrap: anywhere; }
+.gc-note { margin: 4px 0 0; padding-left: 10px; border-left: 2px solid var(--color-border); font-style: italic; overflow-wrap: anywhere; }
+.gc-more { margin-top: var(--space-3); }

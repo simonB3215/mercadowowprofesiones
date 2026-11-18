@@ -17,13 +17,14 @@ const Character = lazy(() => import('./pages/Character.js').then((m) => ({ defau
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
 const TransmutationsPage = lazy(() => import('./pages/Transmutations.js').then((m) => ({ default: m.Transmutations })));
 const BuyOrCraftPage = lazy(() => import('./pages/BuyOrCraft.js').then((m) => ({ default: m.BuyOrCraft })));
+const GameChangesPage = lazy(() => import('./pages/GameChanges.js').then((m) => ({ default: m.GameChanges })));
 const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
 import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
 import { ItemTipHost } from './ItemTooltip.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
-  House, SignOut, Scales, Flask, type Icon,
+  House, SignOut, Scales, Flask, Scroll, type Icon,
 } from '@phosphor-icons/react';
 const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
 const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
@@ -43,6 +44,9 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
   ['Subir profesión', [
     ['/nivel', 'Subir nivel', ArrowFatLinesUp],
     ['/personaje', 'Mi personaje', IdentificationCard],
+  ]],
+  ['El juego', [
+    ['/cambios', 'Cambios del juego', Scroll],
   ]],
   ['Herramientas', [
     ['/perfil', 'Perfiles manuales', UserCircle],
@@ -71,6 +75,7 @@ const NAV_HELP: Record<string, string> = {
   '/datos': 'De cuándo son los precios y qué le falta al catálogo',
   '/ajustes': 'Comisión de la subasta y criterios de «Buena opción»',
   '/changelog': 'Novedades de la web',
+  '/cambios': 'Buffs y nerfs de cada clase y raza (hotfixes oficiales de Blizzard)',
 };
 const EXTRA_TITLES: Record<string, string> = { '/privacidad': 'Privacidad' };
 
@@ -145,6 +150,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
     case 'personaje': page = <Character />; break;
     case 'ajustes': page = <SettingsPage />; break;
     case 'changelog': page = <Changelog />; break;
+    case 'cambios': page = <GameChangesPage />; break;
     default: page = <div className="empty card">Página no encontrada. <a href="#/">Volver al comparador</a></div>;
   }
   const active = '/' + (parts[0] === 'receta' ? '' : parts[0] ?? '');
