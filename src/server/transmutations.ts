@@ -9,6 +9,7 @@ import type { MarketContext } from './market.js';
 import { buildEvalContext, evaluateRecipe, loadRecipes, resolvePrice, type Profile } from './evaluate.js';
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { Q } from '../engine/rational.js';
+import { commissionFor } from './config.js';
 import { cooldownRecipes } from './leveling.js';
 import { reagentKey } from './cooldowns.js';
 import { goldPerDay, craftsPerDay, MAX_CRAFTS_PER_DAY } from '../engine/cooldown.js';
@@ -40,9 +41,48 @@ export function bestPerGroup<T extends { recipeId: number; group: string | null;
   return best;
 }
 
+/**
+ * Objetos que se usan con espera y no son recetas de profesión. El Salero lo fabrica Ingeniería (receta 19567) y lo usa
+ * un peletero (Peletería 250): Sal de roca profunda → Sal de roca profunda refinada, una vez cada 2 días y 23 h.
+ * Comprobado en el tooltip de Wowhead (17-11-2026). Wowhead no dice cuántas sales refinadas da cada uso: se da el
+ * margen por unidad y no se calcula el oro al día (no se suma al plan).
+ */
+export const ITEM_USES = [{
+  key: 'salero', nameEn: 'Salt Shaker', itemId: 15846, spellId: 19566, cooldown: 255600, requires: { profession: 'Peletería', skill: 250 },
+  madeBy: { profession: 'Ingeniería', spellId: 19567 }, inputItemId: 8150, outputItemId: 15409,
+  source: 'https://nether.wowhead.com/tooltip/spell/19566?dataEnv=16&locale=0', checkedAt: '2026-11-17',
+}] as const;
+
+async function itemUses(db: Db, ctx: MarketContext, ectx: Awaited<ReturnType<typeof buildEvalContext>>) {
+  if (ctx.version !== 'forever') return [];
+  const ids = ITEM_USES.flatMap((u) => [u.itemId, u.inputItemId, u.outputItemId]);
+  const rows = await db.query<any>(`select id, name, quality from item where game_version=$1 and id = any($2::int[])`, [ctx.version, ids]);
+  const item = (id: number) => { const r = rows.find((x) => Number(x.id) === id); return { itemId: id, name: (r?.name as string | null) ?? null, quality: (r?.quality as string | null) ?? null }; };
+  const keep = Q.one.sub(Q.parse(commissionFor(ectx.settings, ctx.realm)));
+  return ITEM_USES.map((u) => {
+    const buy = resolvePrice(ectx.snap, u.inputItemId, ectx.settings.buySource).copper;
+    const sell = resolvePrice(ectx.snap, u.outputItemId, ectx.settings.sellSource);
+    const net = sell.copper ? sell.copper.mul(keep) : null;
+    const sold = ectx.snap.region.get(u.outputItemId)?.soldPerDay ?? null;
+    return {
+      key: u.key, nameEn: u.nameEn, spellId: u.spellId, cooldown: u.cooldown, requires: u.requires, madeBy: u.madeBy,
+      device: { ...item(u.itemId), buyPrice: resolvePrice(ectx.snap, u.itemId, ectx.settings.buySource).copper },
+      input: { ...item(u.inputItemId), buyPrice: buy },
+      output: { ...item(u.outputItemId), sellPrice: sell.copper, sellNet: net },
+      /** Precio neto de venta (sin comisión) de una refinada menos el de una sin refinar; null si falta un precio. */
+      marginPerUnit: net && buy ? net.sub(buy) : null,
+      /** Mínimo si cada uso da una sola refinada (cada uso da al menos una); el real puede ser mayor. */
+      minGoldPerDay: net && buy ? goldPerDay(net.sub(buy), u.cooldown) : null,
+      soldPerDay: sold,
+      yieldKnown: false,
+      wowheadUrl: `https://www.wowhead.com/forever/spell=${u.spellId}`, checkedAt: u.checkedAt,
+    };
+  });
+}
+
 export async function transmutations(db: Db, ctx: MarketContext, profile: Profile | null) {
   const wh = cooldownRecipes(ctx.version);
-  if (!wh.length) return { items: [], groups: {}, plan: [], planTotal: null, buyOrMake: [], unmatched: [], note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: null };
+  if (!wh.length) return { items: [], groups: {}, plan: [], planTotal: null, buyOrMake: [], itemUses: [], unmatched: [], note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: null };
   // Recetas del catálogo que crean esos objetos, con sus materiales obligatorios, para enlazarlas por objeto + materiales.
   const created = [...new Set(wh.map((w) => w.createsItemId))];
   const cand = await db.query<any>(
@@ -103,6 +143,8 @@ export async function transmutations(db: Db, ctx: MarketContext, profile: Profil
     plan: plan.map((i) => ({ recipeId: i.recipeId, name: i.name, group: i.group, cooldown: i.cooldown, goldPerDay: i.goldPerDay, profitPerCraft: i.profitPerCraft, output: i.output })),
     planTotal: plan.length ? planTotal : null,
     buyOrMake,
+    /** Objetos que se usan con espera (Salero): margen por unidad, sin oro al día (no se sabe cuánto da cada uso). */
+    itemUses: await itemUses(db, ctx, ectx),
     /** Recetas con espera de Wowhead que no coinciden con ninguna del catálogo (no se pueden evaluar). */
     unmatched: matched.filter((m) => m.recipeId === null).map((m) => ({ spellId: m.w.spellId, name: m.w.nameEn, professionId: m.w.professionId, cooldown: m.w.cooldown })),
     note: SHARED_COOLDOWN_NOTE, maxCraftsPerDay: MAX_CRAFTS_PER_DAY, market: ectx.snap.runs,

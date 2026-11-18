@@ -98,7 +98,7 @@ Las pruebas cubren:
 | `buscar_material` | Id de un material por nombre |
 | `vender_o_usar_material` | Vender el material frente a usarlo en cada receta |
 | `ruta_subir_nivel` | Ruta para subir una profesión (más rápida por defecto o más barata) y lista de compra |
-| `transmutaciones` | Recetas con espera (transmutaciones, Tela lunar): oro al día, la mejor de cada espera compartida, comprar o transmutar |
+| `transmutaciones` | Recetas con espera (transmutaciones, Tela lunar) y el Salero: oro al día, la mejor de cada espera compartida, comprar o transmutar |
 
 Importes en oro con 4 decimales; `null` = sin datos (nunca 0). Casa por defecto: JcJ — Horda (parámetro `casa`).
 

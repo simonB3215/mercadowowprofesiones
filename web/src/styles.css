@@ -830,3 +830,12 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 .tm-done-btn { margin-top: 4px; min-height: 32px; padding: 4px 10px; font-size: var(--text-sm); display: inline-flex; align-items: center; gap: 6px; }
 .link-button { background: none; border: 0; padding: 0; min-height: 0; color: var(--color-primary); text-decoration: underline; cursor: pointer; font-size: inherit; display: inline-flex; align-items: center; gap: 4px; }
 .link-button:hover { color: var(--color-primary-hover); }
+
+/* Lista de compra: lo que ya tienes */
+.rt-owned-note { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; padding: var(--space-2) var(--space-4); border-bottom: 1px solid var(--gold-line); }
+.rt-owned-note .link { display: inline-flex; align-items: center; gap: 4px; }
+.rt-owned-input { width: 5.5em; text-align: right; padding: 4px 6px; }
+.rt-owned-ok { display: inline-flex; align-items: center; gap: 4px; color: var(--color-ok); white-space: nowrap; }
+.rt-owned-all td:first-child { opacity: 0.7; }
+.lv-shop-table tfoot .rt-owned-saved th, .lv-shop-table tfoot .rt-owned-saved td { border-top: 0; color: var(--color-ok); font-weight: 600; }
+@media (max-width: 720px) { .rt-owned-input { width: 4.5em; } .rt-owned-note { padding: var(--space-2) var(--space-3); } }

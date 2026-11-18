@@ -264,6 +264,8 @@ describe('API sobre un catálogo de prueba de WoW Forever', () => {
     const t = r.json.items.find((i: any) => i.recipeId === 800099);
     expect(t).toMatchObject({ spellId: 17187, cooldown: 169200, tools: ['Piedra filosofal'], group: 'transmutaciones', bestInGroup: false });
     expect(r.json.plan).toEqual([]); // sin ganancia calculable no se recomienda nada
+    // Salero: objeto con espera (71 h), aparte de las transmutaciones; sin precios no hay margen (nunca 0).
+    expect(r.json.itemUses).toEqual([expect.objectContaining({ key: 'salero', spellId: 19566, cooldown: 255600, requires: { profession: 'Peletería', skill: 250 }, marginPerUnit: null, minGoldPerDay: null, yieldKnown: false })]);
     expect(r.json.buyOrMake.find((b: any) => b.itemId === 12360)).toMatchObject({ name: 'Barra de arcanita', makeUnit: null, via: null }); // sin precios: no se inventa un costo
     expect(q(t.craftsPerDay).eq(Q.of(24, 47))).toBe(true);
     expect(t.goldPerDay).toBeNull(); // sin precios en el catálogo de prueba: nunca 0

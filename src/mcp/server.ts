@@ -220,6 +220,11 @@ export function createServer(): McpServer {
         comoSeAprende: i.learn.availability === 'instructor' ? `instructor (nivel ${i.learn.learnedAt})` : i.learn.recipeItem ? `objeto de receta «${i.learn.recipeItem.nameEn}»` : i.learn.availability,
         herramientas: i.tools,
       })),
+      objetosConEspera: (r.itemUses ?? []).map((u: any) => ({
+        objeto: u.device.name ?? u.nameEn, espera: cooldownLabel(u.cooldown), requiere: `${u.requires.profession} ${u.requires.skill}`, loFabrica: u.madeBy.profession,
+        convierte: `${u.input.name ?? u.input.itemId} → ${u.output.name ?? u.output.itemId}`, compraSal: gold(u.input.buyPrice), ventaNetaRefinada: gold(u.output.sellNet),
+        margenPorUnidad: gold(u.marginPerUnit), oroAlDiaMinimo: gold(u.minGoldPerDay), ventasPorDia: u.soldPerDay, aviso: 'Wowhead no indica cuántas da cada uso: oroAlDiaMinimo supone una por uso.',
+      })),
       comprarOTransmutar: r.buyOrMake.map((b: any) => ({ objeto: b.name, comprar: gold(b.buyUnit), hacer: gold(b.makeUnit), con: b.via?.name ?? null, mejor: b.verdict, ahorro: gold(b.savings) })),
     };
   }));

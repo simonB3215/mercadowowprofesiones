@@ -152,6 +152,37 @@ export function Transmutations() {
               </div>
             </section>
           )}
+          {d.data.itemUses?.map((u: any) => (
+            <section key={u.key} className="card" aria-label={u.device.name ?? u.nameEn}>
+              <h2 className="icon-inline" style={{ marginTop: 0 }}>
+                <ItemLabel id={u.device.itemId} quality={u.device.quality} px={24} href={`#/materiales/${u.device.itemId}`} name={u.device.name ?? u.nameEn} />
+                <span className="small muted">· Peletería</span>
+              </h2>
+              <p className="small" style={{ marginTop: 0 }}>
+                Un objeto que convierte <ItemLabel id={u.input.itemId} quality={u.input.quality} px={18} name={u.input.name ?? `Objeto ${u.input.itemId}`} /> en <ItemLabel id={u.output.itemId} quality={u.output.quality} px={18} name={u.output.name ?? `Objeto ${u.output.itemId}`} />,
+                {' '}una vez cada {cooldownLabel(u.cooldown)}. Necesitas {u.requires.profession} {u.requires.skill}; el salero lo fabrica {u.madeBy.profession}
+                {u.device.buyPrice && <> (en tu casa, <Money v={u.device.buyPrice} />)</>}. Su espera es aparte: no ocupa la de las transmutaciones.
+              </p>
+              <div className="table-wrap">
+                <table className="responsive">
+                  <thead><tr><th className="num">Compras la sal</th><th className="num">Vendes la refinada</th><th className="num">Margen por unidad</th><th className="num">Ventas/día</th><th>Disponible</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td data-label="Compras la sal" className="num"><Money v={u.input.buyPrice} /></td>
+                      <td data-label="Vendes la refinada" className="num"><Money v={u.output.sellNet} /><span className="lv-unit">sin la comisión</span></td>
+                      <td data-label="Margen por unidad" className="num"><Delta v={u.marginPerUnit} /></td>
+                      <td data-label="Ventas/día" className="num">{u.soldPerDay ?? '—'}{u.soldPerDay !== null && u.soldPerDay < 1 && u.soldPerDay > 0 && <span className="lv-unit lv-error">se vende 1 cada {(Math.round(10 / u.soldPerDay) / 10).toLocaleString('es')} días</span>}</td>
+                      <td data-label="Disponible">{(() => { const i = { group: `uso:${u.key}`, name: u.device.name ?? u.nameEn, cooldown: u.cooldown }; return <Availability i={i} done={done} now={now} onDone={() => mark(i)} onClear={() => clear(i)} />; })()}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="small muted" style={{ marginBottom: 0 }}>
+                {toQ(u.minGoldPerDay)?.sign() === 1 && <><strong>Al menos <Money v={u.minGoldPerDay} /> al día</strong> si cada uso da una sola. </>}
+                <Info size={14} aria-hidden="true" /> Wowhead no dice cuántas sales refinadas da cada uso, así que no se suma arriba con las demás. <a href={u.wowheadUrl} target="_blank" rel="noreferrer">Ver en Wowhead</a>.
+              </p>
+            </section>
+          ))}
           <details className="card">
             <summary>¿Cómo se calcula?</summary>
             <ul className="reasons small">

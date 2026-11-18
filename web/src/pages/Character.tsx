@@ -443,7 +443,7 @@ export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; on
           ))}
         </ol>
       ) : (
-        <ShoppingPanel d={d} done={steps.done} />
+        <ShoppingPanel d={d} done={steps.done} bagKey={doneKey} />
       )}
       <details className="card lv-details">
         <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>

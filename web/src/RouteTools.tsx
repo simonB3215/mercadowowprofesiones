@@ -1,13 +1,14 @@
 /**
  * Herramientas comunes a las rutas de subida («Subir nivel» y «Mi personaje»): marcar pasos hechos (se guarda en
- * este navegador), lista de compra con «solo lo que falta», copiar y descargar CSV, procedencia de recetas y
+ * este navegador), lista de compra con «solo lo que falta» y «lo que ya tienes», copiar y descargar CSV, procedencia de recetas y
  * materiales, y otras recetas posibles en cada paso («Evitar esta receta»).
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Money, Q, toQ } from './lib.js';
 import { ItemLabel } from './icons.js';
 import { downloadCsv, goldCell, toCsv } from './csv.js';
-import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning, BookOpen } from '@phosphor-icons/react';
+import { applyOwned, cleanQty, readOwned, sumOrNull, writeOwned, type Owned } from './shopping.js';
+import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning, BookOpen, Backpack } from '@phosphor-icons/react';
 
 // ---------------------------------------------------------------------------
 // Pasos hechos
@@ -244,19 +245,44 @@ async function copyText(text: string): Promise<boolean> {
   } catch { return false; }
 }
 
-/** Lista de compra con «Solo lo que falta», copiar como texto y descargar CSV. */
-export function ShoppingPanel({ d, done }: { d: any; done: Set<string> }) {
+/** Lo que tienes guardado en este navegador para una bolsa (ruta general o un personaje). */
+function useOwned(key: string) {
+  const [owned, setOwned] = useState<Owned>(() => readOwned(key));
+  useEffect(() => { setOwned(readOwned(key)); }, [key]);
+  const set = (itemId: number, v: unknown) => {
+    const n = cleanQty(v);
+    setOwned((prev) => {
+      const next = { ...prev };
+      if (n) next[String(itemId)] = n; else delete next[String(itemId)];
+      writeOwned(key, next);
+      return next;
+    });
+  };
+  const clear = () => { setOwned({}); writeOwned(key, {}); };
+  return { owned, set, clear };
+}
+
+/**
+ * Lista de compra con «Solo lo que falta», «Tienes» (lo que ya tienes se descuenta; se guarda en este navegador),
+ * copiar como texto y descargar CSV. `bagKey` separa lo que tienes por personaje.
+ */
+export function ShoppingPanel({ d, done, bagKey = 'general' }: { d: any; done: Set<string>; bagKey?: string }) {
   const anyDone = d.steps.some((s: any) => done.has(stepKey(s)));
   const [onlyMissing, setOnlyMissing] = useState(true);
   const [copied, setCopied] = useState<'ok' | 'error' | null>(null);
+  const bag = useOwned(bagKey);
   const missing = onlyMissing && anyDone;
-  const rows: ShopRow[] = useMemo(() => (missing ? remainingShopping(d.steps, done) : d.shopping.map(fromApi)), [missing, d, done]);
-  const total = rows.every((r) => r.cost) ? rows.reduce((acc, r) => acc.add(r.cost!), Q.zero) : null;
+  const base: ShopRow[] = useMemo(() => (missing ? remainingShopping(d.steps, done) : d.shopping.map(fromApi)), [missing, d, done]);
+  const rows = useMemo(() => applyOwned(base, bag.owned), [base, bag.owned]);
+  const total = sumOrNull(rows.map((r) => r.cost));
+  const anyOwned = rows.some((r) => r.owned > 0n);
+  const saved = anyOwned ? sumOrNull(rows.map((r) => r.saved)) : null;
+  const toBuy = rows.filter((r) => r.buy > 0n);
   const title = `${d.profession.name} ${d.from} → ${d.to}`;
 
-  const asText = () => [`Lista de compra · ${title}${missing ? ' (lo que falta)' : ''}`, ...rows.map((m) => `${String(m.quantity)} × ${nameOf(m)}`)].join('\n');
-  const asCsv = () => toCsv(['Material', 'Id', 'Cantidad', 'Precio unidad (oro)', 'Total (oro)', 'Dónde'],
-    rows.map((m) => [nameOf(m), String(m.itemId), String(m.quantity), goldCell(m.unitPrice), goldCell(m.cost), WHERE(m)]));
+  const asText = () => [`Lista de compra · ${title}${missing ? ' (lo que falta)' : ''}${anyOwned ? ' (sin lo que ya tengo)' : ''}`, ...toBuy.map((m) => `${String(m.buy)} × ${nameOf(m.row)}`)].join('\n');
+  const asCsv = () => toCsv(['Material', 'Id', 'Necesitas', 'Tienes', 'Comprar', 'Precio unidad (oro)', 'Total (oro)', 'Dónde'],
+    rows.map((m) => [nameOf(m.row), String(m.row.itemId), String(m.need), String(m.owned), String(m.buy), goldCell(m.row.unitPrice), goldCell(m.cost), WHERE(m.row)]));
   const onCopy = async () => { setCopied((await copyText(asText())) ? 'ok' : 'error'); setTimeout(() => setCopied(null), 2500); };
   const slug = `${d.profession.name}-${d.from}-${d.to}`.toLowerCase().normalize('NFD').replace(/[^a-z0-9-]+/g, '');
 
@@ -267,30 +293,48 @@ export function ShoppingPanel({ d, done }: { d: any; done: Set<string> }) {
           <label className="check"><input type="checkbox" checked={onlyMissing} onChange={(e) => setOnlyMissing(e.target.checked)} />Solo lo que falta (sin los pasos hechos)</label>
         )}
         <div className="rt-shop-buttons">
-          <button type="button" onClick={onCopy} disabled={!rows.length}>{copied === 'ok' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copied === 'ok' ? 'Copiado' : 'Copiar lista'}</button>
+          <button type="button" onClick={onCopy} disabled={!toBuy.length}>{copied === 'ok' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copied === 'ok' ? 'Copiado' : 'Copiar lista'}</button>
           <button type="button" onClick={() => downloadCsv(`lista-compra-${slug}${missing ? '-falta' : ''}.csv`, asCsv())} disabled={!rows.length}><DownloadSimple size={16} aria-hidden="true" />Descargar CSV</button>
         </div>
         <span className="sr-only" aria-live="polite">{copied === 'ok' ? 'Lista copiada al portapapeles' : copied === 'error' ? 'No se pudo copiar' : ''}</span>
         {copied === 'error' && <span className="small lv-error">No se pudo copiar: el navegador no lo permite.</span>}
       </div>
+      {rows.length > 0 && (
+        <p className="small muted rt-owned-note">
+          <Backpack size={14} aria-hidden="true" />
+          <span>En «Tienes» escribe lo que ya tienes en la bolsa o el banco: se descuenta de lo que hay que comprar. Se guarda solo en este navegador{bagKey !== 'general' ? ', para este personaje' : ''}.</span>
+          {anyOwned && <button type="button" className="link" onClick={bag.clear}><ArrowCounterClockwise size={14} aria-hidden="true" />Borrar lo que tengo</button>}
+        </p>
+      )}
       {!rows.length ? <p className="muted rt-empty">{missing ? 'Ya tienes hechos todos los pasos con materiales.' : 'No hay materiales con precio para comprar.'}</p> : (
         <table className="lv-shop-table">
-          <thead><tr><th>Material</th><th className="num">Cantidad</th><th className="num">Total</th><th className="rt-where">Dónde</th></tr></thead>
+          <thead><tr><th>Material</th><th className="num">Tienes</th><th className="num">Comprar</th><th className="num">Total</th><th className="rt-where">Dónde</th></tr></thead>
           <tbody>
             {rows.map((m) => (
-              <tr key={m.itemId}>
-                <td><ItemLabel id={m.itemId} quality={m.quality} px={24} href={`#/materiales/${m.itemId}`} name={nameOf(m)} /></td>
-                <td className="num">{String(m.quantity)}</td>
-                <td className="num"><Money v={m.cost?.toJSON()} /><span className="lv-unit"><Money v={m.unitPrice?.toJSON()} /> c/u</span><span className="lv-unit rt-where-m">{WHERE(m)}</span></td>
+              <tr key={m.row.itemId} className={m.buy === 0n ? 'rt-owned-all' : undefined}>
+                <td><ItemLabel id={m.row.itemId} quality={m.row.quality} px={24} href={`#/materiales/${m.row.itemId}`} name={nameOf(m.row)} /></td>
+                <td className="num">
+                  <input type="number" className="rt-owned-input" min={0} max={100000} step={1} inputMode="numeric" placeholder="0"
+                    value={bag.owned[String(m.row.itemId)] ?? ''} onChange={(e) => bag.set(m.row.itemId, e.target.value)}
+                    aria-label={`Cuántos ${nameOf(m.row)} tienes ya`} />
+                </td>
+                <td className="num">
+                  {m.buy === 0n ? <span className="rt-owned-ok"><Check size={14} weight="bold" aria-hidden="true" />Ya lo tienes</span> : String(m.buy)}
+                  {m.owned > 0n && <span className="lv-unit">de {String(m.need)}</span>}
+                </td>
+                <td className="num"><Money v={m.cost?.toJSON()} /><span className="lv-unit"><Money v={m.row.unitPrice?.toJSON()} /> c/u</span><span className="lv-unit rt-where-m">{WHERE(m.row)}</span></td>
                 <td className="small rt-where">
-                  {m.priceSource === 'vendedor'
-                    ? <a href={soldByUrl(m.itemId)} target="_blank" rel="noreferrer" className="icon-inline">Vendedor<ArrowSquareOut size={12} aria-hidden="true" /></a>
-                    : WHERE(m)}
+                  {m.row.priceSource === 'vendedor'
+                    ? <a href={soldByUrl(m.row.itemId)} target="_blank" rel="noreferrer" className="icon-inline">Vendedor<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                    : WHERE(m.row)}
                 </td>
               </tr>
             ))}
           </tbody>
-          <tfoot><tr><th colSpan={2}>{missing ? 'Total de lo que falta' : 'Total materiales'}</th><td className="num"><Money v={total?.toJSON()} /></td><td className="rt-where" /></tr></tfoot>
+          <tfoot>
+            <tr><th colSpan={3}>{missing ? 'Total de lo que falta' : anyOwned ? 'Total a comprar' : 'Total materiales'}</th><td className="num"><Money v={total?.toJSON()} /></td><td className="rt-where" /></tr>
+            {anyOwned && <tr className="rt-owned-saved"><th colSpan={3}>Te ahorras con lo que tienes</th><td className="num"><Money v={saved?.toJSON()} /></td><td className="rt-where" /></tr>}
+          </tfoot>
         </table>
       )}
     </section>

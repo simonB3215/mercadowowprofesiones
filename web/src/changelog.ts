@@ -14,6 +14,15 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'mejora', title: 'Lista de compra: lo que ya tienes, y el Salero',
+    items: [
+      'En la lista de compra de las rutas de subida («Subir nivel» y «Mi personaje») hay una columna «Tienes»: escribe lo que ya tienes en la bolsa o el banco y se descuenta de lo que hay que comprar, con el total a comprar y cuánto te ahorras.',
+      'Si ya tienes todo lo de un material, aparece «Ya lo tienes». Copiar la lista y el CSV también lo tienen en cuenta.',
+      'Se guarda solo en este navegador, y en «Mi personaje», por separado para cada personaje. El costo de la ruta no cambia: lo que tienes vale lo mismo que en la subasta.',
+      'En «Transmutaciones» aparece el Salero de Peletería (Sal de roca → Sal de roca refinada, cada 2 días y 23 h), con el margen por unidad y su propio «La hice ahora». Wowhead no dice cuántas da cada uso, así que el oro al día es un mínimo (si da una por uso) y no se suma con las demás.',
+    ],
+  },
+  {
     date: '2026-11-17', kind: 'mejora', title: 'Transmutaciones: cuál hacer y cuándo vuelve a estar disponible',
     items: [
       'Las transmutaciones de Alquimia comparten la espera en WoW Forever (al hacer una no puedes hacer otra hasta que pase): la página lo tiene en cuenta y destaca «La mejor transmutación», la que más oro da al día con ventas suficientes. La Tela lunar va aparte.',
