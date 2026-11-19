@@ -14,6 +14,14 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-19', kind: 'mejora', title: 'Menú lateral ordenado',
+    items: [
+      'El menú está ordenado en grupos más claros: Ganar oro, Subir profesión, El juego, Mis datos (perfiles, registro y simulador) y La web (calidad de datos, ajustes y changelog), con una línea dorada en cada título.',
+      'Ya no se corta: caben todas las secciones en una pantalla normal, y si la ventana es muy baja solo se desplaza la lista; «Salir de admin» queda siempre visible abajo, en una línea.',
+      'Cada opción se resalta al pasar el ratón (fondo iluminado y una barra dorada a la izquierda), y la sección en la que estás mantiene la barra.',
+    ],
+  },
+  {
     date: '2026-11-19', kind: 'mejora', title: 'Se ilumina el botón entero',
     items: [
       'Al pasar el ratón, ahora se ilumina todo el botón o bloque (con un relleno dorado; los botones rojos, más brillantes), no solo el borde. También las tarjetas del inicio, el menú y las pestañas.',

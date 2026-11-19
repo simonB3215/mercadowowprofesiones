@@ -48,10 +48,12 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
   ['El juego', [
     ['/cambios', 'Cambios del juego', Scroll],
   ]],
-  ['Herramientas', [
+  ['Mis datos', [
     ['/perfil', 'Perfiles manuales', UserCircle],
     ['/registro', 'Registro real', Receipt],
     ['/avanzado', 'Simulador', Calculator],
+  ]],
+  ['La web', [
     ['/datos', 'Calidad de datos', ShieldCheck],
     ['/ajustes', 'Ajustes', GearSix],
     ['/changelog', 'Changelog', ClockCounterClockwise],
@@ -180,12 +182,12 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
           </nav>
           {onLogout && (
             <button type="button" className="nav-logout" onClick={onLogout} title="Salir del modo administrador">
-              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Salir de administrador</span>
+              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Salir de admin</span>
             </button>
           )}
           {onLogin && (
             <button type="button" className="nav-logout" onClick={onLogin} title="Contraseña para cambiar ajustes, sincronizar precios y editar datos compartidos">
-              <LockKey size={20} aria-hidden="true" /><span className="nav-text">Entrar como administrador</span>
+              <LockKey size={20} aria-hidden="true" /><span className="nav-text">Entrar como admin</span>
             </button>
           )}
           <p className="sidebar-foot">Las ganancias son estimaciones; el beneficio realizado está en «Registro real».</p>

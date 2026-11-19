@@ -901,3 +901,26 @@ option.opt-q-epic { color: var(--q-epic); } option.opt-q-legendary { color: var(
 
 /* Enlaces de acción: brillo dorado al pasar el ratón */
 .pn-more:hover, .gc-link:hover, .gc-link-plain:hover, .pn-tr:hover { text-shadow: var(--glow-text); }
+
+/* --- Menú lateral ordenado: solo la lista se desplaza; marca, «Salir» y pie quedan fijos --- */
+@media (min-width: 1101px) {
+  .sidebar { overflow: hidden; }
+  .sidebar > .brand, .sidebar > .nav-logout, .sidebar > .sidebar-foot { flex: none; }
+  nav.main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin: 0 calc(-1 * var(--space-1)); padding: 0 var(--space-1); scrollbar-width: thin; scrollbar-color: var(--gold-line) transparent; }
+  nav.main::-webkit-scrollbar { width: 6px; }
+  nav.main::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 3px; }
+  nav.main a, .nav-logout { min-height: 32px; padding-top: 5px; padding-bottom: 5px; }
+  .nav-group { gap: 1px; }
+  .nav-group + .nav-group { margin-top: 6px; }
+  .nav-group-title { display: flex; align-items: center; gap: 8px; color: var(--gold-soft); opacity: 0.85; padding: 2px var(--space-3) 3px; }
+  .nav-group-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
+  .nav-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .nav-logout { border-top: 1px solid var(--color-border); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+}
+/* Pantallas bajas: sin el pie de texto, para que quepan todas las secciones */
+@media (min-width: 1101px) and (max-height: 960px) { .sidebar-foot { display: none; } .sidebar { gap: var(--space-2); } }
+/* Barra dorada a la izquierda: al pasar el ratón y en la sección actual */
+nav.main a::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; border-radius: 2px; background: var(--gold); opacity: 0; transform: scaleY(0.4); transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
+nav.main a:hover::before, nav.main a[aria-current='page']::before { opacity: 1; transform: scaleY(1); }
+nav.main a:hover .nav-text { text-shadow: var(--glow-text); }
+@media (max-width: 760px) { nav.main a::before { top: auto; bottom: 0; left: 8px; right: 8px; width: auto; height: 3px; transform: scaleX(0.4); } nav.main a:hover::before, nav.main a[aria-current='page']::before { transform: scaleX(1); } }
