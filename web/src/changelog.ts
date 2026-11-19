@@ -14,6 +14,12 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-18', kind: 'mejora', title: 'Botones que se iluminan al pasar el ratón',
+    items: [
+      'Los botones, pestañas, accesos del inicio y el menú se iluminan con un brillo dorado al pasar el ratón por encima (los botones rojos, con un brillo cálido), al estilo del juego.',
+    ],
+  },
+  {
     date: '2026-11-18', kind: 'mejora', title: 'Inicio más corto: resumen del último parche',
     items: [
       'El inicio ya no muestra las notas del parche completas: solo un resumen del último hotfix, con cuántos cambios hay en cada sección y hasta 5 buffs y nerfs de clases y razas.',
