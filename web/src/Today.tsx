@@ -12,6 +12,7 @@ import { useFavorites } from './favorites.js';
 import { useDone, slotOf } from './pages/Transmutations.js';
 import { cooldownLabel } from '../../src/engine/cooldown.js';
 import { Sun, ChartBar, Flask, Star, ArrowRight, Timer, CheckCircle, TrendUp, TrendDown } from '@phosphor-icons/react';
+import { t, locale } from './i18n.js';
 
 const SNAP_KEY = 'mw-favoritas-foto';
 const DAY = 20 * 3600_000;
@@ -64,28 +65,28 @@ export function Today() {
   const plan: any[] = tm.data?.plan ?? [];
   return (
     <section className="card today" aria-labelledby="today-title">
-      <h2 id="today-title" className="icon-inline"><Sun size={22} aria-hidden="true" />Qué hago hoy</h2>
+      <h2 id="today-title" className="icon-inline"><Sun size={22} aria-hidden="true" />{t('Qué hago hoy')}</h2>
       <div className="today-grid">
         <div className="today-col">
-          <h3 className="icon-inline"><ChartBar size={18} aria-hidden="true" />Las 3 que más dejan</h3>
-          {best.loading && !best.data && <p className="small muted">Calculando…</p>}
-          {best.error && <p className="small lv-error">No se pudo calcular.</p>}
-          {best.data && !top.length && <p className="small muted">Ahora mismo ninguna receta es «Buena opción» en tu casa.</p>}
+          <h3 className="icon-inline"><ChartBar size={18} aria-hidden="true" />{t('Las 3 que más dejan')}</h3>
+          {best.loading && !best.data && <p className="small muted">{t('Calculando…')}</p>}
+          {best.error && <p className="small lv-error">{t('No se pudo calcular.')}</p>}
+          {best.data && !top.length && <p className="small muted">{t('Ahora mismo ninguna receta es «Buena opción» en tu casa.')}</p>}
           <ol className="today-list">
             {top.map((i) => (
               <li key={i.recipeId}>
                 <ItemLabel id={i.output?.itemId} quality={i.output?.quality} px={24} href={`#/receta/${i.recipeId}`} name={i.name}
-                  sub={<><Delta v={i.profitUnit} tag={false} /> por unidad{i.demand?.soldPerDay != null ? ` · ${Number(i.demand.soldPerDay).toLocaleString('es-ES', { maximumFractionDigits: 1 })} ventas/día` : ''}</>} />
+                  sub={<><Delta v={i.profitUnit} tag={false} />{' '}{t('por unidad')}{i.demand?.soldPerDay != null ? ` · ${t('{n} ventas/día', { n: Number(i.demand.soldPerDay).toLocaleString(locale(), { maximumFractionDigits: 1 }) })}` : ''}</>} />
               </li>
             ))}
           </ol>
-          <a className="small icon-inline" href="#/?status=candidato">Ver todas en el comparador<ArrowRight size={14} aria-hidden="true" /></a>
+          <a className="small icon-inline" href="#/?status=candidato">{t('Ver todas en el comparador')}<ArrowRight size={14} aria-hidden="true" /></a>
         </div>
 
         <div className="today-col">
-          <h3 className="icon-inline"><Flask size={18} aria-hidden="true" />Transmutación</h3>
-          {tm.loading && !tm.data && <p className="small muted">Calculando…</p>}
-          {tm.data && !plan.length && <p className="small muted">Ninguna receta con espera da oro hoy.</p>}
+          <h3 className="icon-inline"><Flask size={18} aria-hidden="true" />{t('Transmutación')}</h3>
+          {tm.loading && !tm.data && <p className="small muted">{t('Calculando…')}</p>}
+          {tm.data && !plan.length && <p className="small muted">{t('Ninguna receta con espera da oro hoy.')}</p>}
           <ul className="today-list">
             {plan.map((p) => {
               const d = done[slotOf(p)];
@@ -93,33 +94,33 @@ export function Today() {
               return (
                 <li key={p.recipeId}>
                   <ItemLabel id={p.output?.itemId} quality={p.output?.quality} px={24} href="#/transmutaciones" name={p.name}
-                    sub={<><Delta v={p.goldPerDay} tag={false} /> al día · 1 cada {cooldownLabel(p.cooldown)}</>} />
+                    sub={<><Delta v={p.goldPerDay} tag={false} />{' '}{t('al día · 1 cada')}{' '}{cooldownLabel(p.cooldown)}</>} />
                   {until > now
-                    ? <span className="small today-wait icon-inline"><Timer size={14} aria-hidden="true" />Hasta el {new Date(until).toLocaleString('es-ES', { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</span>
-                    : <span className="small today-ok icon-inline"><CheckCircle size={14} aria-hidden="true" />Disponible</span>}
+                    ? <span className="small today-wait icon-inline"><Timer size={14} aria-hidden="true" />{t('Hasta el')}{' '}{new Date(until).toLocaleString(locale(), { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                    : <span className="small today-ok icon-inline"><CheckCircle size={14} aria-hidden="true" />{t('Disponible')}</span>}
                 </li>
               );
             })}
           </ul>
-          <a className="small icon-inline" href="#/transmutaciones">Ir a Transmutaciones<ArrowRight size={14} aria-hidden="true" /></a>
+          <a className="small icon-inline" href="#/transmutaciones">{t('Ir a Transmutaciones')}<ArrowRight size={14} aria-hidden="true" /></a>
         </div>
 
         <div className="today-col">
-          <h3 className="icon-inline"><Star size={18} aria-hidden="true" />Tus favoritas</h3>
-          {!favs.ids.length && <p className="small muted">Marca recetas con la estrella en el comparador y aquí verás si su ganancia cambia.</p>}
+          <h3 className="icon-inline"><Star size={18} aria-hidden="true" />{t('Tus favoritas')}</h3>
+          {!favs.ids.length && <p className="small muted">{t('Marca recetas con la estrella en el comparador y aquí verás si su ganancia cambia.')}</p>}
           {favs.ids.length > 0 && fav.data && !changes.length && (
-            <p className="small muted">{snap && snap.ctx === ctxQuery ? 'Sin cambios importantes desde la última vez.' : 'Guardado su precio de hoy: mañana verás qué ha cambiado.'}</p>
+            <p className="small muted">{snap && snap.ctx === ctxQuery ? t('Sin cambios importantes desde la última vez.') : t('Guardado su precio de hoy: mañana verás qué ha cambiado.')}</p>
           )}
           <ul className="today-list">
             {changes.map((c) => (
               <li key={c.item.recipeId}>
                 <ItemLabel id={c.item.output?.itemId} quality={c.item.output?.quality} px={24} href={`#/receta/${c.item.recipeId}`} name={c.item.name}
                   sub={<span className="icon-inline">{c.diff.sign() > 0 ? <TrendUp size={14} className="gc-up" aria-hidden="true" /> : <TrendDown size={14} className="gc-down" aria-hidden="true" />}
-                    <Money v={c.before.toJSON()} /> → <Money v={c.after.toJSON()} /> por unidad</span>} />
+                    <Money v={c.before.toJSON()} /> → <Money v={c.after.toJSON()} />{' '}{t('por unidad')}</span>} />
               </li>
             ))}
           </ul>
-          {favs.ids.length > 0 && <a className="small icon-inline" href="#/?onlyFav=1">Ver tus favoritas<ArrowRight size={14} aria-hidden="true" /></a>}
+          {favs.ids.length > 0 && <a className="small icon-inline" href="#/?onlyFav=1">{t('Ver tus favoritas')}<ArrowRight size={14} aria-hidden="true" /></a>}
         </div>
       </div>
     </section>

@@ -9,6 +9,7 @@ import { ItemLabel } from './icons.js';
 import { downloadCsv, goldCell, toCsv } from './csv.js';
 import { applyOwned, cleanQty, readOwned, sumOrNull, writeOwned, type Owned } from './shopping.js';
 import { ArrowSquareOut, ArrowCounterClockwise, Copy, DownloadSimple, Check, Prohibit, ArrowsLeftRight, Recycle, Warning, BookOpen, Backpack } from '@phosphor-icons/react';
+import { t, nm } from './i18n.js';
 
 // ---------------------------------------------------------------------------
 // Pasos hechos
@@ -110,9 +111,9 @@ export function useStepsDone(key: string, bagKey?: string) {
 /** Casilla «Hecho» de un paso. */
 export function StepCheck({ s, i, done, onToggle }: { s: any; i: number; done: boolean; onToggle: () => void }) {
   return (
-    <label className="rt-check" title="Márcalo cuando termines este paso">
+    <label className="rt-check" title={t('Márcalo cuando termines este paso')}>
       <input type="checkbox" checked={done} onChange={onToggle} aria-label={`Paso ${i + 1} (${s.from} → ${s.to}) hecho`} />
-      <span>Hecho</span>
+      <span>{t('Hecho')}</span>
     </label>
   );
 }
@@ -127,14 +128,14 @@ export function RouteProgress({ steps, done, onReset }: { steps: any[]; done: Se
   return (
     <div className="rt-progress" aria-live="polite">
       <div className="rt-progress-text">
-        <strong>{count} de {steps.length} pasos hechos</strong>
-        <span className="muted"> · nivel alcanzado {reached}</span>
-        {count > 0 && <button type="button" className="link" onClick={onReset}><ArrowCounterClockwise size={14} aria-hidden="true" />Desmarcar todo</button>}
+        <strong>{t('{a} de {b} pasos hechos', { a: count, b: steps.length })}</strong>
+        <span className="muted">{' '}{t('· nivel alcanzado {n}', { n: reached })}</span>
+        {count > 0 && <button type="button" className="link" onClick={onReset}><ArrowCounterClockwise size={14} aria-hidden="true" />{t('Desmarcar todo')}</button>}
       </div>
-      <div className="pc-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctDone} aria-label="Progreso de la ruta">
+      <div className="pc-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctDone} aria-label={t('Progreso de la ruta')}>
         <span style={{ width: `${pctDone}%` }} />
       </div>
-      <p className="small muted rt-note">Al marcar un paso, lo que tenías de sus materiales en «Tienes» se gasta (y vuelve si lo desmarcas). Las marcas se guardan solo en este navegador.</p>
+      <p className="small muted rt-note">{t('Al marcar un paso, lo que tenías de sus materiales en «Tienes» se gasta (y vuelve si lo desmarcas). Las marcas se guardan solo en este navegador.')}</p>
     </div>
   );
 }
@@ -150,16 +151,16 @@ const SOURCE_LABEL: Record<number, string> = { 6: 'instructor', 5: 'patrón de v
 export function HowToLearn({ r }: { r: any }) {
   if (r.availability === 'instructor') {
     const cost = String(r.trainingCost ?? '0'); // cobre como texto (bigint serializado)
-    return <>Instructor (nivel {r.learnedAt}){cost !== '0' && <>{' · '}<Money v={{ n: cost, d: '1' }} /></>}</>;
+    return <>{t('Instructor (nivel {n})', { n: r.learnedAt })}{cost !== '0' && <>{' · '}<Money v={{ n: cost, d: '1' }} /></>}</>;
   }
-  if (r.availability === 'inicial') return <span title="Wowhead no indica su fuente; se deduce que se conoce al aprender la profesión.">Se conoce al aprender la profesión</span>;
+  if (r.availability === 'inicial') return <span title={t('Wowhead no indica su fuente; se deduce que se conoce al aprender la profesión.')}>{t('Se conoce al aprender la profesión')}</span>;
   if (r.recipeItem) return <RecipeItemInfo ri={r.recipeItem} learnedAt={r.learnedAt} />;
-  const labels = [...new Set(((r.sources ?? []) as number[]).map((c) => SOURCE_LABEL[c]).filter(Boolean))];
-  const text = labels.length ? labels.join(', ') : 'patrón, botín o misión';
+  const labels = [...new Set(((r.sources ?? []) as number[]).map((c) => SOURCE_LABEL[c]).filter(Boolean))].map((l) => t(l));
+  const text = labels.length ? labels.join(', ') : t('patrón, botín o misión');
   return (
-    <span className="lv-warn-text" title="No la enseña el instructor: hay que conseguir la receta (no está garantizada).">
-      {text[0].toUpperCase() + text.slice(1)} (nivel {r.learnedAt})
-      {r.wowheadUrl && <> · <a href={`${r.wowheadUrl}#taught-by-item`} target="_blank" rel="noreferrer" className="icon-inline">ver dónde<ArrowSquareOut size={12} aria-hidden="true" /></a></>}
+    <span className="lv-warn-text" title={t('No la enseña el instructor: hay que conseguir la receta (no está garantizada).')}>
+      {text[0].toUpperCase() + text.slice(1)}{' '}{t('(nivel {n})', { n: r.learnedAt })}
+      {r.wowheadUrl && <> · <a href={`${r.wowheadUrl}#taught-by-item`} target="_blank" rel="noreferrer" className="icon-inline">{t('ver dónde')}<ArrowSquareOut size={12} aria-hidden="true" /></a></>}
     </span>
   );
 }
@@ -172,17 +173,16 @@ export function RecipeWhere({ ri }: { ri: any }) {
   const list: any[] = ri?.where ?? [];
   if (!list.length) return null;
   return (
-    <span className="rt-where">
-      Dónde:{' '}
+    <span className="rt-where">{t('Dónde:')}{' '}
       {list.map((w, i) => (
         <React.Fragment key={w.url}>
           {i > 0 && ' · '}
-          {w.kind === 'misión' && 'misión '}
-          <a href={w.url} target="_blank" rel="noreferrer">{w.name}</a>
-          {w.zone && ` (${w.zone})`}
+          {w.kind === 'misión' && t('misión ')}
+          <a href={w.url} target="_blank" rel="noreferrer">{nm(w.name, w.nameEn)}</a>
+          {w.zone && ` (${nm(w.zone, w.zoneEn)})`}
         </React.Fragment>
       ))}
-      {ri.whereMore > 0 && ` y ${ri.whereMore} más`}
+      {ri.whereMore > 0 && ` ${t('y {n} más', { n: ri.whereMore })}`}
     </span>
   );
 }
@@ -191,26 +191,26 @@ export function RecipeWhere({ ri }: { ri: any }) {
 export function whereText(ri: any): string {
   const list: any[] = ri?.where ?? [];
   if (!list.length) return '';
-  const first = `${list[0].name}${list[0].zone ? ` (${list[0].zone})` : ''}`;
+  const first = `${nm(list[0].name, list[0].nameEn)}${list[0].zone ? ` (${nm(list[0].zone, list[0].zoneEn)})` : ''}`;
   const more = list.length - 1 + (ri.whereMore ?? 0);
-  return more > 0 ? `${first} y ${more} más` : first;
+  return more > 0 ? `${first} ${t('y {n} más', { n: more })}` : first;
 }
 
 /** Objeto de receta que hay que conseguir (no la enseña el instructor): nombre, cómo se consigue, precio y dónde. */
 export function RecipeItemInfo({ ri, learnedAt, long }: { ri: any; learnedAt: number; long?: boolean }) {
   return (
-    <span className="lv-warn-text rt-learn" title="No la enseña el instructor: hay que conseguir este objeto y usarlo para aprender la receta.">
-      {long ? 'Necesitas el objeto de receta ' : 'Necesita '}
-      <a href={ri.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">«{ri.nameEn}»<ArrowSquareOut size={12} aria-hidden="true" /></a>
-      {' '}(nivel {learnedAt}).{' '}
+    <span className="lv-warn-text rt-learn" title={t('No la enseña el instructor: hay que conseguir este objeto y usarlo para aprender la receta.')}>
+      {long ? t('Necesitas el objeto de receta ') : t('Necesita ')}
+      <a href={ri.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">«{nm(ri.name, ri.nameEn)}»<ArrowSquareOut size={12} aria-hidden="true" /></a>
+      {' '}{t('(nivel {n})', { n: learnedAt })}.{' '}
       {ri.obtain.length ? ri.obtain.map((o: any, i: number) => (
         <React.Fragment key={o.how}>
           {i > 0 && '; '}
-          {i === 0 ? OBTAIN_TEXT[o.how][0].toUpperCase() + OBTAIN_TEXT[o.how].slice(1) : OBTAIN_TEXT[o.how]}
-          {o.how === 'vendedor' && ri.buyPrice && <> por <Money v={{ n: ri.buyPrice, d: '1' }} /></>}
-          {' · '}<a href={o.url} target="_blank" rel="noreferrer" className="icon-inline">{OBTAIN_LINK[o.how]}<ArrowSquareOut size={12} aria-hidden="true" /></a>
+          {i === 0 ? t(OBTAIN_TEXT[o.how])[0].toUpperCase() + t(OBTAIN_TEXT[o.how]).slice(1) : t(OBTAIN_TEXT[o.how])}
+          {o.how === 'vendedor' && ri.buyPrice && <>{' '}{t('por')}{' '}<Money v={{ n: ri.buyPrice, d: '1' }} /></>}
+          {' · '}<a href={o.url} target="_blank" rel="noreferrer" className="icon-inline">{t(OBTAIN_LINK[o.how])}<ArrowSquareOut size={12} aria-hidden="true" /></a>
         </React.Fragment>
-      )) : <a href={ri.wowheadUrl} target="_blank" rel="noreferrer">Dónde se consigue</a>}
+      )) : <a href={ri.wowheadUrl} target="_blank" rel="noreferrer">{t('Dónde se consigue')}</a>}
       {ri.where?.length > 0 && <>{'. '}<RecipeWhere ri={ri} /></>}
     </span>
   );
@@ -220,9 +220,9 @@ const soldByUrl =(itemId: number) => `https://www.wowhead.com/forever/item=${ite
 
 /** Etiqueta de procedencia del precio de un material (manual / vendedor con enlace a quién lo vende). */
 export function PriceTag({ m }: { m: any }) {
-  if (m.priceSource === 'manual') return <span className="lv-manual" title="Precio indicado por ti">manual</span>;
+  if (m.priceSource === 'manual') return <span className="lv-manual" title={t('Precio indicado por ti')}>{t('manual')}</span>;
   if (m.priceSource === 'vendedor') {
-    return <a className="lv-manual" href={soldByUrl(m.itemId)} target="_blank" rel="noreferrer" title="Lo vende un PNJ (más barato que la casa de subastas). Abre en Wowhead quién lo vende.">vendedor</a>;
+    return <a className="lv-manual" href={soldByUrl(m.itemId)} target="_blank" rel="noreferrer" title={t('Lo vende un PNJ (más barato que la casa de subastas). Abre en Wowhead quién lo vende.')}>{t('vendedor')}</a>;
   }
   return null;
 }
@@ -233,11 +233,11 @@ export function MatChip({ m }: { m: any }) {
   return (
     <li className="lv-chip">
       <span className="mono">{String(m.quantity)} ×</span>
-      <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
+      <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? t('Objeto {id}', { id: m.itemId })} />
       <PriceTag m={m} />
       {prev > 0n && (
-        <span className="lv-reuse" title="Lo fabricas en un paso anterior de esta ruta: no hace falta comprarlo">
-          <Recycle size={12} aria-hidden="true" />{prev >= BigInt(m.quantity) ? 'de pasos anteriores' : `${String(prev)} de pasos anteriores`}
+        <span className="lv-reuse" title={t('Lo fabricas en un paso anterior de esta ruta: no hace falta comprarlo')}>
+          <Recycle size={12} aria-hidden="true" />{prev >= BigInt(m.quantity) ? t('de pasos anteriores') : t('{n} de pasos anteriores', { n: String(prev) })}
         </span>
       )}
     </li>
@@ -252,40 +252,40 @@ export function RouteGuide({ steps, done, onOpen }: { steps: any[]; done: Set<st
   return (
     <div className="table-wrap">
       <table className="responsive rt-guide">
-        <caption className="sr-only">Resumen de la ruta: qué fabricar en cada tramo de niveles</caption>
-        <thead><tr><th>Niveles</th><th>Receta</th><th className="num">Fabricaciones</th><th>Materiales por fabricación</th><th className="num">Costo</th></tr></thead>
+        <caption className="sr-only">{t('Resumen de la ruta: qué fabricar en cada tramo de niveles')}</caption>
+        <thead><tr><th>{t('Niveles')}</th><th>{t('Receta')}</th><th className="num">{t('Fabricaciones')}</th><th>{t('Materiales por fabricación')}</th><th className="num">{t('Costo')}</th></tr></thead>
         <tbody>
           {steps.map((s, i) => {
             const crafts = s.crafts ? BigInt(s.crafts) : 0n;
             return (
               <tr key={i} className={done.has(stepKey(s)) ? 'rt-guide-done' : undefined}>
-                <td data-label="Niveles" className="mono rt-guide-lvl">{s.from} → {s.to}{done.has(stepKey(s)) && <Check size={14} weight="bold" aria-label=" (hecho)" />}</td>
+                <td data-label={t('Niveles')} className="mono rt-guide-lvl">{s.from} → {s.to}{done.has(stepKey(s)) && <Check size={14} weight="bold" aria-label={t(' (hecho)')} />}</td>
                 {s.recipe ? (
                   <>
-                    <td data-label="Receta" className="cell-main">
-                      <button type="button" className="link rt-guide-recipe" onClick={() => onOpen(i)} title="Ver el detalle de este paso">
+                    <td data-label={t('Receta')} className="cell-main">
+                      <button type="button" className="link rt-guide-recipe" onClick={() => onOpen(i)} title={t('Ver el detalle de este paso')}>
                         <ItemLabel id={s.recipe.createsItemId} quality={s.recipe.createsQuality} px={24} name={s.recipe.name ?? s.recipe.nameEn} />
                       </button>
-                      {s.fillsTrainerGap && <span className="badge b-info rt-pattern" title="El instructor no enseña ninguna receta para estos niveles">patrón</span>}
-                      {s.inGuide === false && s.recipe && <span className="badge rt-pattern" title="La guía no cubre estos niveles: receta de la ruta más rápida">calculado</span>}
+                      {s.fillsTrainerGap && <span className="badge b-info rt-pattern" title={t('El instructor no enseña ninguna receta para estos niveles')}>{t('patrón')}</span>}
+                      {s.inGuide === false && s.recipe && <span className="badge rt-pattern" title={t('La guía no cubre estos niveles: receta de la ruta más rápida')}>{t('calculado')}</span>}
                       {s.recipe?.availability === 'otra' && <div className="small rt-need"><HowToLearn r={s.recipe} /></div>}
                     </td>
-                    <td data-label="Fabricaciones" className="num mono">{String(s.crafts)}{!s.certain && <span className="rt-guide-approx" title="Estimado: parte del tramo es amarillo o verde y no siempre da punto">≈</span>}</td>
-                    <td data-label="Por fabricación">
+                    <td data-label={t('Fabricaciones')} className="num mono">{String(s.crafts)}{!s.certain && <span className="rt-guide-approx" title={t('Estimado: parte del tramo es amarillo o verde y no siempre da punto')}>≈</span>}</td>
+                    <td data-label={t('Por fabricación')}>
                       <ul className="rt-guide-mats">
                         {s.materials.map((m: any) => (
                           <li key={m.itemId}>
                             <span className="mono">{crafts > 0n ? String(BigInt(m.quantity) / crafts) : '—'}</span>
-                            <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
-                            {BigInt(m.fromSteps ?? 0) > 0n && <Recycle size={13} className="rt-reuse-icon" aria-label="(fabricado en un paso anterior)" />}
+                            <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? t('Objeto {id}', { id: m.itemId })} />
+                            {BigInt(m.fromSteps ?? 0) > 0n && <Recycle size={13} className="rt-reuse-icon" aria-label={t('(fabricado en un paso anterior)')} />}
                           </li>
                         ))}
                       </ul>
                     </td>
-                    <td data-label="Costo" className="num"><Money v={s.cost} /></td>
+                    <td data-label={t('Costo')} className="num"><Money v={s.cost} /></td>
                   </>
                 ) : (
-                  <td colSpan={4} className="rt-guide-gap"><Warning size={16} weight="bold" aria-hidden="true" />Sin datos para estos niveles: mira el detalle.</td>
+                  <td colSpan={4} className="rt-guide-gap"><Warning size={16} weight="bold" aria-hidden="true" />{t('Sin datos para estos niveles: mira el detalle.')}</td>
                 )}
               </tr>
             );
@@ -301,13 +301,11 @@ export function PatternNote({ levels, trainerOnly }: { levels: number; trainerOn
   if (!levels || !trainerOnly) return null;
   return (
     <p className="lv-status info">
-      <BookOpen size={18} weight="bold" aria-hidden="true" />
-      El instructor no enseña recetas que den puntos en {levels} niveles: ahí se usan recetas de patrón, botín o misión (marcadas «patrón»). Cada paso dice dónde se consigue.
-    </p>
+      <BookOpen size={18} weight="bold" aria-hidden="true" />{t('El instructor no enseña recetas que den puntos en {n} niveles: ahí se usan recetas de patrón, botín o misión (marcadas «patrón»). Cada paso dice dónde se consigue.', { n: levels })}</p>
   );
 }
 
-const WHERE = (m: any) => (m.priceSource === 'vendedor' ? 'Vendedor' : m.priceSource === 'manual' ? 'Precio tuyo' : 'Casa de subastas');
+const WHERE = (m: any) => t(m.priceSource === 'vendedor' ? 'Vendedor' : m.priceSource === 'manual' ? 'Precio tuyo' : 'Casa de subastas');
 
 // ---------------------------------------------------------------------------
 // Lista de compra
@@ -334,7 +332,7 @@ function remainingShopping(steps: any[], done: Set<string>): ShopRow[] {
 }
 const fromApi = (m: any): ShopRow => ({ itemId: m.itemId, name: m.name, quality: m.quality, quantity: BigInt(m.quantity), unitPrice: toQ(m.unitPrice), cost: toQ(m.cost), priceSource: m.priceSource });
 
-const nameOf = (m: ShopRow) => m.name ?? `Objeto ${m.itemId}`;
+const nameOf = (m: ShopRow) => m.name ?? t('Objeto {id}', { id: m.itemId });
 
 async function copyText(text: string): Promise<boolean> {
   try { await navigator.clipboard.writeText(text); return true; } catch { /* sin permiso: método antiguo */ }
@@ -385,8 +383,8 @@ export function ShoppingPanel({ d, done, bagKey = 'general' }: { d: any; done: S
   const toBuy = rows.filter((r) => r.buy > 0n);
   const title = `${d.profession.name} ${d.from} → ${d.to}`;
 
-  const asText = () => [`Lista de compra · ${title}${missing ? ' (lo que falta)' : ''}${anyOwned ? ' (sin lo que ya tengo)' : ''}`, ...toBuy.map((m) => `${String(m.buy)} × ${nameOf(m.row)}`)].join('\n');
-  const asCsv = () => toCsv(['Material', 'Id', 'Necesitas', 'Tienes', 'Comprar', 'Precio unidad (oro)', 'Total (oro)', 'Dónde'],
+  const asText = () => [`${t('Lista de compra')} · ${title}${missing ? ` ${t('(lo que falta)')}` : ''}${anyOwned ? ` ${t('(sin lo que ya tengo)')}` : ''}`, ...toBuy.map((m) => `${String(m.buy)} × ${nameOf(m.row)}`)].join('\n');
+  const asCsv = () => toCsv([t('Material'), 'Id', t('Necesitas'), t('Tienes'), t('Comprar'), t('Precio unidad (oro)'), t('Total (oro)'), t('Dónde')],
     rows.map((m) => [nameOf(m.row), String(m.row.itemId), String(m.need), String(m.owned), String(m.buy), goldCell(m.row.unitPrice), goldCell(m.cost), WHERE(m.row)]));
   const onCopy = async () => { setCopied((await copyText(asText())) ? 'ok' : 'error'); setTimeout(() => setCopied(null), 2500); };
   const slug = `${d.profession.name}-${d.from}-${d.to}`.toLowerCase().normalize('NFD').replace(/[^a-z0-9-]+/g, '');
@@ -395,25 +393,25 @@ export function ShoppingPanel({ d, done, bagKey = 'general' }: { d: any; done: S
     <section className="card lv-shop">
       <div className="rt-shop-tools">
         {anyDone && (
-          <label className="check"><input type="checkbox" checked={onlyMissing} onChange={(e) => setOnlyMissing(e.target.checked)} />Solo lo que falta (sin los pasos hechos)</label>
+          <label className="check"><input type="checkbox" checked={onlyMissing} onChange={(e) => setOnlyMissing(e.target.checked)} />{t('Solo lo que falta (sin los pasos hechos)')}</label>
         )}
         <div className="rt-shop-buttons">
-          <button type="button" onClick={onCopy} disabled={!toBuy.length}>{copied === 'ok' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copied === 'ok' ? 'Copiado' : 'Copiar lista'}</button>
-          <button type="button" onClick={() => downloadCsv(`lista-compra-${slug}${missing ? '-falta' : ''}.csv`, asCsv())} disabled={!rows.length}><DownloadSimple size={16} aria-hidden="true" />Descargar CSV</button>
+          <button type="button" onClick={onCopy} disabled={!toBuy.length}>{copied === 'ok' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}{copied === 'ok' ? t('Copiado') : t('Copiar lista')}</button>
+          <button type="button" onClick={() => downloadCsv(`lista-compra-${slug}${missing ? '-falta' : ''}.csv`, asCsv())} disabled={!rows.length}><DownloadSimple size={16} aria-hidden="true" />{t('Descargar CSV')}</button>
         </div>
-        <span className="sr-only" aria-live="polite">{copied === 'ok' ? 'Lista copiada al portapapeles' : copied === 'error' ? 'No se pudo copiar' : ''}</span>
-        {copied === 'error' && <span className="small lv-error">No se pudo copiar: el navegador no lo permite.</span>}
+        <span className="sr-only" aria-live="polite">{copied === 'ok' ? t('Lista copiada al portapapeles') : copied === 'error' ? t('No se pudo copiar') : ''}</span>
+        {copied === 'error' && <span className="small lv-error">{t('No se pudo copiar: el navegador no lo permite.')}</span>}
       </div>
       {rows.length > 0 && (
         <p className="small muted rt-owned-note">
           <Backpack size={14} aria-hidden="true" />
-          <span>En «Tienes» escribe lo que ya tienes en la bolsa o el banco: se descuenta de lo que hay que comprar. Se guarda solo en este navegador{bagKey !== 'general' ? ', para este personaje' : ''}.</span>
-          {anyOwned && <button type="button" className="link" onClick={bag.clear}><ArrowCounterClockwise size={14} aria-hidden="true" />Borrar lo que tengo</button>}
+          <span>{t('En «Tienes» escribe lo que ya tienes en la bolsa o el banco: se descuenta de lo que hay que comprar. Se guarda solo en este navegador')}{bagKey !== 'general' ? t(', para este personaje') : ''}.</span>
+          {anyOwned && <button type="button" className="link" onClick={bag.clear}><ArrowCounterClockwise size={14} aria-hidden="true" />{t('Borrar lo que tengo')}</button>}
         </p>
       )}
-      {!rows.length ? <p className="muted rt-empty">{missing ? 'Ya tienes hechos todos los pasos con materiales.' : 'No hay materiales con precio para comprar.'}</p> : (
+      {!rows.length ? <p className="muted rt-empty">{missing ? t('Ya tienes hechos todos los pasos con materiales.') : t('No hay materiales con precio para comprar.')}</p> : (
         <table className="lv-shop-table">
-          <thead><tr><th>Material</th><th className="num">Tienes</th><th className="num">Comprar</th><th className="num">Total</th><th className="rt-where">Dónde</th></tr></thead>
+          <thead><tr><th>{t('Material')}</th><th className="num">{t('Tienes')}</th><th className="num">{t('Comprar')}</th><th className="num">{t('Total')}</th><th className="rt-where">{t('Dónde')}</th></tr></thead>
           <tbody>
             {rows.map((m) => (
               <tr key={m.row.itemId} className={m.buy === 0n ? 'rt-owned-all' : undefined}>
@@ -424,21 +422,21 @@ export function ShoppingPanel({ d, done, bagKey = 'general' }: { d: any; done: S
                     aria-label={`Cuántos ${nameOf(m.row)} tienes ya`} />
                 </td>
                 <td className="num">
-                  {m.buy === 0n ? <span className="rt-owned-ok"><Check size={14} weight="bold" aria-hidden="true" />Ya lo tienes</span> : String(m.buy)}
-                  {m.owned > 0n && <span className="lv-unit">de {String(m.need)}</span>}
+                  {m.buy === 0n ? <span className="rt-owned-ok"><Check size={14} weight="bold" aria-hidden="true" />{t('Ya lo tienes')}</span> : String(m.buy)}
+                  {m.owned > 0n && <span className="lv-unit">{t('de {n}', { n: String(m.need) })}</span>}
                 </td>
-                <td className="num"><Money v={m.cost?.toJSON()} /><span className="lv-unit"><Money v={m.row.unitPrice?.toJSON()} /> c/u</span><span className="lv-unit rt-where-m">{WHERE(m.row)}</span></td>
+                <td className="num"><Money v={m.cost?.toJSON()} /><span className="lv-unit"><Money v={m.row.unitPrice?.toJSON()} /> {t('c/u')}</span><span className="lv-unit rt-where-m">{WHERE(m.row)}</span></td>
                 <td className="small rt-where">
                   {m.row.priceSource === 'vendedor'
-                    ? <a href={soldByUrl(m.row.itemId)} target="_blank" rel="noreferrer" className="icon-inline">Vendedor<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                    ? <a href={soldByUrl(m.row.itemId)} target="_blank" rel="noreferrer" className="icon-inline">{t('Vendedor')}<ArrowSquareOut size={12} aria-hidden="true" /></a>
                     : WHERE(m.row)}
                 </td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr><th colSpan={3}>{missing ? 'Total de lo que falta' : anyOwned ? 'Total a comprar' : 'Total materiales'}</th><td className="num"><Money v={total?.toJSON()} /></td><td className="rt-where" /></tr>
-            {anyOwned && <tr className="rt-owned-saved"><th colSpan={3}>Te ahorras con lo que tienes</th><td className="num"><Money v={saved?.toJSON()} /></td><td className="rt-where" /></tr>}
+            <tr><th colSpan={3}>{missing ? t('Total de lo que falta') : anyOwned ? t('Total a comprar') : t('Total materiales')}</th><td className="num"><Money v={total?.toJSON()} /></td><td className="rt-where" /></tr>
+            {anyOwned && <tr className="rt-owned-saved"><th colSpan={3}>{t('Te ahorras con lo que tienes')}</th><td className="num"><Money v={saved?.toJSON()} /></td><td className="rt-where" /></tr>}
           </tfoot>
         </table>
       )}
@@ -459,24 +457,23 @@ export function StepAlternatives({ s, onAvoid }: { s: any; onAvoid?: (spellId: n
   if (!alts.length && !onAvoid) return null;
   return (
     <details className="rt-alts">
-      <summary><ArrowsLeftRight size={14} aria-hidden="true" />Otras recetas para este paso{alts.length ? ` (${alts.length})` : ''}</summary>
+      <summary><ArrowsLeftRight size={14} aria-hidden="true" />{t('Otras recetas para este paso')}{alts.length ? ` (${alts.length})` : ''}</summary>
       {alts.length ? (
         <ul className="rt-alts-list">
           {alts.map((a) => (
             <li key={a.spellId}>
               <a href={a.wowheadUrl} target="_blank" rel="noreferrer">{a.name ?? a.createsName ?? a.nameEn}</a>
               <span className={`skill skill-${a.color}`}>{COLOR_ES[a.color] ?? a.color}</span>
-              <span className="muted small">{a.costPerPoint ? <><Money v={a.costPerPoint} /> por punto</> : 'sin precio'}</span>
-              {a.availability === 'otra' && <span className="badge b-warn" title="No la enseña el instructor">patrón</span>}
+              <span className="muted small">{a.costPerPoint ? <><Money v={a.costPerPoint} />{' '}{t('por punto')}</> : t('sin precio')}</span>
+              {a.availability === 'otra' && <span className="badge b-warn" title={t('No la enseña el instructor')}>{t('patrón')}</span>}
             </li>
           ))}
         </ul>
-      ) : <p className="small muted">No hay otra receta disponible en este nivel con las opciones elegidas.</p>}
-      <p className="small muted">En el nivel {s.from}, la elegida cuesta {s.costPerPointAtStart ? <><Money v={s.costPerPointAtStart} /> por punto</> : 'sin datos'}. Costo esperado por punto = materiales de una fabricación ÷ probabilidad de subir; cambia a medida que la receta pierde color.</p>
+      ) : <p className="small muted">{t('No hay otra receta disponible en este nivel con las opciones elegidas.')}</p>}
+      <p className="small muted">{t('En el nivel {n}, la elegida cuesta', { n: s.from })}{' '}{s.costPerPointAtStart ? <><Money v={s.costPerPointAtStart} />{' '}{t('por punto')}</> : t('sin datos')}{t('. Costo esperado por punto = materiales de una fabricación ÷ probabilidad de subir; cambia a medida que la receta pierde color.')}</p>
       {onAvoid && (
         <button type="button" className="rt-avoid" onClick={() => onAvoid(s.recipe.spellId, s.recipe.name ?? s.recipe.nameEn)}>
-          <Prohibit size={16} aria-hidden="true" />Evitar esta receta y recalcular
-        </button>
+          <Prohibit size={16} aria-hidden="true" />{t('Evitar esta receta y recalcular')}</button>
       )}
     </details>
   );
@@ -488,12 +485,12 @@ export interface Avoided { id: number; name: string }
 export function AvoidedList({ list, onRemove, onClear }: { list: Avoided[]; onRemove: (id: number) => void; onClear: () => void }) {
   if (!list.length) return null;
   return (
-    <div className="card rt-avoided" aria-label="Recetas evitadas">
-      <span className="small"><Prohibit size={14} aria-hidden="true" /> Recetas que no se usan en esta ruta:</span>
+    <div className="card rt-avoided" aria-label={t('Recetas evitadas')}>
+      <span className="small"><Prohibit size={14} aria-hidden="true" />{' '}{t('Recetas que no se usan en esta ruta:')}</span>
       {list.map((a) => (
-        <span key={a.id} className="lv-chip">{a.name}<button type="button" className="link" onClick={() => onRemove(a.id)} aria-label={`Permitir de nuevo ${a.name}`}>Permitir</button></span>
+        <span key={a.id} className="lv-chip">{a.name}<button type="button" className="link" onClick={() => onRemove(a.id)} aria-label={t('Permitir de nuevo {x}', { x: a.name })}>{t('Permitir')}</button></span>
       ))}
-      {list.length > 1 && <button type="button" className="link" onClick={onClear}>Permitir todas</button>}
+      {list.length > 1 && <button type="button" className="link" onClick={onClear}>{t('Permitir todas')}</button>}
     </div>
   );
 }

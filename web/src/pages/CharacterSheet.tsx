@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { dt, age, hoursSince } from '../lib.js';
 import { WowIcon, QUALITY_ES } from '../icons.js';
 import { ArrowsClockwise, Lightning, PencilSimple, Warning, UserCircle } from '@phosphor-icons/react';
+import { t } from '../i18n.js';
 
 const SLOT_ES: Record<string, string> = {
   HEAD: 'Cabeza', NECK: 'Cuello', SHOULDER: 'Hombros', BACK: 'Espalda', CHEST: 'Pecho', SHIRT: 'Camisa', TABARD: 'Tabardo', WRIST: 'Muñecas',
@@ -25,30 +26,30 @@ export const PROFESSION_NAME_ES: Record<number, string> = {
   186: 'Minería', 393: 'Desuello', 197: 'Sastrería', 185: 'Cocina', 129: 'Primeros auxilios', 356: 'Pesca',
 };
 
-const factionEs = (f: string | null) => (f === 'HORDE' ? 'Horda' : f === 'ALLIANCE' ? 'Alianza' : f);
+const factionEs = (f: string | null) => (f === 'HORDE' ? t('Horda') : f === 'ALLIANCE' ? t('Alianza') : f);
 
 function ItemTip({ it, side }: { it: any; side: 'right' | 'left' | 'up' }) {
   const q = it.quality ? `q-${String(it.quality).toLowerCase()}` : '';
   return (
     <div className={`pc-tip pc-tip-${side}`} role="tooltip">
-      <p className={`pc-tip-name ${q}`}>{it.name ?? `Objeto ${it.itemId}`}</p>
-      {it.itemLevel !== null && <p className="pc-tip-ilvl">Nivel de objeto {it.itemLevel}</p>}
+      <p className={`pc-tip-name ${q}`}>{it.name ?? t('Objeto {id}', { id: it.itemId })}</p>
+      {it.itemLevel !== null && <p className="pc-tip-ilvl">{t('Nivel de objeto')}{' '}{it.itemLevel}</p>}
       {it.binding && <p>{it.binding}</p>}
       <p className="pc-tip-row"><span>{it.slotName ?? SLOT_ES[it.slot]}</span><span>{it.subclass ?? ''}</span></p>
       {it.armor && <p>{it.armor}</p>}
       {it.stats.map((s: string, i: number) => <p key={i} className="pc-tip-stat">{s}</p>)}
       {it.durability && <p>{it.durability}</p>}
       {it.requirement && <p>{it.requirement}</p>}
-      {it.quantity > 1 && <p>Cantidad: {it.quantity}</p>}
-      {it.quality && <p className="small muted">{QUALITY_ES[it.quality] ?? it.quality}</p>}
+      {it.quantity > 1 && <p>{t('Cantidad:')}{' '}{it.quantity}</p>}
+      {it.quality && <p className="small muted">{t(QUALITY_ES[it.quality] ?? it.quality)}</p>}
     </div>
   );
 }
 
 function Slot({ slot, it, side, open, setOpen }: { slot: string; it: any | undefined; side: 'right' | 'left' | 'up'; open: string | null; setOpen: (s: string | null) => void }) {
-  const label = SLOT_ES[slot] ?? slot;
+  const label = t(SLOT_ES[slot] ?? slot);
   if (!it) {
-    return <li className="pc-slot pc-slot-empty" title={`${label}: vacío`}><span className="pc-slot-frame" aria-hidden="true" /><span className="sr-only">{label}: vacío</span></li>;
+    return <li className="pc-slot pc-slot-empty" title={`${label}${t(': vacío')}`}><span className="pc-slot-frame" aria-hidden="true" /><span className="sr-only">{label}{t(': vacío')}</span></li>;
   }
   const isOpen = open === slot;
   const lastPointer = useRef('');
@@ -62,7 +63,7 @@ function Slot({ slot, it, side, open, setOpen }: { slot: string; it: any | undef
     >
       <a
         href={`https://www.wowhead.com/forever/item=${it.itemId}`} target="_blank" rel="noreferrer"
-        aria-label={`${label}: ${it.name ?? `objeto ${it.itemId}`}${it.itemLevel !== null ? `, nivel de objeto ${it.itemLevel}` : ''} (abre Wowhead)`}
+        aria-label={`${label}: ${it.name ?? t('Objeto {id}', { id: it.itemId })}${it.itemLevel !== null ? t(', nivel de objeto {n}', { n: it.itemLevel }) : ''} ${t('(abre Wowhead)')}`}
         onFocus={() => setOpen(slot)} onBlur={() => { if (lastPointer.current !== 'touch') setOpen(null); }}
         onClick={(e) => { if (lastPointer.current !== 'mouse' && lastPointer.current !== '' && !isOpen) { e.preventDefault(); setOpen(slot); } }}
       >
@@ -82,7 +83,7 @@ export function CharacterSheet({ c, busy, onSync }: { c: any; busy: boolean; onS
   const avgIlvl = counted.length ? Math.round(counted.reduce((s: number, it: any) => s + it.itemLevel, 0) / counted.length) : null;
   const neverRead = !c.profileSyncedAt;
   return (
-    <section className="card pc-sheet" aria-label={`Ficha de ${c.name}`}>
+    <section className="card pc-sheet" aria-label={t('Ficha de {x}', { x: c.name })}>
       <header className="pc-sheet-head">
         <div>
           <h2 className="pc-sheet-name">{c.name}{c.surname ? ` ${c.surname}` : ''}</h2>
@@ -90,42 +91,42 @@ export function CharacterSheet({ c, busy, onSync }: { c: any; busy: boolean; onS
             {[c.level !== null ? `Nivel ${c.level}` : null, c.raceName, c.className].filter(Boolean).join(' · ')}
             {c.faction && <span className={`pc-faction ${c.faction === 'HORDE' ? 'horde' : c.faction === 'ALLIANCE' ? 'alliance' : ''}`}>{factionEs(c.faction)}</span>}
           </p>
-          {c.guild && <p className="pc-guild">&lt;{c.guild}&gt;</p>}
+          {c.guild && <p className="pc-guild">{'<'}{c.guild}{'>'}</p>}
         </div>
         <div className="pc-sheet-sync">
           <button type="button" className="primary" onClick={onSync} disabled={busy}>
-            <ArrowsClockwise size={18} aria-hidden="true" className={busy ? 'spin' : ''} />{busy ? 'Leyendo de Blizzard…' : 'Actualizar desde Blizzard'}
+            <ArrowsClockwise size={18} aria-hidden="true" className={busy ? 'spin' : ''} />{busy ? t('Leyendo de Blizzard…') : t('Actualizar desde Blizzard')}
           </button>
           <span className="small muted">
-            {neverRead ? 'Aún no se ha leído la ficha.' : <>Equipo y retrato de hace {age(hoursSince(c.profileSyncedAt))} <span className="sr-only">({dt(c.profileSyncedAt)})</span></>}
+            {neverRead ? t('Aún no se ha leído la ficha.') : <>{t('Equipo y retrato de hace {a}', { a: age(hoursSince(c.profileSyncedAt)) })} <span className="sr-only">({dt(c.profileSyncedAt)})</span></>}
           </span>
         </div>
       </header>
       {c.profileDetail && <p className="small lv-warn-text"><Warning size={14} aria-hidden="true" /> {c.profileDetail}</p>}
 
       <div className="pc-doll" onKeyDown={(e) => e.key === 'Escape' && setOpen(null)}>
-        <ul className="pc-slots pc-left" aria-label="Equipo: lado izquierdo">
+        <ul className="pc-slots pc-left" aria-label={t('Equipo: lado izquierdo')}>
           {LEFT.map((s) => <Slot key={s} slot={s} it={bySlot.get(s)} side="right" open={open} setOpen={setOpen} />)}
         </ul>
         <figure className="pc-portrait">
           {c.media?.main && imgOk ? (
-            <img src={c.media.main} alt={`Retrato de ${c.name} con su equipo actual`} onError={() => setImgOk(false)} referrerPolicy="no-referrer" />
+            <img src={c.media.main} alt={t('Retrato de {x} con su equipo actual', { x: c.name })} onError={() => setImgOk(false)} referrerPolicy="no-referrer" />
           ) : (
             <div className="pc-portrait-empty">
               <UserCircle size={72} weight="thin" aria-hidden="true" />
-              <span className="small muted">{neverRead ? 'Pulsa «Actualizar desde Blizzard» para ver el retrato y el equipo.' : 'Blizzard no dio retrato para este personaje.'}</span>
+              <span className="small muted">{neverRead ? t('Pulsa «Actualizar desde Blizzard» para ver el retrato y el equipo.') : t('Blizzard no dio retrato para este personaje.')}</span>
             </div>
           )}
-          {avgIlvl !== null && <figcaption className="pc-ilvl"><span>{avgIlvl}</span> nivel de objeto medio</figcaption>}
+          {avgIlvl !== null && <figcaption className="pc-ilvl"><span>{avgIlvl}</span>{' '}{t('nivel de objeto medio')}</figcaption>}
         </figure>
-        <ul className="pc-slots pc-right" aria-label="Equipo: lado derecho">
+        <ul className="pc-slots pc-right" aria-label={t('Equipo: lado derecho')}>
           {RIGHT.map((s) => <Slot key={s} slot={s} it={bySlot.get(s)} side="left" open={open} setOpen={setOpen} />)}
         </ul>
-        <ul className="pc-slots pc-bottom" aria-label="Armas">
+        <ul className="pc-slots pc-bottom" aria-label={t('Armas')}>
           {BOTTOM.map((s) => <Slot key={s} slot={s} it={bySlot.get(s)} side="up" open={open} setOpen={setOpen} />)}
         </ul>
       </div>
-      {!neverRead && <p className="small muted pc-doll-note">Pasa el ratón o toca una pieza para ver sus datos. El equipo es el que tenía el personaje la última vez que lo actualizaste.</p>}
+      {!neverRead && <p className="small muted pc-doll-note">{t('Pasa el ratón o toca una pieza para ver sus datos. El equipo es el que tenía el personaje la última vez que lo actualizaste.')}</p>}
     </section>
   );
 }
@@ -140,25 +141,25 @@ export function ProfessionTiles({ c, plannable, onPlan, onEdit }: { c: any; plan
         const max = p.effective.maxSkillPoints;
         const ratio = skill !== null && max ? Math.min(1, skill / max) : 0;
         const can = plannable.has(p.professionId);
-        const name = PROFESSION_NAME_ES[p.professionId] ?? p.name ?? `Profesión ${p.professionId}`;
+        const name = t(PROFESSION_NAME_ES[p.professionId] ?? p.name ?? `Profesión ${p.professionId}`);
         return (
           <li key={p.professionId} className="pc-tile">
             <div className="pc-tile-head">
               <WowIcon kind="profession" id={p.professionId} px={36} />
               <div>
                 <p className="pc-tile-name">{name}</p>
-                <p className="pc-tile-skill"><strong>{skill ?? '—'}</strong> / {max ?? '—'} {p.effective.source === 'manual' && <span className="badge b-info">Manual</span>}</p>
+                <p className="pc-tile-skill"><strong>{skill ?? '—'}</strong> / {max ?? '—'} {p.effective.source === 'manual' && <span className="badge b-info">{t('Manual')}</span>}</p>
               </div>
             </div>
-            <div className="pc-bar" role="progressbar" aria-label={`${name}: ${skill ?? 'sin dato'} de ${max ?? 'sin dato'}`} aria-valuemin={0} aria-valuemax={max ?? 0} aria-valuenow={skill ?? 0}>
+            <div className="pc-bar" role="progressbar" aria-label={t('{x}: {a} de {b}', { x: name, a: skill ?? t('sin dato'), b: max ?? t('sin dato') })} aria-valuemin={0} aria-valuemax={max ?? 0} aria-valuenow={skill ?? 0}>
               <span style={{ width: `${Math.round(ratio * 100)}%` }} />
             </div>
-            {skill !== null && max !== null && skill >= max && max < 300 && <p className="small lv-warn-text">Tope alcanzado: aprende el siguiente rango en el instructor.</p>}
+            {skill !== null && max !== null && skill >= max && max < 300 && <p className="small lv-warn-text">{t('Tope alcanzado: aprende el siguiente rango en el instructor.')}</p>}
             <div className="pc-tile-actions">
               {can
-                ? <button type="button" className="primary" onClick={() => onPlan(p.professionId)}><Lightning size={16} aria-hidden="true" />Ruta para subirla</button>
-                : <span className="small muted">Se sube recolectando: sin ruta de fabricación.</span>}
-              <button type="button" className="link" onClick={() => onEdit(p)}><PencilSimple size={14} aria-hidden="true" />Corregir</button>
+                ? <button type="button" className="primary" onClick={() => onPlan(p.professionId)}><Lightning size={16} aria-hidden="true" />{t('Ruta para subirla')}</button>
+                : <span className="small muted">{t('Se sube recolectando: sin ruta de fabricación.')}</span>}
+              <button type="button" className="link" onClick={() => onEdit(p)}><PencilSimple size={14} aria-hidden="true" />{t('Corregir')}</button>
             </div>
           </li>
         );

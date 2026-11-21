@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { api, useApp, useAsync, Money, PctShort, Delta, Q, toQ, StatusBadge } from './lib.js';
 import { ItemLabel } from './icons.js';
 import { Star, BellRinging, Bell, Trash } from '@phosphor-icons/react';
+import { t } from './i18n.js';
 
 export interface Favorite { name: string; /** Ganancia mínima por unidad en oro; vacío = sin alerta. */ threshold: string }
 type Favs = Record<string, Favorite>;
@@ -48,12 +49,12 @@ export function useFavorites() {
 export function FavButton({ id, name, withLabel = false }: { id: number; name: string; withLabel?: boolean }) {
   const { favs, toggle } = useFavorites();
   const on = Boolean(favs[id]);
-  const label = on ? `Quitar ${name} de favoritas` : `Añadir ${name} a favoritas`;
+  const label = on ? `Quitar ${name} de favoritas` : t('Añadir {x} a favoritas', { x: name });
   return (
     <button type="button" className={`fav-btn${on ? ' on' : ''}${withLabel ? ' with-label' : ''}`} aria-pressed={on} aria-label={withLabel ? undefined : label} title={label}
-      onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!toggle(id, name)) alert(`Como mucho ${MAX} favoritas.`); }}>
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!toggle(id, name)) alert(t('Como mucho {n} favoritas.', { n: MAX })); }}>
       <Star size={withLabel ? 18 : 16} weight={on ? 'fill' : 'regular'} aria-hidden="true" />
-      {withLabel && (on ? 'En favoritas' : 'Añadir a favoritas')}
+      {withLabel && (on ? t('En favoritas') : t('Añadir a favoritas'))}
     </button>
   );
 }
@@ -85,8 +86,8 @@ export function FavoriteAlerts({ compact = false }: { compact?: boolean }) {
   if (!ids.length) {
     return compact ? null : (
       <section className="card fav-panel">
-        <h2 className="icon-inline fav-h"><Star size={18} aria-hidden="true" />Favoritas y alertas</h2>
-        <p className="small muted">Marca recetas con la estrella <Star size={14} aria-hidden="true" /> para seguirlas aquí y recibir una alerta cuando su ganancia llegue al umbral que elijas.</p>
+        <h2 className="icon-inline fav-h"><Star size={18} aria-hidden="true" />{t('Favoritas y alertas')}</h2>
+        <p className="small muted">{t('Marca recetas con la estrella')}{' '}<Star size={14} aria-hidden="true" />{' '}{t('para seguirlas aquí y recibir una alerta cuando su ganancia llegue al umbral que elijas.')}</p>
       </section>
     );
   }
@@ -94,27 +95,27 @@ export function FavoriteAlerts({ compact = false }: { compact?: boolean }) {
     if (!hits.length) return null;
     return (
       <section className="card fav-panel fav-hit" aria-live="polite">
-        <h2 className="icon-inline fav-h"><BellRinging size={18} weight="fill" aria-hidden="true" />{hits.length === 1 ? '1 favorita llega a tu umbral' : `${hits.length} favoritas llegan a tu umbral`}</h2>
+        <h2 className="icon-inline fav-h"><BellRinging size={18} weight="fill" aria-hidden="true" />{hits.length === 1 ? t('1 favorita llega a tu umbral') : t('{n} favoritas llegan a tu umbral', { n: hits.length })}</h2>
         <ul className="fav-hits">
           {hits.map((i) => (
-            <li key={i.recipeId}><a href={`#/receta/${i.recipeId}`}>{i.name}</a>: gana <Money v={i.profitUnit} /> por unidad (umbral {favs[i.recipeId].threshold} o)</li>
+            <li key={i.recipeId}><a href={`#/receta/${i.recipeId}`}>{i.name}</a>{t(': gana')}{' '}<Money v={i.profitUnit} />{' '}{t('por unidad (umbral')}{' '}{favs[i.recipeId].threshold} o)</li>
           ))}
         </ul>
-        <a className="small" href="#/?onlyFav=1">Ver tus favoritas en el comparador</a>
+        <a className="small" href="#/?onlyFav=1">{t('Ver tus favoritas en el comparador')}</a>
       </section>
     );
   }
   return (
     <details className="card fav-panel" open={hits.length > 0 || undefined}>
       <summary className="icon-inline fav-h">
-        <Star size={18} weight="fill" aria-hidden="true" />Favoritas ({ids.length})
-        {hits.length > 0 && <span className="badge b-ok fav-badge"><BellRinging size={12} weight="fill" aria-hidden="true" />{hits.length} alerta{hits.length > 1 ? 's' : ''}</span>}
+        <Star size={18} weight="fill" aria-hidden="true" />{t('Favoritas (')}{ids.length})
+        {hits.length > 0 && <span className="badge b-ok fav-badge"><BellRinging size={12} weight="fill" aria-hidden="true" />{hits.length}{' '}{t('alerta')}{hits.length > 1 ? 's' : ''}</span>}
       </summary>
-      <p className="small muted">Escribe la ganancia mínima por unidad (en oro) para recibir una alerta. Se comprueba al abrir la web y con cada actualización de precios. Las favoritas se guardan solo en este navegador. Un precio atípico no dispara alertas.</p>
-      {data.loading && !data.data && <p className="small muted">Cargando…</p>}
+      <p className="small muted">{t('Escribe la ganancia mínima por unidad (en oro) para recibir una alerta. Se comprueba al abrir la web y con cada actualización de precios. Las favoritas se guardan solo en este navegador. Un precio atípico no dispara alertas.')}</p>
+      {data.loading && !data.data && <p className="small muted">{t('Cargando…')}</p>}
       <div className="table-wrap">
         <table className="fav-table">
-          <thead><tr><th>Receta</th><th className="num">Ganancia/unid.</th><th className="num">Margen</th><th>Estado</th><th>Alerta desde (oro)</th><th><span className="sr-only">Quitar</span></th></tr></thead>
+          <thead><tr><th>{t('Receta')}</th><th className="num">{t('Ganancia/unid.')}</th><th className="num">{t('Margen')}</th><th>{t('Estado')}</th><th>{t('Alerta desde (oro)')}</th><th><span className="sr-only">{t('Quitar')}</span></th></tr></thead>
           <tbody>
             {ids.map((id) => {
               const i = items.find((x) => x.recipeId === id);
@@ -124,17 +125,17 @@ export function FavoriteAlerts({ compact = false }: { compact?: boolean }) {
               return (
                 <tr key={id} className={hit ? 'fav-row-hit' : ''}>
                   <td>{i ? <ItemLabel id={i.output?.itemId} quality={i.output?.quality} px={22} href={`#/receta/${id}`} name={i.name} /> : <a href={`#/receta/${id}`}>{f.name}</a>}</td>
-                  <td className="num">{i ? <Delta v={i.profitUnit} /> : '—'}{i?.sellCheck && <div><span className="badge b-warn">Precio atípico</span></div>}</td>
+                  <td className="num">{i ? <Delta v={i.profitUnit} /> : '—'}{i?.sellCheck && <div><span className="badge b-warn">{t('Precio atípico')}</span></div>}</td>
                   <td className="num">{i?.marginPct ? <PctShort v={i.marginPct} /> : '—'}</td>
-                  <td>{i ? <StatusBadge s={i.status} /> : <span className="small muted">sin datos</span>}</td>
+                  <td>{i ? <StatusBadge s={i.status} /> : <span className="small muted">{t('sin datos')}</span>}</td>
                   <td>
                     <span className="fav-threshold">
-                      {hit ? <BellRinging size={16} weight="fill" className="fav-bell on" aria-label="Alerta activa" /> : <Bell size={16} className="fav-bell" aria-hidden="true" />}
-                      <input type="text" inputMode="decimal" placeholder="sin alerta" defaultValue={f.threshold} aria-invalid={bad}
-                        aria-label={`Ganancia mínima por unidad en oro para ${f.name}`} onBlur={(e) => setThreshold(id, e.target.value.trim())}
+                      {hit ? <BellRinging size={16} weight="fill" className="fav-bell on" aria-label={t('Alerta activa')} /> : <Bell size={16} className="fav-bell" aria-hidden="true" />}
+                      <input type="text" inputMode="decimal" placeholder={t('sin alerta')} defaultValue={f.threshold} aria-invalid={bad}
+                        aria-label={t('Ganancia mínima por unidad en oro para {x}', { x: f.name })} onBlur={(e) => setThreshold(id, e.target.value.trim())}
                         onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
                     </span>
-                    {bad && <div className="small lv-error">Oro con hasta 4 decimales</div>}
+                    {bad && <div className="small lv-error">{t('Oro con hasta 4 decimales')}</div>}
                   </td>
                   <td><button type="button" className="link danger" onClick={() => remove(id)} aria-label={`Quitar ${f.name} de favoritas`}><Trash size={14} aria-hidden="true" /></button></td>
                 </tr>

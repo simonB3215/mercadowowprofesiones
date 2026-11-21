@@ -4,6 +4,7 @@ import { ItemLabel } from '../icons.js';
 import { ArrowFatLinesUp, ArrowSquareOut, Warning, ShoppingCart, Trash, Calculator, ListNumbers, CheckCircle, Info, Table, Lightning, PiggyBank, BookOpen } from '@phosphor-icons/react';
 import { secondsLabel } from './Character.js';
 import { HowToLearn, MatChip, PatternNote, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
+import { t } from '../i18n.js';
 
 export { HowToLearn };
 
@@ -84,7 +85,7 @@ export function Leveling() {
 
   const fromN = Number(from), toN = Number(to);
   const rangeError = !Number.isInteger(fromN) || !Number.isInteger(toN) || fromN < 1 || toN <= fromN || (current && toN > current.maxSkill)
-    ? `El nivel actual debe ser 1 o más y menor que el objetivo${current ? ` (máximo ${current.maxSkill})` : ''}.` : null;
+    ? `${t('El nivel actual debe ser 1 o más y menor que el objetivo')}${current ? ` ${t('(máximo {n})', { n: current.maxSkill })}` : ''}.` : null;
 
   const d = plan.data;
   const gapLevels = d ? d.steps.filter((s: any) => !s.recipe).reduce((n: number, s: any) => n + (s.to - s.from), 0) : 0;
@@ -92,95 +93,84 @@ export function Leveling() {
 
   return (
     <>
-      <PageHead title="Subir de nivel" icon={<ArrowFatLinesUp size={26} weight="duotone" aria-hidden="true" />}>
-        Elige la profesión y los niveles: te decimos qué fabricar, cuántas veces y cuánto cuesta con los precios de tu casa de subastas.
-      </PageHead>
+      <PageHead title={t('Subir de nivel')} icon={<ArrowFatLinesUp size={26} weight="duotone" aria-hidden="true" />}>{t('Elige la profesión y los niveles: te decimos qué fabricar, cuántas veces y cuánto cuesta con los precios de tu casa de subastas.')}</PageHead>
 
       <form className="card lv-form" onSubmit={(e) => { e.preventDefault(); if (!rangeError) setApplied({ prof, from, to, all, mode }); }}>
-        {profs.loading && <Loading label="Cargando profesiones…" />}
+        {profs.loading && <Loading label={t('Cargando profesiones…')} />}
         {profs.error && <ErrorBox error={profs.error} onRetry={profs.reload} />}
         {!!list.length && (
           <>
             <div className="lv-fields">
-              <label className="field lv-prof">
-                Profesión
-                <select value={prof} onChange={(e) => { setProf(e.target.value); const p = list.find((x) => String(x.id) === e.target.value); if (p) setTo(String(p.defaultTo)); }}>
+              <label className="field lv-prof">{t('Profesión')}<select value={prof} onChange={(e) => { setProf(e.target.value); const p = list.find((x) => String(x.id) === e.target.value); if (p) setTo(String(p.defaultTo)); }}>
                   {list.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </label>
-              <label className="field">
-                Nivel actual
-                <input type="number" min={1} value={from} onChange={(e) => setFrom(e.target.value)} aria-invalid={!!rangeError} />
+              <label className="field">{t('Nivel actual')}<input type="number" min={1} value={from} onChange={(e) => setFrom(e.target.value)} aria-invalid={!!rangeError} />
               </label>
-              <label className="field">
-                Nivel objetivo
-                <input type="number" min={2} max={current?.maxSkill} value={to} onChange={(e) => setTo(e.target.value)} aria-invalid={!!rangeError} />
+              <label className="field">{t('Nivel objetivo')}<input type="number" min={2} max={current?.maxSkill} value={to} onChange={(e) => setTo(e.target.value)} aria-invalid={!!rangeError} />
               </label>
-              <button type="submit" className="primary lv-submit" disabled={!!rangeError}><Calculator size={18} aria-hidden="true" />Calcular ruta</button>
+              <button type="submit" className="primary lv-submit" disabled={!!rangeError}><Calculator size={18} aria-hidden="true" />{t('Calcular ruta')}</button>
             </div>
             <fieldset className="pc-mode">
-              <legend className="small muted">Prioridad</legend>
+              <legend className="small muted">{t('Prioridad')}</legend>
               {([['guia', 'Guía', <BookOpen size={18} aria-hidden="true" />], ['rapida', 'Más rápida', <Lightning size={18} aria-hidden="true" />], ['barata', 'Más barata', <PiggyBank size={18} aria-hidden="true" />]] as const).map(([m, label, icon]) => (
                 <label key={m} className={`pc-mode-opt${mode === m ? ' on' : ''}`}>
                   <input type="radio" name="lv-mode" checked={mode === m}
                     onChange={() => { setMode(m); if (!rangeError && current) setApplied({ prof, from, to, all, mode: m }); }} />
-                  {icon}{label}
+                  {icon}{t(label)}
                 </label>
               ))}
             </fieldset>
             <label className="check">
-              <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
-              Incluir recetas de patrón, botín o misión
-            </label>
+              <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />{t('Incluir recetas de patrón, botín o misión')}</label>
             {rangeError && <p className="small lv-error" role="alert">{rangeError}</p>}
           </>
         )}
       </form>
 
-      {plan.loading && applied && <Loading label="Calculando la ruta…" rows={5} />}
+      {plan.loading && applied && <Loading label={t('Calculando la ruta…')} rows={5} />}
       {plan.error && <ErrorBox error={plan.error} onRetry={plan.reload} />}
       {d && !plan.loading && (
         <>
           {/* Resumen: una cifra principal y dos secundarias. */}
-          <section className="card lv-summary" aria-label="Resumen de costos">
+          <section className="card lv-summary" aria-label={t('Resumen de costos')}>
             <div className="lv-summary-main">
-              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {MODE_LABEL[d.mode as Mode] ?? d.mode}</span>
-              <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">Sin datos</span>}</span>
-              <span className="lv-summary-label">Costo total estimado</span>
+              <span className="lv-summary-label">{d.profession.name} · {d.from} → {d.to} · {t(MODE_LABEL[d.mode as Mode] ?? d.mode)}</span>
+              <span className="lv-total">{d.total ? <Money v={d.total} /> : <span className="lv-total-none">{t('Sin datos')}</span>}</span>
+              <span className="lv-summary-label">{t('Costo total estimado')}</span>
             </div>
             <dl className="lv-summary-parts">
-              <div><dt>Materiales</dt><dd><Money v={d.materialsCost} /></dd></div>
-              <div><dt>Instructor</dt><dd><Money v={d.trainingCost} /></dd></div>
-              <div><dt>Tiempo de fabricación</dt><dd>{secondsLabel(d.activeSeconds)}</dd></div>
+              <div><dt>{t('Materiales')}</dt><dd><Money v={d.materialsCost} /></dd></div>
+              <div><dt>{t('Instructor')}</dt><dd><Money v={d.trainingCost} /></dd></div>
+              <div><dt>{t('Tiempo de fabricación')}</dt><dd>{secondsLabel(d.activeSeconds)}</dd></div>
             </dl>
             <p className={`lv-status ${d.incomplete ? 'warn' : 'ok'}`}>
               {d.incomplete
-                ? <><Warning size={18} weight="bold" aria-hidden="true" />Hay {gapLevels} niveles sin receta con precio: el total no los incluye. Revisa los pasos marcados.</>
-                : <><CheckCircle size={18} weight="bold" aria-hidden="true" />Ruta completa con precios de la casa de subastas.</>}
+                ? <><Warning size={18} weight="bold" aria-hidden="true" />{t('Hay')}{' '}{gapLevels}{' '}{t('niveles sin receta con precio: el total no los incluye. Revisa los pasos marcados.')}</>
+                : <><CheckCircle size={18} weight="bold" aria-hidden="true" />{t('Ruta completa con precios de la casa de subastas.')}</>}
             </p>
             {d.guide && (
               <p className="lv-status info">
                 <BookOpen size={18} weight="bold" aria-hidden="true" />
-                <span>Ruta de la guía de <a href={d.guide.url} target="_blank" rel="noreferrer" className="icon-inline">{d.guide.name}<ArrowSquareOut size={12} aria-hidden="true" /></a> para WoW Forever (actualizada el {String(d.guide.updated).split('-').reverse().join('/')}). Las fabricaciones y el costo se calculan con los precios actuales.{d.guide.filledLevels > 0 && <> La guía no cubre {d.guide.filledLevels} niveles: ahí se usa la ruta más rápida (pasos marcados «calculado»).</>}</span>
+                <span>{t('Ruta de la guía de')}{' '}<a href={d.guide.url} target="_blank" rel="noreferrer" className="icon-inline">{d.guide.name}<ArrowSquareOut size={12} aria-hidden="true" /></a>{' '}{t('para WoW Forever (actualizada el')}{' '}{String(d.guide.updated).split('-').reverse().join('/')}{t('). Las fabricaciones y el costo se calculan con los precios actuales.')}{d.guide.filledLevels > 0 && <>{' '}{t('La guía no cubre')}{' '}{d.guide.filledLevels}{' '}{t('niveles: ahí se usa la ruta más rápida (pasos marcados «calculado»).')}</>}</span>
               </p>
             )}
-            {applied?.mode === 'guia' && !d.guide && <p className="lv-status info"><Info size={18} weight="bold" aria-hidden="true" />No hay guía publicada para esta profesión: se muestra la ruta más rápida.</p>}
-            {d.unpricedSteps > 0 && <p className="lv-status warn"><Warning size={18} weight="bold" aria-hidden="true" />{d.unpricedSteps} paso(s) tienen materiales sin precio en la casa de subastas: el total no los incluye.</p>}
+            {applied?.mode === 'guia' && !d.guide && <p className="lv-status info"><Info size={18} weight="bold" aria-hidden="true" />{t('No hay guía publicada para esta profesión: se muestra la ruta más rápida.')}</p>}
+            {d.unpricedSteps > 0 && <p className="lv-status warn"><Warning size={18} weight="bold" aria-hidden="true" />{d.unpricedSteps}{' '}{t('paso(s) tienen materiales sin precio en la casa de subastas: el total no los incluye.')}</p>}
             {!d.guide && <PatternNote levels={d.patternLevels ?? 0} trainerOnly={d.trainerOnly} />}
           </section>
 
           <AvoidedList list={avoided} onRemove={(id) => setAvoided(avoided.filter((a) => a.id !== id))} onClear={() => setAvoided([])} />
           <RouteProgress steps={d.steps} done={steps.done} onReset={steps.reset} />
 
-          <div className="lv-tabs" role="tablist" aria-label="Vista">
+          <div className="lv-tabs" role="tablist" aria-label={t('Vista')}>
             <button type="button" role="tab" aria-selected={tab === 'guia'} aria-controls="lv-panel" onClick={() => setTab('guia')}>
-              <Table size={18} aria-hidden="true" />Resumen
-            </button>
+              <Table size={18} aria-hidden="true" />{t('Resumen')}</button>
             <button type="button" role="tab" aria-selected={tab === 'pasos'} aria-controls="lv-panel" onClick={() => setTab('pasos')}>
-              <ListNumbers size={18} aria-hidden="true" />Pasos<span className="hide-sm"> en detalle</span> <span className="lv-count">{d.steps.length}</span>
+              <ListNumbers size={18} aria-hidden="true" />{t('Pasos')}<span className="hide-sm">{' '}{t('en detalle')}</span> <span className="lv-count">{d.steps.length}</span>
             </button>
             <button type="button" role="tab" aria-selected={tab === 'compra'} aria-controls="lv-panel" onClick={() => setTab('compra')}>
-              <ShoppingCart size={18} aria-hidden="true" /><span className="hide-sm">Lista de compra</span><span className="show-sm">Compra</span> <span className="lv-count">{d.shopping.length}</span>
+              <ShoppingCart size={18} aria-hidden="true" /><span className="hide-sm">{t('Lista de compra')}</span><span className="show-sm">{t('Compra')}</span> <span className="lv-count">{d.shopping.length}</span>
             </button>
           </div>
 
@@ -189,7 +179,7 @@ export function Leveling() {
               <ol className="lv-steps">
                 {d.steps.map((s: any, i: number) => (
                   <li key={i} id={`lv-paso-${i}`} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
-                    <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>
+                    <div className="lv-level"><span className="lv-step-n">{t('Paso')}{' '}{i + 1}</span><span className="mono">{s.from} → {s.to}</span>
                       <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s), s)} /></div>
                     {s.recipe ? (
                       <>
@@ -200,15 +190,15 @@ export function Leveling() {
                               href={s.recipe.catalogRecipeId ? `#/receta/${s.recipe.catalogRecipeId}` : undefined}
                               name={s.recipe.name ?? s.recipe.nameEn} />
                           </div>
-                          <ul className="lv-mats" aria-label="Materiales">
+                          <ul className="lv-mats" aria-label={t('Materiales')}>
                             {s.materials.map((m: any) => <MatChip key={m.itemId} m={m} />)}
                           </ul>
                           <p className="lv-meta">
                             <HowToLearn r={s.recipe} />
                             <span aria-hidden="true">·</span>
-                            <span>Dificultad <SkillColor c={s.colorFrom} />{s.colorTo !== s.colorFrom && <> a <SkillColor c={s.colorTo} /></>}</span>
+                            <span>{t('Dificultad')}{' '}<SkillColor c={s.colorFrom} />{s.colorTo !== s.colorFrom && <> a <SkillColor c={s.colorTo} /></>}</span>
                             <span aria-hidden="true">·</span>
-                            <a href={s.recipe.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">Wowhead<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                            <a href={s.recipe.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline">{t('Wowhead')}<ArrowSquareOut size={12} aria-hidden="true" /></a>
                           </p>
                           <StepAlternatives s={s} onAvoid={(id, name) => setAvoided([...avoided.filter((a) => a.id !== id), { id, name }])} />
                         </div>
@@ -216,21 +206,21 @@ export function Leveling() {
                       </>
                     ) : (
                       <div className="lv-main">
-                        <p className="lv-gap-title"><Warning size={18} weight="bold" aria-hidden="true" />Sin datos para estos niveles</p>
+                        <p className="lv-gap-title"><Warning size={18} weight="bold" aria-hidden="true" />{t('Sin datos para estos niveles')}</p>
                         <p className="small lv-gap-reason">{s.reason}</p>
                         {!!s.missingItems.length && (
                           <div className="lv-prices">
-                            <span className="small muted">Si sabes cuánto cuestan (por ejemplo, en el vendedor), escribe el precio en oro:</span>
+                            <span className="small muted">{t('Si sabes cuánto cuestan (por ejemplo, en el vendedor), escribe el precio en oro:')}</span>
                             {s.missingItems.slice(0, 6).map((m: any) => (
                               <label key={m.itemId} className="lv-price-row">
-                                <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? `Objeto ${m.itemId}`} />
-                                <input type="text" inputMode="decimal" placeholder="oro, p. ej. 0.05"
-                                  aria-label={`Precio en oro de ${m.name ?? `objeto ${m.itemId}`}`}
+                                <ItemLabel id={m.itemId} quality={m.quality} px={18} name={m.name ?? t('Objeto {id}', { id: m.itemId })} />
+                                <input type="text" inputMode="decimal" placeholder={t('oro, p. ej. 0.05')}
+                                  aria-label={t('Precio en oro de {x}', { x: m.name ?? t('Objeto {id}', { id: m.itemId }) })}
                                   defaultValue={manual[m.itemId] ?? ''} onBlur={(e) => setPrice(m.itemId, e.target.value)}
                                   aria-invalid={!!invalidGold(manual[m.itemId])} />
                               </label>
                             ))}
-                            {s.missingItems.length > 6 && <span className="small muted">… y {s.missingItems.length - 6} más.</span>}
+                            {s.missingItems.length > 6 && <span className="small muted">… y {s.missingItems.length - 6}{' '}{t('más.')}</span>}
                           </div>
                         )}
                       </div>
@@ -245,14 +235,14 @@ export function Leveling() {
 
           {manualCount > 0 && (
             <details className="card lv-details">
-              <summary>Tus precios manuales ({manualCount})</summary>
-              <p className="small muted">Se guardan solo en este navegador y sustituyen al precio de la casa de subastas.</p>
+              <summary>{t('Tus precios manuales (')}{manualCount})</summary>
+              <p className="small muted">{t('Se guardan solo en este navegador y sustituyen al precio de la casa de subastas.')}</p>
               <ul className="lv-manual-list">
                 {Object.entries(manual).map(([id, v]) => (
                   <li key={id}>
-                    <ItemLabel id={Number(id)} px={18} quality={itemInfo(d, Number(id))?.quality} name={itemInfo(d, Number(id))?.name ?? `Objeto ${id}`} />
-                    <span className="mono">{v} oro</span>{!validGold(v) && <span className="badge b-bad">no válido: no se usa</span>}
-                    <button type="button" className="link danger" onClick={() => setPrice(Number(id), '')}><Trash size={14} aria-hidden="true" />Quitar</button>
+                    <ItemLabel id={Number(id)} px={18} quality={itemInfo(d, Number(id))?.quality} name={itemInfo(d, Number(id))?.name ?? t('Objeto {id}', { id: id })} />
+                    <span className="mono">{v}{' '}{t('oro')}</span>{!validGold(v) && <span className="badge b-bad">{t('no válido: no se usa')}</span>}
+                    <button type="button" className="link danger" onClick={() => setPrice(Number(id), '')}><Trash size={14} aria-hidden="true" />{t('Quitar')}</button>
                   </li>
                 ))}
               </ul>
@@ -260,14 +250,14 @@ export function Leveling() {
           )}
 
           <details className="card lv-details">
-            <summary className="icon-inline"><Info size={16} aria-hidden="true" />¿Cómo se calcula?</summary>
+            <summary className="icon-inline"><Info size={16} aria-hidden="true" />{t('¿Cómo se calcula?')}</summary>
             <ul className="small lv-notes">
-              <li>{d.mode === 'guia' ? <>Guía: los tramos y recetas de una guía publicada para WoW Forever; si su receta aún no da puntos en un nivel, se sigue con la anterior, y lo que la guía no cubre se completa con la ruta más rápida.</> : d.mode === 'barata' ? <>Más barata: tramos con la receta que sube más barato.</> : <>Más rápida: tramos con la receta de menor tiempo de fabricación esperado (tiempo de lanzamiento ÷ probabilidad de punto).</>} Se agrupan niveles con una sola receta siempre que eso no cueste más de un 3 % de {d.mode === 'barata' ? 'oro' : 'tiempo'} frente a elegir nivel a nivel.</li>
-              <li>Las veces a fabricar en dificultad amarilla y verde son una <strong>estimación</strong> (fórmula de la comunidad); se redondean hacia arriba.</li>
-              <li>Precios: casa de subastas elegida arriba, campo «{d.priceField}», escaneo {d.priceSourceTime ? `hace ${age(hoursSince(d.priceSourceTime))} (${dt(d.priceSourceTime)})` : 'sin datos'}. Un material sin precio nunca se cuenta como gratis.{d.source?.vendor?.items ? ` Los materiales que solo venden los vendedores (${d.source.vendor.items}, Wowhead, ${d.source.vendor.checkedAt}) usan el precio del vendedor si es más barato.` : ''}</li>
-              <li>Recetas y dificultad: <a href={d.source.url} target="_blank" rel="noreferrer">Wowhead (WoW Forever)</a>, datos del {dt(d.source.fetchedAt)}.</li>
-              <li>Por defecto solo se usan recetas del instructor y las que se conocen al aprender la profesión. El objetivo por defecto es 300.</li>
-              <li>Herboristería, Desuello y Pesca no aparecen: se suben recolectando.</li>
+              <li>{d.mode === 'guia' ? <>{t('Guía: los tramos y recetas de una guía publicada para WoW Forever; si su receta aún no da puntos en un nivel, se sigue con la anterior, y lo que la guía no cubre se completa con la ruta más rápida.')}</> : d.mode === 'barata' ? <>{t('Más barata: tramos con la receta que sube más barato.')}</> : <>{t('Más rápida: tramos con la receta de menor tiempo de fabricación esperado (tiempo de lanzamiento ÷ probabilidad de punto).')}</>}{' '}{t('Se agrupan niveles con una sola receta siempre que eso no cueste más de un 3 % de')}{' '}{d.mode === 'barata' ? t('oro') : t('tiempo')}{' '}{t('frente a elegir nivel a nivel.')}</li>
+              <li>{t('Las veces a fabricar en dificultad amarilla y verde son una')}{' '}<strong>{t('estimación')}</strong>{' '}{t('(fórmula de la comunidad); se redondean hacia arriba.')}</li>
+              <li>{t('Precios: casa de subastas elegida arriba, campo «')}{d.priceField}{t('», escaneo')}{' '}{d.priceSourceTime ? `${t('hace {a}', { a: age(hoursSince(d.priceSourceTime)) })} (${dt(d.priceSourceTime)})` : t('sin datos')}{t('. Un material sin precio nunca se cuenta como gratis.')}{d.source?.vendor?.items ? ` ${t('Los materiales que solo venden los vendedores ({n}, Wowhead, {d}) usan el precio del vendedor si es más barato.', { n: d.source.vendor.items, d: d.source.vendor.checkedAt })}` : ''}</li>
+              <li>{t('Recetas y dificultad:')}{' '}<a href={d.source.url} target="_blank" rel="noreferrer">{t('Wowhead (WoW Forever)')}</a>{t(', datos del')}{' '}{dt(d.source.fetchedAt)}.</li>
+              <li>{t('Por defecto solo se usan recetas del instructor y las que se conocen al aprender la profesión. El objetivo por defecto es 300.')}</li>
+              <li>{t('Herboristería, Desuello y Pesca no aparecen: se suben recolectando.')}</li>
             </ul>
           </details>
         </>

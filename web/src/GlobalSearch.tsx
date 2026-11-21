@@ -7,6 +7,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { api, useApp } from './lib.js';
 import { WowIcon } from './icons.js';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { t } from './i18n.js';
 
 interface Hit { key: string; href: string; name: string; sub: string; itemId: number | null; quality: string | null; kind?: 'profession' }
 
@@ -53,10 +54,10 @@ export function GlobalSearch() {
   const show = open && hits !== null;
   return (
     <div className="gsearch" role="search">
-      <label className="sr-only" htmlFor={`${listId}-in`}>Buscar una receta o un objeto</label>
+      <label className="sr-only" htmlFor={`${listId}-in`}>{t('Buscar una receta o un objeto')}</label>
       <span className="input-icon">
         <MagnifyingGlass size={16} aria-hidden="true" />
-        <input id={`${listId}-in`} ref={input} type="search" value={text} placeholder="Buscar receta u objeto  ( / )" autoComplete="off"
+        <input id={`${listId}-in`} ref={input} type="search" value={text} placeholder={t('Buscar receta u objeto  ( / )')} autoComplete="off"
           role="combobox" aria-expanded={show} aria-controls={listId} aria-autocomplete="list"
           aria-activedescendant={show && hits!.length ? `${listId}-${active}` : undefined}
           onChange={(e) => { setText(e.target.value); setOpen(true); }} onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)}
@@ -70,7 +71,7 @@ export function GlobalSearch() {
       </span>
       {show && (
         <ul className="item-picker-list gsearch-list" role="listbox" id={listId}>
-          {!hits!.length && <li className="gsearch-empty muted small" role="presentation">Nada con «{text.trim()}».</li>}
+          {!hits!.length && <li className="gsearch-empty muted small" role="presentation">{t('Nada con «')}{text.trim()}».</li>}
           {hits!.map((h, i) => (
             <li key={h.key} id={`${listId}-${i}`} role="option" aria-selected={i === active} className={i === active ? 'active' : ''}
               onMouseDown={(e) => { e.preventDefault(); go(h); }} onMouseEnter={() => setActive(i)}>

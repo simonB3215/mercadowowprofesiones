@@ -1,28 +1,30 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { api, useApp, useAsync, Q, formatMoney, CoinText } from './lib.js';
 import { ChartLine, TrendUp, TrendDown, MinusCircle } from '@phosphor-icons/react';
+import { t, locale } from './i18n.js';
 
 interface Day { day: string; marketValue: string | null; minBuyout: string | null; quantity: number | null; samples: number }
 
 const money = (v: string | null) => (v === null ? '—' : formatMoney(Q.of(BigInt(v))));
 const gold = (v: string | null) => (v === null ? null : Number(BigInt(v)) / 10000);
 const DAY_MS = 86400000;
-const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString(locale(), { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
 /** Unidades en venta y publicaciones de la foto actual (solo casas cargadas desde Blizzard). */
 export function SupplyText({ s }: { s: { quantity: number | null; auctions: number | null } | null | undefined }) {
   if (!s || (s.quantity === null && s.auctions === null)) return null;
-  const q = s.quantity !== null ? `${s.quantity.toLocaleString('es-ES')} en venta` : null;
-  const a = s.auctions !== null ? `${s.auctions.toLocaleString('es-ES')} ${s.auctions === 1 ? 'publicación' : 'publicaciones'}` : null;
-  return <span className={s.auctions === 1 ? 'supply supply-thin' : 'supply'} title="Oferta en la casa de subastas en la última carga">{[q, a].filter(Boolean).join(' · ')}</span>;
+  const q = s.quantity !== null ? t('{n} en venta', { n: s.quantity.toLocaleString(locale()) }) : null;
+  const a = s.auctions !== null ? `${s.auctions.toLocaleString(locale())} ${t(s.auctions === 1 ? 'publicación' : 'publicaciones')}` : null;
+  return <span className={s.auctions === 1 ? 'supply supply-thin' : 'supply'} title={t('Oferta en la casa de subastas en la última carga')}>{[q, a].filter(Boolean).join(' · ')}</span>;
 }
 
 /**
  * Historial diario propio del valor de mercado en la casa elegida. Una sola serie (sin leyenda: el título la nombra),
  * línea de 2 px, rejilla discreta, cruz y ficha al pasar el ratón o con las flechas del teclado, y la tabla equivalente.
  */
-export function PriceHistory({ itemId, title = 'Historial de precio' }: { itemId: number; title?: string }) {
+export function PriceHistory({ itemId, title: titleIn }: { itemId: number; title?: string }) {
   const { ctxQuery, ctx } = useApp();
+  const title = titleIn ?? t('Historial de precio');
   const [days, setDays] = useState(30);
   const h = useAsync(() => api<{ history: Day[] }>(`/api/items/${itemId}/history?${ctxQuery}&days=${days}`), [itemId, ctxQuery, days]);
   const rows = h.data?.history ?? [];
@@ -32,20 +34,19 @@ export function PriceHistory({ itemId, title = 'Historial de precio' }: { itemId
     <section className="card ph" aria-labelledby={`ph-${itemId}`}>
       <div className="ph-head">
         <h2 id={`ph-${itemId}`} className="icon-inline"><ChartLine size={18} aria-hidden="true" />{title}</h2>
-        <div className="ph-range" role="group" aria-label="Periodo">
+        <div className="ph-range" role="group" aria-label={t('Periodo')}>
           {[7, 14, 30, 60].map((d) => (
-            <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}>{d} días</button>
+            <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}>{d}{' '}{t('días')}</button>
           ))}
         </div>
       </div>
-      {!ctx.realm ? <p className="muted small">Elige una casa de subastas arriba para ver su historial.</p>
-        : h.loading && !h.data ? <p className="muted small">Cargando historial…</p>
-        : h.error ? <p className="muted small">No se pudo cargar el historial: {h.error}</p>
+      {!ctx.realm ? <p className="muted small">{t('Elige una casa de subastas arriba para ver su historial.')}</p>
+        : h.loading && !h.data ? <p className="muted small">{t('Cargando historial…')}</p>
+        : h.error ? <p className="muted small">{t('No se pudo cargar el historial:')}{' '}{h.error}</p>
         : pts.length < 2 ? (
           <p className="muted small">
-            {pts.length === 0 ? 'Aún no hay historial de este objeto en esta casa.' : `Solo hay un día con datos (${fmtDay(pts[0].day)}: ${money(pts[0].marketValue)}).`}
-            {' '}Se guarda una muestra cada vez que se cargan los precios; con dos días o más se dibuja la evolución.
-          </p>
+            {pts.length === 0 ? t('Aún no hay historial de este objeto en esta casa.') : t('Solo hay un día con datos ({d}: {m}).', { d: fmtDay(pts[0].day), m: money(pts[0].marketValue) })}
+            {' '}{t('Se guarda una muestra cada vez que se cargan los precios; con dos días o más se dibuja la evolución.')}</p>
         ) : <Chart rows={pts} />}
     </section>
   );
@@ -88,8 +89,9 @@ function Chart({ rows }: { rows: Day[] }) {
   // Etiqueta del eje en la moneda mayor que tenga sentido (o, p o c), con un decimal si hace falta para distinguir marcas.
   const gTick = (v: number) => {
     const c = v * 10000;
-    const [n, u] = c >= 10000 ? [c / 10000, 'o'] : c >= 100 ? [c / 100, 'p'] : [c, 'c'];
-    return `${n >= 100 ? Math.round(n) : n.toFixed(1).replace(/\.0$/, '').replace('.', ',')} ${u}`;
+    const en = locale() === 'en-US';
+    const [n, u] = c >= 10000 ? [c / 10000, en ? 'g' : 'o'] : c >= 100 ? [c / 100, en ? 's' : 'p'] : [c, 'c'];
+    return `${(n >= 100 ? Math.round(n) : Number(n.toFixed(1))).toLocaleString(locale())} ${u}`;
   };
 
   const pick = (clientX: number, el: SVGSVGElement) => {
@@ -109,14 +111,14 @@ function Chart({ rows }: { rows: Day[] }) {
   return (
     <>
       <dl className="ph-stats">
-        <div><dt>Último día</dt><dd><CoinText text={money(rows[rows.length - 1].marketValue)} /></dd></div>
-        <div><dt>Cambio en el periodo</dt><dd className={`delta ${change === null || Math.abs(change) < 0.5 ? 'zero' : change > 0 ? 'pos' : 'neg'}`}>
-          <TrendI size={14} weight="bold" aria-hidden="true" />{change === null ? '—' : `${change > 0 ? '+' : ''}${change.toFixed(1).replace('.', ',')} %`}</dd></div>
-        <div><dt>Mínimo · máximo</dt><dd><CoinText text={formatMoney(Q.of(minV))} /> · <CoinText text={formatMoney(Q.of(maxV))} /></dd></div>
+        <div><dt>{t('Último día')}</dt><dd><CoinText text={money(rows[rows.length - 1].marketValue)} /></dd></div>
+        <div><dt>{t('Cambio en el periodo')}</dt><dd className={`delta ${change === null || Math.abs(change) < 0.5 ? 'zero' : change > 0 ? 'pos' : 'neg'}`}>
+          <TrendI size={14} weight="bold" aria-hidden="true" />{change === null ? '—' : `${change > 0 ? '+' : ''}${Number(change.toFixed(1)).toLocaleString(locale())} %`}</dd></div>
+        <div><dt>{t('Mínimo · máximo')}</dt><dd><CoinText text={formatMoney(Q.of(minV))} /> · <CoinText text={formatMoney(Q.of(maxV))} /></dd></div>
       </dl>
       <div className="ph-plot" ref={box}>
         <svg viewBox={`0 0 ${W} ${H}`} role="img" tabIndex={0} aria-describedby={`${uid}-hint`}
-          aria-label={`Valor de mercado diario: ${rows.length} días, de ${money(rows[0].marketValue)} a ${money(rows[rows.length - 1].marketValue)}`}
+          aria-label={t('Valor de mercado diario: {n} días, de {a} a {b}', { n: rows.length, a: money(rows[0].marketValue), b: money(rows[rows.length - 1].marketValue) })}
           onPointerMove={(e) => pick(e.clientX, e.currentTarget)} onPointerDown={(e) => pick(e.clientX, e.currentTarget)}
           onPointerLeave={(e) => { if (e.pointerType === 'mouse') setSel(null); }} onKeyDown={onKey} onBlur={() => setSel(null)}>
           {geo.ticks.map((t, i) => (
@@ -139,21 +141,21 @@ function Chart({ rows }: { rows: Day[] }) {
         {cur && (
           <div className="ph-tip" role="status" style={{ left: `${Math.min(82, Math.max(18, (geo.x(cur.day) / W) * 100))}%` }}>
             <strong>{fmtDay(cur.day)}</strong>
-            <span>Valor de mercado: <CoinText text={money(cur.marketValue)} /></span>
-            <span>Más barato del día: <CoinText text={money(cur.minBuyout)} /></span>
-            {cur.quantity !== null && <span>{cur.quantity.toLocaleString('es-ES')} en venta (media)</span>}
-            <span className="muted">{cur.samples} {cur.samples === 1 ? 'muestra' : 'muestras'}</span>
+            <span>{t('Valor de mercado:')}{' '}<CoinText text={money(cur.marketValue)} /></span>
+            <span>{t('Más barato del día:')}{' '}<CoinText text={money(cur.minBuyout)} /></span>
+            {cur.quantity !== null && <span>{cur.quantity.toLocaleString(locale())}{' '}{t('en venta (media)')}</span>}
+            <span className="muted">{cur.samples} {cur.samples === 1 ? t('muestra') : t('muestras')}</span>
           </div>
         )}
       </div>
-      <p id={`${uid}-hint`} className="small muted">Media diaria del valor de mercado de esta casa. Pasa el ratón o usa las flechas ← → sobre el gráfico.</p>
+      <p id={`${uid}-hint`} className="small muted">{t('Media diaria del valor de mercado de esta casa. Pasa el ratón o usa las flechas ← → sobre el gráfico.')}</p>
       <details className="ph-table">
-        <summary>Ver como tabla</summary>
+        <summary>{t('Ver como tabla')}</summary>
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Día</th><th className="num">Valor de mercado</th><th className="num">Más barato</th><th className="num">En venta</th></tr></thead>
+            <thead><tr><th>{t('Día')}</th><th className="num">{t('Valor de mercado')}</th><th className="num">{t('Más barato')}</th><th className="num">{t('En venta')}</th></tr></thead>
             <tbody>{[...rows].reverse().map((r) => (
-              <tr key={r.day}><td>{fmtDay(r.day)}</td><td className="num"><CoinText text={money(r.marketValue)} /></td><td className="num"><CoinText text={money(r.minBuyout)} /></td><td className="num">{r.quantity?.toLocaleString('es-ES') ?? '—'}</td></tr>
+              <tr key={r.day}><td>{fmtDay(r.day)}</td><td className="num"><CoinText text={money(r.marketValue)} /></td><td className="num"><CoinText text={money(r.minBuyout)} /></td><td className="num">{r.quantity?.toLocaleString(locale()) ?? '—'}</td></tr>
             ))}</tbody>
           </table>
         </div>

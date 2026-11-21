@@ -6,6 +6,7 @@ import React, { useEffect, useId, useState } from 'react';
 import { api, useApp } from './lib.js';
 import { WowIcon } from './icons.js';
 import { MagnifyingGlass } from '@phosphor-icons/react';
+import { t } from './i18n.js';
 
 interface Hit { item_id: number; name: string; quality: string | null }
 
@@ -35,7 +36,7 @@ export function ItemPicker({ label, value, onPick, craftable }: { label: string;
     setText(v); setOpen(true);
     const q = v.trim();
     if (!q) onPick(null);
-    else if (/^\d+$/.test(q)) onPick({ id: Number(q), name: `Objeto ${q}` });
+    else if (/^\d+$/.test(q)) onPick({ id: Number(q), name: t('Objeto {id}', { id: q }) });
     else if (value) onPick(null);
   };
   const show = open && hits.length > 0;
@@ -43,7 +44,7 @@ export function ItemPicker({ label, value, onPick, craftable }: { label: string;
     <label className="field item-picker">{label}
       <span className="input-icon">
         <MagnifyingGlass size={16} aria-hidden="true" />
-        <input type="text" value={text} placeholder="Escribe el nombre" autoComplete="off" role="combobox" aria-expanded={show} aria-controls={listId} aria-autocomplete="list"
+        <input type="text" value={text} placeholder={t('Escribe el nombre')} autoComplete="off" role="combobox" aria-expanded={show} aria-controls={listId} aria-autocomplete="list"
           aria-activedescendant={show && active >= 0 ? `${listId}-${active}` : undefined}
           onChange={(e) => change(e.target.value)} onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)}
           onKeyDown={(e) => {
@@ -64,7 +65,7 @@ export function ItemPicker({ label, value, onPick, craftable }: { label: string;
           ))}
         </ul>
       )}
-      {value && <span className="small muted">Elegido: {value.name}</span>}
+      {value && <span className="small muted">{t('Elegido:')}{' '}{value.name}</span>}
     </label>
   );
 }

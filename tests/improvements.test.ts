@@ -195,10 +195,10 @@ describe('dónde se consigue la receta', () => {
     expect(parseSources(xml)).toEqual([{ n: 'Alchemist Pestlezugg', t: 1, ti: 5594, z: 440 }]);
     expect(parseSources('<json><![CDATA["source":[2]]]></json>')).toEqual([]);
   });
-  it('la receta de Transmutar arcanita dice vendedor y zona en español', async () => {
+  it('la receta de Transmutar arcanita dice vendedor y zona en los dos idiomas', async () => {
     const { recipeItemFor, recipeWhere } = await import('../src/server/recipeItems.js');
     const ri = recipeItemFor(17187)!;
-    expect(ri.where).toEqual([{ name: 'Alchemist Pestlezugg', kind: 'pnj', url: 'https://www.wowhead.com/forever/npc=5594', zone: 'Tanaris' }]);
+    expect(ri.where).toEqual([{ name: 'Alchemist Pestlezugg', nameEn: 'Alchemist Pestlezugg', kind: 'pnj', url: 'https://www.wowhead.com/forever/npc=5594', zone: 'Tanaris', zoneEn: 'Tanaris' }]);
     expect(ri.whereMore).toBe(0);
     expect(recipeWhere(1)).toEqual({ where: [], whereMore: 0 });
     const { whereText } = await import('../web/src/RouteTools.js');

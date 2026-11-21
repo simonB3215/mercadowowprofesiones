@@ -23,6 +23,7 @@ import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
 import { ItemTipHost } from './ItemTooltip.js';
 import { GlobalSearch } from './GlobalSearch.js';
+import { t, t as tr, lang, setLang, loadGameNames } from './i18n.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
   House, SignOut, Scales, Flask, Scroll, type Icon,
@@ -33,54 +34,54 @@ const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: 
 type NavItem = [string, string, Icon];
 /** Menú en tres grupos por objetivo. En tableta y móvil los títulos se sustituyen por una línea separadora. */
 const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
-  [null, [['/inicio', 'Inicio', House]]],
-  ['Ganar oro', [
-    ['/', 'Comparador', ChartBar],
-    ['/catalogo', 'Catálogo', BookOpen],
-    ['/materiales', 'Materiales', Package],
-    ['/comprar', 'Comprar o fabricar', Scales],
-    ['/transmutaciones', 'Transmutaciones', Flask],
-    ['/plan', 'Fabricación', Hammer],
+  [null, [['/inicio', t('Inicio'), House]]],
+  [t('Ganar oro'), [
+    ['/', t('Comparador'), ChartBar],
+    ['/catalogo', t('Catálogo'), BookOpen],
+    ['/materiales', t('Materiales'), Package],
+    ['/comprar', t('Comprar o fabricar'), Scales],
+    ['/transmutaciones', t('Transmutaciones'), Flask],
+    ['/plan', t('Fabricación'), Hammer],
   ]],
-  ['Subir profesión', [
-    ['/nivel', 'Subir nivel', ArrowFatLinesUp],
-    ['/personaje', 'Mi personaje', IdentificationCard],
+  [t('Subir profesión'), [
+    ['/nivel', t('Subir nivel'), ArrowFatLinesUp],
+    ['/personaje', t('Mi personaje'), IdentificationCard],
   ]],
-  ['El juego', [
-    ['/cambios', 'Cambios del juego', Scroll],
+  [t('El juego'), [
+    ['/cambios', t('Cambios del juego'), Scroll],
   ]],
-  ['Mis datos', [
-    ['/perfil', 'Perfiles manuales', UserCircle],
-    ['/registro', 'Registro real', Receipt],
-    ['/avanzado', 'Simulador', Calculator],
+  [t('Mis datos'), [
+    ['/perfil', t('Perfiles manuales'), UserCircle],
+    ['/registro', t('Registro real'), Receipt],
+    ['/avanzado', t('Simulador'), Calculator],
   ]],
-  ['La web', [
-    ['/datos', 'Calidad de datos', ShieldCheck],
-    ['/ajustes', 'Ajustes', GearSix],
-    ['/changelog', 'Changelog', ClockCounterClockwise],
+  [t('La web'), [
+    ['/datos', t('Calidad de datos'), ShieldCheck],
+    ['/ajustes', t('Ajustes'), GearSix],
+    ['/changelog', t('Changelog'), ClockCounterClockwise],
   ]],
 ];
 const NAV: NavItem[] = NAV_GROUPS.flatMap(([, items]) => items);
 /** Para qué sirve cada sección (ayuda emergente del menú). */
 const NAV_HELP: Record<string, string> = {
-  '/inicio': 'Página de inicio',
-  '/': 'Qué recetas dan más oro con los precios actuales',
-  '/catalogo': 'Todas las profesiones y sus recetas',
-  '/materiales': '¿Vender un material o usarlo para fabricar?',
-  '/transmutaciones': 'Transmutaciones y recetas con espera: cuánto oro dan al día',
-  '/comprar': '¿Te sale más barato comprar un objeto o fabricarlo?',
-  '/plan': 'Lista de compra total para fabricar varias recetas',
-  '/nivel': 'Qué fabricar para subir una profesión y cuánto cuesta',
-  '/personaje': 'Tu personaje de Battle.net y la ruta desde tu nivel',
-  '/perfil': 'Indica a mano qué recetas conoces y qué materiales tienes',
-  '/registro': 'Anota tus compras y ventas reales para ver tu ganancia de verdad',
-  '/avanzado': 'Calcula la ganancia media de resultados al azar (desencantar…)',
-  '/datos': 'De cuándo son los precios y qué le falta al catálogo',
-  '/ajustes': 'Comisión de la subasta y criterios de «Buena opción»',
-  '/changelog': 'Novedades de la web',
-  '/cambios': 'Buffs y nerfs de cada clase y raza (hotfixes oficiales de Blizzard)',
+  '/inicio': t('Página de inicio'),
+  '/': t('Qué recetas dan más oro con los precios actuales'),
+  '/catalogo': t('Todas las profesiones y sus recetas'),
+  '/materiales': t('¿Vender un material o usarlo para fabricar?'),
+  '/transmutaciones': t('Transmutaciones y recetas con espera: cuánto oro dan al día'),
+  '/comprar': t('¿Te sale más barato comprar un objeto o fabricarlo?'),
+  '/plan': t('Lista de compra total para fabricar varias recetas'),
+  '/nivel': t('Qué fabricar para subir una profesión y cuánto cuesta'),
+  '/personaje': t('Tu personaje de Battle.net y la ruta desde tu nivel'),
+  '/perfil': t('Indica a mano qué recetas conoces y qué materiales tienes'),
+  '/registro': t('Anota tus compras y ventas reales para ver tu ganancia de verdad'),
+  '/avanzado': t('Calcula la ganancia media de resultados al azar (desencantar…)'),
+  '/datos': t('De cuándo son los precios y qué le falta al catálogo'),
+  '/ajustes': t('Comisión de la subasta y criterios de «Buena opción»'),
+  '/changelog': t('Novedades de la web'),
+  '/cambios': t('Buffs y nerfs de cada clase y raza (hotfixes oficiales de Blizzard)'),
 };
-const EXTRA_TITLES: Record<string, string> = { '/privacidad': 'Privacidad' };
+const EXTRA_TITLES: Record<string, string> = { '/privacidad': t('Privacidad') };
 
 /** Hay entradas del changelog que este navegador aún no ha visto. */
 function useChangelogUnseen() {
@@ -118,24 +119,30 @@ function ContextBar() {
   const change = (c: Partial<Ctx>) => setCtx({ ...ctx, ...c });
 
   return (
-    <div className="ctxbar" role="group" aria-label="Mercado y personaje">
-      <label className="field">Región
+    <div className="ctxbar" role="group" aria-label={t('Mercado y personaje')}>
+      <label className="field">{t('Región')}
         <select value={ctx.region} onChange={(e) => change({ region: e.target.value, realm: null })}>
-          {(version?.regions ?? []).map((r: string) => <option key={r} value={r}>{meta?.regions?.[r] ?? r}</option>)}
+          {(version?.regions ?? []).map((r: string) => <option key={r} value={r}>{t(meta?.regions?.[r] ?? r)}</option>)}
         </select>
       </label>
-      <label className="field">{realms.data?.realmLabel ?? 'Reino'}
+      <label className="field">{t(realms.data?.realmLabel ?? 'Reino')}
         <select value={ctx.realm ?? ''} onChange={(e) => change({ realm: e.target.value || null })}>
-          <option value="">Elige una (sin ella solo hay datos regionales)</option>
+          <option value="">{t('Elige una (sin ella solo hay datos regionales)')}</option>
           {(realms.data?.realms ?? []).map((r: any) => <option key={r.slug} value={r.slug}>{r.name}</option>)}
           {ctx.realm && !(realms.data?.realms ?? []).some((r: any) => r.slug === ctx.realm) && <option value={ctx.realm}>{ctx.realm}</option>}
         </select>
       </label>
       <label className="field">
-        <span>Perfil manual <a className="small" href="#/perfil" title="Qué es un perfil manual">(?)</a></span>
+        <span>{t('Perfil manual')} <a className="small" href="#/perfil" title={t('Qué es un perfil manual')}>(?)</a></span>
         <select value={profileId ?? ''} onChange={(e) => setProfileId(e.target.value || null)}>
-          <option value="">Ninguno (no filtra por recetas conocidas)</option>
+          <option value="">{t('Ninguno (no filtra por recetas conocidas)')}</option>
           {(profiles.data?.profiles ?? []).map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+      </label>
+      <label className="field">{t('Idioma')}
+        <select value={lang()} onChange={(e) => setLang(e.target.value as 'es' | 'en')}>
+          <option value="es">{t('Español')}</option>
+          <option value="en">{t('English')}</option>
         </select>
       </label>
     </div>
@@ -147,8 +154,8 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
   const { meta } = useApp();
   useEffect(() => {
     const k = '/' + (parts[0] ?? '');
-    const t = NAV.find(([p]) => p === k)?.[1] ?? EXTRA_TITLES[k] ?? 'Receta';
-    document.title = `${t} · Mercado de profesiones`;
+    const t = NAV.find(([p]) => p === k)?.[1] ?? EXTRA_TITLES[k] ?? tr('Receta');
+    document.title = `${t} · ${tr('Mercado de profesiones')}`;
   }, [path]);
   let page: React.ReactNode;
   switch (parts[0]) {
@@ -170,46 +177,46 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
     case 'ajustes': page = <SettingsPage />; break;
     case 'changelog': page = <Changelog />; break;
     case 'cambios': page = <GameChangesPage />; break;
-    default: page = <div className="empty card">Página no encontrada. <a href="#/">Volver al comparador</a></div>;
+    default: page = <div className="empty card">{t('Página no encontrada.')} <a href="#/">{t('Volver al comparador')}</a></div>;
   }
   const active = '/' + (parts[0] === 'receta' ? '' : parts[0] ?? '');
   const unseen = useChangelogUnseen();
   const hotfixUnseen = useHotfixUnseen(active === '/cambios');
   return (
     <>
-      <a className="skip" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
+      <a className="skip" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>{t('Saltar al contenido')}</a>
       <div className="shell">
-        <aside className="sidebar" aria-label="Navegación principal">
-          <a className="brand" href="#/inicio" aria-label="Mercado de profesiones, WoW Forever: ir al inicio">
+        <aside className="sidebar" aria-label={t('Navegación principal')}>
+          <a className="brand" href="#/inicio" aria-label={t('Mercado de profesiones, WoW Forever: ir al inicio')}>
             <span className="brand-mark" aria-hidden="true"><Coins size={20} weight="fill" /></span>
-            <span>Mercado de profesiones<small>WoW Forever</small></span>
+            <span>{t('Mercado de profesiones')}<small>{t('WoW Forever')}</small></span>
           </a>
-          <nav className="main" aria-label="Secciones">
+          <nav className="main" aria-label={t('Secciones')}>
             {NAV_GROUPS.map(([group, items], gi) => (
-              <div key={gi} className="nav-group" role="group" aria-label={group ?? 'Inicio'}>
+              <div key={gi} className="nav-group" role="group" aria-label={group ?? t('Inicio')}>
                 {group && <span className="nav-group-title" aria-hidden="true">{group}</span>}
                 {items.map(([p, l, Ico]) => (
                   <a key={p} href={`#${p}`} aria-current={active === p ? 'page' : undefined} title={NAV_HELP[p] && p !== "/inicio" ? `${l}: ${NAV_HELP[p]}` : l}>
                     <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
                     <span className="nav-text">{l}</span>
-                    {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}
-                    {p === '/cambios' && hotfixUnseen && <span className="nav-dot nav-dot-hotfix" title="Hay un hotfix nuevo de Blizzard" aria-label="(hotfix nuevo sin ver)" />}
+                    {p === '/changelog' && unseen && <span className="nav-dot" aria-label={t('(novedades sin ver)')} />}
+                    {p === '/cambios' && hotfixUnseen && <span className="nav-dot nav-dot-hotfix" title={t('Hay un hotfix nuevo de Blizzard')} aria-label={t('(hotfix nuevo sin ver)')} />}
                   </a>
                 ))}
               </div>
             ))}
           </nav>
           {onLogout && (
-            <button type="button" className="nav-logout" onClick={onLogout} title="Salir del modo administrador">
-              <SignOut size={20} aria-hidden="true" /><span className="nav-text">Salir de admin</span>
+            <button type="button" className="nav-logout" onClick={onLogout} title={t('Salir del modo administrador')}>
+              <SignOut size={20} aria-hidden="true" /><span className="nav-text">{t('Salir de admin')}</span>
             </button>
           )}
           {onLogin && (
-            <button type="button" className="nav-logout" onClick={onLogin} title="Contraseña para cambiar ajustes, sincronizar precios y editar datos compartidos">
-              <LockKey size={20} aria-hidden="true" /><span className="nav-text">Entrar como admin</span>
+            <button type="button" className="nav-logout" onClick={onLogin} title={t('Contraseña para cambiar ajustes, sincronizar precios y editar datos compartidos')}>
+              <LockKey size={20} aria-hidden="true" /><span className="nav-text">{t('Entrar como admin')}</span>
             </button>
           )}
-          <p className="sidebar-foot">Las ganancias son estimaciones; el beneficio realizado está en «Registro real».</p>
+          <p className="sidebar-foot">{t('Las ganancias son estimaciones; el beneficio realizado está en «Registro real».')}</p>
         </aside>
         <div className="content">
           <UpdateBanner />
@@ -220,16 +227,16 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
           </header>
           <main id="contenido" tabIndex={-1} className="fade-in" key={parts[0] ?? 'inicio'}>
             <WhatsNew hidden={parts[0] === 'changelog'} />
-            {meta?.error &&<div className="alert bad" role="alert"><div><p><strong>No se pudo conectar con la API:</strong> {meta.error}</p><p className="small">Comprueba DATABASE_URL y que las migraciones estén aplicadas (npm run migrate).</p></div></div>}
+            {meta?.error &&<div className="alert bad" role="alert"><div><p><strong>{t('No se pudo conectar con la API:')}</strong> {meta.error}</p><p className="small">{t('Comprueba DATABASE_URL y que las migraciones estén aplicadas (npm run migrate).')}</p></div></div>}
             <Suspense fallback={<Loading rows={4} />}>{page}</Suspense>
           </main>
           <footer className="site">
-            Solo World of Warcraft: Forever. Precios: casas de subastas de la API de Blizzard y estadísticas regionales de TradeSkillMaster (importes en cobre).
-            Catálogo: Blizzard Game Data API. Iconos: <a href="https://www.wowhead.com/forever" rel="noopener noreferrer" target="_blank">Wowhead (WoW Forever)</a> y Blizzard; arte © Blizzard Entertainment.
-            Las ganancias son estimaciones condicionadas a vender al precio utilizado; no son beneficios realizados.
+            {t('Solo World of Warcraft: Forever. Precios: casas de subastas de la API de Blizzard y estadísticas regionales de TradeSkillMaster (importes en cobre).')}
+            {' '}{t('Catálogo: Blizzard Game Data API. Iconos:')} <a href="https://www.wowhead.com/forever" rel="noopener noreferrer" target="_blank">{t('Wowhead (WoW Forever)')}</a> {t('y Blizzard; arte © Blizzard Entertainment.')}
+            {' '}{t('Las ganancias son estimaciones condicionadas a vender al precio utilizado; no son beneficios realizados.')}
             <span className="footer-legal">
-              Web de fans sin relación con Blizzard Entertainment. World of Warcraft y Battle.net son marcas de Blizzard Entertainment, Inc.
-              {' · '}<a href="#/privacidad">Privacidad</a>{' · '}<a href="#/changelog">Changelog</a>
+              {t('Web de fans sin relación con Blizzard Entertainment. World of Warcraft y Battle.net son marcas de Blizzard Entertainment, Inc.')}
+              {' · '}<a href="#/privacidad">{t('Privacidad')}</a>{' · '}<a href="#/changelog">{t('Changelog')}</a>
             </span>
           </footer>
         </div>
@@ -263,16 +270,16 @@ function Login({ onDone, onCancel }: { onDone: () => void; onCancel: () => void 
   return (
     <div className="login" role="dialog" aria-modal="true" aria-labelledby="login-title" onMouseDown={(e) => { if (e.target === e.currentTarget) onCancel(); }}>
       <form className="card" onSubmit={submit}>
-        <h1 id="login-title"><span className="brand-mark" aria-hidden="true"><LockKey size={20} weight="fill" /></span> Modo administrador</h1>
-        <p className="muted small">Consultar la web no necesita contraseña. Solo hace falta para cambiar los ajustes, sincronizar precios y editar perfiles, fabricación o el registro, que son comunes para todos.</p>
+        <h1 id="login-title"><span className="brand-mark" aria-hidden="true"><LockKey size={20} weight="fill" /></span> {t('Modo administrador')}</h1>
+        <p className="muted small">{t('Consultar la web no necesita contraseña. Solo hace falta para cambiar los ajustes, sincronizar precios y editar perfiles, fabricación o el registro, que son comunes para todos.')}</p>
         <label>
-          Contraseña
+          {t('Contraseña')}
           <input type="password" autoComplete="current-password" value={pw} onChange={(e) => setPw(e.target.value)} required autoFocus />
         </label>
         {err && <p className="alert bad" role="alert">{err}</p>}
         <div className="row">
-          <button type="submit" className="primary" disabled={busy || !pw}>{busy ? 'Comprobando…' : 'Entrar'}</button>
-          <button type="button" onClick={onCancel}>Cancelar</button>
+          <button type="submit" className="primary" disabled={busy || !pw}>{busy ? t('Comprobando…') : t('Entrar')}</button>
+          <button type="button" onClick={onCancel}>{t('Cancelar')}</button>
         </div>
       </form>
     </div>
@@ -304,8 +311,9 @@ function Gate() {
 // Entrar sin ruta (la dirección de la web a secas) lleva al inicio; los enlaces al comparador (#/…) siguen igual.
 if (!location.hash) history.replaceState(null, '', '#/inicio');
 
-createRoot(document.getElementById('root')!).render(
+// Con la web en inglés, primero se cargan los nombres del juego en inglés (una vez).
+loadGameNames().finally(() => createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Gate />
   </React.StrictMode>,
-);
+));

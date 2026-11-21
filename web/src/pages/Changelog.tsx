@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { PageHead } from '../lib.js';
 import { CHANGELOG, markChangelogSeen, type ChangeKind } from '../changelog.js';
 import { ClockCounterClockwise, Sparkle, ArrowUp, Wrench, type Icon } from '@phosphor-icons/react';
+import { t } from '../i18n.js';
 
 const KIND: Record<ChangeKind, { label: string; cls: string; icon: Icon }> = {
   nuevo: { label: 'Nuevo', cls: 'b-ok', icon: Sparkle },
@@ -16,9 +17,7 @@ export function Changelog() {
   const days = [...new Set(CHANGELOG.map((e) => e.date))];
   return (
     <div>
-      <PageHead title="Changelog" icon={<ClockCounterClockwise size={26} aria-hidden="true" />}>
-        Todas las actualizaciones de la web, de la más reciente a la más antigua.
-      </PageHead>
+      <PageHead title={t('Changelog')} icon={<ClockCounterClockwise size={26} aria-hidden="true" />}>{t('Todas las actualizaciones de la web, de la más reciente a la más antigua.')}</PageHead>
       <ol className="cl-days">
         {days.map((d) => (
           <li key={d} className="cl-day">
@@ -28,8 +27,8 @@ export function Changelog() {
                 const k = KIND[e.kind];
                 return (
                   <article key={e.title} className="card cl-entry">
-                    <h3><span className={`badge ${k.cls}`}><k.icon size={14} weight="bold" aria-hidden="true" />{k.label}</span>{e.title}</h3>
-                    <ul>{e.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
+                    <h3><span className={`badge ${k.cls}`}><k.icon size={14} weight="bold" aria-hidden="true" />{k.label}</span>{t(e.title)}</h3>
+                    <ul>{e.items.map((it, i) => <li key={i}>{t(it)}</li>)}</ul>
                   </article>
                 );
               })}

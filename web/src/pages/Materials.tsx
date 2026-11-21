@@ -5,6 +5,7 @@ import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { PriceAlertButton, PriceAlertsPanel } from '../priceAlerts.js';
 import { CraftingCard } from '../Crafting.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
+import { t } from '../i18n.js';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
   const [units, setUnits] = useState('');
@@ -19,13 +20,13 @@ function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
   } catch { result = null; }
   return (
     <section className="card">
-      <h2 style={{ marginTop: 0 }}>Oro por hora (con tus datos)</h2>
-      <p className="small muted">Solo se calcula con el tiempo y el rendimiento que indiques; no hay una fuente validada de tasas de recolección.</p>
+      <h2 style={{ marginTop: 0 }}>{t('Oro por hora (con tus datos)')}</h2>
+      <p className="small muted">{t('Solo se calcula con el tiempo y el rendimiento que indiques; no hay una fuente validada de tasas de recolección.')}</p>
       <div className="row">
-        <GoldInput label="Unidades obtenidas" value={units} onChange={setUnits} placeholder="p. ej. 120" />
-        <GoldInput label="Minutos empleados" value={minutes} onChange={setMinutes} placeholder="p. ej. 30" />
+        <GoldInput label={t('Unidades obtenidas')} value={units} onChange={setUnits} placeholder={t('p. ej. 120')} />
+        <GoldInput label={t('Minutos empleados')} value={minutes} onChange={setMinutes} placeholder={t('p. ej. 30')} />
       </div>
-      <p>Resultado: <strong>{result ?? '—'}</strong> /hora <span className="small muted">(procedencia: entrada del usuario × valor neto de venta)</span></p>
+      <p>{t('Resultado:')}{' '}<strong>{result ?? '—'}</strong>{' '}{t('/hora')}{' '}<span className="small muted">{t('(procedencia: entrada del usuario × valor neto de venta)')}</span></p>
     </section>
   );
 }
@@ -38,42 +39,42 @@ function MaterialDetail({ itemId }: { itemId: number }) {
   const x = d.data;
   return (
     <>
-      <p><a className="icon-inline" href="#/materiales"><ArrowLeft size={16} aria-hidden="true" />Todos los materiales</a></p>
-      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? `Objeto ${itemId}`}</h1><p className="small muted" style={{ margin: 0 }}>¿Te conviene más venderlo tal cual o usarlo para fabricar algo?</p></div><div style={{ marginLeft: 'auto' }}><PriceAlertButton itemId={itemId} name={x.name ?? `Objeto ${itemId}`} price={toQ(x.price.copper)} /></div></div>
+      <p><a className="icon-inline" href="#/materiales"><ArrowLeft size={16} aria-hidden="true" />{t('Todos los materiales')}</a></p>
+      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? t('Objeto {id}', { id: itemId })}</h1><p className="small muted" style={{ margin: 0 }}>{t('¿Te conviene más venderlo tal cual o usarlo para fabricar algo?')}</p></div><div style={{ marginLeft: 'auto' }}><PriceAlertButton itemId={itemId} name={x.name ?? t('Objeto {id}', { id: itemId })} price={toQ(x.price.copper)} /></div></div>
       <section className="card">
-        <h2 style={{ marginTop: 0 }}>Vender el material</h2>
+        <h2 style={{ marginTop: 0 }}>{t('Vender el material')}</h2>
         <dl className="kv">
-          <dt>Precio utilizado</dt><dd><Money v={x.price.copper} /> <span className="small muted">{priceSource(x.price.field, x.price.scope)}</span>{x.price.supply && <div className="small"><SupplyText s={x.price.supply} /></div>}</dd>
-          <dt>Cobras por unidad al venderlo</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(menos la comisión del {Math.round(Number(x.commission) * 100)} %)</span></dd>
+          <dt>{t('Precio utilizado')}</dt><dd><Money v={x.price.copper} /> <span className="small muted">{priceSource(x.price.field, x.price.scope)}</span>{x.price.supply && <div className="small"><SupplyText s={x.price.supply} /></div>}</dd>
+          <dt>{t('Cobras por unidad al venderlo')}</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">{t('(menos la comisión del')}{' '}{Math.round(Number(x.commission) * 100)} %)</span></dd>
         </dl>
       </section>
       <CraftingCard itemId={itemId} />
       <PriceHistory itemId={itemId} />
       <section className="card">
-        <h2 style={{ marginTop: 0 }}>Usarlo para fabricar</h2>
-        <p className="small muted">Valor por unidad del material = (ingreso neto de la receta − costo del resto de materiales) / cantidad usada. Mismos supuestos de precio que la venta directa.</p>
+        <h2 style={{ marginTop: 0 }}>{t('Usarlo para fabricar')}</h2>
+        <p className="small muted">{t('Valor por unidad del material = (ingreso neto de la receta − costo del resto de materiales) / cantidad usada. Mismos supuestos de precio que la venta directa.')}</p>
         <div className="table-wrap">
           <table className="responsive">
-            <thead><tr><th>Receta</th><th>Profesión</th><th className="num">Cantidad</th><th className="num">Valor por unidad del material</th><th>Comparación</th><th>Estado</th></tr></thead>
+            <thead><tr><th>{t('Receta')}</th><th>{t('Profesión')}</th><th className="num">{t('Cantidad')}</th><th className="num">{t('Valor por unidad del material')}</th><th>{t('Comparación')}</th><th>{t('Estado')}</th></tr></thead>
             <tbody>
               {x.alternatives.map((a: any) => {
                 const v = toQ(a.valuePerUnit);
                 const s = toQ(x.sellNet);
                 return (
                   <tr key={a.recipeId}>
-                    <td data-label="Receta" className="cell-main"><a href={`#/receta/${a.recipeId}`}>{a.name}</a></td>
-                    <td data-label="Profesión">{a.profession}</td>
-                    <td data-label="Cantidad" className="num">{a.quantity ?? '—'}</td>
-                    <td data-label="Valor/unidad" className="num">{formatMoney(v)}</td>
-                    <td data-label="Comparación">{v && s ? (v.cmp(s) > 0
-                      ? <span className="delta pos"><ArrowUp size={14} weight="bold" aria-hidden="true" />Mejor que vender</span>
-                      : <span className="delta neg"><ArrowDown size={14} weight="bold" aria-hidden="true" />Peor que vender</span>)
-                      : <span className="delta none"><MinusCircle size={14} aria-hidden="true" />Sin datos comparables</span>}</td>
-                    <td data-label="Estado"><StatusBadge s={a.status} /></td>
+                    <td data-label={t('Receta')} className="cell-main"><a href={`#/receta/${a.recipeId}`}>{a.name}</a></td>
+                    <td data-label={t('Profesión')}>{a.profession}</td>
+                    <td data-label={t('Cantidad')} className="num">{a.quantity ?? '—'}</td>
+                    <td data-label={t('Valor/unidad')} className="num">{formatMoney(v)}</td>
+                    <td data-label={t('Comparación')}>{v && s ? (v.cmp(s) > 0
+                      ? <span className="delta pos"><ArrowUp size={14} weight="bold" aria-hidden="true" />{t('Mejor que vender')}</span>
+                      : <span className="delta neg"><ArrowDown size={14} weight="bold" aria-hidden="true" />{t('Peor que vender')}</span>)
+                      : <span className="delta none"><MinusCircle size={14} aria-hidden="true" />{t('Sin datos comparables')}</span>}</td>
+                    <td data-label={t('Estado')}><StatusBadge s={a.status} /></td>
                   </tr>
                 );
               })}
-              {!x.alternatives.length && <tr><td colSpan={6} className="empty">Ninguna receta del catálogo usa este material.</td></tr>}
+              {!x.alternatives.length && <tr><td colSpan={6} className="empty">{t('Ninguna receta del catálogo usa este material.')}</td></tr>}
             </tbody>
           </table>
         </div>
@@ -92,18 +93,18 @@ export function Materials({ itemId }: { itemId: number | null }) {
   if (itemId) return <MaterialDetail itemId={itemId} />;
   return (
     <div>
-      <PageHead title="Materiales">¿Tienes materiales (por ejemplo, de recolectar) y no sabes qué hacer con ellos? Pulsa uno para ver si conviene venderlo o usarlo en una receta.</PageHead>
+      <PageHead title={t('Materiales')}>{t('¿Tienes materiales (por ejemplo, de recolectar) y no sabes qué hacer con ellos? Pulsa uno para ver si conviene venderlo o usarlo en una receta.')}</PageHead>
       <PriceAlertsPanel />
-      <label className="field" style={{ maxWidth: 360 }}>Buscar material<span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nombre del material" /></span></label>
+      <label className="field" style={{ maxWidth: 360 }}>{t('Buscar material')}<span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('Nombre del material')} /></span></label>
       {list.loading ? <Loading rows={6} /> : list.error ? <ErrorBox error={list.error} /> : (
         <div className="table-wrap" style={{ marginTop: 10 }}>
           <table className="responsive">
-            <thead><tr><th>Material</th><th className="num">Recetas que lo usan</th></tr></thead>
+            <thead><tr><th>{t('Material')}</th><th className="num">{t('Recetas que lo usan')}</th></tr></thead>
             <tbody>
               {list.data.materials.map((m: any) => (
-                <tr key={m.item_id}><td data-label="Material" className="cell-main"><ItemLabel id={m.item_id} href={`#/materiales/${m.item_id}`} name={m.name} /></td><td data-label="Recetas" className="num">{m.uses}</td></tr>
+                <tr key={m.item_id}><td data-label={t('Material')} className="cell-main"><ItemLabel id={m.item_id} href={`#/materiales/${m.item_id}`} name={m.name} /></td><td data-label={t('Recetas')} className="num">{m.uses}</td></tr>
               ))}
-              {!list.data.materials.length && <tr><td colSpan={2} className="empty">Sin materiales en el catálogo.</td></tr>}
+              {!list.data.materials.length && <tr><td colSpan={2} className="empty">{t('Sin materiales en el catálogo.')}</td></tr>}
             </tbody>
           </table>
         </div>

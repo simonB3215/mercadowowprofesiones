@@ -3,6 +3,7 @@ import { translateUrl, PatchNotes } from '../PatchNotes.js';
 import { api, useAsync, Loading, ErrorBox, Empty, PageHead, hashQuery, setHashQuery, dt } from '../lib.js';
 import { useMyCharacters } from '../myCharacters.js';
 import { Scroll, UserFocus, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, Notepad, UsersThree, type Icon } from '@phosphor-icons/react';
+import { t, isEn, locale } from '../i18n.js';
 
 type Effect = 'mejora' | 'empeora' | 'mixto' | 'correccion' | 'cambio';
 const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: string }> = {
@@ -27,7 +28,7 @@ export function matchKey(name: string | null | undefined, list: Array<{ en: stri
   return list.find((c) => norm(c.en) === n)?.en ?? list.find((c) => norm(c.es).slice(0, 3) === n.slice(0, 3))?.en ?? null;
 }
 
-const longDate =(d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const longDate =(d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 /** «Cambios del juego»: buffs y nerfs de clases y razas sacados de los hilos oficiales de Blizzard. */
 export function GameChanges() {
@@ -51,9 +52,9 @@ export function GameChanges() {
 
   const data = d.data;
   const all: any[] = data?.changes ?? [];
-  const classEs: Record<string, string> = Object.fromEntries((data?.classes ?? []).map((c: any) => [c.en, c.es]));
-  const raceEs: Record<string, string> = Object.fromEntries((data?.races ?? []).map((c: any) => [c.en, c.es]));
-  const specEs: Record<string, string> = data?.specs ?? {};
+  const classEs: Record<string, string> = isEn() ? {} : Object.fromEntries((data?.classes ?? []).map((c: any) => [c.en, c.es]));
+  const raceEs: Record<string, string> = isEn() ? {} : Object.fromEntries((data?.races ?? []).map((c: any) => [c.en, c.es]));
+  const specEs: Record<string, string> = isEn() ? {} : data?.specs ?? {};
   // Clases y razas de tus personajes de Battle.net (si estás conectado).
   const mine = useMemo(() => {
     const classes = new Set<string>(); const races = new Set<string>();
@@ -101,31 +102,27 @@ export function GameChanges() {
   const whoLabel = (c: any) => {
     const parts: string[] = [];
     if (c.className) parts.push(classEs[c.className] ?? c.className);
-    else if (c.kind === 'clase') parts.push('Todas las clases');
+    else if (c.kind === 'clase') parts.push(t('Todas las clases'));
     if (c.spec) parts.push(specEs[c.spec] ?? c.spec);
     if (c.race) parts.push(raceEs[c.race] ?? c.race);
-    else if (c.kind === 'raza') parts.push('Razas');
+    else if (c.kind === 'raza') parts.push(t('Razas'));
     return parts.join(' · ');
   };
 
   return (
     <div>
-      <PageHead title="Cambios del juego" icon={<Scroll size={26} aria-hidden="true" />}>
-        Notas del parche y mejoras (buffs), empeoramientos (nerfs) y correcciones de cada clase y raza de WoW Forever, sacados de los hilos oficiales de Blizzard.
-      </PageHead>
+      <PageHead title={t('Cambios del juego')} icon={<Scroll size={26} aria-hidden="true" />}>{t('Notas del parche y mejoras (buffs), empeoramientos (nerfs) y correcciones de cada clase y raza de WoW Forever, sacados de los hilos oficiales de Blizzard.')}</PageHead>
 
-      <div className="lv-tabs" role="tablist" aria-label="Vista">
+      <div className="lv-tabs" role="tablist" aria-label={t('Vista')}>
         <button type="button" role="tab" aria-selected={view === 'clases'} aria-controls="gc-panel" onClick={() => update('vista', '', () => setView('clases'))}>
-          <UsersThree size={18} aria-hidden="true" />Buffs y nerfs por clase y raza
-        </button>
+          <UsersThree size={18} aria-hidden="true" />{t('Buffs y nerfs por clase y raza')}</button>
         <button type="button" role="tab" aria-selected={view === 'notas'} aria-controls="gc-panel" onClick={() => update('vista', 'notas', setView)}>
-          <Notepad size={18} aria-hidden="true" />Notas del parche
-        </button>
+          <Notepad size={18} aria-hidden="true" />{t('Notas del parche')}</button>
       </div>
 
       <div id="gc-panel" role="tabpanel">
       {view === 'notas' && <PatchNotes days={7} />}
-      {view === 'clases' && d.loading && <Loading label="Leyendo los foros de Blizzard…" rows={4} />}
+      {view === 'clases' && d.loading && <Loading label={t('Leyendo los foros de Blizzard…')} rows={4} />}
       {view === 'clases' && d.error && <ErrorBox error={d.error} onRetry={d.reload} />}
       {view === 'clases' && data && (
         <>
@@ -134,9 +131,9 @@ export function GameChanges() {
             <ul className="small">
               {data.sources.map((s: any) => (
                 <li key={s.topicId}>
-                  <a href={s.url} target="_blank" rel="noreferrer">{s.label}<ArrowSquareOut size={12} aria-hidden="true" /></a>
-                  {' — '}{s.changes} cambios de clase o raza{s.fetchedAt && <span className="muted"> · leído {dt(s.fetchedAt)}</span>}
-                  {s.error && <span className="gc-err"><Warning size={14} aria-hidden="true" />{s.stale ? 'No se pudo actualizar; se muestra la última copia.' : `No se pudo leer: ${s.error}`}</span>}
+                  <a href={s.url} target="_blank" rel="noreferrer">{t(s.label)}<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                  {' — '}{s.changes}{' '}{t('cambios de clase o raza')}{s.fetchedAt && <span className="muted">{' '}{t('· leído')}{' '}{dt(s.fetchedAt)}</span>}
+                  {s.error && <span className="gc-err"><Warning size={14} aria-hidden="true" />{s.stale ? t('No se pudo actualizar; se muestra la última copia.') : t('No se pudo leer: {e}', { e: s.error })}</span>}
                 </li>
               ))}
             </ul>
@@ -147,59 +144,50 @@ export function GameChanges() {
               <p className="icon-inline" style={{ margin: 0 }}>
                 <UserFocus size={20} aria-hidden="true" />
                 <span>
-                  <strong>Tus personajes:</strong> {[...mine.classes].map((k) => classEs[k] ?? k).concat([...mine.races].map((k) => raceEs[k] ?? k)).join(', ')}
-                  {' · '}{all.filter(affectsMe).length} cambios te afectan (marcados con «Te afecta»).
-                </span>
+                  <strong>{t('Tus personajes:')}</strong> {[...mine.classes].map((k) => classEs[k] ?? k).concat([...mine.races].map((k) => raceEs[k] ?? k)).join(', ')}
+                  {' · '}{all.filter(affectsMe).length}{' '}{t('cambios te afectan (marcados con «Te afecta»).')}</span>
               </p>
               {who !== 'mio:*'
-                ? <button type="button" className="primary" onClick={() => update('quien', 'mio:*', setWho)}>Ver solo los míos</button>
-                : <button type="button" onClick={() => update('quien', '', setWho)}>Ver todos</button>}
+                ? <button type="button" className="primary" onClick={() => update('quien', 'mio:*', setWho)}>{t('Ver solo los míos')}</button>
+                : <button type="button" onClick={() => update('quien', '', setWho)}>{t('Ver todos')}</button>}
             </div>
           )}
 
           <form className="card row gc-filters" onSubmit={(e) => e.preventDefault()} role="search">
-            <label className="field">
-              Clase o raza
-              <select value={who} onChange={(e) => update('quien', e.target.value, setWho)}>
-                <option value="">Todas</option>
-                {me.characters.length > 0 && <option value="mio:*">Mis personajes</option>}
-                <optgroup label="Clases">
-                  <option value="clase:*">Todas las clases (general)</option>
+            <label className="field">{t('Clase o raza')}<select value={who} onChange={(e) => update('quien', e.target.value, setWho)}>
+                <option value="">{t('Todas')}</option>
+                {me.characters.length > 0 && <option value="mio:*">{t('Mis personajes')}</option>}
+                <optgroup label={t('Clases')}>
+                  <option value="clase:*">{t('Todas las clases (general)')}</option>
                   {(data.classes as any[]).map((c) => <option key={c.en} value={`clase:${c.en}`}>{c.es}</option>)}
                 </optgroup>
-                <optgroup label="Razas">
-                  <option value="raza:*">Todas las razas</option>
+                <optgroup label={t('Razas')}>
+                  <option value="raza:*">{t('Todas las razas')}</option>
                   {(data.races as any[]).map((c) => <option key={c.en} value={`raza:${c.en}`}>{c.es}</option>)}
                 </optgroup>
               </select>
             </label>
-            <label className="field">
-              Efecto
-              <select value={effect} onChange={(e) => update('efecto', e.target.value, setEffect)}>
-                <option value="">Todos</option>
-                {(Object.keys(EFFECT) as Effect[]).map((k) => <option key={k} value={k}>{EFFECT[k].label}</option>)}
+            <label className="field">{t('Efecto')}<select value={effect} onChange={(e) => update('efecto', e.target.value, setEffect)}>
+                <option value="">{t('Todos')}</option>
+                {(Object.keys(EFFECT) as Effect[]).map((k) => <option key={k} value={k}>{t(EFFECT[k].label)}</option>)}
               </select>
             </label>
-            <label className="field">
-              Origen
-              <select value={source} onChange={(e) => update('origen', e.target.value, setSource)}>
-                <option value="">Todo</option>
-                <option value="hotfix">Hotfixes (desde el lanzamiento)</option>
-                <option value="beta">Beta (antes del lanzamiento)</option>
+            <label className="field">{t('Origen')}<select value={source} onChange={(e) => update('origen', e.target.value, setSource)}>
+                <option value="">{t('Todo')}</option>
+                <option value="hotfix">{t('Hotfixes (desde el lanzamiento)')}</option>
+                <option value="beta">{t('Beta (antes del lanzamiento)')}</option>
               </select>
             </label>
-            <label className="field gc-search">
-              Buscar (en inglés)
-              <input type="search" value={q} placeholder="p. ej. Windfury, cooldown" onChange={(e) => update('q', e.target.value, setQ)} />
+            <label className="field gc-search">{t('Buscar (en inglés)')}<input type="search" value={q} placeholder={t('p. ej. Windfury, cooldown')} onChange={(e) => update('q', e.target.value, setQ)} />
             </label>
           </form>
 
           {balance.length > 0 && (
             <details className="card gc-balance" open={!who}>
-              <summary>Balance por clase y raza</summary>
+              <summary>{t('Balance por clase y raza')}</summary>
               <div className="table-wrap">
                 <table>
-                  <thead><tr><th>Clase o raza</th><th className="num">Mejoras</th><th className="num">Empeora</th><th className="num">Mixtos</th><th className="num">Total</th></tr></thead>
+                  <thead><tr><th>{t('Clase o raza')}</th><th className="num">{t('Mejoras')}</th><th className="num">{t('Empeora')}</th><th className="num">{t('Mixtos')}</th><th className="num">{t('Total')}</th></tr></thead>
                   <tbody>
                     {balance.map((r) => (
                       <tr key={r.key}>
@@ -213,8 +201,8 @@ export function GameChanges() {
             </details>
           )}
 
-          <p className="small muted" aria-live="polite">{list.length} cambios{list.length !== all.length && ` de ${all.length}`}</p>
-          {!list.length && <Empty>No hay cambios con estos filtros.</Empty>}
+          <p className="small muted" aria-live="polite">{list.length}{' '}{t('cambios')}{list.length !== all.length && ` de ${all.length}`}</p>
+          {!list.length && <Empty>{t('No hay cambios con estos filtros.')}</Empty>}
           <ol className="cl-days">
             {days.map((day) => (
               <li key={day} className="cl-day">
@@ -225,12 +213,12 @@ export function GameChanges() {
                     return (
                       <li key={c.id} className={`card gc-item${affectsMe(c) ? ' gc-mine' : ''}`}>
                         <div className="gc-head">
-                          <span className={`badge ${e.cls}`} title={e.help}><e.icon size={13} weight="bold" aria-hidden="true" />{e.label}</span>
+                          <span className={`badge ${e.cls}`} title={t(e.help)}><e.icon size={13} weight="bold" aria-hidden="true" />{t(e.label)}</span>
                           <strong>{whoLabel(c)}</strong>
-                          {affectsMe(c) && <span className="badge b-info gc-mine-badge"><UserFocus size={12} aria-hidden="true" />Te afecta</span>}
-                          <span className="muted small">{SOURCE[c.source]}</span>
-                          <a className="small gc-link" href={translateUrl(c)} target="_blank" rel="noreferrer" title="Abrir este cambio en Google Translate (inglés → español)"><Translate size={13} aria-hidden="true" />Traducir</a>
-                          <a className="small gc-link-plain" href={c.url} target="_blank" rel="noreferrer">Original<ArrowSquareOut size={12} aria-hidden="true" /></a>
+                          {affectsMe(c) && <span className="badge b-info gc-mine-badge"><UserFocus size={12} aria-hidden="true" />{t('Te afecta')}</span>}
+                          <span className="muted small">{t(SOURCE[c.source] ?? c.source)}</span>
+                          <a className="small gc-link" href={translateUrl(c)} target="_blank" rel="noreferrer" title={t('Abrir este cambio en Google Translate (inglés → español)')}><Translate size={13} aria-hidden="true" />{t('Traducir')}</a>
+                          <a className="small gc-link-plain" href={c.url} target="_blank" rel="noreferrer">{t('Original')}<ArrowSquareOut size={12} aria-hidden="true" /></a>
                         </div>
                         {c.context && <p className="small muted gc-context">{c.context}</p>}
                         <p className="gc-text" lang="en">{c.text}</p>
@@ -243,7 +231,7 @@ export function GameChanges() {
             ))}
           </ol>
           {list.length > limit && (
-            <button type="button" className="gc-more" onClick={() => setLimit(limit + PAGE)}>Mostrar más ({list.length - limit} restantes)</button>
+            <button type="button" className="gc-more" onClick={() => setLimit(limit + PAGE)}>{t('Mostrar más (')}{list.length - limit}{' '}{t('restantes)')}</button>
           )}
         </>
       )}

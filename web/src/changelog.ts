@@ -14,6 +14,15 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-21', kind: 'nuevo', title: 'La web en inglés',
+    items: [
+      'Nuevo selector «Idioma» arriba (Español / English): cambia todos los menús, botones, avisos y explicaciones de la web. Se recuerda en este navegador.',
+      'En inglés, los objetos, recetas, profesiones, misiones y zonas salen con su nombre oficial en inglés (datos de Blizzard) y el oro se escribe g/s/c.',
+      'En español, las misiones que dan recetas salen ahora con su nombre en español.',
+      'Las entradas antiguas de este registro de cambios siguen en español.',
+    ],
+  },
+  {
     date: '2026-11-21', kind: 'mejora', title: 'Dónde se consigue cada receta',
     items: [
       'Cuando una receta no la enseña el instructor, ahora se dice quién la vende, quién la suelta o qué misión la da, y en qué zona (por ejemplo «Alchemist Pestlezugg (Tanaris)»), con enlace a Wowhead. Sale en la tarjeta «Cómo se fabrica», en la ventana del objeto y en las rutas de subida.',

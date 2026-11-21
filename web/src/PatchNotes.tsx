@@ -1,6 +1,7 @@
 import React from 'react';
 import { api, useAsync, dt } from './lib.js';
 import { Scroll, ArrowSquareOut, Translate, ArrowUp, ArrowDown, ArrowsDownUp, Warning, ArrowRight } from '@phosphor-icons/react';
+import { t, locale, isEn } from './i18n.js';
 
 /** Google Translate con el texto de un cambio (y su contexto y notas), del inglés al español. Solo texto público de Blizzard. */
 export const translateUrl = (c: { text: string; notes: string[]; context?: string | null }) =>
@@ -12,7 +13,7 @@ const EFFECT: Record<string, { label: string; cls: string; icon: typeof ArrowUp 
   mixto: { label: 'Mixto', cls: 'b-warn', icon: ArrowsDownUp },
 };
 
-const longDate = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+const longDate = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 
 const MAX_HIGHLIGHTS = 5;
 
@@ -24,17 +25,17 @@ export function PatchNotesSummary() {
   return (
     <section className="card pn pn-compact" aria-labelledby="pn-title">
       <div className="pn-head">
-        <h2 id="pn-title" className="icon-inline"><Scroll size={22} aria-hidden="true" />Notas del parche del juego</h2>
-        {day && <span className="small muted">Último hotfix: <time dateTime={day.date}>{longDate(day.date)}</time> · {day.total} cambios</span>}
+        <h2 id="pn-title" className="icon-inline"><Scroll size={22} aria-hidden="true" />{t('Notas del parche del juego')}</h2>
+        {day && <span className="small muted">{t('Último hotfix:')}{' '}<time dateTime={day.date}>{longDate(day.date)}</time> · {day.total}{' '}{t('cambios')}</span>}
       </div>
-      {d.loading && <p className="small muted">Leyendo el foro de Blizzard…</p>}
-      {(d.error || (d.data && !day)) && <p className="small pn-err"><Warning size={14} aria-hidden="true" />No se pudieron cargar las notas del parche.</p>}
+      {d.loading && <p className="small muted">{t('Leyendo el foro de Blizzard…')}</p>}
+      {(d.error || (d.data && !day)) && <p className="small pn-err"><Warning size={14} aria-hidden="true" />{t('No se pudieron cargar las notas del parche.')}</p>}
       {day && (
         <>
-          <ul className="pn-chips" aria-label="Cambios por sección">
+          <ul className="pn-chips" aria-label={t('Cambios por sección')}>
             {day.sections.map((s: any) => <li key={s.name}>{s.nameEs} <strong>{s.items.length}</strong></li>)}
           </ul>
-          {highlights.length === 0 && <p className="small muted">Este hotfix no trae buffs ni nerfs de clases o razas.</p>}
+          {highlights.length === 0 && <p className="small muted">{t('Este hotfix no trae buffs ni nerfs de clases o razas.')}</p>}
           {highlights.length > 0 && (
             <ul className="pn-highlights">
               {highlights.slice(0, MAX_HIGHLIGHTS).map((it: any, k: number) => {
@@ -49,8 +50,7 @@ export function PatchNotesSummary() {
               })}
             </ul>
           )}
-          <a className="pn-more icon-inline" href="#/cambios?vista=notas">
-            Ver todas las notas{highlights.length > MAX_HIGHLIGHTS ? ` (${highlights.length - MAX_HIGHLIGHTS} buffs y nerfs más)` : ''}<ArrowRight size={14} weight="bold" aria-hidden="true" />
+          <a className="pn-more icon-inline" href="#/cambios?vista=notas">{t('Ver todas las notas')}{highlights.length > MAX_HIGHLIGHTS ? ` ${t('({n} buffs y nerfs más)', { n: highlights.length - MAX_HIGHLIGHTS })}` : ''}<ArrowRight size={14} weight="bold" aria-hidden="true" />
           </a>
         </>
       )}
@@ -65,18 +65,16 @@ export function PatchNotes({ days = 3 }: { days?: number }) {
   return (
     <section className="card pn" aria-labelledby="pn-title-full">
       <div className="pn-head">
-        <h2 id="pn-title-full" className="icon-inline"><Scroll size={22} aria-hidden="true" />Notas del parche del juego</h2>
+        <h2 id="pn-title-full" className="icon-inline"><Scroll size={22} aria-hidden="true" />{t('Notas del parche del juego')}</h2>
       </div>
-      <p className="small muted">
-        Últimos hotfixes de WoW Forever publicados por Blizzard, en inglés (como los publica Blizzard). Usa «Traducir» para verlos en español.
-        {data?.source && <> · <a href={data.source.url} target="_blank" rel="noreferrer" className="icon-inline">hilo oficial<ArrowSquareOut size={12} aria-hidden="true" /></a>{data.source.fetchedAt && <> · leído {dt(data.source.fetchedAt)}</>}</>}
+      <p className="small muted">{t('Últimos hotfixes de WoW Forever publicados por Blizzard, en inglés (como los publica Blizzard). Usa «Traducir» para verlos en español.')}{data?.source && <> · <a href={data.source.url} target="_blank" rel="noreferrer" className="icon-inline">{t('hilo oficial')}<ArrowSquareOut size={12} aria-hidden="true" /></a>{data.source.fetchedAt && <>{' '}{t('· leído')}{' '}{dt(data.source.fetchedAt)}</>}</>}
       </p>
-      {d.loading && <p className="small muted">Leyendo el foro de Blizzard…</p>}
-      {d.error && <p className="small pn-err"><Warning size={14} aria-hidden="true" />No se pudieron cargar las notas del parche. <button type="button" className="link-button" onClick={d.reload}>Reintentar</button></p>}
-      {data?.source?.error && <p className="small pn-err"><Warning size={14} aria-hidden="true" />{data.source.stale ? 'No se pudo actualizar desde el foro; se muestra la última copia.' : `No se pudo leer el foro: ${data.source.error}`}</p>}
+      {d.loading && <p className="small muted">{t('Leyendo el foro de Blizzard…')}</p>}
+      {d.error && <p className="small pn-err"><Warning size={14} aria-hidden="true" />{t('No se pudieron cargar las notas del parche.')}{' '}<button type="button" className="link-button" onClick={d.reload}>{t('Reintentar')}</button></p>}
+      {data?.source?.error && <p className="small pn-err"><Warning size={14} aria-hidden="true" />{data.source.stale ? t('No se pudo actualizar desde el foro; se muestra la última copia.') : t('No se pudo leer el foro: {e}', { e: data.source.error })}</p>}
       {(data?.days ?? []).map((day: any, i: number) => (
         <details key={day.date} className="pn-day" open={i === 0}>
-          <summary><time dateTime={day.date}>{longDate(day.date)}</time> <span className="muted small">· {day.total} cambios</span></summary>
+          <summary><time dateTime={day.date}>{longDate(day.date)}</time> <span className="muted small">· {day.total}{' '}{t('cambios')}</span></summary>
           {day.sections.map((s: any) => (
             <div key={s.name} className="pn-section">
               <h3>{s.nameEs}</h3>
@@ -89,7 +87,7 @@ export function PatchNotes({ days = 3 }: { days?: number }) {
                       {e && <span className={`badge ${e.cls}`}><e.icon size={12} weight="bold" aria-hidden="true" />{e.label}</span>}
                       {it.context && <span className="muted"> {it.context} — </span>}
                       <span lang="en"> {it.text}</span>
-                      {' '}<a className="small pn-tr" href={translateUrl(it)} target="_blank" rel="noreferrer" title="Abrir en Google Translate (inglés → español)"><Translate size={12} aria-hidden="true" />Traducir</a>
+                      {!isEn() && <>{' '}<a className="small pn-tr" href={translateUrl(it)} target="_blank" rel="noreferrer" title={t('Abrir en Google Translate (inglés → español)')}><Translate size={12} aria-hidden="true" />{t('Traducir')}</a></>}
                       {it.notes.map((n: string, j: number) => <p key={j} className="small muted pn-note" lang="en">{n}</p>)}
                     </li>
                   );

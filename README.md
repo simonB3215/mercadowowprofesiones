@@ -141,6 +141,7 @@ Datos:
 - `npm run sync:vendor` regenera los precios de vendedor de los materiales (D35; lento a propósito para que Wowhead no bloquee).
 - `npm run sync:recipe-items` regenera qué objeto de receta (patrón, diseño…) enseña cada receta que no enseña el instructor y de dónde sale (buscador de Wowhead Forever; una petición cada 1,2 s, se reanuda si Wowhead bloquea).
 - `npm run sync:recipe-sources` regenera quién vende, suelta o da cada objeto de receta y en qué zona (ficha XML de Wowhead Forever, campo «sourcemore»; unas 1 700 peticiones, una cada 1,2 s, unos 35 min; se reanuda si Wowhead bloquea).
+- `npm run sync:recipe-names` regenera los nombres en español e inglés de los objetos de receta y de las misiones que los dan (API de Blizzard, `data/leveling/forever-recipe-names.json`).
 - `npm run probe:profile` vuelve a comprobar los namespaces de perfil.
 
 ## Despliegue en Supabase y Vercel
@@ -192,6 +193,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/professions`, `/api/coverage` | Catálogo y cobertura |
 | GET | `/api/opportunities` | Comparador con filtros, orden y paginación |
 | GET | `/api/recipes/{id}` | Detalle, desglose y comparación comprar/fabricar |
+| GET | `/api/names?version=` | Nombres del juego en inglés por nombre en español (objetos, recetas y profesiones); la web en inglés lo carga al abrir. Caché de 6 h |
 | GET | `/api/search?version=&q=` | Buscador global: recetas y objetos por nombre (español o inglés), como mucho 8 de cada |
 | GET | `/api/prices?version=&region=&realm=&ids=` | Precio de compra actual de hasta 200 objetos (avisos de precio); `null` = sin datos |
 | GET/PUT | `/api/me/characters/{id}/cooldowns` | «La hice ahora» de Transmutaciones guardado con el personaje (sesión de Battle.net); `DELETE …/cooldowns/{slot}` lo borra |

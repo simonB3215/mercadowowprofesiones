@@ -5,6 +5,7 @@ import { STATUS_LABEL, STATUS_HELP, type Status } from '../../src/engine/calc.js
 import {
   CheckCircle, Question, WarningCircle, TrendDown, MinusCircle, Prohibit, Storefront, TrendUp, Warning, ArrowClockwise, Tray, type Icon,
 } from '@phosphor-icons/react';
+import { t, isEn, locale, translateData } from './i18n.js';
 
 export { Q, formatMoney, exactGold, formatPct, STATUS_LABEL, STATUS_HELP };
 export type { Status };
@@ -24,14 +25,14 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
       body: opts.body ? JSON.stringify(opts.body) : undefined,
     });
   } catch {
-    throw new ApiError(0, 'No se pudo contactar con el servidor.');
+    throw new ApiError(0, t('No se pudo contactar con el servidor.'));
   }
   const text = await res.text();
   let j: any = null;
   try { j = text ? JSON.parse(text) : null; } catch { /* respuesta no JSON */ }
   if (res.status === 401 && j?.auth) window.dispatchEvent(new Event('auth-required'));
-  if (!res.ok) throw new ApiError(res.status, j?.error ?? `Error HTTP ${res.status}`);
-  return j as T;
+  if (!res.ok) throw new ApiError(res.status, j?.error ? t(j.error) : `Error HTTP ${res.status}`);
+  return translateData(j) as T;
 }
 
 /** Convierte {n,d} del servidor a Q; null se mantiene. */
@@ -41,8 +42,11 @@ export const money = (j: any) => formatMoney(toQ(j));
  * Importe con las monedas del juego: «o» oro, «p» plata, «c» cobre. Las letras se mantienen como texto
  * (el color es un refuerzo, no la única pista) y el valor es el mismo que devuelve `formatMoney`.
  */
+/** Letra de moneda en el idioma elegido (o/p/c → g/s/c en inglés). */
+const COIN_EN: Record<string, string> = { o: 'g', p: 's', c: 'c' };
 export function CoinText({ text }: { text: string }) {
-  const parts = text.split(/ ([opc])(?=\s|$)/);
+  if (isEn()) text = text.replace(/(\d) o(?=\s|$)/g, '$1 g').replace(/(\d) p(?=\s|$)/g, '$1 s').replace(/(\d{1,3}(?:\.\d{3})+)/g, (m) => m.replace(/\./g, ','));
+  const parts = text.split(/ ([opcgs])(?=\s|$)/);
   if (parts.length === 1) return <>{text}</>;
   // Cada «número + moneda» va junto (no se parte entre líneas); los grupos sí pueden pasar a otra línea.
   const out: React.ReactNode[] = [];
@@ -51,19 +55,19 @@ export function CoinText({ text }: { text: string }) {
     const unit = parts[i + 1];
     if (unit === undefined) { if (num) out.push(<React.Fragment key={i}>{num}</React.Fragment>); continue; }
     const lead = num.match(/^\s*/)![0];
-    out.push(<React.Fragment key={i}>{lead}<span className="coin-group">{num.slice(lead.length)}{' '}<span className={`coin coin-${unit}`}>{unit}</span></span></React.Fragment>);
+    out.push(<React.Fragment key={i}>{lead}<span className="coin-group">{num.slice(lead.length)}{' '}<span className={`coin coin-${unit === 'g' ? 'o' : unit === 's' ? 'p' : unit}`}>{unit}</span></span></React.Fragment>);
   }
   return <span className="coins">{out}</span>;
 }
 export function Money({ v }: { v: any }) {
   return <CoinText text={money(v)} />;
 }
-export const pct = (j: any) => formatPct(toQ(j));
+export const pct = (j: any) => (isEn() ? formatPct(toQ(j)).replace(/(\d),(\d)/g, '$1.$2') : formatPct(toQ(j)));
 /** ROI corto para tablas: aproximado, con el valor exacto en el título. */
 export function PctShort({ v }: { v: any }) {
   const q = toQ(v);
   if (!q) return <>—</>;
-  return <span title={`Exacto: ${formatPct(q)}`}>{q.isTerminating() ? '' : '≈ '}{q.toDecimal(1)} %</span>;
+  return <span title={`${t('Exacto')}: ${pct(v)}`}>{q.isTerminating() ? '' : '≈ '}{isEn() ? q.toDecimal(1).replace(',', '.') : q.toDecimal(1)} %</span>;
 }
 
 /** Casa de subastas por defecto: la del usuario (JcJ, Horda). */
@@ -174,7 +178,7 @@ const STATUS_ICON: Record<Status, Icon> = {
 /** Estado con texto + icono + color (nunca solo color). */
 export function StatusBadge({ s }: { s: Status }) {
   const I = STATUS_ICON[s];
-  return <span className={`badge ${STATUS_CLASS[s]}`} title={STATUS_HELP[s]}><I size={14} weight="bold" aria-hidden="true" />{STATUS_LABEL[s]}</span>;
+  return <span className={`badge ${STATUS_CLASS[s]}`} title={t(STATUS_HELP[s])}><I size={14} weight="bold" aria-hidden="true" />{t(STATUS_LABEL[s])}</span>;
 }
 
 /**
@@ -183,22 +187,22 @@ export function StatusBadge({ s }: { s: Status }) {
  */
 export function Delta({ v, tag = true }: { v: any; tag?: boolean }) {
   const q = toQ(v);
-  if (!q) return <span className="delta none"><span>—</span>{tag && <span className="delta-tag">sin datos</span>}</span>;
+  if (!q) return <span className="delta none"><span>—</span>{tag && <span className="delta-tag">{t('sin datos')}</span>}</span>;
   const sgn = q.sign();
   const cls = sgn > 0 ? 'pos' : sgn < 0 ? 'neg' : 'zero';
   const I = sgn > 0 ? TrendUp : sgn < 0 ? TrendDown : MinusCircle;
   return (
     <span className={`delta ${cls}`}>
       <I size={14} weight="bold" aria-hidden="true" />
-      <span><CoinText text={formatMoney(q)} />{tag && <span className="delta-tag">{sgn > 0 ? 'ganancia' : sgn < 0 ? 'pérdida' : 'equilibrio'}</span>}</span>
+      <span><CoinText text={formatMoney(q)} />{tag && <span className="delta-tag">{t(sgn > 0 ? 'ganancia' : sgn < 0 ? 'pérdida' : 'equilibrio')}</span>}</span>
     </span>
   );
 }
 
-export function Loading({ label = 'Cargando…', rows = 0 }: { label?: string; rows?: number }) {
+export function Loading({ label, rows = 0 }: { label?: string; rows?: number }) {
   return (
     <div role="status" aria-live="polite">
-      <p className="muted"><span className="spinner" aria-hidden="true" /> {label}</p>
+      <p className="muted"><span className="spinner" aria-hidden="true" /> {label ?? t('Cargando…')}</p>
       {rows > 0 && <div className="skeleton-rows card" aria-hidden="true">{Array.from({ length: rows }, (_, i) => <span key={i} />)}</div>}
     </div>
   );
@@ -208,8 +212,8 @@ export function ErrorBox({ error, onRetry }: { error: string; onRetry?: () => vo
     <div className="alert bad" role="alert">
       <Warning size={20} weight="bold" aria-hidden="true" />
       <div>
-        <p><strong>Error:</strong> {error}</p>
-        {onRetry && <button onClick={onRetry}><ArrowClockwise size={16} aria-hidden="true" />Reintentar</button>}
+        <p><strong>{t('Error:')}</strong> {error}</p>
+        {onRetry && <button onClick={onRetry}><ArrowClockwise size={16} aria-hidden="true" />{t('Reintentar')}</button>}
       </div>
     </div>
   );
@@ -223,10 +227,10 @@ const FIELD_ES: Record<string, string> = {
   regionMarketValue: 'valor de mercado regional', regionAvgSalePrice: 'precio medio regional', manual: 'precio tuyo', vendor: 'vendedor',
 };
 export function priceSource(field?: string | null, scope?: string | null) {
-  if (field === 'manual' || scope === 'manual') return 'precio tuyo';
-  if (scope === 'sin datos') return 'sin precio';
-  const f = field ? FIELD_ES[field] ?? field : '';
-  return [f, scope].filter(Boolean).join(' · ');
+  if (field === 'manual' || scope === 'manual') return t('precio tuyo');
+  if (scope === 'sin datos') return t('sin precio');
+  const f = field ? t(FIELD_ES[field] ?? field) : '';
+  return [f, scope ? t(scope) : scope].filter(Boolean).join(' · ');
 }
 
 export function PageHead({ title, children, icon }: { title: React.ReactNode; children?: React.ReactNode; icon?: React.ReactNode }) {
@@ -241,14 +245,14 @@ export function PageHead({ title, children, icon }: { title: React.ReactNode; ch
 }
 
 export function age(h: number | null | undefined) {
-  if (h === null || h === undefined) return 'sin datos';
+  if (h === null || h === undefined) return t('sin datos');
   if (h < 1) return `${Math.round(h * 60)} min`;
   if (h < 48) return `${h.toFixed(1)} h`;
-  return `${(h / 24).toFixed(1)} días`;
+  return `${(h / 24).toFixed(1)} ${t('días')}`;
 }
 export function dt(iso: string | null | undefined) {
   if (!iso) return '—';
-  return new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+  return new Date(iso).toLocaleString(locale(), { dateStyle: 'short', timeStyle: 'short' });
 }
 export const hoursSince = (iso: string | null | undefined) => (iso ? (Date.now() - Date.parse(iso)) / 3600000 : null);
 
@@ -259,7 +263,7 @@ export function GoldInput({ label, value, onChange, placeholder, hint }: { label
     <label className="field">
       {label}
       <input type="text" inputMode="decimal" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} aria-invalid={invalid} />
-      {invalid ? <span style={{ color: 'var(--color-bad)' }}>Número inválido</span> : hint ? <span className="small">{hint}</span> : null}
+      {invalid ? <span style={{ color: 'var(--color-bad)' }}>{t('Número inválido')}</span> : hint ? <span className="small">{hint}</span> : null}
     </label>
   );
 }

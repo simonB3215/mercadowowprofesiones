@@ -9,6 +9,7 @@ import { api, useApp, Money } from './lib.js';
 import { SupplyText } from './PriceHistory.js';
 import { setItemTipListener, type TipAnchor as Anchor } from './itemTip.js';
 import { CraftingTip } from './Crafting.js';
+import { t } from './i18n.js';
 
 const cache = new Map<string, Promise<any>>();
 const tone: Record<string, string> = { green: 'it-green', gold: 'it-gold', muted: 'it-muted', red: 'it-red' };
@@ -74,18 +75,18 @@ export function ItemTipHost() {
   const q = data?.quality ? `q-${String(data.quality).toLowerCase()}` : '';
   return (
     <div ref={box} className="item-tip" role="tooltip" style={pos ? { left: pos.left, top: pos.top } : { left: -9999, top: 0 }}>
-      {error ? <p className="it-muted">No se pudo cargar la descripción.</p> : !data ? <p className="it-muted">Cargando…</p> : (
+      {error ? <p className="it-muted">{t('No se pudo cargar la descripción.')}</p> : !data ? <p className="it-muted">{t('Cargando…')}</p> : (
         <>
-          <p className={`it-name ${q}`}>{data.name ?? `Objeto ${data.itemId}`}</p>
+          <p className={`it-name ${q}`}>{data.name ?? t('Objeto {id}', { id: data.itemId })}</p>
           {data.lines.map((l: any, i: number) => (
             <p key={i} className={`${tone[l.tone] ?? ''}${l.right ? ' it-row' : ''}`}><span>{l.text}</span>{l.right && <span>{l.right}</span>}</p>
           ))}
-          {data.partial && <p className="it-muted">El catálogo no tiene más detalles de este objeto.</p>}
+          {data.partial && <p className="it-muted">{t('El catálogo no tiene más detalles de este objeto.')}</p>}
           <CraftingTip c={data.crafting} />
-          {data.vendorSell && <p className="it-sell">Se vende al vendedor por <Money v={{ n: data.vendorSell, d: '1' }} /></p>}
+          {data.vendorSell && <p className="it-sell">{t('Se vende al vendedor por')}{' '}<Money v={{ n: data.vendorSell, d: '1' }} /></p>}
           {data.market && (
             <p className="it-market">
-              {data.market.price ? <>En tu casa de subastas: <Money v={data.market.price} /></> : 'Sin precio en tu casa de subastas'}
+              {data.market.price ? <>{t('En tu casa de subastas:')}{' '}<Money v={data.market.price} /></> : t('Sin precio en tu casa de subastas')}
               {data.market.supply && <><br /><SupplyText s={data.market.supply} /></>}
             </p>
           )}

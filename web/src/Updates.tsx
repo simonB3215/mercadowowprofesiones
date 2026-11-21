@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CHANGELOG, unseenEntries, markChangelogSeen } from './changelog.js';
 import { ArrowsClockwise, Sparkle, X } from '@phosphor-icons/react';
+import { t } from './i18n.js';
 
 /** Archivo principal de la versión cargada (p. ej. /assets/index-AbC123.js). En desarrollo no existe y no se comprueba. */
 function loadedBundle(): string | null {
@@ -37,10 +38,9 @@ export function UpdateBanner() {
   return (
     <div className="update-banner" role="status">
       <Sparkle size={18} weight="fill" aria-hidden="true" />
-      <span>Hay una versión nueva de la web.</span>
+      <span>{t('Hay una versión nueva de la web.')}</span>
       <button type="button" className="primary" onClick={() => location.reload()}>
-        <ArrowsClockwise size={16} weight="bold" aria-hidden="true" />Actualizar ahora
-      </button>
+        <ArrowsClockwise size={16} weight="bold" aria-hidden="true" />{t('Actualizar ahora')}</button>
     </div>
   );
 }
@@ -57,18 +57,18 @@ export function WhatsNew({ hidden }: { hidden: boolean }) {
   return (
     <section className="card whats-new" aria-labelledby="whats-new-title">
       <div className="whats-new-head">
-        <h2 id="whats-new-title" className="icon-inline"><Sparkle size={18} weight="fill" aria-hidden="true" />Novedades de la web</h2>
-        <button type="button" className="icon-btn" aria-label="Cerrar novedades" onClick={markChangelogSeen}><X size={18} aria-hidden="true" /></button>
+        <h2 id="whats-new-title" className="icon-inline"><Sparkle size={18} weight="fill" aria-hidden="true" />{t('Novedades de la web')}</h2>
+        <button type="button" className="icon-btn" aria-label={t('Cerrar novedades')} onClick={markChangelogSeen}><X size={18} aria-hidden="true" /></button>
       </div>
       {entries.map((e) => (
         <div key={e.title} className="whats-new-entry">
-          <strong>{e.title}</strong>
-          <ul>{e.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
+          <strong>{t(e.title)}</strong>
+          <ul>{e.items.map((it, i) => <li key={i}>{t(it)}</li>)}</ul>
         </div>
       ))}
       <p className="small" style={{ margin: 0 }}>
-        <a href="#/changelog">Ver todas las actualizaciones ({CHANGELOG.length})</a>
-        {' · '}<button type="button" className="link" onClick={markChangelogSeen}>Entendido</button>
+        <a href="#/changelog">{t('Ver todas las actualizaciones (')}{CHANGELOG.length})</a>
+        {' · '}<button type="button" className="link" onClick={markChangelogSeen}>{t('Entendido')}</button>
       </p>
     </section>
   );

@@ -648,6 +648,31 @@ route('GET', '/api/prices', async (_r, _p, u, db) => {
 });
 
 /**
+ * Nombres en inglés de los datos del juego (para la web en inglés): {nombre en español → nombre en inglés} de objetos,
+ * recetas y profesiones. Sale del catálogo de Blizzard (name_en o raw.name.en_US). Se guarda en memoria por versión.
+ */
+const namesCache = new Map<string, { at: number; names: Record<string, string> }>();
+export async function gameNamesEn(db: Db, version: string): Promise<Record<string, string>> {
+  const hit = namesCache.get(version);
+  if (hit && Date.now() - hit.at < 6 * 3600_000) return hit.names;
+  const rows = await db.query<{ es: string | null; en: string | null }>(
+    `select name as es, coalesce(name_en, raw->'name'->>'en_US') as en from item where game_version=$1
+     union all select name, raw->'name'->>'en_US' from recipe where game_version=$1 and fetch_error is null
+     union all select name, name_en from profession where game_version=$1
+     union all select name, name_en from skill_tier where game_version=$1
+     union all select coalesce(c->'name'->>'es_MX', c->'name'->>'es_ES'), c->'name'->>'en_US'
+       from skill_tier st, jsonb_array_elements(case when jsonb_typeof(st.raw->'categories') = 'array' then st.raw->'categories' else '[]'::jsonb end) c
+       where st.game_version=$1`,
+    [version],
+  );
+  const names: Record<string, string> = {};
+  for (const r of rows) if (r.es && r.en && r.es !== r.en && !(r.es in names)) names[r.es] = r.en;
+  namesCache.set(version, { at: Date.now(), names });
+  return names;
+}
+route('GET', '/api/names', async (_r, _p, u, db) => ({ names: await gameNamesEn(db, u.searchParams.get('version') ?? 'forever') }));
+
+/**
  * Buscador global (cabecera): recetas y objetos por nombre en español o inglés. Mínimo 2 letras; como mucho 8 de cada.
  * Los objetos dicen si son material de alguna receta (enlazan a «Materiales») o el resultado de una (enlazan a la receta).
  */

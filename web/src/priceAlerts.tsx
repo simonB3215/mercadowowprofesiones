@@ -8,6 +8,7 @@ import { api, useApp, useAsync, Money, Q, toQ } from './lib.js';
 import { ItemLabel } from './icons.js';
 import { ItemPicker } from './ItemPicker.js';
 import { BellRinging, Bell, Trash, Plus } from '@phosphor-icons/react';
+import { t } from './i18n.js';
 
 export interface PriceAlert { itemId: number; name: string; when: 'baja' | 'sube'; gold: string }
 
@@ -69,8 +70,8 @@ export function PriceAlertButton({ itemId, name, price }: { itemId: number; name
   const has = list.some((a) => a.itemId === itemId);
   const start = price ? price.div(10000).toDecimal(2) : '';
   return has
-    ? <a className="small icon-inline" href="#/materiales"><BellRinging size={16} weight="fill" aria-hidden="true" />Tienes un aviso de precio (verlo)</a>
-    : <button type="button" onClick={() => { if (!add({ itemId, name, when: 'baja', gold: start })) alert(`Como mucho ${MAX} avisos.`); }}><Bell size={16} aria-hidden="true" />Avisarme del precio</button>;
+    ? <a className="small icon-inline" href="#/materiales"><BellRinging size={16} weight="fill" aria-hidden="true" />{t('Tienes un aviso de precio (verlo)')}</a>
+    : <button type="button" onClick={() => { if (!add({ itemId, name, when: 'baja', gold: start })) alert(t('Como mucho {n} avisos.', { n: MAX })); }}><Bell size={16} aria-hidden="true" />{t('Avisarme del precio')}</button>;
 }
 
 /** Avisos que saltan ahora (para el inicio). No muestra nada si no hay ninguno. */
@@ -81,13 +82,13 @@ export function PriceAlertHits() {
   if (!hits.length) return null;
   return (
     <section className="card fav-panel fav-hit" aria-live="polite">
-      <h2 className="icon-inline fav-h"><BellRinging size={18} weight="fill" aria-hidden="true" />{hits.length === 1 ? '1 aviso de precio' : `${hits.length} avisos de precio`}</h2>
+      <h2 className="icon-inline fav-h"><BellRinging size={18} weight="fill" aria-hidden="true" />{hits.length === 1 ? t('1 aviso de precio') : t('{n} avisos de precio', { n: hits.length })}</h2>
       <ul className="fav-hits">
         {hits.map((a) => (
-          <li key={`${a.itemId}-${a.when}`}><a href={`#/materiales/${a.itemId}`}>{prices.get(a.itemId)?.name ?? a.name}</a>: está a <Money v={prices.get(a.itemId)?.price} /> ({a.when === 'baja' ? 'bajó de' : 'subió de'} {a.gold} o)</li>
+          <li key={`${a.itemId}-${a.when}`}><a href={`#/materiales/${a.itemId}`}>{prices.get(a.itemId)?.name ?? a.name}</a>{t(': está a')}{' '}<Money v={prices.get(a.itemId)?.price} /> ({a.when === 'baja' ? t('bajó de') : t('subió de')} {a.gold} o)</li>
         ))}
       </ul>
-      <a className="small" href="#/materiales">Ver tus avisos</a>
+      <a className="small" href="#/materiales">{t('Ver tus avisos')}</a>
     </section>
   );
 }
@@ -104,27 +105,25 @@ export function PriceAlertsPanel() {
   return (
     <details className="card fav-panel" open={hits > 0 || undefined}>
       <summary className="icon-inline fav-h">
-        <Bell size={18} aria-hidden="true" />Avisos de precio ({list.length})
-        {hits > 0 && <span className="badge b-ok fav-badge"><BellRinging size={12} weight="fill" aria-hidden="true" />{hits} activo{hits > 1 ? 's' : ''}</span>}
+        <Bell size={18} aria-hidden="true" />{t('Avisos de precio (')}{list.length})
+        {hits > 0 && <span className="badge b-ok fav-badge"><BellRinging size={12} weight="fill" aria-hidden="true" />{hits}{' '}{t('activo')}{hits > 1 ? 's' : ''}</span>}
       </summary>
-      <p className="small muted">Te avisa cuando el precio de compra de un objeto en tu casa de subastas baja o sube del importe que elijas. Se comprueba al abrir la web y con cada actualización de precios. Se guardan solo en este navegador.</p>
-      <form className="row pa-add" onSubmit={(e) => { e.preventDefault(); if (!ok) return; if (add({ itemId: pick!.id, name: pick!.name, when, gold: gold.trim().replace(',', '.') })) setGold(''); else alert(`Como mucho ${MAX} avisos.`); }}>
-        <ItemPicker label="Objeto" value={pick} onPick={setPick} />
-        <label className="field">Avisar si
-          <select value={when} onChange={(e) => setWhen(e.target.value as 'baja' | 'sube')}>
-            <option value="baja">baja de</option>
-            <option value="sube">sube de</option>
+      <p className="small muted">{t('Te avisa cuando el precio de compra de un objeto en tu casa de subastas baja o sube del importe que elijas. Se comprueba al abrir la web y con cada actualización de precios. Se guardan solo en este navegador.')}</p>
+      <form className="row pa-add" onSubmit={(e) => { e.preventDefault(); if (!ok) return; if (add({ itemId: pick!.id, name: pick!.name, when, gold: gold.trim().replace(',', '.') })) setGold(''); else alert(t('Como mucho {n} avisos.', { n: MAX })); }}>
+        <ItemPicker label={t('Objeto')} value={pick} onPick={setPick} />
+        <label className="field">{t('Avisar si')}<select value={when} onChange={(e) => setWhen(e.target.value as 'baja' | 'sube')}>
+            <option value="baja">{t('baja de')}</option>
+            <option value="sube">{t('sube de')}</option>
           </select>
         </label>
-        <label className="field">Oro
-          <input type="text" inputMode="decimal" value={gold} onChange={(e) => setGold(e.target.value)} placeholder="p. ej. 40" aria-invalid={gold !== '' && !validGold(gold)} />
+        <label className="field">{t('Oro')}<input type="text" inputMode="decimal" value={gold} onChange={(e) => setGold(e.target.value)} placeholder={t('p. ej. 40')} aria-invalid={gold !== '' && !validGold(gold)} />
         </label>
-        <button type="submit" disabled={!ok}><Plus size={16} aria-hidden="true" />Añadir aviso</button>
+        <button type="submit" disabled={!ok}><Plus size={16} aria-hidden="true" />{t('Añadir aviso')}</button>
       </form>
       {list.length > 0 && (
         <div className="table-wrap">
           <table className="fav-table">
-            <thead><tr><th>Objeto</th><th className="num">Precio ahora</th><th>Avisar si</th><th>Oro</th><th><span className="sr-only">Quitar</span></th></tr></thead>
+            <thead><tr><th>{t('Objeto')}</th><th className="num">{t('Precio ahora')}</th><th>{t('Avisar si')}</th><th>{t('Oro')}</th><th><span className="sr-only">{t('Quitar')}</span></th></tr></thead>
             <tbody>
               {list.map((a, i) => {
                 const p = prices.get(a.itemId);
@@ -134,20 +133,20 @@ export function PriceAlertsPanel() {
                     <td><ItemLabel id={a.itemId} quality={p?.quality} px={22} href={`#/materiales/${a.itemId}`} name={p?.name ?? a.name} /></td>
                     <td className="num">{p ? <Money v={p.price} /> : loading ? '…' : '—'}</td>
                     <td>
-                      <select value={a.when} onChange={(e) => update(i, { when: e.target.value as 'baja' | 'sube' })} aria-label={`Cuándo avisar de ${a.name}`}>
-                        <option value="baja">baja de</option>
-                        <option value="sube">sube de</option>
+                      <select value={a.when} onChange={(e) => update(i, { when: e.target.value as 'baja' | 'sube' })} aria-label={t('Cuándo avisar de {x}', { x: a.name })}>
+                        <option value="baja">{t('baja de')}</option>
+                        <option value="sube">{t('sube de')}</option>
                       </select>
                     </td>
                     <td>
                       <span className="fav-threshold">
-                        {hit ? <BellRinging size={16} weight="fill" className="fav-bell on" aria-label="Aviso activo" /> : <Bell size={16} className="fav-bell" aria-hidden="true" />}
-                        <input type="text" inputMode="decimal" defaultValue={a.gold} aria-invalid={!validGold(a.gold)} aria-label={`Oro para el aviso de ${a.name}`}
+                        {hit ? <BellRinging size={16} weight="fill" className="fav-bell on" aria-label={t('Aviso activo')} /> : <Bell size={16} className="fav-bell" aria-hidden="true" />}
+                        <input type="text" inputMode="decimal" defaultValue={a.gold} aria-invalid={!validGold(a.gold)} aria-label={t('Oro para el aviso de {x}', { x: a.name })}
                           onBlur={(e) => update(i, { gold: e.target.value.trim().replace(',', '.') })} onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
                       </span>
-                      {!validGold(a.gold) && <div className="small lv-error">Oro con hasta 4 decimales</div>}
+                      {!validGold(a.gold) && <div className="small lv-error">{t('Oro con hasta 4 decimales')}</div>}
                     </td>
-                    <td><button type="button" className="link danger" onClick={() => remove(i)} aria-label={`Quitar el aviso de ${a.name}`}><Trash size={14} aria-hidden="true" /></button></td>
+                    <td><button type="button" className="link danger" onClick={() => remove(i)} aria-label={t('Quitar el aviso de {x}', { x: a.name })}><Trash size={14} aria-hidden="true" /></button></td>
                   </tr>
                 );
               })}
