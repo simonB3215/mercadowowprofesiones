@@ -3,6 +3,7 @@ import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput
 import { ItemLabel, WowIcon } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { PriceAlertButton, PriceAlertsPanel } from '../priceAlerts.js';
+import { CraftingCard } from '../Crafting.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
@@ -46,6 +47,7 @@ function MaterialDetail({ itemId }: { itemId: number }) {
           <dt>Cobras por unidad al venderlo</dt><dd><strong><Money v={x.sellNet} /></strong> <span className="small muted">(menos la comisión del {Math.round(Number(x.commission) * 100)} %)</span></dd>
         </dl>
       </section>
+      <CraftingCard itemId={itemId} />
       <PriceHistory itemId={itemId} />
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Usarlo para fabricar</h2>

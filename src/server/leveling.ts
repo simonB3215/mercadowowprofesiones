@@ -10,7 +10,7 @@ import { alternativesAt, planGuide, planLeveling, pointCost, recipePool, type Le
 import { planRoute, rankRequirements, type RouteMode, type RouteResult } from '../engine/route.js';
 import { castSecondsOf, SPELL_TOOLS, SPELL_DETAILS_SOURCE } from './spellDetails.js';
 import { bestBuyPrice, VENDOR_SOURCE } from './vendorItems.js';
-import { recipeItemFor, RECIPE_ITEMS_SOURCE } from './recipeItems.js';
+import { recipeItemFor, RECIPE_ITEMS_SOURCE, type RecipeItemOut } from './recipeItems.js';
 import { Q, COPPER_PER_GOLD } from '../engine/rational.js';
 
 /** «id:oro,id:oro» → precios manuales en cobre. Oro con hasta 4 decimales (cobre entero), ≥ 0. */
@@ -268,6 +268,82 @@ function learnFromWh(w: WhRecipe) {
     trainingCost: availability === 'instructor' ? String(Math.max(0, Math.floor(w.trainingCost || 0))) : '0',
     wowheadUrl: `https://www.wowhead.com/forever/spell=${w.id}`, recipeItem: availability === 'otra' ? recipeItemFor(w.id) : null,
   };
+}
+
+// Índices de Wowhead por objeto: qué recetas lo crean y en cuántas es material.
+const WH_BY_OUTPUT = new Map<number, Array<{ prof: number; r: WhRecipe }>>();
+const WH_REAGENT_OF = new Map<number, number>();
+for (const p of DATA.professions) {
+  for (const r of p.recipes) {
+    if (r.creates?.itemId) WH_BY_OUTPUT.set(r.creates.itemId, [...(WH_BY_OUTPUT.get(r.creates.itemId) ?? []), { prof: p.professionId, r }]);
+    for (const g of r.reagents) WH_REAGENT_OF.set(g.itemId, (WH_REAGENT_OF.get(g.itemId) ?? 0) + 1);
+  }
+}
+
+export interface ItemCraftingRecipe {
+  /** Receta del catálogo de Blizzard (para enlazar su detalle); null si no está en el catálogo. */
+  recipeId: number | null;
+  spellId: number | null;
+  name: string;
+  profession: string;
+  professionId: number;
+  /** Nivel de profesión que hace falta para aprenderla (Wowhead); null si no se conoce. */
+  learnedAt: number | null;
+  /** instructor | inicial | otra (objeto de receta, botín, misión…) | null = desconocido. */
+  availability: 'instructor' | 'inicial' | 'otra' | null;
+  trainingCost: string | null;
+  recipeItem: RecipeItemOut | null;
+  unitsPerCraft: number | null;
+  wowheadUrl: string | null;
+}
+
+/**
+ * Cómo se fabrica un objeto: las recetas que lo crean (profesión, nivel necesario y si la enseña el instructor o hace
+ * falta un objeto de receta) y en cuántas recetas es material. Datos de Wowhead Forever; nombres en español y enlace
+ * del catálogo de Blizzard cuando coinciden por objeto + materiales.
+ */
+export async function itemCrafting(db: Db, version: string, itemId: number) {
+  const wh = version === DATA.gameVersion ? WH_BY_OUTPUT.get(itemId) ?? [] : [];
+  const rows = await db.query<any>(
+    `select r.id, r.name, r.profession_id, p.name as profession, r.crafted_item_id, r.qty_min, r.qty_max,
+            coalesce(json_agg(json_build_object('itemId', g.item_id, 'quantity', g.quantity)) filter (where g.item_id is not null), '[]') as reagents
+     from recipe r join profession p on p.game_version=r.game_version and p.id=r.profession_id
+     left join recipe_reagent g on g.game_version=r.game_version and g.recipe_id=r.id and not g.optional
+     where r.game_version=$1 and r.fetch_error is null and $2 in (r.crafted_item_id, r.alliance_item_id, r.horde_item_id)
+     group by r.id, r.name, r.profession_id, p.name, r.crafted_item_id, r.qty_min, r.qty_max`,
+    [version, itemId],
+  );
+  const profNames = new Map<number, string>(
+    (await db.query<any>(`select id, name from profession where game_version=$1`, [version])).map((p) => [Number(p.id), p.name]),
+  );
+  const catalog = rows.map((c) => {
+    const reagents = (typeof c.reagents === 'string' ? JSON.parse(c.reagents) : c.reagents) as any[];
+    return { c, key: reagentKey(itemId, reagents.map((g) => ({ itemId: Number(g.itemId), quantity: Number(g.quantity) }))) };
+  });
+  const used = new Set<number>();
+  const out: ItemCraftingRecipe[] = wh.map(({ prof, r }) => {
+    const match = catalog.find((x) => !used.has(Number(x.c.id)) && x.key === reagentKey(itemId, r.reagents));
+    if (match) used.add(Number(match.c.id));
+    const l = learnFromWh(r);
+    return {
+      recipeId: match ? Number(match.c.id) : null, spellId: r.id, name: match?.c.name ?? r.name,
+      profession: profNames.get(prof) ?? match?.c.profession ?? `Profesión ${prof}`, professionId: prof,
+      learnedAt: l.learnedAt, availability: l.availability, trainingCost: l.availability === 'instructor' ? l.trainingCost : null,
+      recipeItem: l.recipeItem, unitsPerCraft: r.creates && r.creates.min === r.creates.max ? r.creates.min : null, wowheadUrl: l.wowheadUrl,
+    };
+  });
+  // Recetas del catálogo sin pareja en Wowhead: se muestran sin nivel ni forma de aprenderla (desconocidos, no inventados).
+  for (const { c } of catalog) {
+    if (used.has(Number(c.id))) continue;
+    out.push({
+      recipeId: Number(c.id), spellId: null, name: c.name, profession: c.profession, professionId: Number(c.profession_id), learnedAt: null,
+      availability: null, trainingCost: null, recipeItem: null, unitsPerCraft: c.qty_min !== null && c.qty_min === c.qty_max ? Number(c.qty_min) : null, wowheadUrl: null,
+    });
+  }
+  out.sort((a, b) => (a.learnedAt ?? 9999) - (b.learnedAt ?? 9999) || a.name.localeCompare(b.name, 'es'));
+  const reagentRows = await db.query<any>(`select count(distinct recipe_id)::int as n from recipe_reagent where game_version=$1 and item_id=$2`, [version, itemId]);
+  const reagentOf = Math.max(Number(reagentRows[0]?.n ?? 0), version === DATA.gameVersion ? WH_REAGENT_OF.get(itemId) ?? 0 : 0);
+  return { itemId, createdBy: out, reagentOf };
 }
 
 /**

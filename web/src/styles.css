@@ -961,3 +961,7 @@ nav.main a:hover .nav-text { text-shadow: var(--glow-text); }
 .today-ok { color: var(--q-uncommon); }
 .today-wait { color: var(--color-muted-fg); }
 @media (max-width: 900px) { .today-grid { grid-template-columns: 1fr; } }
+
+/* Ventana del objeto: cómo se fabrica */
+.item-tip .it-craft { margin-top: 6px; border-top: 1px solid rgba(138, 122, 82, 0.4); padding-top: 6px; }
+.item-tip .it-craft-row { font-size: 0.85rem; }

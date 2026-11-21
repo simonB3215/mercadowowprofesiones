@@ -19,7 +19,7 @@ import { gameChanges, patchNotes } from './gameChanges.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
-import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo } from './leveling.js';
+import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo, itemCrafting } from './leveling.js';
 import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, syncCharacterProfile, ownedCharacter, characterProfessions } from './battlenet.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isOpenRequest } from './auth.js';
 
@@ -591,7 +591,14 @@ route('GET', '/api/items/:id/tooltip', async (_r, p, u, db) => {
     const pr = resolvePrice(snap, itemId, settings.buySource);
     market = { price: pr.copper, field: pr.field, scope: pr.scope, supply: pr.supply ?? null };
   }
-  return { ...tip, market };
+  return { ...tip, market, crafting: await itemCrafting(db, version, itemId) };
+});
+
+/** Cómo se fabrica un objeto: recetas que lo crean (profesión, nivel y cómo se aprende) y en cuántas es material. */
+route('GET', '/api/items/:id/crafting', async (_r, p, u, db) => {
+  const itemId = int(p.id);
+  if (!itemId || itemId <= 0) throw new HttpError(400, 'Objeto inválido.');
+  return itemCrafting(db, u.searchParams.get('version') ?? 'forever', itemId);
 });
 
 /** Historial diario del precio de un objeto en la casa elegida (solo casas cargadas desde Blizzard). */

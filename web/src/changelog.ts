@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-21', kind: 'nuevo', title: 'Cómo se fabrica cada objeto',
+    items: [
+      'Al pasar el ratón por un objeto, la ventana dice con qué profesión se fabrica, qué nivel hace falta y si la enseña el instructor o necesitas una receta (y dónde se consigue). También dice si es material de otras recetas, o que no se fabrica (se recolecta, cae o se compra).',
+      'En la página de cada material, nueva tarjeta «Cómo se fabrica» con todas las recetas que lo crean, su nivel y cómo se aprenden, con enlace a la receta.',
+    ],
+  },
+  {
     date: '2026-11-21', kind: 'nuevo', title: '«Qué hago hoy», buscador y avisos de precio',
     items: [
       'Inicio: tarjeta «Qué hago hoy» con las 3 recetas que más dejan en tu casa de subastas, la transmutación que más oro da al día (y si ya está disponible) y las favoritas cuya ganancia ha cambiado desde ayer.',

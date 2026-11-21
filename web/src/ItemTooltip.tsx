@@ -8,6 +8,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { api, useApp, Money } from './lib.js';
 import { SupplyText } from './PriceHistory.js';
 import { setItemTipListener, type TipAnchor as Anchor } from './itemTip.js';
+import { CraftingTip } from './Crafting.js';
 
 const cache = new Map<string, Promise<any>>();
 const tone: Record<string, string> = { green: 'it-green', gold: 'it-gold', muted: 'it-muted', red: 'it-red' };
@@ -80,6 +81,7 @@ export function ItemTipHost() {
             <p key={i} className={`${tone[l.tone] ?? ''}${l.right ? ' it-row' : ''}`}><span>{l.text}</span>{l.right && <span>{l.right}</span>}</p>
           ))}
           {data.partial && <p className="it-muted">El catálogo no tiene más detalles de este objeto.</p>}
+          <CraftingTip c={data.crafting} />
           {data.vendorSell && <p className="it-sell">Se vende al vendedor por <Money v={{ n: data.vendorSell, d: '1' }} /></p>}
           {data.market && (
             <p className="it-market">

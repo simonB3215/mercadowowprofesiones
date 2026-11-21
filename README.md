@@ -194,6 +194,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/search?version=&q=` | Buscador global: recetas y objetos por nombre (español o inglés), como mucho 8 de cada |
 | GET | `/api/prices?version=&region=&realm=&ids=` | Precio de compra actual de hasta 200 objetos (avisos de precio); `null` = sin datos |
 | GET/PUT | `/api/me/characters/{id}/cooldowns` | «La hice ahora» de Transmutaciones guardado con el personaje (sesión de Battle.net); `DELETE …/cooldowns/{slot}` lo borra |
+| GET | `/api/items/{id}/crafting?version=` | Cómo se fabrica un objeto: recetas que lo crean (profesión, nivel, instructor u objeto de receta) y en cuántas es material |
 | GET | `/api/game-changes` | Buffs, nerfs y correcciones de clases y razas (foros oficiales de Blizzard), con la clasificación estimada |
 | GET | `/api/transmutations?version=&region=&realm=&profileId=` | Recetas con reutilización (transmutaciones, Tela lunar…) con ganancia por fabricación y oro al día |
 | GET | `/api/items/{id}/tooltip?version=&region=&realm=` | Descripción del objeto para la ventana al pasar el ratón (y su precio en la casa si se indica) |

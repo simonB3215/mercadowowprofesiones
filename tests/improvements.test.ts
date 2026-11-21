@@ -158,3 +158,32 @@ describe('Cambios de las favoritas en «Qué hago hoy»', () => {
     expect(favoriteChanges([item(1, 10000, { sellCheck: { kind: 'atipico' } })], snap({ 1: 50000 }), 'c')).toEqual([]);
   });
 });
+
+describe('Cómo se fabrica un objeto', () => {
+  it('Tela lunar: Sastrería nivel 230 con patrón (Wowhead) y material de otras recetas', async () => {
+    const r = await api('/api/items/14342/crafting?version=forever');
+    expect(r.status).toBe(200);
+    expect(r.json.createdBy).toHaveLength(1);
+    expect(r.json.createdBy[0]).toMatchObject({ professionId: 197, learnedAt: 230, availability: 'otra', trainingCost: null });
+    expect(r.json.createdBy[0].recipeItem.nameEn).toMatch(/Mooncloth/);
+    expect(r.json.reagentOf).toBeGreaterThan(0);
+  });
+
+  it('un objeto que no se fabrica (Paño de lino) dice que no y cuántas recetas lo usan', async () => {
+    const r = await api('/api/items/2589/crafting?version=forever');
+    expect(r.json.createdBy).toEqual([]);
+    expect(r.json.reagentOf).toBeGreaterThan(0);
+  });
+
+  it('una receta del catálogo sin pareja en Wowhead sale con nivel y forma de aprenderla desconocidos (null, no 0)', async () => {
+    const r = await api('/api/items/900017/crafting?version=forever');
+    expect(r.json.createdBy).toEqual([expect.objectContaining({ recipeId: 800011, name: 'Bolsa de prueba', profession: 'Sastrería', learnedAt: null, availability: null })]);
+  });
+
+  it('la ventana del objeto incluye cómo se fabrica', async () => {
+    const r = await api('/api/items/900017/tooltip?version=forever');
+    expect(r.status).toBe(200);
+    expect(r.json.crafting.createdBy[0].recipeId).toBe(800011);
+    expect((await api('/api/items/0/crafting')).status).toBe(400);
+  });
+});
