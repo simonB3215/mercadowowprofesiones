@@ -7,10 +7,13 @@ import React from 'react';
 import { api, useAsync, useApp, Money } from './lib.js';
 import { WowIcon } from './icons.js';
 import { ArrowSquareOut, Hammer } from '@phosphor-icons/react';
+import { RecipeWhere, whereText } from './RouteTools.js';
 
 export interface CraftingData { itemId: number; reagentOf: number; createdBy: any[] }
 
 const HOW_ES: Record<string, string> = { vendedor: 'vendedor', 'botín': 'botín', 'misión': 'misión', fabricado: 'fabricada', otra: 'otra fuente' };
+/** Texto del enlace a la lista de Wowhead que dice dónde (vendedores y su zona, enemigos que la sueltan, misiones). */
+const WHERE_ES: Record<string, string> = { vendedor: 'qué vendedor la vende y en qué zona', 'botín': 'qué enemigos la sueltan', 'misión': 'qué misión la da', fabricado: 'quién la fabrica', otra: 'dónde se consigue' };
 
 /** «Instructor», «Al empezar», «Receta: …» o «Forma de aprenderla desconocida». */
 export function learnText(r: any): string {
@@ -19,7 +22,8 @@ export function learnText(r: any): string {
   if (r.availability === 'otra') {
     if (!r.recipeItem) return 'Con receta (objeto)';
     const how = r.recipeItem.obtain.map((o: any) => HOW_ES[o.how] ?? o.how).join(', ');
-    return `Receta: ${r.recipeItem.nameEn}${how ? ` (${how})` : ''}`;
+    const where = whereText(r.recipeItem);
+    return `Receta: ${r.recipeItem.nameEn}${how ? ` (${how})` : ''}${where ? ` · ${where}` : ''}`;
   }
   return 'Forma de aprenderla desconocida';
 }
@@ -85,7 +89,8 @@ export function CraftingCard({ itemId }: { itemId: number }) {
                         {r.availability === 'otra' && (r.recipeItem
                           ? <>Necesita la receta{' '}
                             <a href={r.recipeItem.wowheadUrl} target="_blank" rel="noreferrer" className="icon-inline"><WowIcon id={r.recipeItem.itemId} px={18} tip={false} />{r.recipeItem.nameEn}<ArrowSquareOut size={12} aria-hidden="true" /></a>
-                            {r.recipeItem.obtain.length > 0 && <div className="small muted">Se consigue: {r.recipeItem.obtain.map((o: any, j: number) => <React.Fragment key={j}>{j > 0 && ', '}<a href={o.url} target="_blank" rel="noreferrer">{HOW_ES[o.how] ?? o.how}</a></React.Fragment>)}{r.recipeItem.buyPrice && <> · <Money v={{ n: r.recipeItem.buyPrice, d: '1' }} /> en el vendedor</>}</div>}
+                            {r.recipeItem.obtain.length > 0 && <div className="small">Se consigue: {r.recipeItem.obtain.map((o: any, j: number) => <React.Fragment key={j}>{j > 0 && ' · '}<strong>{HOW_ES[o.how] ?? o.how}</strong> (<a href={o.url} target="_blank" rel="noreferrer" className="icon-inline">ver {WHERE_ES[o.how] ?? 'dónde'}<ArrowSquareOut size={12} aria-hidden="true" /></a>)</React.Fragment>)}{r.recipeItem.buyPrice && <> · <Money v={{ n: r.recipeItem.buyPrice, d: '1' }} /> en el vendedor</>}</div>}
+                            {r.recipeItem.where?.length > 0 && <div className="small"><RecipeWhere ri={r.recipeItem} /></div>}
                           </>
                           : <>Necesita una receta (objeto){r.wowheadUrl && <> · <a href={r.wowheadUrl} target="_blank" rel="noreferrer">ver en Wowhead</a></>}</>)}
                         {r.availability === null && <span className="muted">Desconocido (la receta no coincide con los datos de Wowhead)</span>}

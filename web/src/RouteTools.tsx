@@ -167,6 +167,35 @@ export function HowToLearn({ r }: { r: any }) {
 const OBTAIN_LINK: Record<string, string> = { vendedor: 'quién la vende y dónde', 'botín': 'quién la suelta', 'misión': 'qué misión la da', fabricado: 'quién la fabrica', otra: 'dónde se consigue' };
 const OBTAIN_TEXT: Record<string, string> = { vendedor: 'se compra a un vendedor', 'botín': 'cae de botín', 'misión': 'recompensa de misión', fabricado: 'la fabrica otro jugador', otra: 'otra fuente' };
 
+/** «Dónde: Alchemist Pestlezugg (Tanaris) · …»: quién vende, suelta o da el objeto de receta, con enlace a Wowhead. */
+export function RecipeWhere({ ri }: { ri: any }) {
+  const list: any[] = ri?.where ?? [];
+  if (!list.length) return null;
+  return (
+    <span className="rt-where">
+      Dónde:{' '}
+      {list.map((w, i) => (
+        <React.Fragment key={w.url}>
+          {i > 0 && ' · '}
+          {w.kind === 'misión' && 'misión '}
+          <a href={w.url} target="_blank" rel="noreferrer">{w.name}</a>
+          {w.zone && ` (${w.zone})`}
+        </React.Fragment>
+      ))}
+      {ri.whereMore > 0 && ` y ${ri.whereMore} más`}
+    </span>
+  );
+}
+
+/** Texto corto de dónde se consigue: «Alchemist Pestlezugg (Tanaris)», o '' si no se sabe. */
+export function whereText(ri: any): string {
+  const list: any[] = ri?.where ?? [];
+  if (!list.length) return '';
+  const first = `${list[0].name}${list[0].zone ? ` (${list[0].zone})` : ''}`;
+  const more = list.length - 1 + (ri.whereMore ?? 0);
+  return more > 0 ? `${first} y ${more} más` : first;
+}
+
 /** Objeto de receta que hay que conseguir (no la enseña el instructor): nombre, cómo se consigue, precio y dónde. */
 export function RecipeItemInfo({ ri, learnedAt, long }: { ri: any; learnedAt: number; long?: boolean }) {
   return (
@@ -182,6 +211,7 @@ export function RecipeItemInfo({ ri, learnedAt, long }: { ri: any; learnedAt: nu
           {' · '}<a href={o.url} target="_blank" rel="noreferrer" className="icon-inline">{OBTAIN_LINK[o.how]}<ArrowSquareOut size={12} aria-hidden="true" /></a>
         </React.Fragment>
       )) : <a href={ri.wowheadUrl} target="_blank" rel="noreferrer">Dónde se consigue</a>}
+      {ri.where?.length > 0 && <>{'. '}<RecipeWhere ri={ri} /></>}
     </span>
   );
 }

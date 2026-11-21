@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-21', kind: 'mejora', title: 'Dónde se consigue cada receta',
+    items: [
+      'Cuando una receta no la enseña el instructor, ahora se dice quién la vende, quién la suelta o qué misión la da, y en qué zona (por ejemplo «Alchemist Pestlezugg (Tanaris)»), con enlace a Wowhead. Sale en la tarjeta «Cómo se fabrica», en la ventana del objeto y en las rutas de subida.',
+      'Los enlaces a Wowhead dicen qué vas a ver: qué vendedor la vende y en qué zona, qué enemigos la sueltan o qué misión la da.',
+    ],
+  },
+  {
     date: '2026-11-21', kind: 'nuevo', title: 'Cómo se fabrica cada objeto',
     items: [
       'Al pasar el ratón por un objeto, la ventana dice con qué profesión se fabrica, qué nivel hace falta y si la enseña el instructor o necesitas una receta (y dónde se consigue). También dice si es material de otras recetas, o que no se fabrica (se recolecta, cae o se compra).',

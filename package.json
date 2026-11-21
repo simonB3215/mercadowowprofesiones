@@ -24,7 +24,8 @@
     "probe:profile": "tsx --env-file-if-exists=.env scripts/probe-profile.ts",
     "sync:spells": "tsx scripts/sync-spell-details.ts",
     "sync:vendor": "tsx scripts/sync-vendor-items.ts",
-    "sync:recipe-items": "tsx scripts/sync-recipe-items.ts"
+    "sync:recipe-items": "tsx scripts/sync-recipe-items.ts",
+    "sync:recipe-sources": "tsx scripts/sync-recipe-sources.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",

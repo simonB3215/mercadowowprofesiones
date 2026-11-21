@@ -187,3 +187,22 @@ describe('Cómo se fabrica un objeto', () => {
     expect((await api('/api/items/0/crafting')).status).toBe(400);
   });
 });
+
+describe('dónde se consigue la receta', () => {
+  it('lee sourcemore de la ficha XML de Wowhead', async () => {
+    const { parseSources } = await import('../scripts/sync-recipe-sources.js');
+    const xml = '<json><![CDATA["source":[5],"sourcemore":[{"n":"Alchemist Pestlezugg","t":1,"ti":5594,"z":440},{"n":"Sin id","t":1}]]]></json>';
+    expect(parseSources(xml)).toEqual([{ n: 'Alchemist Pestlezugg', t: 1, ti: 5594, z: 440 }]);
+    expect(parseSources('<json><![CDATA["source":[2]]]></json>')).toEqual([]);
+  });
+  it('la receta de Transmutar arcanita dice vendedor y zona en español', async () => {
+    const { recipeItemFor, recipeWhere } = await import('../src/server/recipeItems.js');
+    const ri = recipeItemFor(17187)!;
+    expect(ri.where).toEqual([{ name: 'Alchemist Pestlezugg', kind: 'pnj', url: 'https://www.wowhead.com/forever/npc=5594', zone: 'Tanaris' }]);
+    expect(ri.whereMore).toBe(0);
+    expect(recipeWhere(1)).toEqual({ where: [], whereMore: 0 });
+    const { whereText } = await import('../web/src/RouteTools.js');
+    expect(whereText(ri)).toBe('Alchemist Pestlezugg (Tanaris)');
+    expect(whereText({ where: [ri.where[0], { name: 'X', zone: null }], whereMore: 2 })).toBe('Alchemist Pestlezugg (Tanaris) y 3 más');
+  });
+});
