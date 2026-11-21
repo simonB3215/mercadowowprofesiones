@@ -296,6 +296,7 @@ const metricKey = (e: Evaluation, sort: string): Q | null => {
   if (sort === 'soldPerDay') return numQ(e.demand?.soldPerDay);
   if (sort === 'saleRate') return numQ(e.demand?.saleRate);
   if (sort === 'profitBatch') return e.profit.profitBatch;
+  if (sort === 'profitHour') return e.profitHour;
   if (sort === 'cost') return e.cost.unit;
   return e.profit.profitUnit;
 };
@@ -356,7 +357,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     items: slice.map((e) => ({
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
-      sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown,
+      sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown, castSeconds: e.castSeconds, profitHour: e.profitHour,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined, marginPct: marginOf(e),
       demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
     })),
@@ -618,6 +619,60 @@ route('GET', '/api/materials', async (_r, _p, u, db) => {
   return { materials: rows };
 });
 
+/**
+ * Precio actual de varios objetos en la casa elegida (avisos de precio): el mismo precio de compra que usan los cálculos
+ * («Precio de los materiales» en Ajustes). Como mucho 200 objetos; null = sin datos (nunca 0).
+ */
+route('GET', '/api/prices', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const ids = idsParam(u.searchParams.get('ids')) ?? [];
+  if (!ids.length) return { items: [] };
+  const [snap, settings, names] = await Promise.all([
+    loadSnapshot(db, ctx, ids), loadSettings(db),
+    db.query<any>(`select id, name, quality from item where game_version=$1 and id = any($2::int[])`, [ctx.version, ids]),
+  ]);
+  const byId = new Map(names.map((n) => [Number(n.id), n]));
+  return {
+    items: ids.map((id) => {
+      const p = resolvePrice(snap, id, settings.buySource);
+      return { itemId: id, name: byId.get(id)?.name ?? null, quality: byId.get(id)?.quality ?? null, price: p.copper, scope: p.scope, sourceTime: p.sourceTime, supply: p.supply ?? null };
+    }),
+  };
+});
+
+/**
+ * Buscador global (cabecera): recetas y objetos por nombre en español o inglés. Mínimo 2 letras; como mucho 8 de cada.
+ * Los objetos dicen si son material de alguna receta (enlazan a «Materiales») o el resultado de una (enlazan a la receta).
+ */
+route('GET', '/api/search', async (_r, _p, u, db) => {
+  const version = u.searchParams.get('version') ?? 'forever';
+  const q = (u.searchParams.get('q') ?? '').trim().toLowerCase().replace(/[%_\\]/g, '').slice(0, 60);
+  if (q.length < 2) return { recipes: [], items: [] };
+  const [recipes, items] = await Promise.all([
+    db.query<any>(
+      `select r.id, r.name, p.name as profession, r.profession_id, r.crafted_item_id as item_id, i.quality
+       from recipe r join profession p on p.game_version=r.game_version and p.id=r.profession_id
+       left join item i on i.game_version=r.game_version and i.id=r.crafted_item_id
+       where r.game_version=$1 and r.fetch_error is null and r.name is not null and (lower(r.name) like '%' || $2 || '%' or lower(coalesce(i.name_en,'')) like '%' || $2 || '%')
+       order by (lower(r.name) = $2) desc, (lower(r.name) like $2 || '%') desc, length(r.name), r.id limit 8`,
+      [version, q],
+    ),
+    db.query<any>(
+      `select item.id as item_id, item.name, item.quality,
+              exists (select 1 from recipe_reagent g where g.game_version=item.game_version and g.item_id=item.id) as reagent,
+              (select min(r.id) from recipe r where r.game_version=item.game_version and r.fetch_error is null and item.id in (r.crafted_item_id, r.alliance_item_id, r.horde_item_id)) as recipe_id
+       from item
+       where game_version=$1 and name is not null and (lower(name) like '%' || $2 || '%' or lower(coalesce(name_en,'')) like '%' || $2 || '%')
+       order by (lower(name) = $2) desc, (lower(name) like $2 || '%') desc, length(name), id limit 8`,
+      [version, q],
+    ),
+  ]);
+  return {
+    recipes: recipes.map((r) => ({ id: Number(r.id), name: r.name, profession: r.profession, professionId: Number(r.profession_id), itemId: r.item_id === null ? null : Number(r.item_id), quality: r.quality })),
+    items: items.map((i) => ({ itemId: Number(i.item_id), name: i.name, quality: i.quality, reagent: Boolean(i.reagent), recipeId: i.recipe_id === null ? null : Number(i.recipe_id) })),
+  };
+});
+
 /** Buscador de objetos por nombre (para elegir un objeto sin conocer su ID). Mínimo 2 letras, como mucho 20 resultados. */
 route('GET', '/api/items', async (_r, _p, u, db) => {
   const version = u.searchParams.get('version') ?? 'forever';
@@ -803,6 +858,44 @@ route('DELETE', '/api/me/characters/:id/professions/:pid', async (req, p, _u, db
   const c = await ownedCharacter(db, s, p.id);
   await db.query(`delete from profession_manual where character_id=$1 and profession_id=$2`, [c.id, int(p.pid)]);
   return { character: await characterView(db, c) };
+});
+
+// «La hice ahora» (Transmutaciones) guardado con el personaje: solo el dueño lo lee o lo cambia.
+const cooldownView = (r: any) => ({ slot: r.slot, at: new Date(r.done_at).getTime(), cd: Number(r.cooldown_s), name: r.name });
+const SLOT_RE = /^[a-z0-9:_-]{1,80}$/i;
+route('GET', '/api/me/characters/:id/cooldowns', async (req, p, _u, db) => {
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  const rows = await db.query<any>(`select * from character_cooldown where character_id=$1`, [c.id]);
+  return { cooldowns: rows.map(cooldownView) };
+});
+route('PUT', '/api/me/characters/:id/cooldowns', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  const b = await body(req);
+  const slot = String(b.slot ?? '');
+  const cd = Number(b.cooldown);
+  const at = b.at === undefined ? Date.now() : Number(b.at);
+  if (!SLOT_RE.test(slot)) throw new HttpError(400, 'Receta inválida.');
+  if (!Number.isInteger(cd) || cd <= 0 || cd > 30 * 86400) throw new HttpError(400, 'Espera inválida.');
+  if (!Number.isFinite(at) || at > Date.now() + 60_000 || at < Date.now() - 30 * 86400_000) throw new HttpError(400, 'Fecha inválida.');
+  const name = String(b.name ?? '').slice(0, 120) || slot;
+  await db.query(
+    `insert into character_cooldown (character_id, slot, done_at, cooldown_s, name) values ($1,$2,$3,$4,$5)
+     on conflict (character_id, slot) do update set done_at=excluded.done_at, cooldown_s=excluded.cooldown_s, name=excluded.name`,
+    [c.id, slot, new Date(at).toISOString(), cd, name],
+  );
+  const rows = await db.query<any>(`select * from character_cooldown where character_id=$1`, [c.id]);
+  return { cooldowns: rows.map(cooldownView) };
+});
+route('DELETE', '/api/me/characters/:id/cooldowns/:slot', async (req, p, _u, db) => {
+  checkSameOrigin(req);
+  const s = await requireSession(db, req);
+  const c = await ownedCharacter(db, s, p.id);
+  await db.query(`delete from character_cooldown where character_id=$1 and slot=$2`, [c.id, p.slot]);
+  const rows = await db.query<any>(`select * from character_cooldown where character_id=$1`, [c.id]);
+  return { cooldowns: rows.map(cooldownView) };
 });
 
 /** Ruta para un personaje propio: nivel de partida = el observado (Blizzard o manual) salvo que se indique otro. */

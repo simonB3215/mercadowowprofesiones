@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api, useApp, useAsync, money, Loading, ErrorBox, StatusBadge, GoldInput, PageHead, toQ, formatMoney, Q, Money, priceSource } from '../lib.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
+import { PriceAlertButton, PriceAlertsPanel } from '../priceAlerts.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
@@ -37,7 +38,7 @@ function MaterialDetail({ itemId }: { itemId: number }) {
   return (
     <>
       <p><a className="icon-inline" href="#/materiales"><ArrowLeft size={16} aria-hidden="true" />Todos los materiales</a></p>
-      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? `Objeto ${itemId}`}</h1><p className="small muted" style={{ margin: 0 }}>¿Te conviene más venderlo tal cual o usarlo para fabricar algo?</p></div></div>
+      <div className="card title-with-icon"><WowIcon id={itemId} px={56} /><div><h1 style={{ margin: 0 }}>{x.name ?? `Objeto ${itemId}`}</h1><p className="small muted" style={{ margin: 0 }}>¿Te conviene más venderlo tal cual o usarlo para fabricar algo?</p></div><div style={{ marginLeft: 'auto' }}><PriceAlertButton itemId={itemId} name={x.name ?? `Objeto ${itemId}`} price={toQ(x.price.copper)} /></div></div>
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Vender el material</h2>
         <dl className="kv">
@@ -90,6 +91,7 @@ export function Materials({ itemId }: { itemId: number | null }) {
   return (
     <div>
       <PageHead title="Materiales">¿Tienes materiales (por ejemplo, de recolectar) y no sabes qué hacer con ellos? Pulsa uno para ver si conviene venderlo o usarlo en una receta.</PageHead>
+      <PriceAlertsPanel />
       <label className="field" style={{ maxWidth: 360 }}>Buscar material<span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nombre del material" /></span></label>
       {list.loading ? <Loading rows={6} /> : list.error ? <ErrorBox error={list.error} /> : (
         <div className="table-wrap" style={{ marginTop: 10 }}>

@@ -924,3 +924,40 @@ nav.main a::before { content: ''; position: absolute; left: 0; top: 6px; bottom:
 nav.main a:hover::before, nav.main a[aria-current='page']::before { opacity: 1; transform: scaleY(1); }
 nav.main a:hover .nav-text { text-shadow: var(--glow-text); }
 @media (max-width: 760px) { nav.main a::before { top: auto; bottom: 0; left: 8px; right: 8px; width: auto; height: 3px; transform: scaleX(0.4); } nav.main a:hover::before, nav.main a[aria-current='page']::before { transform: scaleX(1); } }
+
+/* Buscador global de la cabecera */
+.gsearch { position: relative; margin-bottom: var(--space-2); }
+.gsearch .input-icon { display: flex; }
+.gsearch input { width: 100%; }
+.gsearch-list { max-height: 380px; }
+.gsearch-text { display: flex; flex-direction: column; min-width: 0; }
+.gsearch-text > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gsearch-empty { padding: 8px; cursor: default; }
+
+/* Hotfix nuevo en el menú: punto azul, distinto del del changelog */
+.nav-dot-hotfix { background: var(--q-rare); }
+
+/* Ganancia por hora en el comparador */
+.cmp-hour { color: var(--color-muted-fg); }
+
+/* Cambios del juego: los que afectan a tus personajes */
+.gc-mine-card { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: center; justify-content: space-between; }
+.gc-item.gc-mine { border-left: 3px solid var(--q-rare); }
+.gc-mine-badge { margin-left: 2px; }
+
+/* Transmutaciones: personaje con el que se guarda «La hice ahora» */
+.tm-char { max-width: 320px; margin: 8px 0 0; }
+
+/* Avisos de precio */
+.pa-add { align-items: end; margin-bottom: var(--space-2); }
+.pa-add .item-picker { flex: 2 1 240px; }
+
+/* Inicio: qué hago hoy */
+.today h2 { margin-top: 0; }
+.today-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.today-col h3 { font-size: 1rem; margin: 0 0 var(--space-2); }
+.today-list { list-style: none; margin: 0 0 var(--space-2); padding: 0; display: grid; gap: 8px; }
+.today-list li { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.today-ok { color: var(--q-uncommon); }
+.today-wait { color: var(--color-muted-fg); }
+@media (max-width: 900px) { .today-grid { grid-template-columns: 1fr; } }

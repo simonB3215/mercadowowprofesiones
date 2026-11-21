@@ -8,6 +8,7 @@
  */
 import dataset from '../../data/leveling/forever-wowhead.json' with { type: 'json' };
 import cooldownData from '../../data/leveling/forever-cooldowns.json' with { type: 'json' };
+import { castSecondsOf } from './spellDetails.js';
 
 type Reagents = Array<{ itemId: number; quantity: number }>;
 interface WhRecipe { id: number; name: string; creates?: { itemId: number }; reagents: Reagents }
@@ -42,4 +43,25 @@ export function catalogCooldown(craftedItemId: number | null, reagents: Array<{ 
   if (!reagents.length || reagents.some((g) => g.quantity === null)) return null;
   const v = BY_KEY.get(reagentKey(craftedItemId, reagents.map((g) => ({ itemId: g.item_id, quantity: g.quantity! }))));
   return v === undefined ? null : v;
+}
+
+/** Clave (objeto + materiales) → tiempo de lanzamiento en segundos (Wowhead). Si dos hechizos comparten clave, el mayor. */
+const CAST_BY_KEY = (() => {
+  const m = new Map<string, number>();
+  for (const p of (dataset as unknown as { professions: Array<{ recipes: WhRecipe[] }> }).professions) {
+    for (const r of p.recipes) {
+      const cast = castSecondsOf(r.id);
+      if (!r.reagents.length || cast === null) continue;
+      const k = reagentKey(r.creates?.itemId, r.reagents);
+      m.set(k, Math.max(m.get(k) ?? 0, cast));
+    }
+  }
+  return m;
+})();
+
+/** Tiempo de lanzamiento de una receta del catálogo en segundos; null si no coincide con Wowhead o no se conoce. */
+export function catalogCastSeconds(craftedItemId: number | null, reagents: Array<{ item_id: number; quantity: number | null }>): number | null {
+  if (!reagents.length || reagents.some((g) => g.quantity === null)) return null;
+  const v = CAST_BY_KEY.get(reagentKey(craftedItemId, reagents.map((g) => ({ itemId: g.item_id, quantity: g.quantity! }))));
+  return v === undefined || v <= 0 ? null : v;
 }

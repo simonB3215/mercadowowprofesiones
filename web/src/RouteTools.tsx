@@ -22,8 +22,50 @@ function readDone(key: string): Set<string> {
   try { return new Set(JSON.parse(localStorage.getItem(DONE_PREFIX + key) ?? '[]')); } catch { return new Set(); }
 }
 
-/** Pasos marcados como hechos para una ruta (por profesión, objetivo y modo; personaje si lo hay). */
-export function useStepsDone(key: string) {
+// Lo que cada paso hecho gastó de «Tienes» (para devolverlo si se desmarca): { paso: { objeto: cantidad } }.
+const USED_PREFIX = 'routeUsed:';
+type Used = Record<string, Record<string, number>>;
+function readUsed(key: string): Used {
+  try { const v = JSON.parse(localStorage.getItem(USED_PREFIX + key) ?? '{}'); return v && typeof v === 'object' ? v : {}; } catch { return {}; }
+}
+function writeUsed(key: string, u: Used) {
+  try { if (Object.keys(u).length) localStorage.setItem(USED_PREFIX + key, JSON.stringify(u)); else localStorage.removeItem(USED_PREFIX + key); } catch { /* sin almacenamiento */ }
+}
+
+/** Materiales que un paso compra (lo fabricado en pasos anteriores no cuenta). */
+export const stepNeeds = (s: any): Array<[number, number]> =>
+  (s.recipe ? s.materials : []).map((m: any) => [m.itemId, Number(m.quantity) - Number(m.fromSteps ?? 0)] as [number, number]).filter(([, n]: [number, number]) => n > 0);
+
+/**
+ * Gasta de la bolsa lo que pide un paso (como mucho lo que tienes) y devuelve lo gastado; o, al desmarcarlo, lo devuelve.
+ * Pura para poder probarla: recibe y devuelve la bolsa.
+ */
+export function consumeForStep(owned: Owned, needs: Array<[number, number]>): { owned: Owned; used: Record<string, number> } {
+  const next = { ...owned };
+  const used: Record<string, number> = {};
+  for (const [id, n] of needs) {
+    const have = cleanQty(next[String(id)]);
+    const take = Math.min(have, n);
+    if (!take) continue;
+    used[String(id)] = (used[String(id)] ?? 0) + take;
+    if (have - take > 0) next[String(id)] = have - take; else delete next[String(id)];
+  }
+  return { owned: next, used };
+}
+export function restoreForStep(owned: Owned, used: Record<string, number>): Owned {
+  const next = { ...owned };
+  for (const [id, n] of Object.entries(used)) next[id] = cleanQty((next[id] ?? 0) + n);
+  return next;
+}
+
+const BAG_EVENT = 'bag-changed';
+
+/**
+ * Pasos marcados como hechos para una ruta (por profesión, objetivo y modo; personaje si lo hay).
+ * Con `bagKey`, marcar un paso apunta la fabricación: lo que tenías de sus materiales se descuenta de «Tienes»
+ * (y se devuelve al desmarcarlo). Así lo que queda en la bolsa no se cuenta dos veces para los pasos siguientes.
+ */
+export function useStepsDone(key: string, bagKey?: string) {
   const [done, setDone] = useState<Set<string>>(() => readDone(key));
   useEffect(() => { setDone(readDone(key)); }, [key]);
   const write = useCallback((next: Set<string>) => {
@@ -33,8 +75,36 @@ export function useStepsDone(key: string) {
       else localStorage.removeItem(DONE_PREFIX + key);
     } catch { /* sin almacenamiento: se mantiene solo mientras la página esté abierta */ }
   }, [key]);
-  const toggle = (k: string) => { const n = new Set(done); if (n.has(k)) n.delete(k); else n.add(k); write(n); };
-  return { done, toggle, reset: () => write(new Set()) };
+  const toggle = (k: string, s?: any) => {
+    const n = new Set(done);
+    const wasDone = n.has(k);
+    if (wasDone) n.delete(k); else n.add(k);
+    if (bagKey && s) {
+      const used = readUsed(key);
+      const bag = readOwned(bagKey);
+      if (wasDone) {
+        if (used[k]) { writeOwned(bagKey, restoreForStep(bag, used[k])); delete used[k]; }
+      } else {
+        const r = consumeForStep(bag, stepNeeds(s));
+        if (Object.keys(r.used).length) { writeOwned(bagKey, r.owned); used[k] = r.used; }
+      }
+      writeUsed(key, used);
+      window.dispatchEvent(new Event(BAG_EVENT));
+    }
+    write(n);
+  };
+  const reset = () => {
+    if (bagKey) {
+      const used = readUsed(key);
+      let bag = readOwned(bagKey);
+      for (const u of Object.values(used)) bag = restoreForStep(bag, u);
+      writeOwned(bagKey, bag);
+      writeUsed(key, {});
+      window.dispatchEvent(new Event(BAG_EVENT));
+    }
+    write(new Set());
+  };
+  return { done, toggle, reset };
 }
 
 /** Casilla «Hecho» de un paso. */
@@ -64,7 +134,7 @@ export function RouteProgress({ steps, done, onReset }: { steps: any[]; done: Se
       <div className="pc-bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pctDone} aria-label="Progreso de la ruta">
         <span style={{ width: `${pctDone}%` }} />
       </div>
-      <p className="small muted rt-note">Las marcas se guardan solo en este navegador.</p>
+      <p className="small muted rt-note">Al marcar un paso, lo que tenías de sus materiales en «Tienes» se gasta (y vuelve si lo desmarcas). Las marcas se guardan solo en este navegador.</p>
     </div>
   );
 }
@@ -248,8 +318,13 @@ async function copyText(text: string): Promise<boolean> {
 /** Lo que tienes guardado en este navegador para una bolsa (ruta general o un personaje). */
 function useOwned(key: string) {
   const [owned, setOwned] = useState<Owned>(() => readOwned(key));
-  useEffect(() => { setOwned(readOwned(key)); }, [key]);
-  const set = (itemId: number, v: unknown) => {
+  useEffect(() => {
+    setOwned(readOwned(key));
+    const on = () => setOwned(readOwned(key));
+    window.addEventListener(BAG_EVENT, on);
+    return () => window.removeEventListener(BAG_EVENT, on);
+  }, [key]);
+  const set =(itemId: number, v: unknown) => {
     const n = cleanQty(v);
     setOwned((prev) => {
       const next = { ...prev };

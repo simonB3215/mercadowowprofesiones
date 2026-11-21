@@ -34,6 +34,11 @@ export function SettingsPage() {
       </PageHead>
       <section className="card">
         <h2 style={{ marginTop: 0 }}>Precios y comisión</h2>
+        <p className="small muted" style={{ marginTop: 0 }}>
+          En WoW Forever la subasta se queda con el <strong>5 %</strong> de cada venta en Alianza y Horda y con el <strong>15 %</strong> en Aguasnegras
+          (Gadgetzan, Bahía del Botín y Vista Eterna), según el cliente del juego comprobado el 13-11-2026 (<a href="https://conquestcapped.com/guides/wow-forever/wow-forever-auction-house/" target="_blank" rel="noreferrer">guía de Forever</a>).
+          El depósito se devuelve si se vende.
+        </p>
         <div className="grid grid-3">
           {fld('commission', 'Comisión de la subasta de Alianza y Horda', `Escrita en decimal: 0.05 = 5 %${pctOf(s.commission)}`)}
           {fld('commissionNeutral', 'Comisión de la subasta de Aguasnegras', `Escrita en decimal: 0.15 = 15 %${pctOf(s.commissionNeutral)}`)}

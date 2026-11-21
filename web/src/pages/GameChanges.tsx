@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { translateUrl, PatchNotes } from '../PatchNotes.js';
 import { api, useAsync, Loading, ErrorBox, Empty, PageHead, hashQuery, setHashQuery, dt } from '../lib.js';
-import { Scroll, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, Notepad, UsersThree, type Icon } from '@phosphor-icons/react';
+import { useMyCharacters } from '../myCharacters.js';
+import { Scroll, UserFocus, ArrowUp, ArrowDown, ArrowsDownUp, Wrench, Swap, Info, ArrowSquareOut, Warning, Translate, Notepad, UsersThree, type Icon } from '@phosphor-icons/react';
 
 type Effect = 'mejora' | 'empeora' | 'mixto' | 'correccion' | 'cambio';
 const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: string }> = {
@@ -13,6 +14,18 @@ const EFFECT: Record<Effect, { label: string; cls: string; icon: Icon; help: str
 };
 const SOURCE: Record<string, string> = { hotfix: 'Hotfix', beta: 'Beta' };
 const PAGE = 150;
+
+/** Sin tildes ni mayúsculas, para comparar el nombre que da Blizzard (inglés o español) con el del foro. */
+const norm = (x: string) => x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+/**
+ * Clave inglesa del foro para un nombre de Blizzard: igual en inglés; en español por las 3 primeras letras, que bastan
+ * para distinguir clases y razas de Forever y aceptan el femenino (Cazadora, Elfa de la noche, Sacerdotisa…).
+ */
+export function matchKey(name: string | null | undefined, list: Array<{ en: string; es: string }>): string | null {
+  if (!name) return null;
+  const n = norm(name);
+  return list.find((c) => norm(c.en) === n)?.en ?? list.find((c) => norm(c.es).slice(0, 3) === n.slice(0, 3))?.en ?? null;
+}
 
 const longDate =(d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
@@ -26,6 +39,7 @@ export function GameChanges() {
   const [q, setQ] = useState(init.get('q') ?? '');
   const [view, setView] = useState(init.get('vista') === 'notas' ? 'notas' : 'clases');
   const [limit, setLimit] = useState(PAGE);
+  const me = useMyCharacters();
 
   const update = (k: string, v: string, set: (v: string) => void) => {
     set(v);
@@ -40,19 +54,30 @@ export function GameChanges() {
   const classEs: Record<string, string> = Object.fromEntries((data?.classes ?? []).map((c: any) => [c.en, c.es]));
   const raceEs: Record<string, string> = Object.fromEntries((data?.races ?? []).map((c: any) => [c.en, c.es]));
   const specEs: Record<string, string> = data?.specs ?? {};
+  // Clases y razas de tus personajes de Battle.net (si estás conectado).
+  const mine = useMemo(() => {
+    const classes = new Set<string>(); const races = new Set<string>();
+    for (const c of me.characters) {
+      const k = matchKey(c.className, data?.classes ?? []); if (k) classes.add(k);
+      const r = matchKey(c.raceName, data?.races ?? []); if (r) races.add(r);
+    }
+    return { classes, races };
+  }, [me.characters, data]);
+  const affectsMe = (c: any) => (c.className && mine.classes.has(c.className)) || (c.race && mine.races.has(c.race));
 
   const matchesWho = (c: any) => {
     if (!who) return true;
     const [k, v] = who.split(':');
     if (k === 'clase') return v === '*' ? c.kind === 'clase' && !c.className : c.className === v;
     if (k === 'raza') return v === '*' ? c.kind === 'raza' : c.race === v;
+    if (k === 'mio') return affectsMe(c);
     return true;
   };
   const needle = q.trim().toLowerCase();
   const list = useMemo(
     () => all.filter((c) => matchesWho(c) && (!effect || c.effect === effect) && (!source || c.source === source)
       && (!needle || `${c.text} ${c.notes.join(' ')} ${c.context ?? ''} ${c.path.join(' ')}`.toLowerCase().includes(needle))),
-    [all, who, effect, source, needle],
+    [all, who, effect, source, needle, mine],
   );
 
   /** Balance por clase o raza: cuántas mejoras y empeoramientos tiene cada una (con el resto de filtros). */
@@ -117,11 +142,27 @@ export function GameChanges() {
             </ul>
           </div>
 
+          {me.characters.length > 0 && (mine.classes.size > 0 || mine.races.size > 0) && (
+            <div className="card gc-mine-card">
+              <p className="icon-inline" style={{ margin: 0 }}>
+                <UserFocus size={20} aria-hidden="true" />
+                <span>
+                  <strong>Tus personajes:</strong> {[...mine.classes].map((k) => classEs[k] ?? k).concat([...mine.races].map((k) => raceEs[k] ?? k)).join(', ')}
+                  {' · '}{all.filter(affectsMe).length} cambios te afectan (marcados con «Te afecta»).
+                </span>
+              </p>
+              {who !== 'mio:*'
+                ? <button type="button" className="primary" onClick={() => update('quien', 'mio:*', setWho)}>Ver solo los míos</button>
+                : <button type="button" onClick={() => update('quien', '', setWho)}>Ver todos</button>}
+            </div>
+          )}
+
           <form className="card row gc-filters" onSubmit={(e) => e.preventDefault()} role="search">
             <label className="field">
               Clase o raza
               <select value={who} onChange={(e) => update('quien', e.target.value, setWho)}>
                 <option value="">Todas</option>
+                {me.characters.length > 0 && <option value="mio:*">Mis personajes</option>}
                 <optgroup label="Clases">
                   <option value="clase:*">Todas las clases (general)</option>
                   {(data.classes as any[]).map((c) => <option key={c.en} value={`clase:${c.en}`}>{c.es}</option>)}
@@ -182,10 +223,11 @@ export function GameChanges() {
                   {shown.filter((c) => c.date === day).map((c) => {
                     const e = EFFECT[c.effect as Effect];
                     return (
-                      <li key={c.id} className="card gc-item">
+                      <li key={c.id} className={`card gc-item${affectsMe(c) ? ' gc-mine' : ''}`}>
                         <div className="gc-head">
                           <span className={`badge ${e.cls}`} title={e.help}><e.icon size={13} weight="bold" aria-hidden="true" />{e.label}</span>
                           <strong>{whoLabel(c)}</strong>
+                          {affectsMe(c) && <span className="badge b-info gc-mine-badge"><UserFocus size={12} aria-hidden="true" />Te afecta</span>}
                           <span className="muted small">{SOURCE[c.source]}</span>
                           <a className="small gc-link" href={translateUrl(c)} target="_blank" rel="noreferrer" title="Abrir este cambio en Google Translate (inglés → español)"><Translate size={13} aria-hidden="true" />Traducir</a>
                           <a className="small gc-link-plain" href={c.url} target="_blank" rel="noreferrer">Original<ArrowSquareOut size={12} aria-hidden="true" /></a>

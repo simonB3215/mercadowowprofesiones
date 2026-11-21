@@ -14,6 +14,20 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-21', kind: 'nuevo', title: '«Qué hago hoy», buscador y avisos de precio',
+    items: [
+      'Inicio: tarjeta «Qué hago hoy» con las 3 recetas que más dejan en tu casa de subastas, la transmutación que más oro da al día (y si ya está disponible) y las favoritas cuya ganancia ha cambiado desde ayer.',
+      'Buscador arriba en todas las páginas: escribe una receta o un objeto y salta a su página. Pulsa «/» para ir directo a él.',
+      'Avisos de precio para cualquier objeto o material: «avísame si baja de…» o «si sube de…». Se crean en «Materiales» o con «Avisarme del precio» en la página de un objeto o una receta, y salen en el inicio cuando se cumplen.',
+      'Comparador: ganancia por hora fabricando sin parar (con el tiempo de lanzamiento de Wowhead) y nuevo orden «Ganancia por hora».',
+      'Transmutaciones: con Battle.net conectado, «La hice ahora» se guarda con tu personaje y lo ves en cualquier equipo.',
+      'Rutas de subida: al marcar un paso hecho se gastan de «Tienes» los materiales que usaste (y vuelven si lo desmarcas).',
+      'Cambios del juego: con Battle.net conectado, los cambios de la clase y la raza de tus personajes salen marcados con «Te afecta», con un botón para ver solo esos.',
+      'El menú marca «Cambios del juego» cuando Blizzard publica un hotfix que aún no has visto.',
+      'Ajustes: la comisión de la subasta (5 % y 15 % en Aguasnegras) ya está comprobada en el cliente de Forever.',
+    ],
+  },
+  {
     date: '2026-11-19', kind: 'mejora', title: 'Menú lateral ordenado',
     items: [
       'El menú está ordenado en grupos más claros: Ganar oro, Subir profesión, El juego, Mis datos (perfiles, registro y simulador) y La web (calidad de datos, ajustes y changelog), con una línea dorada en cada título.',

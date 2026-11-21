@@ -3,6 +3,7 @@ import { api, useApp, useAsync, money, pct, toQ, exactGold, StatusBadge, STATUS_
 import { ItemLabel, WowIcon, useAsset, QualityText } from '../icons.js';
 import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { FavButton } from '../favorites.js';
+import { PriceAlertButton } from '../priceAlerts.js';
 import { RecipeItemInfo } from '../RouteTools.js';
 import { BuyOrCraftCard } from '../BuyOrCraft.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass, Coins, Tag, TrendUp, ChartLineUp } from '@phosphor-icons/react';
@@ -77,6 +78,7 @@ function RecipeHeader({ e }: { e: any }) {
       </div>
       <div className="row" style={{ alignItems: 'center' }}>
         <FavButton id={e.recipeId} name={e.name} withLabel />
+        {e.output?.itemId && <PriceAlertButton itemId={e.output.itemId} name={e.output.name ?? e.name} price={toQ(e.sellPrice?.copper)} />}
         <StatusBadge s={e.status} />
         {e.cooldown > 0 && <span className="badge b-info" title="Tiempo de reutilización (Wowhead)"><Hourglass size={12} weight="bold" aria-hidden="true" />1 cada {cooldownLabel(e.cooldown)}</span>}
         {a?.page && <a className="icon-inline small" href={a.page} target="_blank" rel="noopener noreferrer">Ficha en Wowhead<ArrowSquareOut size={14} aria-hidden="true" /><span className="sr-only">(se abre en otra pestaña)</span></a>}

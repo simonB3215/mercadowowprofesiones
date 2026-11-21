@@ -4,11 +4,13 @@ import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
+import { useMyCharacters } from '../myCharacters.js';
 import { Flask, Info, Hourglass, Trophy, CheckCircle, ArrowCounterClockwise, Timer, Scales } from '@phosphor-icons/react';
 
 const LEARN: Record<string, string> = { instructor: 'Instructor', inicial: 'Al empezar', otra: 'Receta' };
 
-// PT-08: cuándo se hizo cada receta (o grupo de espera compartida), guardado solo en este navegador.
+// PT-08: cuándo se hizo cada receta (o grupo de espera compartida). Con Battle.net conectado se guarda con el personaje;
+// si no, solo en este navegador.
 const DONE_KEY = 'mw-transmutaciones-hechas';
 type Done = Record<string, { at: number; cd: number; name: string }>;
 function loadDone(): Done {
@@ -17,7 +19,48 @@ function loadDone(): Done {
 function saveDone(d: Done) {
   try { localStorage.setItem(DONE_KEY, JSON.stringify(d)); } catch { /* sin almacenamiento: solo dura esta visita */ }
 }
-const slotOf = (i: any) => i.group ?? `receta:${i.recipeId}`;
+export const slotOf = (i: any) => i.group ?? `receta:${i.recipeId}`;
+/** Marcas de «La hice ahora»: del personaje elegido (en el servidor) o de este navegador. */
+export function useDone() {
+  const me = useMyCharacters();
+  const char = me.current;
+  const [done, setDone] = useState<Done>(loadDone);
+  const [err, setErr] = useState<string | null>(null);
+  const toDone = (list: any[]): Done => Object.fromEntries(list.map((c) => [c.slot, { at: c.at, cd: c.cd, name: c.name }]));
+  const url = char ? `/api/me/characters/${char.id}/cooldowns` : '';
+  useEffect(() => {
+    if (!char) { setDone(loadDone()); return; }
+    let on = true;
+    (async () => {
+      try {
+        let r = await api<any>(url);
+        // Las marcas que había en este navegador (aún en espera) pasan al personaje la primera vez.
+        const local = loadDone();
+        const server = new Set((r.cooldowns as any[]).map((c) => c.slot));
+        for (const [slot, d] of Object.entries(local)) {
+          if (server.has(slot) || d.at + d.cd * 1000 <= Date.now()) continue;
+          r = await api<any>(url, { method: 'PUT', body: { slot, at: d.at, cooldown: d.cd, name: d.name } });
+        }
+        if (Object.keys(local).length) saveDone({});
+        if (on) { setDone(toDone(r.cooldowns)); setErr(null); }
+      } catch (e) { if (on) setErr((e as Error).message); }
+    })();
+    return () => { on = false; };
+  }, [char?.id]);
+  const mark = async (slot: string, cd: number, name: string) => {
+    const at = Date.now();
+    if (!char) { const n = { ...done, [slot]: { at, cd, name } }; setDone(n); saveDone(n); return; }
+    try { const r = await api<any>(url, { method: 'PUT', body: { slot, at, cooldown: cd, name } }); setDone(toDone(r.cooldowns)); setErr(null); }
+    catch (e) { setErr((e as Error).message); }
+  };
+  const clear = async (slot: string) => {
+    if (!char) { const n = { ...done }; delete n[slot]; setDone(n); saveDone(n); return; }
+    try { const r = await api<any>(`${url}/${encodeURIComponent(slot)}`, { method: 'DELETE' }); setDone(toDone(r.cooldowns)); setErr(null); }
+    catch (e) { setErr((e as Error).message); }
+  };
+  return { done, mark, clear, err, me };
+}
+
 const when = (ms: number) => new Date(ms).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
 /** Disponible ya, o bloqueada hasta cuándo (y por cuál), con el botón para apuntarla. */
@@ -42,11 +85,11 @@ export function Transmutations() {
   const d = useAsync(() => api(`/api/transmutations?${ctxQuery}${profileId ? `&profileId=${profileId}` : ''}`), [ctxQuery, profileId]);
   const [onlyProfit, setOnlyProfit] = useState(false);
   const [onlyKnown, setOnlyKnown] = useState(false);
-  const [done, setDone] = useState<Done>(loadDone);
+  const { done, mark: markSlot, clear: clearSlot, err: doneErr, me } = useDone();
   const [now, setNow] = useState(Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 60_000); return () => clearInterval(t); }, []);
-  const mark = (i: any) => { const n = { ...done, [slotOf(i)]: { at: Date.now(), cd: i.cooldown, name: i.name } }; setDone(n); saveDone(n); setNow(Date.now()); };
-  const clear = (i: any) => { const n = { ...done }; delete n[slotOf(i)]; setDone(n); saveDone(n); };
+  const mark = (i: any) => { markSlot(slotOf(i), i.cooldown, i.name); setNow(Date.now()); };
+  const clear = (i: any) => clearSlot(slotOf(i));
 
   const all: any[] = d.data?.items ?? [];
   const list = useMemo(() => all.filter((i) => (!onlyProfit || toQ(i.profitPerCraft)?.sign() === 1) && (!onlyKnown || i.character === 'conoce')), [all, onlyProfit, onlyKnown]);
@@ -89,8 +132,16 @@ export function Transmutations() {
           )}
           <div className="alert info icon-inline" style={{ alignItems: 'flex-start' }}>
             <Info size={18} aria-hidden="true" style={{ flex: 'none', marginTop: 2 }} />
-            <span className="small">{d.data.note} Necesitan la <strong>Piedra filosofal</strong>. Las esperas cortas cuentan como máximo {d.data.maxCraftsPerDay} fabricaciones al día. «La hice ahora» se guarda solo en este navegador.</span>
+            <span className="small">{d.data.note} Necesitan la <strong>Piedra filosofal</strong>. Las esperas cortas cuentan como máximo {d.data.maxCraftsPerDay} fabricaciones al día.{' '}{me.current ? <>«La hice ahora» se guarda con <strong>{me.current.name}</strong> (Battle.net): lo verás en cualquier equipo.</> : <>«La hice ahora» se guarda solo en este navegador; <a href="#/personaje">conecta Battle.net</a> para guardarlo con tu personaje.</>}</span>
           </div>
+          {me.characters.length > 1 && (
+            <label className="field tm-char">Personaje
+              <select value={me.current?.id ?? ''} onChange={(e) => me.choose(e.target.value)}>
+                {me.characters.map((c) => <option key={c.id} value={c.id}>{c.name}{c.level ? ` (nivel ${c.level})` : ''}</option>)}
+              </select>
+            </label>
+          )}
+          {doneErr && <p className="small lv-error" role="alert">No se pudo guardar con el personaje: {doneErr}</p>}
           <div className="row" style={{ margin: '8px 0' }}>
             <label className="check"><input type="checkbox" checked={onlyProfit} onChange={(e) => setOnlyProfit(e.target.checked)} />Solo con ganancia</label>
             {profileId && <label className="check"><input type="checkbox" checked={onlyKnown} onChange={(e) => setOnlyKnown(e.target.checked)} />Solo las que conoce el perfil</label>}

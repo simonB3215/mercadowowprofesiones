@@ -10,7 +10,7 @@ import { toQ } from '../lib.js';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
 
 const SORTS: Array<[string, string]> = [
-  ['profitUnit', 'Ganancia por unidad'], ['profitBatch', 'Ganancia por lote'], ['margin', 'Margen (%)'], ['roi', 'ROI'],
+  ['profitUnit', 'Ganancia por unidad'], ['profitHour', 'Ganancia por hora'], ['profitBatch', 'Ganancia por lote'], ['margin', 'Margen (%)'], ['roi', 'ROI'],
   ['soldPerDay', 'Ventas al día (región)'], ['saleRate', 'Tasa de venta (región)'], ['cost', 'Costo por unidad'],
 ];
 
@@ -98,12 +98,12 @@ export function Comparator() {
       const all = await api(`/api/opportunities?${ctxQuery}&${q.toString()}${profileId ? `&profileId=${profileId}` : ''}${favQuery}&export=1&pageSize=5000`);
       const rows = (all.items as any[]).map((i) => [
         i.name, i.profession, i.output?.name ?? '', goldCell(toQ(i.costUnit)), goldCell(toQ(i.sellPrice)), i.sellScope ?? '',
-        goldCell(toQ(i.profitUnit)), numCell(toQ(i.marginPct)), i.roiUndefined ? '' : numCell(toQ(i.roiPct)),
+        goldCell(toQ(i.profitUnit)), goldCell(toQ(i.profitHour)), numCell(toQ(i.marginPct)), i.roiUndefined ? '' : numCell(toQ(i.roiPct)),
         numCell(i.demand?.soldPerDay ?? null), numCell(i.demand?.saleRate ?? null, 3), i.sellSupply?.quantity != null ? String(i.sellSupply.quantity) : '',
         i.sellCheck ? (i.sellCheck.kind === 'atipico' ? 'Precio atípico' : 'Sin confirmar') : '', STATUS_LABEL[i.status as Status] ?? i.status, i.reasons?.[0] ?? '',
         `https://mercadowowprofesiones.vercel.app/#/receta/${i.recipeId}`,
       ]);
-      const csv = toCsv(['Receta', 'Profesión', 'Objeto', 'Costo/unid. (oro)', 'Precio venta (oro)', 'Origen del precio', 'Ganancia/unid. (oro)', 'Margen %', 'ROI %',
+      const csv = toCsv(['Receta', 'Profesión', 'Objeto', 'Costo/unid. (oro)', 'Precio venta (oro)', 'Origen del precio', 'Ganancia/unid. (oro)', 'Ganancia/hora (oro)', 'Margen %', 'ROI %',
         'Ventas/día (región)', 'Tasa de venta', 'En venta', 'Aviso de precio', 'Estado', 'Motivo', 'Enlace'], rows);
       downloadCsv(`comparador-${ctx.realm ?? ctx.region}-${new Date().toLocaleDateString('sv-SE')}.csv`, csv);
       setExporting(null);
@@ -205,6 +205,7 @@ export function Comparator() {
               <li><strong>Costo/unid.</strong>: lo que cuestan los materiales para fabricar una unidad, con los precios actuales.</li>
               <li><strong>Precio venta</strong>: precio al que se vende el objeto y cuántas unidades hay publicadas. Si solo hay una publicación, el precio es poco fiable.</li>
               <li><strong>Ganancia est./unid.</strong>: lo que te queda por unidad tras pagar materiales y la comisión de la subasta. ROI = ganancia ÷ costo.</li>
+              <li><strong>Por hora</strong>: lo que ganarías en una hora fabricando sin parar, según el tiempo de lanzamiento de Wowhead. No cuenta comprar, viajar ni vender, ni si se vende todo; las recetas con espera no la tienen.</li>
               <li><strong>Ventas</strong>: unidades que se venden al día en toda la región (dato de TradeSkillMaster). Pocas ventas = puede tardar en venderse.</li>
               <li><strong>Estado</strong>: el veredicto. Pulsa las tarjetas de arriba para ver solo un estado; pasa el ratón por encima para leer qué significa.</li>
             </ul>
@@ -267,6 +268,7 @@ export function Comparator() {
                       <Delta v={i.profitUnit} />
                       <div className="small muted">ROI {i.roiUndefined ? 'no definido' : <PctShort v={i.roiPct} />}</div>
                       {units !== null && units !== 1 && <div className="small muted">Lote: <Money v={i.profitBatch} /></div>}
+                      {i.profitHour && <div className="small cmp-hour" title={`Fabricando sin parar: ${i.castSeconds} s por fabricación (Wowhead), sin contar compras ni viajes`}><Money v={i.profitHour} /> por hora</div>}
                     </td>
                     <td data-label="Ventas" className="num">
                       {i.demand?.soldPerDay != null

@@ -9,6 +9,7 @@ import { ItemLabel } from '../icons.js';
 import { SkillColor, HowToLearn } from './Leveling.js';
 import { MatChip, PatternNote, RouteGuide, RouteProgress, ShoppingPanel, StepAlternatives, StepCheck, AvoidedList, stepKey, useStepsDone, type Avoided } from '../RouteTools.js';
 import { CharacterSheet, ProfessionTiles, PROFESSION_NAME_ES, useScrollTo } from './CharacterSheet.js';
+import { readChosen, writeChosen } from '../myCharacters.js';
 import {
   IdentificationCard, SignIn, SignOut, ArrowsClockwise, Warning, CheckCircle, Info, Lightning, PiggyBank, Timer, ListNumbers, Table,
   ShoppingCart, FloppyDisk, ArrowSquareOut, Trash, PencilSimple, XCircle, Flag,
@@ -46,7 +47,8 @@ export function Character() {
   const connected = Boolean(status.data?.connected);
   const chars = useAsync(() => (connected ? api('/api/me/characters') : Promise.resolve(null)), [connected]);
   const profs = useAsync(() => api(`/api/leveling/professions?version=${ctx.version}`), [ctx.version]);
-  const [charId, setCharId] = useState<string>('');
+  const [charId, setCharIdState] = useState<string>(readChosen);
+  const setCharId = (id: string) => { setCharIdState(id); writeChosen(id); };
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [charData, setCharData] = useState<any>(null);
@@ -55,7 +57,7 @@ export function Character() {
   const autoListed = React.useRef(false);
 
   const list: any[] = chars.data?.characters ?? [];
-  useEffect(() => { if (!charId && list.length) setCharId(list[0].id); }, [list.length]);
+  useEffect(() => { if (list.length && !list.some((c) => c.id === charId)) setCharId(list[0].id); }, [list.length]);
   useEffect(() => { setCharData(list.find((c) => c.id === charId) ?? null); }, [charId, chars.data]);
 
   const run = async (label: string, fn: () => Promise<void>) => {
@@ -342,7 +344,7 @@ function RoutePlanner({ c, profs, ctxQuery, ctx, focus }: { c: any | null; profs
 export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; onAvoid?: (spellId: number, name: string) => void }) {
   const [tab, setTab] = useState<'guia' | 'pasos' | 'compra'>('guia');
   const openStep = (i: number) => { setTab('pasos'); setTimeout(() => document.getElementById(`pc-paso-${i}`)?.scrollIntoView({ block: 'start' }), 50); };
-  const steps = useStepsDone(`${doneKey}:${d.profession?.id}:${d.to}:${d.mode}`);
+  const steps = useStepsDone(`${doneKey}:${d.profession?.id}:${d.to}:${d.mode}`, doneKey);
   if (d.completed) {
     return <section className="card"><p className="lv-status ok"><CheckCircle size={18} aria-hidden="true" />{d.profession.name}: ya tienes {d.from}, que alcanza el objetivo {d.to}. No hace falta ruta.</p></section>;
   }
@@ -399,7 +401,7 @@ export function RouteView({ d, doneKey, onAvoid }: { d: any; doneKey: string; on
           {d.steps.map((s: any, i: number) => (
             <li key={i} id={`pc-paso-${i}`} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
               <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>{s.recipe && i < d.steps.length - 1 && <span className="lv-unit">Cambia al llegar a {s.to}</span>}
-                <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
+                <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s), s)} /></div>
               {s.recipe ? (
                 <>
                   <div className="lv-main">

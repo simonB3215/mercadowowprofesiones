@@ -2,8 +2,10 @@ import React from 'react';
 import { useApp } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { FavoriteAlerts } from '../favorites.js';
+import { PriceAlertHits } from '../priceAlerts.js';
 import { CHANGELOG } from '../changelog.js';
 import { PatchNotesSummary } from '../PatchNotes.js';
+import { Today } from '../Today.js';
 import { Coins, ChartBar, ArrowFatLinesUp, IdentificationCard, ArrowRight, ClockCounterClockwise, type Icon } from '@phosphor-icons/react';
 
 const ACTIONS: Array<{ href: string; icon: Icon; title: string; text: string; cta: string }> = [
@@ -40,9 +42,12 @@ export function Home() {
         ))}
       </div>
 
+      <Today />
+
       <PatchNotesSummary />
 
       <FavoriteAlerts compact />
+      <PriceAlertHits />
       <MarketStatus />
 
       {latest && (

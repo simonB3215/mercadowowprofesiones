@@ -7,7 +7,7 @@ import { computeCost, computeProfit, classify, applyPriceDrop, type Status, type
 import type { Db } from './db.js';
 import { loadSnapshot, ageHours, type MarketContext, type MarketSnapshot } from './market.js';
 import { DEFAULT_SETTINGS, commissionFor, type Settings, type PriceField } from './config.js';
-import { catalogCooldown } from './cooldowns.js';
+import { catalogCooldown, catalogCastSeconds } from './cooldowns.js';
 import { cooldownLabel } from '../engine/cooldown.js';
 
 export interface RecipeRow {
@@ -137,6 +137,10 @@ export interface Evaluation {
   notes: string[];
   /** Reutilización en segundos (PB-22): 0 = ninguna; null = desconocida (la receta no coincide con los datos de Wowhead). */
   cooldown: number | null;
+  /** Tiempo de lanzamiento en segundos (Wowhead); null = desconocido. */
+  castSeconds: number | null;
+  /** Ganancia por hora fabricando sin parar (ganancia por lote × 3600 ÷ lanzamiento); null con espera o sin tiempo conocido. */
+  profitHour: Q | null;
   manual: boolean;
   /** Hay cualquier modificación del usuario (incluida la caída de precio). */
   edited: boolean;
@@ -201,6 +205,8 @@ export interface EvalContext {
   profile: Profile | null;
   /** Reutilización por id de receta (segundos; 0 = sin reutilización; ausente o null = desconocida). Ver cooldowns.ts. */
   cooldowns?: Map<number, number | null>;
+  /** Tiempo de lanzamiento por id de receta (segundos; null = desconocido). */
+  castTimes?: Map<number, number | null>;
   now?: number;
 }
 
@@ -375,6 +381,7 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
   });
   if (demand) notes.push('La tasa y el volumen son regionales: no son probabilidad de venta diaria ni ventas de tu personaje.');
   const cooldown = ctx.cooldowns?.get(r.id) ?? null;
+  const castSeconds = ctx.castTimes?.get(r.id) ?? null;
   if (cooldown) {
     notes.push(`Reutilización de ${cooldownLabel(cooldown)} (Wowhead): como máximo una fabricación cada ${cooldownLabel(cooldown)}. La ganancia es por fabricación; no se puede repetir seguida.`);
   }
@@ -411,6 +418,8 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     reasons: cls.reasons,
     notes: [...cls.notes, ...notes],
     cooldown,
+    castSeconds,
+    profitHour: castSeconds && cooldown === 0 && profit.profitBatch ? profit.profitBatch.mul(3600).div(Q.parse(String(castSeconds)).mul(runs)) : null,
     manual,
     edited: Object.values(ov).some((v) => v !== undefined && v !== '' && v !== false && !(typeof v === 'object' && v !== null && !Object.values(v).some((x) => x !== ''))),
     character,
@@ -471,6 +480,7 @@ export async function buildEvalContext(db: Db, ctx: MarketContext, recipes: Reci
     if (!x.optional) required.set(k, [...(required.get(k) ?? []), g]);
   }
   const cooldowns = new Map<number, number | null>(recipes.map((r) => [r.id, catalogCooldown(r.crafted_item_id, required.get(r.id) ?? [])]));
+  const castTimes = new Map<number, number | null>(recipes.map((r) => [r.id, catalogCastSeconds(r.crafted_item_id, required.get(r.id) ?? [])]));
   const itemIds = new Set<number>();
   for (const r of recipes) for (const v of [r.crafted_item_id, r.alliance_item_id, r.horde_item_id]) if (v !== null) itemIds.add(v);
   for (const x of rr) itemIds.add(Number(x.item_id));
@@ -480,5 +490,5 @@ export async function buildEvalContext(db: Db, ctx: MarketContext, recipes: Reci
   const items = new Map<number, ItemRow>(its.map((i) => [Number(i.id), { ...i, id: Number(i.id) }]));
   // Snapshot completo: necesario para detectar variantes de calidad por nombre.
   const snap = await loadSnapshot(db, ctx);
-  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, variants: variantIndex(snap), profile, cooldowns };
+  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, variants: variantIndex(snap), profile, cooldowns, castTimes };
 }

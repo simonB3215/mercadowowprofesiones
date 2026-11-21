@@ -22,6 +22,7 @@ const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ defau
 import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
 import { ItemTipHost } from './ItemTooltip.js';
+import { GlobalSearch } from './GlobalSearch.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
   House, SignOut, Scales, Flask, Scroll, type Icon,
@@ -92,6 +93,22 @@ function useChangelogUnseen() {
   return unseen;
 }
 
+/**
+ * Hay un hotfix de Blizzard más reciente que el último que se vio en «Cambios del juego» (desde este navegador).
+ * La primera vez que se abre la web no se marca nada: solo avisa de los que salgan después.
+ */
+const HOTFIX_KEY = 'mw-hotfix-visto';
+function useHotfixUnseen(onPage: boolean) {
+  const [latest, setLatest] = useState<string | null>(null);
+  const [seen, setSeen] = useState<string | null>(() => { try { return localStorage.getItem(HOTFIX_KEY); } catch { return null; } });
+  useEffect(() => { api<any>('/api/patch-notes?days=1').then((r) => setLatest(r.days?.[0]?.date ?? null)).catch(() => {}); }, []);
+  useEffect(() => {
+    if (!latest || (seen && !onPage && latest <= seen)) return;
+    if (onPage || !seen) { try { localStorage.setItem(HOTFIX_KEY, latest); } catch { /* sin almacenamiento */ } setSeen(latest); }
+  }, [latest, onPage]);
+  return Boolean(latest && seen && latest > seen && !onPage);
+}
+
 function ContextBar() {
   const { ctx, setCtx, meta, profileId, setProfileId } = useApp();
   const versions = meta?.versions ?? [];
@@ -157,6 +174,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
   }
   const active = '/' + (parts[0] === 'receta' ? '' : parts[0] ?? '');
   const unseen = useChangelogUnseen();
+  const hotfixUnseen = useHotfixUnseen(active === '/cambios');
   return (
     <>
       <a className="skip" href="#contenido" onClick={(e) => { e.preventDefault(); document.getElementById('contenido')?.focus(); }}>Saltar al contenido</a>
@@ -175,6 +193,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
                     <Ico size={20} weight={active === p ? 'fill' : 'regular'} aria-hidden="true" />
                     <span className="nav-text">{l}</span>
                     {p === '/changelog' && unseen && <span className="nav-dot" aria-label="(novedades sin ver)" />}
+                    {p === '/cambios' && hotfixUnseen && <span className="nav-dot nav-dot-hotfix" title="Hay un hotfix nuevo de Blizzard" aria-label="(hotfix nuevo sin ver)" />}
                   </a>
                 ))}
               </div>
@@ -196,6 +215,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
           <UpdateBanner />
           <ItemTipHost />
           <header className="topbar">
+            <GlobalSearch />
             <ContextBar />
           </header>
           <main id="contenido" tabIndex={-1} className="fade-in" key={parts[0] ?? 'inicio'}>

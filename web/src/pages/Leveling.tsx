@@ -43,7 +43,7 @@ export function Leveling() {
   const [tab, setTab] = useState<Tab>('guia');
   const openStep = (i: number) => { setTab('pasos'); setTimeout(() => document.getElementById(`lv-paso-${i}`)?.scrollIntoView({ block: 'start' }), 50); };
   const [avoided, setAvoided] = useState<Avoided[]>([]);
-  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}${applied.mode === 'barata' ? ':b' : applied.mode === 'guia' ? ':g' : ''}` : 'lv:none');
+  const steps = useStepsDone(applied ? `lv:${applied.prof}:${applied.to}:${applied.all ? 1 : 0}${applied.mode === 'barata' ? ':b' : applied.mode === 'guia' ? ':g' : ''}` : 'lv:none', 'general');
 
   const list: any[] = profs.data?.professions ?? [];
   const current = list.find((p) => String(p.id) === prof) ?? null;
@@ -190,7 +190,7 @@ export function Leveling() {
                 {d.steps.map((s: any, i: number) => (
                   <li key={i} id={`lv-paso-${i}`} className={`lv-step${s.recipe ? '' : ' gap'}${steps.done.has(stepKey(s)) ? ' done' : ''}`}>
                     <div className="lv-level"><span className="lv-step-n">Paso {i + 1}</span><span className="mono">{s.from} → {s.to}</span>
-                      <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s))} /></div>
+                      <StepCheck s={s} i={i} done={steps.done.has(stepKey(s))} onToggle={() => steps.toggle(stepKey(s), s)} /></div>
                     {s.recipe ? (
                       <>
                         <div className="lv-main">

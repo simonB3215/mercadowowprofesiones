@@ -251,6 +251,37 @@ describe('Battle.net: rutas guardadas y progreso', () => {
   });
 });
 
+describe('Battle.net: «La hice ahora» guardado con el personaje', () => {
+  it('guarda, sobrescribe y borra las marcas del personaje propio', async () => {
+    const url = `/api/me/characters/${charA}/cooldowns`;
+    expect((await jsonCall(url, A)).json.cooldowns).toEqual([]);
+    const at = Date.now() - 3600_000;
+    const put = await jsonCall(url, A, 'PUT', { slot: 'transmutacion', at, cooldown: 82800, name: 'Transmutar: arcanita' });
+    expect(put.status).toBe(200);
+    expect(put.json.cooldowns).toEqual([{ slot: 'transmutacion', at, cd: 82800, name: 'Transmutar: arcanita' }]);
+    // Otra transmutación ocupa la misma espera: se sobrescribe, no se duplica.
+    const again = await jsonCall(url, A, 'PUT', { slot: 'transmutacion', cooldown: 169200, name: 'Transmutar: legionita' });
+    expect(again.json.cooldowns).toHaveLength(1);
+    expect(again.json.cooldowns[0]).toMatchObject({ cd: 169200, name: 'Transmutar: legionita' });
+    await jsonCall(url, A, 'PUT', { slot: 'receta:18560', cooldown: 345600, name: 'Tela lunar' });
+    const del = await jsonCall(`${url}/${encodeURIComponent('receta:18560')}`, A, 'DELETE');
+    expect(del.json.cooldowns.map((c: any) => c.slot)).toEqual(['transmutacion']);
+  });
+
+  it('rechaza datos inválidos y B no puede leer ni cambiar las marcas de A', async () => {
+    const url = `/api/me/characters/${charA}/cooldowns`;
+    expect((await jsonCall(url, A, 'PUT', { slot: 'transmutacion', cooldown: 0, name: 'x' })).status).toBe(400);
+    expect((await jsonCall(url, A, 'PUT', { slot: 'mal slot!', cooldown: 60, name: 'x' })).status).toBe(400);
+    expect((await jsonCall(url, A, 'PUT', { slot: 'transmutacion', cooldown: 60, at: Date.now() + 86400_000, name: 'x' })).status).toBe(400);
+    expect((await jsonCall(url, B)).status).toBe(404);
+    expect((await jsonCall(url, B, 'PUT', { slot: 'transmutacion', cooldown: 60, name: 'x' })).status).toBe(404);
+    expect((await jsonCall(`${url}/transmutacion`, B, 'DELETE')).status).toBe(404);
+    expect((await jsonCall(url, '')).status).toBe(401);
+    expect((await jsonCall(url, A, 'PUT', { slot: 'transmutacion', cooldown: 60, name: 'x' }, 'https://otro.test')).status).toBe(403);
+    expect((await jsonCall(url, A)).json.cooldowns).toHaveLength(1);
+  });
+});
+
 describe('Battle.net: desconectar', () => {
   it('desconectar cierra la sesión pero conserva los datos; al volver a conectar siguen ahí', async () => {
     const d = await call('/api/battlenet/disconnect', { method: 'POST', headers: { cookie: A, origin: ORIGIN, 'content-type': 'application/json' }, body: '{}' });
@@ -268,6 +299,7 @@ describe('Battle.net: desconectar', () => {
     expect(await db.query(`select 1 from bnet_account where bnet_sub='111'`)).toEqual([]);
     expect(await db.query(`select 1 from bnet_character where id=$1`, [charA])).toEqual([]);
     expect(await db.query(`select 1 from leveling_plan`)).toEqual([]);
+    expect(await db.query(`select 1 from character_cooldown`)).toEqual([]);
     expect((await jsonCall('/api/me/characters', B)).json.characters.map((c: any) => c.id)).toEqual([charB]);
   });
 
