@@ -15,6 +15,7 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { buildItemTooltip } from './itemTooltip.js';
 import { transmutations } from './transmutations.js';
+import { potions, POTION_KINDS, type PotionKind } from './potions.js';
 import { gameChanges, patchNotes } from './gameChanges.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
@@ -503,6 +504,15 @@ route('GET', '/api/transmutations', async (_r, _p, u, db) => {
   const ctx = ctxFrom(u);
   const profile = await loadProfile(db, u.searchParams.get('profileId'));
   return { ctx, profile: profile ? { id: profile.id, name: profile.name } : null, ...(await transmutations(db, ctx, profile)) };
+});
+
+/** Pociones, elíxires y frascos de Alquimia: los más vendidos en la región y si sigue saliendo a cuenta fabricarlos para vender. */
+route('GET', '/api/potions', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  const profile = await loadProfile(db, u.searchParams.get('profileId'));
+  const k = u.searchParams.get('kind') ?? 'todas';
+  if (k !== 'todas' && !(k in POTION_KINDS)) throw new HttpError(400, 'Tipo inválido: «pociones», «elixires», «frascos» o «todas».');
+  return { ctx, profile: profile ? { id: profile.id, name: profile.name } : null, ...(await potions(db, ctx, profile, k as PotionKind | 'todas')) };
 });
 
 /** Comprar o fabricar por receta (recipeId) o por objeto (itemId: compara todas las recetas que lo fabrican). */

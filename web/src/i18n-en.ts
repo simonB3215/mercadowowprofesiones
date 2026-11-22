@@ -1440,4 +1440,42 @@ export const EN: Record<string, string> = {
   'No la conoce': 'Does not know it',
   'No tiene la profesión': 'Does not have the profession',
   'Sin perfil: sin confirmar': 'No profile: unconfirmed',
+
+  // --- pociones ---
+  'Pociones': 'Potions',
+  'Las pociones más vendidas y si aún conviene fabricarlas para vender': 'The best-selling potions and whether crafting them to sell still pays off',
+  'Las pociones, elíxires y frascos de Alquimia que más se venden en la región, y si con los precios de hoy aún sale a cuenta fabricarlos para venderlos.': 'The Alchemy potions, elixirs and flasks that sell the most in the region, and whether crafting them to sell still pays off at today\'s prices.',
+  'No hay recetas de este tipo en el catálogo.': 'There are no recipes of this type in the catalog.',
+  'La más vendida es': 'The best seller is',
+  'De {total}, conviene fabricar para vender {si} y ganan poco {poco}; {no} pierden oro con los precios de hoy.': 'Of {total}, {si} are worth crafting to sell and {poco} make little; {no} lose gold at today\'s prices.',
+  'Las más vendidas que dejan oro:': 'Best sellers that make gold:',
+  'Filtrar por veredicto': 'Filter by verdict',
+  'Pociones ordenadas por ventas al día en la región': 'Potions sorted by daily sales in the region',
+  'Unidades vendidas al día en toda la región (TradeSkillMaster)': 'Units sold per day across the region (TradeSkillMaster)',
+  'De cada 100 que se publican, cuántas llegan a venderse': 'Out of every 100 listed, how many actually sell',
+  'Se compra': 'Sells through',
+  '¿Conviene?': 'Worth it?',
+  'Ventas/día y «Se compra» son de toda la región (TradeSkillMaster), no solo de tu reino. Costo, precio y ganancia son por unidad con los precios de la casa de subastas elegida, ya restada la comisión. Son estimaciones: los precios cambian.': 'Sales/day and "Sells through" cover the whole region (TradeSkillMaster), not just your realm. Cost, price and profit are per unit at the chosen auction house\'s prices, after the fee. They are estimates: prices change.',
+  'Elíxires': 'Elixirs',
+  'Frascos': 'Flasks',
+  'Poción': 'Potion',
+  'Elíxir': 'Elixir',
+  'Frasco': 'Flask',
+  'Sí, conviene': 'Yes, worth it',
+  'Precio dudoso': 'Doubtful price',
+  'No conviene': 'Not worth it',
+  'Gana oro y se vende bien en la región: cumple tus objetivos de Ajustes.': 'Makes gold and sells well in the region: meets your Settings targets.',
+  'Deja algo de oro, pero se vende poco o el margen no llega a tus objetivos de Ajustes.': 'Makes some gold, but sells little or the margin falls short of your Settings targets.',
+  'El precio de venta parece una sola publicación cara: no te fíes de la ganancia.': 'The sale price looks like a single expensive listing: do not trust the profit.',
+  'Con los precios de hoy, fabricarla para vender pierde oro o no gana nada.': 'At today\'s prices, crafting it to sell loses gold or makes nothing.',
+  'Falta algún precio para calcularlo.': 'A price is missing to calculate it.',
+  'Tipo inválido: «pociones», «elixires», «frascos» o «todas».': 'Invalid type: "pociones", "elixires", "frascos" or "todas".',
+
+  // --- changelog pociones ---
+  'Pociones más vendidas': 'Best-selling potions',
+  'Nueva sección «Pociones» en el menú: las pociones, elíxires y frascos de Alquimia ordenados por cuántos se venden al día en la región, y qué parte de lo publicado llega a venderse.': 'New "Potions" section in the menu: Alchemy potions, elixirs and flasks sorted by how many sell per day in the region, and how much of what is listed actually sells.',
+  'Cada una dice si aún conviene fabricarla para vender con los precios de hoy: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos», con su costo, precio y ganancia por unidad.': 'Each one says whether crafting it to sell still pays off at today\'s prices: "Yes, worth it", "Small profit", "Doubtful price", "Not worth it" or "No data", with its cost, price and profit per unit.',
+
+  // --- pociones 2 ---
+  'Las que más oro dejan por unidad (y se venden al menos 1 al día):': 'Those that make the most gold per unit (and sell at least 1 a day):',
 };

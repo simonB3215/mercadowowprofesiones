@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-21', kind: 'nuevo', title: 'Pociones más vendidas',
+    items: [
+      'Nueva sección «Pociones» en el menú: las pociones, elíxires y frascos de Alquimia ordenados por cuántos se venden al día en la región, y qué parte de lo publicado llega a venderse.',
+      'Cada una dice si aún conviene fabricarla para vender con los precios de hoy: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos», con su costo, precio y ganancia por unidad.',
+    ],
+  },
+  {
     date: '2026-11-21', kind: 'nuevo', title: 'La web en inglés',
     items: [
       'Nuevo selector «Idioma» arriba (Español / English): cambia todos los menús, botones, avisos y explicaciones de la web. Se recuerda en este navegador.',

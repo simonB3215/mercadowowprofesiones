@@ -200,6 +200,7 @@ docs/                        Validación de fuentes y decisiones técnicas
 | GET | `/api/items/{id}/crafting?version=` | Cómo se fabrica un objeto: recetas que lo crean (profesión, nivel, instructor u objeto de receta) y en cuántas es material |
 | GET | `/api/game-changes` | Buffs, nerfs y correcciones de clases y razas (foros oficiales de Blizzard), con la clasificación estimada |
 | GET | `/api/transmutations?version=&region=&realm=&profileId=` | Recetas con reutilización (transmutaciones, Tela lunar…) con ganancia por fabricación y oro al día |
+| GET | `/api/potions?version=&region=&realm=&profileId=&kind=` | Pociones, elíxires y frascos de Alquimia (`kind`: todas, pociones, elixires, frascos) ordenados por ventas al día en la región, con ganancia por unidad y veredicto (`si`, `poco`, `dudoso`, `no`, `sin_datos`) |
 | GET | `/api/items/{id}/tooltip?version=&region=&realm=` | Descripción del objeto para la ventana al pasar el ratón (y su precio en la casa si se indica) |
 | GET | `/api/buy-or-craft?recipeId=…` o `?itemId=…&qty=&profileId=` | ¿Comprar el objeto terminado o fabricarlo? (para usarlo, no venderlo) |
 | POST | `/api/calculate` | Escenario con valores manuales |

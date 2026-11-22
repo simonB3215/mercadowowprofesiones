@@ -15,6 +15,7 @@ const Ledger = lazy(() => import('./pages/Ledger.js').then((m) => ({ default: m.
 const Leveling = lazy(() => import('./pages/Leveling.js').then((m) => ({ default: m.Leveling })));
 const Character = lazy(() => import('./pages/Character.js').then((m) => ({ default: m.Character })));
 const SettingsPage = lazy(() => import('./pages/Settings.js').then((m) => ({ default: m.SettingsPage })));
+const PotionsPage = lazy(() => import('./pages/Potions.js').then((m) => ({ default: m.PotionsPage })));
 const TransmutationsPage = lazy(() => import('./pages/Transmutations.js').then((m) => ({ default: m.Transmutations })));
 const BuyOrCraftPage = lazy(() => import('./pages/BuyOrCraft.js').then((m) => ({ default: m.BuyOrCraft })));
 const GameChangesPage = lazy(() => import('./pages/GameChanges.js').then((m) => ({ default: m.GameChanges })));
@@ -26,7 +27,7 @@ import { GlobalSearch } from './GlobalSearch.js';
 import { t, t as tr, lang, setLang, loadGameNames } from './i18n.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
-  House, SignOut, Scales, Flask, Scroll, type Icon,
+  House, SignOut, Scales, Flask, Scroll, BeerBottle, type Icon,
 } from '@phosphor-icons/react';
 const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
 const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
@@ -41,6 +42,7 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
     ['/materiales', t('Materiales'), Package],
     ['/comprar', t('Comprar o fabricar'), Scales],
     ['/transmutaciones', t('Transmutaciones'), Flask],
+    ['/pociones', t('Pociones'), BeerBottle],
     ['/plan', t('Fabricación'), Hammer],
   ]],
   [t('Subir profesión'), [
@@ -69,6 +71,7 @@ const NAV_HELP: Record<string, string> = {
   '/catalogo': t('Todas las profesiones y sus recetas'),
   '/materiales': t('¿Vender un material o usarlo para fabricar?'),
   '/transmutaciones': t('Transmutaciones y recetas con espera: cuánto oro dan al día'),
+  '/pociones': t('Las pociones más vendidas y si aún conviene fabricarlas para vender'),
   '/comprar': t('¿Te sale más barato comprar un objeto o fabricarlo?'),
   '/plan': t('Lista de compra total para fabricar varias recetas'),
   '/nivel': t('Qué fabricar para subir una profesión y cuánto cuesta'),
@@ -167,6 +170,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
     case 'datos': page = <DataQuality />; break;
     case 'perfil': page = <Profiles />; break;
     case 'transmutaciones': page = <TransmutationsPage />; break;
+    case 'pociones': page = <PotionsPage />; break;
     case 'comprar': page = <BuyOrCraftPage />; break;
     case 'plan': page = <PlanPage />; break;
     case 'materiales': page = <Materials itemId={parts[1] ? Number(parts[1]) : null} />; break;
