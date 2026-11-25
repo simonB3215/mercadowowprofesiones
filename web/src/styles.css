@@ -238,6 +238,29 @@ tr:last-child td { border-bottom: none; }
 .cmp-name { display: inline-flex; align-items: flex-start; gap: 6px; }
 .cmp-toolbar { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-3); margin: var(--space-2) 0; }
 .cmp-toolbar button { display: inline-flex; align-items: center; gap: 6px; }
+/* Comparador simple: buscador + profesión a la vista, el resto en «Más opciones»; cada fila se despliega. */
+.cmp-simple { margin-bottom: var(--space-2); }
+.cmp-more { margin-bottom: var(--space-3); }
+.cmp-more > summary { cursor: pointer; }
+.cmp-more[open] > summary { margin-bottom: var(--space-2); }
+.cmp-row { cursor: pointer; }
+.cmp-row:hover td, .cmp-row.open td { background: rgba(255, 209, 0, 0.05); }
+.cmp-row.open td { border-bottom-color: transparent; }
+.cmp-toggle-cell { width: 1%; white-space: nowrap; text-align: right; }
+.cmp-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 4px 10px; font-size: var(--text-sm); }
+.cmp-toggle svg { transition: transform 150ms; }
+.cmp-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.cmp-detail td { background: rgba(255, 209, 0, 0.05); padding: var(--space-3); }
+.cmp-quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3); }
+.cmp-quick-h { color: var(--gold-soft); font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+.cmp-quick-big { font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1.1; }
+.cmp-mats { list-style: none; margin: 0 0 var(--space-2); padding: 0; display: grid; gap: 6px; }
+.cmp-mats li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+@container tabla (max-width: 720px) {
+  table.cmp-table td.cmp-toggle-cell { width: 100%; padding-left: 8px; text-align: left; }
+  table.cmp-table .cmp-toggle { width: 100%; justify-content: center; }
+  table.cmp-table tr.cmp-detail td { padding: var(--space-2); text-align: left; }
+}
 
 /* Favoritas */
 .fav-btn { background: none; border: none; box-shadow: none; padding: 4px; min-height: 0; color: var(--color-muted-fg); display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; cursor: pointer; }

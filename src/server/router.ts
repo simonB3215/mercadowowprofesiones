@@ -15,12 +15,12 @@ import { buildPlan, resolveSourcing, type CraftOption } from '../engine/calc.js'
 import { buyOrCraft } from '../engine/buyOrCraft.js';
 import { buildItemTooltip } from './itemTooltip.js';
 import { transmutations } from './transmutations.js';
-import { potions, POTION_KINDS, type PotionKind } from './potions.js';
+import { potions, potionVerdict, POTION_KINDS, type PotionKind, type PotionVerdict } from './potions.js';
 import { gameChanges, patchNotes } from './gameChanges.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
-import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo, itemCrafting } from './leveling.js';
+import { levelingProfessions, levelingPlan, parseManualPrices, routePlan, knownSpellIds, learnInfo, itemCrafting, quickLearn } from './leveling.js';
 import { battlenetConfig, currentSession, requireSession, startLogin, finishLogin, disconnect, redirectUri, profileNamespaces, checkSameOrigin, syncCharacters, syncProfessions, syncCharacterProfile, ownedCharacter, characterProfessions } from './battlenet.js';
 import { authRequired, isAuthenticated, checkPassword, sessionCookie, clearCookie, isOpenRequest } from './auth.js';
 
@@ -329,6 +329,9 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
   // aunque esté mirando solo uno (las tarjetas del comparador sirven para cambiar de estado).
   const counts: Record<string, number> = {};
   for (const e of list) counts[e.status] = (counts[e.status] ?? 0) + 1;
+  // Veredicto sencillo (el mismo que «Pociones»): ¿conviene fabricarla para vender?
+  const verdicts: Record<PotionVerdict, number> = { si: 0, poco: 0, dudoso: 0, no: 0, sin_datos: 0 };
+  for (const e of list) verdicts[potionVerdict(e)]++;
   const statusF = u.searchParams.get('status');
   if (statusF) list = list.filter((e) => statusF.split(',').includes(e.status));
   const sort = u.searchParams.get('sort') ?? 'profitUnit';
@@ -343,6 +346,11 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     if (!y) return -1;
     return x.cmp(y) * dir;
   });
+  const rowById = new Map(recipes.map((r) => [r.id, r]));
+  const learnOf = (id: number) => {
+    const r = rowById.get(id);
+    return r ? quickLearn(ctx.version, r.profession_id, r.crafted_item_id, ectx.required?.get(id) ?? []) : null;
+  };
   // Exportar (CSV) pide la lista entera filtrada de una vez; la tabla va por páginas.
   const pageSize = Math.max(1, Math.min(u.searchParams.get('export') === '1' ? 5000 : 200, int(u.searchParams.get('pageSize'), 50)!));
   const page = Math.max(1, int(u.searchParams.get('page'), 1)!);
@@ -353,9 +361,11 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
     page,
     pageSize,
     counts,
+    verdicts,
     market: { runs: ectx.snap.runs },
     profile: profile ? { id: profile.id, name: profile.name } : null,
     items: slice.map((e) => ({
+      verdict: potionVerdict(e), learn: learnOf(e.recipeId),
       recipeId: e.recipeId, name: e.name, profession: e.profession, professionId: e.professionId, expansion: e.expansion, output: e.output,
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
       sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown, castSeconds: e.castSeconds, profitHour: e.profitHour,

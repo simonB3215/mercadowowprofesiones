@@ -201,6 +201,8 @@ export interface EvalContext {
   settings: Settings;
   items: Map<number, ItemRow>;
   reagents: Map<number, Array<{ item_id: number; quantity: number | null }>>;
+  /** Solo los materiales obligatorios (sin opcionales), por id de receta. */
+  required?: Map<number, Array<{ item_id: number; quantity: number | null }>>;
   variants: Map<string, number[]>;
   profile: Profile | null;
   /** Reutilización por id de receta (segundos; 0 = sin reutilización; ausente o null = desconocida). Ver cooldowns.ts. */
@@ -490,5 +492,5 @@ export async function buildEvalContext(db: Db, ctx: MarketContext, recipes: Reci
   const items = new Map<number, ItemRow>(its.map((i) => [Number(i.id), { ...i, id: Number(i.id) }]));
   // Snapshot completo: necesario para detectar variantes de calidad por nombre.
   const snap = await loadSnapshot(db, ctx);
-  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, variants: variantIndex(snap), profile, cooldowns, castTimes };
+  return { snap, settings: settings ?? (await loadSettings(db)), items, reagents, required, variants: variantIndex(snap), profile, cooldowns, castTimes };
 }

@@ -1,18 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api, useApp, useAsync, money, PctShort, StatusBadge, STATUS_LABEL, STATUS_HELP, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
+import { api, useApp, useAsync, STATUS_LABEL, STATUS_HELP, Loading, ErrorBox, Empty, Delta, PageHead, hashQuery, setHashQuery, age, hoursSince, type Status, Money } from '../lib.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon, QUALITY_ES } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
-import { MagnifyingGlass, CaretUp, CaretDown, CaretUpDown, Funnel, CheckCircle, MinusCircle, Scroll, WarningCircle, CaretLeft, CaretRight, Hourglass, DownloadSimple, X, Question, TrendDown, Prohibit, Storefront } from '@phosphor-icons/react';
+import { HowToLearn } from '../RouteTools.js';
+import { MagnifyingGlass, CheckCircle, MinusCircle, WarningCircle, CaretLeft, CaretRight, CaretDown, Hourglass, DownloadSimple, X, Question, TrendDown, Prohibit, Storefront, SlidersHorizontal, Fire, ArrowRight, Hammer, ShoppingCart } from '@phosphor-icons/react';
 import { FavButton, FavoriteAlerts, useFavorites } from '../favorites.js';
 import { downloadCsv, goldCell, numCell, toCsv } from '../csv.js';
 import { toQ } from '../lib.js';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
 import { t, locale } from '../i18n.js';
+import { VerdictBadge } from '../verdict.js';
 
 const SORTS: Array<[string, string]> = [
-  ['profitUnit', 'Ganancia por unidad'], ['profitHour', 'Ganancia por hora'], ['profitBatch', 'Ganancia por lote'], ['margin', 'Margen (%)'], ['roi', 'ROI'],
-  ['soldPerDay', 'Ventas al día (región)'], ['saleRate', 'Tasa de venta (región)'], ['cost', 'Costo por unidad'],
+  ['soldPerDay', 'Ventas al día (región)'], ['profitUnit', 'Ganancia por unidad'], ['profitHour', 'Ganancia por hora'], ['profitBatch', 'Ganancia por lote'],
+  ['margin', 'Margen (%)'], ['roi', 'ROI'], ['saleRate', 'Tasa de venta (región)'], ['cost', 'Costo por unidad'],
 ];
 
 /** Recuento por estado con recuentos reales del servidor. Cada tarjeta filtra la tabla por ese estado (y otra pulsación lo quita). */
@@ -35,6 +37,61 @@ function StatusFilter({ counts, active, onPick }: { counts: Record<string, numbe
   );
 }
 
+const num = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString(locale(), { maximumFractionDigits: 1 }));
+const learnShort = (l: any) => (!l ? '' : l.availability === 'inicial' ? t('se conoce al empezar') : l.availability === 'instructor' ? t('instructor') : t('hay que conseguir la receta'));
+
+/** Lo que se ve al abrir una fila: nivel, dónde se aprende, materiales (comprar o fabricar) y las cuentas. */
+function RecipeQuick({ id }: { id: number }) {
+  const { ctxQuery, profileId } = useApp();
+  const d = useAsync(() => api<any>(`/api/recipes/${id}?${ctxQuery}${profileId ? `&profileId=${profileId}` : ''}`), [id, ctxQuery, profileId]);
+  if (d.loading && !d.data) return <Loading rows={2} />;
+  if (d.error) return <ErrorBox error={d.error} onRetry={d.reload} />;
+  const e = d.data.evaluation;
+  const l = d.data.learn;
+  const src = new Map<number, any>((d.data.sourcing ?? []).map((s: any) => [s.itemId, s.node]));
+  return (
+    <div className="cmp-quick">
+      <div className="cmp-quick-grid">
+        <div>
+          <div className="cmp-quick-h">{t('Nivel requerido')}</div>
+          <div className="cmp-quick-big">{l ? l.learnedAt : '—'}</div>
+          <div className="small muted">{e.profession}</div>
+        </div>
+        <div>
+          <div className="cmp-quick-h">{t('Dónde se aprende')}</div>
+          <div>{l ? <HowToLearn r={l} /> : <span className="muted">{t('No se pudo enlazar con los datos de Wowhead: revisa la ficha de la receta.')}</span>}</div>
+        </div>
+        <div>
+          <div className="cmp-quick-h">{t('Cuentas por unidad')}</div>
+          <div className="small">{t('Costo')}{' '}<Money v={e.cost.unit} />{' · '}{t('Se vende por')}{' '}<Money v={e.sellPrice.copper} /></div>
+          <div className="small">{t('Ganancia')}{' '}<Delta v={e.profit.profitUnit} />{e.demand?.saleRate != null && <>{' · '}{t('se vende el {p} de lo publicado', { p: `${Math.round(e.demand.saleRate * 100)} %` })}</>}</div>
+        </div>
+      </div>
+      <div className="cmp-quick-h" style={{ marginTop: 12 }}>{t('Materiales por fabricación')}</div>
+      {!e.reagents.length ? <p className="small muted">{t('Sin materiales en el catálogo.')}</p> : (
+        <ul className="cmp-mats">
+          {e.reagents.map((r: any) => {
+            const n = src.get(r.itemId);
+            return (
+              <li key={r.itemId}>
+                <span className="mono">{r.quantity ?? '?'} ×</span>
+                <ItemLabel id={r.itemId} px={18} name={r.name ?? t('Objeto {id}', { id: r.itemId })} />
+                <span className="small muted"><Money v={r.price.copper} />{' '}{t('c/u')}</span>
+                {n?.choice === 'fabricar'
+                  ? <span className="badge b-info" title={t('Sale más barato fabricarlo con otra receta que comprarlo')}><Hammer size={12} weight="bold" aria-hidden="true" />{t('mejor fabricarlo')}</span>
+                  : n?.choice === 'comprar'
+                    ? <span className="badge b-neutral" title={t('Se compra en la casa de subastas')}><ShoppingCart size={12} weight="bold" aria-hidden="true" />{t('comprar en subasta')}</span>
+                    : <span className="badge b-warn">{t('sin precio')}</span>}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <a className="icon-inline small" href={`#/receta/${id}`}>{t('Ver todo el detalle')}<ArrowRight size={14} aria-hidden="true" /></a>
+    </div>
+  );
+}
+
 export function Comparator() {
   const { ctx, ctxQuery, profileId, meta } = useApp();
   const init = hashQuery();
@@ -44,7 +101,7 @@ export function Comparator() {
     expansion: init.get('expansion') ?? '',
     status: init.get('status') ?? '',
     quality: init.get('quality') ?? '',
-    sort: init.get('sort') ?? 'profitUnit',
+    sort: init.get('sort') ?? 'soldPerDay',
     dir: init.get('dir') ?? 'desc',
     onlyKnown: init.get('onlyKnown') === '1',
     hideUnsellable: init.get('hideUnsellable') === '1',
@@ -62,6 +119,7 @@ export function Comparator() {
     window.addEventListener('market-updated', on);
     return () => window.removeEventListener('market-updated', on);
   }, []);
+  const [open, setOpen] = useState<number | null>(null);
 
   const q = useMemo(() => {
     const p = new URLSearchParams();
@@ -82,15 +140,20 @@ export function Comparator() {
     () => api(`/api/opportunities?${ctxQuery}&${q.toString()}${profileId ? `&profileId=${profileId}` : ''}${favQuery}&pageSize=50`),
     [ctxQuery, q.toString(), profileId, tick, favQuery],
   );
-  const activeFilters = [search.trim(), f.professionId, f.expansion, f.status, f.quality].filter(Boolean).length + [f.onlyKnown, f.hideUnsellable, f.onlyFav].filter(Boolean).length;
-  // En el móvil los filtros empiezan plegados para que los resultados se vean antes.
-  const [filtersOpen, setFiltersOpen] = useState(() => typeof window === 'undefined' || window.innerWidth > 700);
+  // Filtros de «Más opciones» (el buscador y la profesión están siempre a la vista).
+  const moreFilters = [f.expansion, f.status, f.quality].filter(Boolean).length + [f.onlyKnown, f.hideUnsellable, f.onlyFav].filter(Boolean).length;
+  const activeFilters = moreFilters + [search.trim(), f.professionId].filter(Boolean).length;
   const resetFilters = () => { setSearch(''); setF((x) => ({ ...x, search: '', professionId: '', expansion: '', status: '', quality: '', onlyKnown: false, hideUnsellable: false, onlyFav: false, page: 1 })); };
-  const set = (k: string, v: any) => setF((x) => ({ ...x, [k]: v, page: k === 'page' ? v : 1 }));
-  const sortBy = (k: string) => setF((x) => ({ ...x, sort: k, dir: x.sort === k && x.dir === 'desc' ? 'asc' : 'desc', page: 1 }));
+  const set = (k: string, v: any) => { setOpen(null); setF((x) => ({ ...x, [k]: v, page: k === 'page' ? v : 1 })); };
   const total = data.data?.total ?? 0;
   const pages = Math.max(1, Math.ceil(total / 50));
   const recipesInCatalog = meta?.catalog?.recipes?.[ctx.version] ?? 0;
+  const items: any[] = data.data?.items ?? [];
+  const vc = data.data?.verdicts;
+  const bySales = f.sort === 'soldPerDay' && f.dir === 'desc' && f.page === 1;
+  // Las más vendidas que dejan al menos 1 plata por unidad (con menos, «deja oro» no dice nada útil).
+  const copper = (v: any) => (v ? Number(v.n) / Number(v.d) : 0);
+  const bestSellers = bySales ? items.filter((i) => (i.verdict === 'si' || i.verdict === 'poco') && copper(i.profitUnit) >= 100).slice(0, 3) : [];
   const [exporting, setExporting] = useState<string | null>(null);
   /** Descarga la lista entera con los filtros y el orden actuales (todas las páginas). */
   const exportCsv = async () => {
@@ -98,34 +161,23 @@ export function Comparator() {
     try {
       const all = await api(`/api/opportunities?${ctxQuery}&${q.toString()}${profileId ? `&profileId=${profileId}` : ''}${favQuery}&export=1&pageSize=5000`);
       const rows = (all.items as any[]).map((i) => [
-        i.name, i.profession, i.output?.name ?? '', goldCell(toQ(i.costUnit)), goldCell(toQ(i.sellPrice)), i.sellScope ?? '',
+        i.name, i.profession, i.output?.name ?? '', i.learn ? String(i.learn.learnedAt) : '', goldCell(toQ(i.costUnit)), goldCell(toQ(i.sellPrice)), i.sellScope ?? '',
         goldCell(toQ(i.profitUnit)), goldCell(toQ(i.profitHour)), numCell(toQ(i.marginPct)), i.roiUndefined ? '' : numCell(toQ(i.roiPct)),
         numCell(i.demand?.soldPerDay ?? null), numCell(i.demand?.saleRate ?? null, 3), i.sellSupply?.quantity != null ? String(i.sellSupply.quantity) : '',
         i.sellCheck ? t(i.sellCheck.kind === 'atipico' ? 'Precio atípico' : 'Sin confirmar') : '', t(STATUS_LABEL[i.status as Status] ?? i.status), t(i.reasons?.[0] ?? ''),
         `https://mercadowowprofesiones.vercel.app/#/receta/${i.recipeId}`,
       ]);
-      const csv = toCsv(['Receta', 'Profesión', 'Objeto', 'Costo/unid. (oro)', 'Precio venta (oro)', 'Origen del precio', 'Ganancia/unid. (oro)', 'Ganancia/hora (oro)', 'Margen %', 'ROI %',
+      const csv = toCsv(['Receta', 'Profesión', 'Objeto', 'Nivel requerido', 'Costo/unid. (oro)', 'Precio venta (oro)', 'Origen del precio', 'Ganancia/unid. (oro)', 'Ganancia/hora (oro)', 'Margen %', 'ROI %',
         'Ventas/día (región)', 'Tasa de venta', 'En venta', 'Aviso de precio', 'Estado', 'Motivo', 'Enlace'].map((h) => t(h)), rows);
       downloadCsv(`comparador-${ctx.realm ?? ctx.region}-${new Date().toLocaleDateString('sv-SE')}.csv`, csv);
       setExporting(null);
     } catch (e) { setExporting((e as Error).message); }
   };
 
-  const th = (k: string, label: string) => (
-    <th className="num" aria-sort={f.sort === k ? (f.dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
-      <button className="sort" onClick={() => sortBy(k)}>
-        {t(label)}
-        {f.sort === k
-          ? (f.dir === 'asc' ? <CaretUp size={12} weight="bold" aria-hidden="true" /> : <CaretDown size={12} weight="bold" aria-hidden="true" />)
-          : <CaretUpDown size={12} aria-hidden="true" />}
-      </button>
-    </th>
-  );
-
   return (
     <div>
-      <PageHead title={t('Comparador de recetas')}>{t('Qué recetas dan más oro: lo que cuestan los materiales frente a lo que cobras al venderla en tu casa de subastas (ya descontada la comisión). Pulsa una receta para ver el detalle. «—» significa que falta el precio.')}</PageHead>
-      <MarketStatus />
+      <PageHead title={t('Comparador de recetas')}>{t('Las recetas que más se venden en la región y si aún sale a cuenta fabricarlas para vender. Pulsa una fila para ver el nivel que pide, dónde se aprende y qué materiales necesita.')}</PageHead>
+      <MarketStatus compact />
       {meta && !meta.error && recipesInCatalog === 0 && (
         <div className="alert warn" role="note">
           <WarningCircle size={20} weight="bold" aria-hidden="true" />
@@ -138,31 +190,34 @@ export function Comparator() {
           </div>
         </div>
       )}
-      <details className="card cmp-filters" open={filtersOpen} onToggle={(e) => setFiltersOpen((e.target as HTMLDetailsElement).open)}>
-        <summary className="icon-inline"><Funnel size={18} aria-hidden="true" />{' '}{t('Filtros')}{activeFilters > 0 && <span className="badge b-info">{activeFilters}{' '}{t('activo')}{activeFilters > 1 ? "s" : ""}</span>}</summary>
+      <div className="row cmp-simple">
+        <label className="field" style={{ flex: '2 1 220px' }}>{t('Buscar por nombre')}<span className="input-icon">
+            <MagnifyingGlass size={16} aria-hidden="true" />
+            <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('Receta u objeto')} />
+          </span>
+        </label>
+        <label className="field">{t('Profesión')}<select value={f.professionId} onChange={(e) => set('professionId', e.target.value)}>
+            <option value="">{t('Todas')}</option>
+            {(profs.data?.professions ?? []).map((p: any) => <option key={p.id} value={p.id}>{p.name} ({p.recipes})</option>)}
+          </select>
+        </label>
+      </div>
+
+      <details className="card cmp-more">
+        <summary className="icon-inline"><SlidersHorizontal size={18} aria-hidden="true" />{' '}{t('Más opciones')}{moreFilters > 0 && <span className="badge b-info">{moreFilters}{' '}{t('activo')}{moreFilters > 1 ? 's' : ''}</span>}</summary>
         <div className="row">
-          <label className="field" style={{ flex: '2 1 220px' }}>{t('Buscar por nombre')}<span className="input-icon">
-              <MagnifyingGlass size={16} aria-hidden="true" />
-              <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('Receta u objeto')} />
-            </span>
-          </label>
-          <label className="field">{t('Profesión')}<select value={f.professionId} onChange={(e) => set('professionId', e.target.value)}>
-              <option value="">{t('Todas')}</option>
-              {(profs.data?.professions ?? []).map((p: any) => <option key={p.id} value={p.id}>{p.name} ({p.recipes})</option>)}
+          <label className="field">{t('Ordenar por')}<select value={f.sort} onChange={(e) => set('sort', e.target.value)}>
+              {SORTS.map(([k, l]) => <option key={k} value={k}>{t(l)}</option>)}
             </select>
           </label>
           <label className="field">{t('Estado')}<select value={f.status} onChange={(e) => set('status', e.target.value)}>
               <option value="">{t('Todos')}</option>
-              {(Object.keys(STATUS_LABEL) as Status[]).map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
+              {(Object.keys(STATUS_LABEL) as Status[]).map((s) => <option key={s} value={s}>{t(STATUS_LABEL[s])}</option>)}
             </select>
           </label>
           <label className="field">{t('Calidad del objeto')}<select value={f.quality} onChange={(e) => set('quality', e.target.value)}>
               <option value="">{t('Todas')}</option>
               {[...Object.keys(QUALITY_ES), 'DESCONOCIDA'].map((x) => <option key={x} value={x} className={`opt-q-${x.toLowerCase()}`}>{QUALITY_ES[x] ?? t('Desconocida')}</option>)}
-            </select>
-          </label>
-          <label className="field">{t('Ordenar por')}<select value={f.sort} onChange={(e) => set('sort', e.target.value)}>
-              {SORTS.map(([k, l]) => <option key={k} value={k}>{t(l)}</option>)}
             </select>
           </label>
         </div>
@@ -174,113 +229,114 @@ export function Comparator() {
             <button type="button" className="link cmp-reset" onClick={resetFilters}><X size={14} aria-hidden="true" />{t('Quitar filtros (')}{activeFilters})</button>
           )}
         </div>
+        {data.data && <StatusFilter counts={data.data.counts} active={f.status} onPick={(v) => set('status', v)} />}
+        {data.data && (
+          <div className="cmp-toolbar">
+            <button type="button" onClick={exportCsv} disabled={exporting === '…' || total === 0}>
+              <DownloadSimple size={16} aria-hidden="true" />{exporting === '…' ? t('Preparando…') : t('Exportar CSV ({n})', { n: total })}
+            </button>
+            {exporting && exporting !== '…' && <span className="small lv-error" role="alert">{t('No se pudo exportar:')}{' '}{exporting}</span>}
+          </div>
+        )}
+        <FavoriteAlerts />
       </details>
 
-      <FavoriteAlerts />
-      {data.data && (
-        <div className="cmp-toolbar">
-          <button type="button" onClick={exportCsv} disabled={exporting === '…' || total === 0}>
-            <DownloadSimple size={16} aria-hidden="true" />{exporting === '…' ? t('Preparando…') : t('Exportar CSV ({n})', { n: total })}
-          </button>
-          {exporting && exporting !== '…' && <span className="small lv-error" role="alert">{t('No se pudo exportar:')}{' '}{exporting}</span>}
-        </div>
+      {data.data && vc && total > 0 && (
+        <section className="card" aria-label={t('En resumen')}>
+          <h2 className="icon-inline" style={{ marginTop: 0 }}><Fire size={20} aria-hidden="true" />{t('En resumen')}</h2>
+          <ul className="small" style={{ margin: 0, paddingLeft: '1.2em' }}>
+            <li>
+              {t('De {total}, conviene fabricar para vender {si} y ganan poco {poco}; {no} pierden oro con los precios de hoy.', {
+                total: (vc.si + vc.poco + vc.dudoso + vc.no + vc.sin_datos).toLocaleString(locale()), si: vc.si, poco: vc.poco, no: vc.no,
+              })}
+            </li>
+            {bestSellers.length > 0 && (
+              <li>
+                {t('Las más vendidas que dejan oro:')}{' '}
+                {bestSellers.map((i, n) => (
+                  <React.Fragment key={i.recipeId}>{n > 0 && ', '}<a href={`#/receta/${i.recipeId}`}>{i.name}</a> (<Money v={i.profitUnit} />, {t('{n} al día', { n: num(i.demand?.soldPerDay) })})</React.Fragment>
+                ))}
+              </li>
+            )}
+            {!profileId && <li className="muted">{t('Sin perfil manual no se comprueba si tu personaje conoce cada receta.')}</li>}
+          </ul>
+        </section>
       )}
-      {data.data && (
-        <>
-          <StatusFilter counts={data.data.counts} active={f.status} onPick={(v) => set('status', v)} />
-          <p className="small muted" aria-live="polite">
-            {total.toLocaleString(locale())} {total === 1 ? t('receta') : t('recetas')}{f.status ? ` ${t('con estado «{s}»', { s: t(STATUS_LABEL[f.status as Status]) })}` : ''}.
-            {!profileId && t(' Sin perfil manual no se comprueba si tu personaje conoce cada receta.')}
-          </p>
-          <details className="cmp-help small">
-            <summary>{t('Cómo leer la tabla')}</summary>
-            <ul>
-              <li><strong>{t('Costo/unid.')}</strong>{t(': lo que cuestan los materiales para fabricar una unidad, con los precios actuales.')}</li>
-              <li><strong>{t('Precio venta')}</strong>{t(': precio al que se vende el objeto y cuántas unidades hay publicadas. Si solo hay una publicación, el precio es poco fiable.')}</li>
-              <li><strong>{t('Ganancia est./unid.')}</strong>{t(': lo que te queda por unidad tras pagar materiales y la comisión de la subasta. ROI = ganancia ÷ costo.')}</li>
-              <li><strong>{t('Por hora')}</strong>{t(': lo que ganarías en una hora fabricando sin parar, según el tiempo de lanzamiento de Wowhead. No cuenta comprar, viajar ni vender, ni si se vende todo; las recetas con espera no la tienen.')}</li>
-              <li><strong>{t('Ventas')}</strong>{t(': unidades que se venden al día en toda la región (dato de TradeSkillMaster). Pocas ventas = puede tardar en venderse.')}</li>
-              <li><strong>{t('Estado')}</strong>{t(': el veredicto. Pulsa las tarjetas de arriba para ver solo un estado; pasa el ratón por encima para leer qué significa.')}</li>
-            </ul>
-          </details>
-        </>
-      )}
+
       {data.loading && <Loading label={t('Calculando oportunidades…')} rows={data.data ? 0 : 6} />}
       {data.error && <ErrorBox error={data.error} onRetry={data.reload} />}
       {data.data && !data.loading && total === 0 && (
         <Empty icon={MagnifyingGlass}>{t('No hay recetas que coincidan con los filtros')}{recipesInCatalog === 0 ? t(' (el catálogo está vacío)') : ''}.</Empty>
       )}
       {data.data && total > 0 && (
-        <div className="table-wrap" style={{ opacity: data.loading ? 0.55 : 1, transition: 'opacity 150ms' }} aria-busy={data.loading}>
-          <table className="responsive cards-lg">
-            <caption className="sr-only">{t('Recetas con costo, precio, ganancia estimada y estado')}</caption>
-            <thead>
-              {/* 6 columnas: los datos relacionados van juntos para que la tabla quepa sin desplazarse hacia el lado.
-                  El orden por lote o ROI sigue disponible en «Ordenar por». */}
-              <tr>
-                <th>{t('Receta')}</th>
-                {th('cost', 'Costo/unid.')}
-                <th className="num">{t('Precio venta')}</th>
-                {th('profitUnit', 'Ganancia est./unid.')}
-                <th className="num">{t('Ventas')}</th>
-                <th>{t('Estado')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.data.items.map((i: any) => {
-                const units = i.unitsPerRun ?? (i.yieldRange[0] !== null ? `${i.yieldRange[0]}–${i.yieldRange[1]}` : null);
-                return (
-                  <tr key={i.recipeId}>
-                    <td data-label={t('Receta')} className="cell-main">
-                      <span className="cmp-name"><FavButton id={i.recipeId} name={i.name} />
-                      <ItemLabel id={i.output?.itemId} quality={i.output?.quality} href={`#/receta/${i.recipeId}`} name={i.name}
-                        sub={<span className="cmp-sub">
-                          <WowIcon kind="profession" id={i.professionId} px={14} />{i.profession}
-                          {i.output?.name && i.output.name !== i.name && <> · {i.output.name}</>}
-                        </span>} /></span>
-                      {i.cooldown > 0 && (
-                        <span className="badge b-info cmp-cooldown" title={t('Tiempo de reutilización (Wowhead): no se puede fabricar seguida. La ganancia es por fabricación.')}>
-                          <Hourglass size={12} weight="bold" aria-hidden="true" />{' '}{t('1 cada')}{' '}{cooldownLabel(i.cooldown)}
-                        </span>
+        <>
+          <p className="small muted" aria-live="polite">
+            {total.toLocaleString(locale())} {total === 1 ? t('receta') : t('recetas')}{f.status ? ` ${t('con estado «{s}»', { s: t(STATUS_LABEL[f.status as Status]) })}` : ''}.
+          </p>
+          <div className="table-wrap" style={{ opacity: data.loading ? 0.55 : 1, transition: 'opacity 150ms' }} aria-busy={data.loading}>
+            <table className="responsive cmp-table">
+              <caption className="sr-only">{t('Recetas con ventas, ganancia y si conviene fabricarlas')}</caption>
+              <thead>
+                <tr>
+                  <th>{t('Receta')}</th>
+                  <th className="num" title={t('Unidades vendidas al día en toda la región (TradeSkillMaster)')}>{t('Ventas/día')}</th>
+                  <th className="num">{t('Ganancia')}</th>
+                  <th>{t('¿Conviene?')}</th>
+                  <th><span className="sr-only">{t('Detalle')}</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((i: any) => {
+                  const isOpen = open === i.recipeId;
+                  const toggle = () => setOpen(isOpen ? null : i.recipeId);
+                  return (
+                    <React.Fragment key={i.recipeId}>
+                      <tr className={`cmp-row${isOpen ? ' open' : ''}`} onClick={(ev) => { if (!(ev.target as HTMLElement).closest('a,button')) toggle(); }}>
+                        <td data-label={t('Receta')} className="cell-main">
+                          <span className="cmp-name"><FavButton id={i.recipeId} name={i.name} />
+                          <ItemLabel id={i.output?.itemId} quality={i.output?.quality} href={`#/receta/${i.recipeId}`} name={i.name}
+                            sub={<span className="cmp-sub">
+                              <WowIcon kind="profession" id={i.professionId} px={14} />{i.profession}
+                              {i.learn && <> · {t('nivel {n}', { n: i.learn.learnedAt })} · {learnShort(i.learn)}</>}
+                            </span>} /></span>
+                          {i.cooldown > 0 && (
+                            <span className="badge b-info cmp-cooldown" title={t('Tiempo de reutilización (Wowhead): no se puede fabricar seguida. La ganancia es por fabricación.')}>
+                              <Hourglass size={12} weight="bold" aria-hidden="true" />{' '}{t('1 cada')}{' '}{cooldownLabel(i.cooldown)}
+                            </span>
+                          )}
+                        </td>
+                        <td data-label={t('Ventas/día')} className="num">
+                          {i.demand?.soldPerDay != null ? <strong>{num(i.demand.soldPerDay)}</strong> : <span className="small muted">{t('sin datos de ventas')}</span>}
+                        </td>
+                        <td data-label={t('Ganancia')} className="num">
+                          <Delta v={i.profitUnit} />
+                          {i.sellSupply && <div className="small"><SupplyText s={i.sellSupply} /></div>}
+                        </td>
+                        <td data-label={t('¿Conviene?')}>
+                          <VerdictBadge v={i.verdict} />
+                          {i.verdict !== 'si' && i.reasons?.[0] && <div className="small muted">{i.reasons[0]}</div>}
+                          {i.freshness?.stale && <span className="badge b-warn">{t('Desactualizado')}</span>}
+                        </td>
+                        <td className="cmp-toggle-cell">
+                          <button type="button" className="cmp-toggle" aria-expanded={isOpen} onClick={toggle}>
+                            <span>{isOpen ? t('Cerrar') : t('Ver materiales y nivel')}</span>
+                            <CaretDown size={14} weight="bold" aria-hidden="true" />
+                          </button>
+                        </td>
+                      </tr>
+                      {isOpen && (
+                        <tr className="cmp-detail">
+                          <td colSpan={5}><RecipeQuick id={i.recipeId} /></td>
+                        </tr>
                       )}
-                    </td>
-                    <td data-label={t('Costo/unid.')} className="num">
-                      <Money v={i.costUnit} />
-                      {units !== null && units !== 1 && <div className="small muted">{units}{' '}{t('por fabricación')}</div>}
-                    </td>
-                    <td data-label={t('Precio venta')} className="num">
-                      <Money v={i.sellPrice} /><div className="small muted">{i.sellScope}</div>
-                      {i.sellSupply && <div className="small"><SupplyText s={i.sellSupply} /></div>}
-                      {i.sellCheck && (
-                        <span className="badge b-warn" title={i.sellCheck.kind === 'atipico' ? t('Muy por encima del valor regional de TSM') : t('Sin precio regional para confirmarlo')}>
-                          {i.sellCheck.kind === 'atipico' ? t('Precio atípico') : t('Sin confirmar')}
-                        </span>
-                      )}
-                    </td>
-                    <td data-label={t('Ganancia est./unid.')} className="num">
-                      <Delta v={i.profitUnit} />
-                      <div className="small muted">{t('ROI')}{' '}{i.roiUndefined ? t('no definido') : <PctShort v={i.roiPct} />}</div>
-                      {units !== null && units !== 1 && <div className="small muted">{t('Lote:')}{' '}<Money v={i.profitBatch} /></div>}
-                      {i.profitHour && <div className="small cmp-hour" title={t('Fabricando sin parar: {s} s por fabricación (Wowhead), sin contar compras ni viajes', { s: i.castSeconds })}><Money v={i.profitHour} />{' '}{t('por hora')}</div>}
-                    </td>
-                    <td data-label={t('Ventas')} className="num">
-                      {i.demand?.soldPerDay != null
-                        ? <><strong>{i.demand.soldPerDay}</strong><div className="small muted">{t('al día en la región')}</div></>
-                        : <span className="small muted">{t('sin datos de ventas')}</span>}
-                      <div className="small muted">{t('Precio de hace')}{' '}{i.sourceTime ? age(hoursSince(i.sourceTime)) : '—'}</div>
-                      {i.freshness.stale && <span className="badge b-warn">{t('Desactualizado')}</span>}
-                    </td>
-                    <td data-label={t('Estado')} className="cmp-status">
-                      <StatusBadge s={i.status} />
-                      <div className="cmp-margin">{t('Margen')}{' '}{i.marginPct ? <PctShort v={i.marginPct} /> : '—'}</div>
-                      <div className="small muted">{i.reasons[0]}</div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="small muted">{t('Ventas/día son de toda la región (TradeSkillMaster), no solo de tu reino. La ganancia es por unidad, ya restada la comisión. Precios de hace')}{' '}{items[0]?.sourceTime ? age(hoursSince(items[0].sourceTime)) : '—'}.</p>
+        </>
       )}
       {data.data && total > 50 && (
         <nav className="pager" aria-label={t('Paginación')}>

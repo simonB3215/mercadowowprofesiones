@@ -270,6 +270,28 @@ function learnFromWh(w: WhRecipe) {
   };
 }
 
+// Índice de Wowhead por profesión + objeto + materiales, para saber el nivel y el origen de muchas recetas sin consultas.
+let WH_BY_KEY: Map<string, WhRecipe[]> | null = null;
+/**
+ * Nivel de profesión y cómo se aprende una receta del catálogo, desde los datos de Wowhead (igual que learnInfo, pero en
+ * memoria y para listas). null si no es la versión de Wowhead o no hay una coincidencia única (no se adivina).
+ */
+export function quickLearn(version: string, professionId: number, craftedItemId: number | null, required: Array<{ item_id: number; quantity: number | null }>) {
+  if (version !== DATA.gameVersion) return null;
+  if (!WH_BY_KEY) {
+    WH_BY_KEY = new Map();
+    for (const p of DATA.professions) for (const r of p.recipes) {
+      const k = `${p.professionId}|${reagentKey(r.creates?.itemId ?? null, r.reagents)}`;
+      WH_BY_KEY.set(k, [...(WH_BY_KEY.get(k) ?? []), r]);
+    }
+  }
+  if (required.some((g) => g.quantity === null)) return null;
+  const hits = WH_BY_KEY.get(`${professionId}|${reagentKey(craftedItemId, required.map((g) => ({ itemId: g.item_id, quantity: g.quantity! })))}`) ?? [];
+  if (hits.length !== 1) return null;
+  const availability = availabilityOf(hits[0]);
+  return { learnedAt: availability === 'inicial' ? 1 : hits[0].learnedAt, availability };
+}
+
 // Índices de Wowhead por objeto: qué recetas lo crean y en cuántas es material.
 const WH_BY_OUTPUT = new Map<number, Array<{ prof: number; r: WhRecipe }>>();
 const WH_REAGENT_OF = new Map<number, number>();

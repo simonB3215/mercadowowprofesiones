@@ -1478,4 +1478,29 @@ export const EN: Record<string, string> = {
 
   // --- pociones 2 ---
   'Las que más oro dejan por unidad (y se venden al menos 1 al día):': 'Those that make the most gold per unit (and sell at least 1 a day):',
+
+  // --- b13 comparador simple ---
+  'se conoce al empezar': 'known from the start',
+  'hay que conseguir la receta': 'you need to get the recipe',
+  'Nivel requerido': 'Required level',
+  'Dónde se aprende': 'Where to learn it',
+  'Cuentas por unidad': 'Numbers per unit',
+  'se vende el {p} de lo publicado': '{p} of listings sell',
+  'Sale más barato fabricarlo con otra receta que comprarlo': 'Crafting it with another recipe is cheaper than buying it',
+  'mejor fabricarlo': 'better to craft it',
+  'Se compra en la casa de subastas': 'Bought at the auction house',
+  'comprar en subasta': 'buy at auction',
+  'Ver todo el detalle': 'See full details',
+  'Las recetas que más se venden en la región y si aún sale a cuenta fabricarlas para vender. Pulsa una fila para ver el nivel que pide, dónde se aprende y qué materiales necesita.': 'The best-selling recipes in the region and whether crafting them to sell still pays off. Tap a row to see the level it needs, where to learn it and which materials it takes.',
+  'Más opciones': 'More options',
+  'Sin perfil manual no se comprueba si tu personaje conoce cada receta.': 'Without a manual profile, we can\'t check whether your character knows each recipe.',
+  'Recetas con ventas, ganancia y si conviene fabricarlas': 'Recipes with sales, profit and whether they are worth crafting',
+  'Detalle': 'Details',
+  'Cerrar': 'Close',
+  'Ver materiales y nivel': 'Materials and level',
+  'Ventas/día son de toda la región (TradeSkillMaster), no solo de tu reino. La ganancia es por unidad, ya restada la comisión. Precios de hace': 'Sales/day cover the whole region (TradeSkillMaster), not just your realm. Profit is per unit, after the auction cut. Prices from',
+  'Comparador más simple': 'A simpler Comparator',
+  'El Comparador ahora se parece a «Pociones»: las recetas que más se venden primero y un veredicto claro: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos».': 'The Comparator now looks like «Potions»: best sellers first and a clear verdict: «Yes, worth it», «Low profit», «Doubtful price», «Not worth it» or «No data».',
+  'Pulsa una fila para ver el nivel que pide, dónde se aprende la receta y qué materiales necesita, con su precio y si sale mejor comprarlos o fabricarlos.': 'Tap a row to see the level it needs, where to learn the recipe and which materials it takes, with their price and whether it\'s better to buy or craft them.',
+  'A la vista solo quedan el buscador y la profesión; el orden, los estados, las favoritas y el CSV están en «Más opciones».': 'Only the search box and profession stay in view; sorting, statuses, favorites and CSV are under «More options».',
 };

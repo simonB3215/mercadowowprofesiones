@@ -3,30 +3,14 @@ import { api, useApp, useAsync, Money, Delta, Loading, ErrorBox, Empty, PageHead
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
-import { BeerBottle, CheckCircle, WarningCircle, Question, TrendDown, MinusCircle, Info, Fire } from '@phosphor-icons/react';
-import type { Icon } from '@phosphor-icons/react';
+import { BeerBottle, Info, Fire } from '@phosphor-icons/react';
 import { t, locale } from '../i18n.js';
+import { VERDICT, VerdictBadge, type Verdict } from '../verdict.js';
 
 type Kind = 'todas' | 'pociones' | 'elixires' | 'frascos';
-type Verdict = 'si' | 'poco' | 'dudoso' | 'no' | 'sin_datos';
 
 const KINDS: Array<[Kind, string]> = [['todas', 'Todas'], ['pociones', 'Pociones'], ['elixires', 'Elíxires'], ['frascos', 'Frascos']];
 const KIND_ONE: Record<string, string> = { pociones: 'Poción', elixires: 'Elíxir', frascos: 'Frasco' };
-/** Veredicto: etiqueta, explicación, icono y tono (el mismo orden que las tarjetas). */
-const VERDICT: Array<[Verdict, string, string, Icon, string]> = [
-  ['si', 'Sí, conviene', 'Gana oro y se vende bien en la región: cumple tus objetivos de Ajustes.', CheckCircle, 'ok'],
-  ['poco', 'Gana poco', 'Deja algo de oro, pero se vende poco o el margen no llega a tus objetivos de Ajustes.', WarningCircle, 'warn'],
-  ['dudoso', 'Precio dudoso', 'El precio de venta parece una sola publicación cara: no te fíes de la ganancia.', Question, 'info'],
-  ['no', 'No conviene', 'Con los precios de hoy, fabricarla para vender pierde oro o no gana nada.', TrendDown, 'bad'],
-  ['sin_datos', 'Sin datos', 'Falta algún precio para calcularlo.', MinusCircle, 'neutral'],
-];
-const V = Object.fromEntries(VERDICT.map((v) => [v[0], v])) as Record<Verdict, (typeof VERDICT)[number]>;
-const BADGE: Record<string, string> = { ok: 'b-ok', warn: 'b-warn', info: 'b-info', bad: 'b-bad', neutral: 'b-neutral' };
-
-function VerdictBadge({ v }: { v: Verdict }) {
-  const [, label, help, I, tone] = V[v];
-  return <span className={`badge ${BADGE[tone]}`} title={t(help)}><I size={14} weight="bold" aria-hidden="true" />{t(label)}</span>;
-}
 
 const pct = (r: number | null | undefined) => (r === null || r === undefined ? '—' : `${Math.round(r * 100)} %`);
 const num = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString(locale(), { maximumFractionDigits: 1 }));

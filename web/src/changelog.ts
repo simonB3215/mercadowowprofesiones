@@ -14,6 +14,14 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-24', kind: 'mejora', title: 'Comparador más simple',
+    items: [
+      'El Comparador ahora se parece a «Pociones»: las recetas que más se venden primero y un veredicto claro: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos».',
+      'Pulsa una fila para ver el nivel que pide, dónde se aprende la receta y qué materiales necesita, con su precio y si sale mejor comprarlos o fabricarlos.',
+      'A la vista solo quedan el buscador y la profesión; el orden, los estados, las favoritas y el CSV están en «Más opciones».',
+    ],
+  },
+  {
     date: '2026-11-21', kind: 'nuevo', title: 'Pociones más vendidas',
     items: [
       'Nueva sección «Pociones» en el menú: las pociones, elíxires y frascos de Alquimia ordenados por cuántos se venden al día en la región, y qué parte de lo publicado llega a venderse.',
