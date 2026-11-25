@@ -5,3 +5,7 @@ data/*
 !data/leveling/
 .env
 *.log
+# Grafo de graphify (se genera en local con /graphify)
+graphify-out/
+# Índice de CodeGraph (se genera en local con codegraph init)
+.codegraph/
