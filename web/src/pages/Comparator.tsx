@@ -10,7 +10,7 @@ import { downloadCsv, goldCell, numCell, toCsv } from '../csv.js';
 import { toQ } from '../lib.js';
 import { cooldownLabel } from '../../../src/engine/cooldown.js';
 import { t, locale } from '../i18n.js';
-import { VerdictBadge } from '../verdict.js';
+import { VerdictBadge, NoSales } from '../verdict.js';
 
 const SORTS: Array<[string, string]> = [
   ['soldPerDay', 'Ventas al día (región)'], ['profitUnit', 'Ganancia por unidad'], ['profitHour', 'Ganancia por hora'], ['profitBatch', 'Ganancia por lote'],
@@ -306,7 +306,7 @@ export function Comparator() {
                           )}
                         </td>
                         <td data-label={t('Ventas/día')} className="num">
-                          {i.demand?.soldPerDay != null ? <strong>{num(i.demand.soldPerDay)}</strong> : <span className="small muted">{t('sin datos de ventas')}</span>}
+                          {i.demand?.soldPerDay != null ? <strong>{num(i.demand.soldPerDay)}</strong> : <NoSales why={i.noSales} />}
                         </td>
                         <td data-label={t('Ganancia')} className="num">
                           <Delta v={i.profitUnit} />

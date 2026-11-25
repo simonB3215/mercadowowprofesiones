@@ -370,7 +370,7 @@ route('GET', '/api/opportunities', async (_r, _p, u, db) => {
       unitsPerRun: e.unitsPerRun, yieldRange: e.yieldRange, costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
       sellCheck: e.sellCheck ? { kind: e.sellCheck.kind, ratio: e.sellCheck.ratio } : null, cooldown: e.cooldown, castSeconds: e.castSeconds, profitHour: e.profitHour,
       profitUnit: e.profit.profitUnit, profitBatch: e.profit.profitBatch, roiPct: e.profit.roiPct, roiUndefined: e.profit.roiUndefined, marginPct: marginOf(e),
-      demand: e.demand, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
+      demand: e.demand, noSales: e.noSales, sourceTime: e.sellPrice.sourceTime, freshness: e.freshness, status: e.status, reasons: e.reasons, channel: e.channel, character: e.character,
     })),
   };
 });

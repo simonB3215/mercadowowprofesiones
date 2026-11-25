@@ -1503,4 +1503,22 @@ export const EN: Record<string, string> = {
   'El Comparador ahora se parece a «Pociones»: las recetas que más se venden primero y un veredicto claro: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos».': 'The Comparator now looks like «Potions»: best sellers first and a clear verdict: «Yes, worth it», «Low profit», «Doubtful price», «Not worth it» or «No data».',
   'Pulsa una fila para ver el nivel que pide, dónde se aprende la receta y qué materiales necesita, con su precio y si sale mejor comprarlos o fabricarlos.': 'Tap a row to see the level it needs, where to learn the recipe and which materials it takes, with their price and whether it\'s better to buy or craft them.',
   'A la vista solo quedan el buscador y la profesión; el orden, los estados, las favoritas y el CSV están en «Más opciones».': 'Only the search box and profession stay in view; sorting, statuses, favorites and CSV are under «More options».',
+
+  // --- b14 motivo sin ventas ---
+  'se liga: no se vende en subasta': 'binds: can\'t be sold at auction',
+  'El objeto se liga al recogerlo o a la cuenta, así que no se puede vender en la casa de subastas.': 'The item binds on pickup or to the account, so it can\'t be sold at the auction house.',
+  'encantamiento: no se vende': 'enchant: not sold',
+  'La receta no fabrica un objeto (encantamiento o efecto): no se vende en la casa de subastas.': 'The recipe doesn\'t craft an item (enchant or effect): it isn\'t sold at the auction house.',
+  'objeto que Blizzard no reconoce': 'item Blizzard doesn\'t recognize',
+  'La API de Blizzard no tiene este objeto; seguramente no se puede conseguir en WoW Forever.': 'Blizzard\'s API doesn\'t have this item; it probably can\'t be obtained in WoW Forever.',
+  'datos regionales viejos': 'old regional data',
+  'Las estadísticas regionales son más antiguas que el máximo de Ajustes, así que no se usan.': 'The regional stats are older than the maximum in Settings, so they aren\'t used.',
+  'aún sin estadísticas regionales': 'no regional stats yet',
+  'Está a la venta en tu casa de subastas, pero TradeSkillMaster todavía no tiene estadísticas regionales.': 'It\'s for sale at your auction house, but TradeSkillMaster doesn\'t have regional stats yet.',
+  'nadie la vende en la región': 'nobody sells it in the region',
+  'TradeSkillMaster no tiene ningún registro: nadie la ha vendido ni publicado en la región.': 'TradeSkillMaster has no record: nobody has sold or listed it in the region.',
+  'No hay datos de ventas de la región.': 'There\'s no regional sales data.',
+  'Por qué faltan ventas': 'Why sales are missing',
+  'Donde no hay ventas de la región, ahora se dice el motivo: «se liga: no se vende en subasta», «encantamiento: no se vende», «nadie la vende en la región», «objeto que Blizzard no reconoce» o «aún sin estadísticas regionales».': 'Where there are no regional sales, the reason is now shown: «binds: can\'t be sold at auction», «enchant: not sold», «nobody sells it in the region», «item Blizzard doesn\'t recognize» or «no regional stats yet».',
+  'TradeSkillMaster solo publica los objetos que se comercian en la región: la web ya guarda todos sus registros, así que una receta sin ventas no se vende o no se puede vender.': 'TradeSkillMaster only publishes items that are traded in the region: the site already stores all its records, so a recipe with no sales isn\'t sold or can\'t be sold.',
 };

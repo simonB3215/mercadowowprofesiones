@@ -131,6 +131,12 @@ export interface Evaluation {
   profit: ProfitResult;
   dropScenario: { drop: string; price: Q | null; profit: ProfitResult } | null;
   demand: { saleRate: number | null; soldPerDay: number | null; avgSalePrice: Q | null; sourceTime: string | null; scope: 'región' } | null;
+  /**
+   * Por qué no hay ventas de la región (null si las hay): vinculado (se liga, no se vende en subasta), servicio
+   * (encantamiento o efecto), no_existe (Blizzard no reconoce el objeto), desactualizado (datos regionales viejos),
+   * sin_region (está en tu casa pero TSM aún no tiene estadísticas regionales), sin_comercio (nadie lo comercia en la región).
+   */
+  noSales: 'vinculado' | 'servicio' | 'no_existe' | 'desactualizado' | 'sin_region' | 'sin_comercio' | null;
   freshness: { localHours: number | null; regionHours: number | null; stale: boolean };
   status: Status;
   reasons: string[];
@@ -349,6 +355,14 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     notes.push(`Las señales de demanda tienen ${regionHours.toFixed(1)} h, por encima del máximo configurado.`);
     demand = null;
   }
+  // Por qué no hay ventas de la región (TSM solo publica los objetos que se comercian): se dice el motivo, nunca cero.
+  const noSales: Evaluation['noSales'] = demand ? null
+    : sell.channel === 'vinculado' ? 'vinculado'
+    : sell.channel === 'servicio' ? 'servicio'
+    : outId !== null && outItem?.fetch_error ? 'no_existe'
+    : reg ? 'desactualizado'
+    : outId !== null && snap.local.has(outId) ? 'sin_region'
+    : 'sin_comercio';
 
   // Personaje
   let character: 'conoce' | 'no_conoce' | 'requisito_no_cumplido' | 'sin_perfil' = 'sin_perfil';
@@ -415,6 +429,7 @@ export function evaluateRecipe(r: RecipeRow, ctx: EvalContext, ov: Overrides = {
     profit,
     dropScenario,
     demand,
+    noSales,
     freshness: { localHours, regionHours, stale },
     status: cls.status,
     reasons: cls.reasons,

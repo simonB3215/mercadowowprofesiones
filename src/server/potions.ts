@@ -48,7 +48,7 @@ export async function potions(db: Db, ctx: MarketContext, profile: Profile | nul
     return {
       recipeId: e.recipeId, name: e.name, kind: KIND_BY_SUB[subOf.get(e.recipeId) ?? 1], output: e.output, unitsPerRun: e.unitsPerRun,
       costUnit: e.cost.unit, sellPrice: e.sellPrice.copper, sellScope: e.sellPrice.scope, sellSupply: e.sellPrice.supply ?? null,
-      profitUnit: e.profit.profitUnit, roiPct: e.profit.roiPct, demand: e.demand, status: e.status, reasons: e.reasons,
+      profitUnit: e.profit.profitUnit, roiPct: e.profit.roiPct, demand: e.demand, noSales: e.noSales, status: e.status, reasons: e.reasons,
       sellCheck: e.sellCheck ? { kind: e.sellCheck.kind } : null, character: e.character, cooldown: e.cooldown,
       verdict: potionVerdict(e),
     };

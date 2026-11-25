@@ -9,6 +9,7 @@ import { BuyOrCraftCard } from '../BuyOrCraft.js';
 import { ArrowLeft, ArrowSquareOut, Calculator, ArrowCounterClockwise, FloppyDisk, Plus, ListChecks, Hourglass, Coins, Tag, TrendUp, ChartLineUp } from '@phosphor-icons/react';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../../../src/engine/cooldown.js';
 import { t } from '../i18n.js';
+import { NoSales } from '../verdict.js';
 
 function backHref() {
   try { return sessionStorage.getItem('lastComparator') ?? '#/'; } catch { return '#/'; }
@@ -103,7 +104,7 @@ function Summary({ e, commission }: { e: any; commission: string }) {
         <div><span className="rd-fig-label"><TrendUp size={16} aria-hidden="true" />{t('Te queda')}{per}</span><span className="rd-fig"><Delta v={e.profit.profitUnit} /></span>
           <span className="small muted">{t('tras la comisión de la subasta (')}{Math.round(Number(commission) * 100)} %)</span></div>
         <div><span className="rd-fig-label"><ChartLineUp size={16} aria-hidden="true" />{t('Ventas en la región')}</span><span className="rd-fig">{sold != null ? t('{n} al día', { n: sold }) : '—'}</span>
-          <span className="small muted">{sold == null ? t('sin datos de ventas') : sold < 1 ? t('pocas: puede tardar en venderse') : t('se vende con regularidad')}</span></div>
+          <span className="small muted">{sold == null ? <NoSales why={e.noSales} /> : sold < 1 ? t('pocas: puede tardar en venderse') : t('se vende con regularidad')}</span></div>
       </div>
       <div className="rd-verdict">
         <StatusBadge s={e.status} />

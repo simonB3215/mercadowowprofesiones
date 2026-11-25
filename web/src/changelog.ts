@@ -14,6 +14,13 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-25', kind: 'mejora', title: 'Por qué faltan ventas',
+    items: [
+      'Donde no hay ventas de la región, ahora se dice el motivo: «se liga: no se vende en subasta», «encantamiento: no se vende», «nadie la vende en la región», «objeto que Blizzard no reconoce» o «aún sin estadísticas regionales».',
+      'TradeSkillMaster solo publica los objetos que se comercian en la región: la web ya guarda todos sus registros, así que una receta sin ventas no se vende o no se puede vender.',
+    ],
+  },
+  {
     date: '2026-11-24', kind: 'mejora', title: 'Comparador más simple',
     items: [
       'El Comparador ahora se parece a «Pociones»: las recetas que más se venden primero y un veredicto claro: «Sí, conviene», «Gana poco», «Precio dudoso», «No conviene» o «Sin datos».',

@@ -5,7 +5,7 @@ import { ItemLabel } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
 import { BeerBottle, Info, Fire } from '@phosphor-icons/react';
 import { t, locale } from '../i18n.js';
-import { VERDICT, VerdictBadge, type Verdict } from '../verdict.js';
+import { VERDICT, VerdictBadge, NoSales, type Verdict } from '../verdict.js';
 
 type Kind = 'todas' | 'pociones' | 'elixires' | 'frascos';
 
@@ -107,7 +107,7 @@ export function PotionsPage() {
                         <ItemLabel id={i.output?.itemId} quality={i.output?.quality} href={`#/receta/${i.recipeId}`} name={i.name}
                           sub={<>{t(KIND_ONE[i.kind] ?? '')}{i.unitsPerRun > 1 ? ` · ${t('{n} por fabricación', { n: i.unitsPerRun })}` : ''}{i.character === 'conoce' ? t(' · la conoces') : ''}</>} />
                       </td>
-                      <td data-label={t('Ventas/día')} className="num"><strong>{num(i.demand?.soldPerDay)}</strong></td>
+                      <td data-label={t('Ventas/día')} className="num">{i.demand?.soldPerDay != null ? <strong>{num(i.demand.soldPerDay)}</strong> : <NoSales why={i.noSales} />}</td>
                       <td data-label={t('Se compra')} className="num">{pct(i.demand?.saleRate)}</td>
                       <td data-label={t('Costo')} className="num"><Money v={i.costUnit} /></td>
                       <td data-label={t('Se vende por')} className="num"><Money v={i.sellPrice} />{i.sellSupply && <div className="small"><SupplyText s={i.sellSupply} /></div>}</td>

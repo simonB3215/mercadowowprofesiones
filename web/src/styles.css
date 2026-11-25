@@ -256,6 +256,7 @@ tr:last-child td { border-bottom: none; }
 .cmp-quick-big { font-size: 1.6rem; font-weight: 700; color: var(--gold); line-height: 1.1; }
 .cmp-mats { list-style: none; margin: 0 0 var(--space-2); padding: 0; display: grid; gap: 6px; }
 .cmp-mats li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.no-sales { display: inline-block; white-space: normal; max-width: 9.5em; line-height: 1.3; cursor: help; }
 @container tabla (max-width: 720px) {
   table.cmp-table td.cmp-toggle-cell { width: 100%; padding-left: 8px; text-align: left; }
   table.cmp-table .cmp-toggle { width: 100%; justify-content: center; }
