@@ -19,6 +19,7 @@ const PotionsPage = lazy(() => import('./pages/Potions.js').then((m) => ({ defau
 const TransmutationsPage = lazy(() => import('./pages/Transmutations.js').then((m) => ({ default: m.Transmutations })));
 const BuyOrCraftPage = lazy(() => import('./pages/BuyOrCraft.js').then((m) => ({ default: m.BuyOrCraft })));
 const GameChangesPage = lazy(() => import('./pages/GameChanges.js').then((m) => ({ default: m.GameChanges })));
+const TimelinePage = lazy(() => import('./pages/Timeline.js').then((m) => ({ default: m.TimelinePage })));
 const Changelog = lazy(() => import('./pages/Changelog.js').then((m) => ({ default: m.Changelog })));
 import { changelogUnseen } from './changelog.js';
 import { UpdateBanner, WhatsNew } from './Updates.js';
@@ -27,7 +28,7 @@ import { GlobalSearch } from './GlobalSearch.js';
 import { t, t as tr, lang, setLang, loadGameNames } from './i18n.js';
 import {
   ChartBar, BookOpen, Hammer, Package, UserCircle, Receipt, Calculator, ShieldCheck, GearSix, Coins, LockKey, ArrowFatLinesUp, IdentificationCard, ClockCounterClockwise,
-  House, SignOut, Scales, Flask, Scroll, BeerBottle, type Icon,
+  House, SignOut, Scales, Flask, Scroll, BeerBottle, ChartLineUp, type Icon,
 } from '@phosphor-icons/react';
 const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
 const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
@@ -43,6 +44,7 @@ const NAV_GROUPS: Array<[string | null, NavItem[]]> = [
     ['/comprar', t('Comprar o fabricar'), Scales],
     ['/transmutaciones', t('Transmutaciones'), Flask],
     ['/pociones', t('Pociones'), BeerBottle],
+    ['/linea-de-tiempo', t('Línea de tiempo'), ChartLineUp],
     ['/plan', t('Fabricación'), Hammer],
   ]],
   [t('Subir profesión'), [
@@ -72,6 +74,7 @@ const NAV_HELP: Record<string, string> = {
   '/materiales': t('¿Vender un material o usarlo para fabricar?'),
   '/transmutaciones': t('Transmutaciones y recetas con espera: cuánto oro dan al día'),
   '/pociones': t('Las pociones más vendidas y si aún conviene fabricarlas para vender'),
+  '/linea-de-tiempo': t('Qué materiales comprar baratos hoy para venderlos cuando abran las raids'),
   '/comprar': t('¿Te sale más barato comprar un objeto o fabricarlo?'),
   '/plan': t('Lista de compra total para fabricar varias recetas'),
   '/nivel': t('Qué fabricar para subir una profesión y cuánto cuesta'),
@@ -171,6 +174,7 @@ function App({ onLogout, onLogin }: { onLogout?: () => void; onLogin?: () => voi
     case 'perfil': page = <Profiles />; break;
     case 'transmutaciones': page = <TransmutationsPage />; break;
     case 'pociones': page = <PotionsPage />; break;
+    case 'linea-de-tiempo': page = <TimelinePage itemId={parts[1] ? Number(parts[1]) : null} />; break;
     case 'comprar': page = <BuyOrCraftPage />; break;
     case 'plan': page = <PlanPage />; break;
     case 'materiales': page = <Materials itemId={parts[1] ? Number(parts[1]) : null} />; break;

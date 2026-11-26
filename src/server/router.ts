@@ -17,6 +17,7 @@ import { buildItemTooltip } from './itemTooltip.js';
 import { transmutations } from './transmutations.js';
 import { potions, potionVerdict, POTION_KINDS, type PotionKind, type PotionVerdict } from './potions.js';
 import { gameChanges, patchNotes } from './gameChanges.js';
+import { timelineRanking, timelineItem, createReference, updateReference, deleteReference } from './timeline.js';
 import { cooldownLabel, durationLabel, minTimeForRuns } from '../engine/cooldown.js';
 import { storeRaw } from './storage.js';
 import { loadAssets, type IconSize } from './assets.js';
@@ -523,6 +524,33 @@ route('GET', '/api/potions', async (_r, _p, u, db) => {
   const k = u.searchParams.get('kind') ?? 'todas';
   if (k !== 'todas' && !(k in POTION_KINDS)) throw new HttpError(400, 'Tipo inválido: «pociones», «elixires», «frascos» o «todas».');
   return { ctx, profile: profile ? { id: profile.id, name: profile.name } : null, ...(await potions(db, ctx, profile, k as PotionKind | 'todas')) };
+});
+
+/**
+ * «Línea de tiempo» (D36): qué materiales conviene comprar baratos hoy para venderlos cuando abran las raids,
+ * comparando WoW Forever con Classic Anniversary por días desde el lanzamiento.
+ */
+route('GET', '/api/timeline', async (_r, _p, u, db) => {
+  const ctx = ctxFrom(u);
+  return { ctx, ...(await timelineRanking(db, ctx)) };
+});
+route('GET', '/api/timeline/items/:id', async (_r, p, u, db) => {
+  const ctx = ctxFrom(u);
+  const itemId = int(p.id);
+  if (!itemId || itemId <= 0) throw new HttpError(400, 'Objeto inválido.');
+  return { ctx, ...(await timelineItem(db, ctx, itemId)) };
+});
+// Referencias: cambian datos compartidos, así que piden la contraseña de administrador (isOpenRequest).
+route('POST', '/api/timeline/references', async (req, _p, _u, db) => createReference(db, await body(req)));
+route('PUT', '/api/timeline/references/:id', async (req, p, _u, db) => {
+  const id = int(p.id);
+  if (!id || id <= 0) throw new HttpError(400, 'Id inválido.');
+  return updateReference(db, id, await body(req));
+});
+route('DELETE', '/api/timeline/references/:id', async (_r, p, _u, db) => {
+  const id = int(p.id);
+  if (!id || id <= 0) throw new HttpError(400, 'Id inválido.');
+  return deleteReference(db, id);
 });
 
 /** Comprar o fabricar por receta (recipeId) o por objeto (itemId: compara todas las recetas que lo fabrican). */

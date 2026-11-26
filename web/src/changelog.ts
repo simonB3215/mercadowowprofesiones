@@ -14,6 +14,15 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-26', kind: 'nuevo', title: 'Línea de tiempo: comprar barato ahora, vender en raids',
+    items: [
+      'Nueva sección «Línea de tiempo» en «Ganar oro»: qué materiales conviene comprar baratos hoy para venderlos cuando abran las raids de WoW Forever (día 35, 9 de diciembre).',
+      'Compara cada material con lo que pasó en Classic Anniversary al abrir sus raids, por días desde el lanzamiento, y le pone un veredicto: «Comprar», «Vigilar», «Esperar (todavía cae)», «No conviene» o «Sin datos», con sus motivos.',
+      'Tiene en cuenta el techo de 50 o del vendedor de Loto negro y Cristal Arcano, los precios locales inflados, las pocas publicaciones y que en Forever las hierbas y minerales comunes tienden a abaratarse.',
+      'Pulsa un material para ver su gráfico frente a Anniversary, los tramos de venta sugeridos (×2, ×3 y ×5) y las citas de los foros con su enlace.',
+    ],
+  },
+  {
     date: '2026-11-25', kind: 'mejora', title: 'Por qué faltan ventas',
     items: [
       'Donde no hay ventas de la región, ahora se dice el motivo: «se liga: no se vende en subasta», «encantamiento: no se vende», «nadie la vende en la región», «objeto que Blizzard no reconoce» o «aún sin estadísticas regionales».',
