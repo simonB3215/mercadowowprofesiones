@@ -33,6 +33,25 @@ import {
 const Home = lazy(() => import('./pages/Home.js').then((m) => ({ default: m.Home })));
 const Privacy = lazy(() => import('./pages/Privacy.js').then((m) => ({ default: m.Privacy })));
 
+/**
+ * Tras publicar una versión nueva, una pestaña abierta con la anterior pide trozos (assets/Pagina-abc.js) que ya no
+ * existen y la página se quedaba en blanco. Si falla la carga de un trozo, se recarga una vez para traer la versión
+ * nueva. Como mucho una recarga por minuto, para no entrar en bucle si el fallo es otro (sin conexión, etc.).
+ */
+const CHUNK_ERROR = /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module|Expected a JavaScript.*module script/i;
+function reloadForNewVersion() {
+  try {
+    const last = Number(sessionStorage.getItem('chunkReloadAt') ?? 0);
+    if (Date.now() - last < 60_000) return false;
+    sessionStorage.setItem('chunkReloadAt', String(Date.now()));
+  } catch { /* sin almacenamiento: se recarga igual */ }
+  location.reload();
+  return true;
+}
+window.addEventListener('vite:preloadError', (e) => { if (reloadForNewVersion()) e.preventDefault(); });
+window.addEventListener('unhandledrejection', (e) => { if (CHUNK_ERROR.test(String((e.reason as Error)?.message ?? e.reason))) reloadForNewVersion(); });
+window.addEventListener('error', (e) => { if (CHUNK_ERROR.test(String(e.message ?? ''))) reloadForNewVersion(); });
+
 type NavItem = [string, string, Icon];
 /** Menú en tres grupos por objetivo. En tableta y móvil los títulos se sustituyen por una línea separadora. */
 const NAV_GROUPS: Array<[string | null, NavItem[]]> = [

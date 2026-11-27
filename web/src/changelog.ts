@@ -14,6 +14,12 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-27', kind: 'arreglo', title: 'Página en blanco tras una actualización',
+    items: [
+      'Si tenías la web abierta mientras se publicaba una versión nueva, al cambiar de sección se quedaba en blanco. Ahora se recarga sola y trae la versión nueva.',
+    ],
+  },
+  {
     date: '2026-11-27', kind: 'mejora', title: 'Filtros en todas las listas',
     items: [
       'Pociones, Transmutaciones, Materiales, Catálogo y Línea de tiempo tienen ahora los mismos filtros que el Comparador: buscar por nombre, profesión, estado, calidad del objeto y «Más opciones».',

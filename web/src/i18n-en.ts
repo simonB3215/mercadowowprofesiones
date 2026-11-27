@@ -1707,4 +1707,6 @@ export const EN: Record<string, string> = {
   'Casillas como «Solo con ganancia», «Solo favoritas», «Solo recetas conocidas» u «Ocultar resultados no vendibles», según lo que tenga sentido en cada página.': 'Checkboxes such as “Only with profit”, “Favorites only”, “Only known recipes” or “Hide unsellable results”, depending on what makes sense on each page.',
   'Los filtros quedan en la dirección de la página: al recargar o compartir el enlace se mantienen. «Quitar filtros» los borra todos.': 'Filters are kept in the page address: they survive a reload or a shared link. “Clear filters” removes them all.',
   'Materiales muestra ahora todos los materiales del catálogo (antes solo los 100 más usados), con «Mostrar más».': 'Materials now lists every material in the catalog (before, only the 100 most used), with “Show more”.',
+  'Página en blanco tras una actualización': 'Blank page after an update',
+  'Si tenías la web abierta mientras se publicaba una versión nueva, al cambiar de sección se quedaba en blanco. Ahora se recarga sola y trae la versión nueva.': 'If you had the site open while a new version was published, switching sections showed a blank page. It now reloads by itself and loads the new version.',
 };
