@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api, useApp, useAsync, Money, Delta, StatusBadge, Loading, ErrorBox, Empty, PageHead, toQ } from '../lib.js';
+import { api, useApp, useAsync, Money, Delta, StatusBadge, Loading, ErrorBox, Empty, PageHead, toQ, STATUS_LABEL, type Status } from '../lib.js';
+import { useListFilters, sortNum, type FilterSpec } from '../ListFilters.js';
+import { useFavorites } from '../favorites.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel, WowIcon } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
@@ -84,8 +86,6 @@ function Availability({ i, done, now, onDone, onClear }: { i: any; done: Done; n
 export function Transmutations() {
   const { ctxQuery, profileId } = useApp();
   const d = useAsync(() => api(`/api/transmutations?${ctxQuery}${profileId ? `&profileId=${profileId}` : ''}`), [ctxQuery, profileId]);
-  const [onlyProfit, setOnlyProfit] = useState(false);
-  const [onlyKnown, setOnlyKnown] = useState(false);
   const { done, mark: markSlot, clear: clearSlot, err: doneErr, me } = useDone();
   const [now, setNow] = useState(Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 60_000); return () => clearInterval(t); }, []);
@@ -93,7 +93,32 @@ export function Transmutations() {
   const clear = (i: any) => clearSlot(slotOf(i));
 
   const all: any[] = d.data?.items ?? [];
-  const list = useMemo(() => all.filter((i) => (!onlyProfit || toQ(i.profitPerCraft)?.sign() === 1) && (!onlyKnown || i.character === 'conoce')), [all, onlyProfit, onlyKnown]);
+  const favs = useFavorites();
+  const spec: FilterSpec<any> = {
+    path: '/transmutaciones',
+    name: (i) => i.name, searchExtra: (i) => i.output?.name ?? '', searchPlaceholder: 'Receta u objeto',
+    profession: (i) => ({ id: i.professionId, name: i.profession }),
+    status: { label: 'Estado', get: (i) => i.status, options: (Object.keys(STATUS_LABEL) as Status[]).map((s) => [s, STATUS_LABEL[s]]) },
+    quality: (i) => i.output?.quality,
+    defaultSort: '',
+    sorts: [
+      { key: 'goldPerDay', label: 'Oro al día', get: (i) => sortNum(i.goldPerDay) },
+      { key: 'profit', label: 'Ganancia por fabricación', get: (i) => sortNum(i.profitPerCraft) },
+      { key: 'roi', label: 'ROI', get: (i) => sortNum(i.roiPct) },
+      { key: 'soldPerDay', label: 'Ventas al día (región)', get: (i) => i.demand?.soldPerDay },
+      { key: 'cost', label: 'Costo', get: (i) => sortNum(i.cost) },
+      { key: 'cooldown', label: 'Espera', get: (i) => i.cooldown },
+      { key: 'name', label: 'Nombre', get: (i) => i.name },
+    ],
+    depsKey: `${favs.ids.join(',')}|${profileId ?? ''}`,
+    checks: [
+      { key: 'ganancia', label: 'Solo con ganancia', test: (i) => toQ(i.profitPerCraft)?.sign() === 1 },
+      { key: 'conocidas', label: 'Solo recetas conocidas', test: (i) => i.character === 'conoce', disabled: !profileId, hint: ' (elige un perfil manual arriba)' },
+      { key: 'vendibles', label: 'Ocultar resultados no vendibles', test: (i) => i.status !== 'no_vendible' },
+      { key: 'favoritas', label: 'Solo favoritas', test: (i) => favs.ids.includes(i.recipeId) },
+    ],
+  };
+  const { list, ui: filtersUi } = useListFilters(all, spec);
   const groups = useMemo(() => {
     const m = new Map<string, any[]>();
     for (const i of list) m.set(i.profession, [...(m.get(i.profession) ?? []), i]);
@@ -141,10 +166,7 @@ export function Transmutations() {
             </label>
           )}
           {doneErr && <p className="small lv-error" role="alert">{t('No se pudo guardar con el personaje:')}{' '}{doneErr}</p>}
-          <div className="row" style={{ margin: '8px 0' }}>
-            <label className="check"><input type="checkbox" checked={onlyProfit} onChange={(e) => setOnlyProfit(e.target.checked)} />{t('Solo con ganancia')}</label>
-            {profileId && <label className="check"><input type="checkbox" checked={onlyKnown} onChange={(e) => setOnlyKnown(e.target.checked)} />{t('Solo las que conoce el perfil')}</label>}
-          </div>
+          {filtersUi}
           {!list.length ? <Empty icon={Flask}>{t('Ninguna receta cumple los filtros.')}</Empty> : groups.map(([prof, items]) => (
             <section key={prof} className="card">
               <h2 className="icon-inline" style={{ marginTop: 0 }}><WowIcon kind="profession" id={items[0].professionId} px={22} />{prof}</h2>

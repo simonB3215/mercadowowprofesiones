@@ -14,6 +14,16 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   {
+    date: '2026-11-27', kind: 'mejora', title: 'Filtros en todas las listas',
+    items: [
+      'Pociones, Transmutaciones, Materiales, Catálogo y Línea de tiempo tienen ahora los mismos filtros que el Comparador: buscar por nombre, profesión, estado, calidad del objeto y «Más opciones».',
+      'Puedes ordenar cada lista por la columna que quieras (ventas al día, ganancia, oro al día, potencial, nombre…) y cambiar el sentido con la flecha.',
+      'Casillas como «Solo con ganancia», «Solo favoritas», «Solo recetas conocidas» u «Ocultar resultados no vendibles», según lo que tenga sentido en cada página.',
+      'Los filtros quedan en la dirección de la página: al recargar o compartir el enlace se mantienen. «Quitar filtros» los borra todos.',
+      'Materiales muestra ahora todos los materiales del catálogo (antes solo los 100 más usados), con «Mostrar más».',
+    ],
+  },
+  {
     date: '2026-11-26', kind: 'nuevo', title: 'Línea de tiempo: comprar barato ahora, vender en raids',
     items: [
       'Nueva sección «Línea de tiempo» en «Ganar oro»: qué materiales conviene comprar baratos hoy para venderlos cuando abran las raids de WoW Forever (día 35, 9 de diciembre).',

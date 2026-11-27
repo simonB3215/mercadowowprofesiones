@@ -1035,3 +1035,8 @@ nav.main a:hover .nav-text { text-shadow: var(--glow-text); }
 .tl-grow { flex: 1 1 240px; }
 .tl-grow input { width: 100%; }
 @media (max-width: 760px) { .tl-reason { max-width: none; } }
+
+/* Filtros de lista comunes (ListFilters.tsx) */
+.lf-sort { display: flex; gap: 6px; align-items: stretch; }
+.lf-sort select { flex: 1; min-width: 0; }
+.lf-dir { display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; }

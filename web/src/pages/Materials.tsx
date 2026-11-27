@@ -5,7 +5,8 @@ import { PriceHistory, SupplyText } from '../PriceHistory.js';
 import { PriceAlertButton, PriceAlertsPanel } from '../priceAlerts.js';
 import { CraftingCard } from '../Crafting.js';
 import { ArrowLeft, MagnifyingGlass, ArrowUp, ArrowDown, MinusCircle } from '@phosphor-icons/react';
-import { t } from '../i18n.js';
+import { t, locale } from '../i18n.js';
+import { useListFilters } from '../ListFilters.js';
 
 function GoldPerHour({ netPerUnit }: { netPerUnit: Q | null }) {
   const [units, setUnits] = useState('');
@@ -84,30 +85,52 @@ function MaterialDetail({ itemId }: { itemId: number }) {
   );
 }
 
+const PAGE = 100;
+
 export function Materials({ itemId }: { itemId: number | null }) {
   const { ctx } = useApp();
-  const [search, setSearch] = useState('');
-  const [q, setQ] = useState('');
-  useEffect(() => { const t = setTimeout(() => setQ(search), 300); return () => clearTimeout(t); }, [search]);
-  const list = useAsync(() => api(`/api/materials?version=${ctx.version}&search=${encodeURIComponent(q)}`), [ctx.version, q]);
+  const list = useAsync(() => api<any>(`/api/materials?version=${ctx.version}`), [ctx.version]);
+  const all: any[] = list.data?.materials ?? [];
+  const filters = useListFilters(all, {
+    path: '/materiales',
+    name: (m) => m.name, searchExtra: (m) => String(m.item_id),
+    searchLabel: 'Buscar material', searchPlaceholder: 'Nombre del material',
+    quality: (m) => m.quality,
+    defaultSort: 'uses',
+    sorts: [
+      { key: 'uses', label: 'Recetas que lo usan', get: (m) => m.uses },
+      { key: 'name', label: 'Nombre', get: (m) => m.name },
+    ],
+    checks: [
+      { key: 'fabricable', label: 'Solo los que se pueden fabricar', test: (m) => Boolean(m.craftable) },
+      { key: 'nofabricable', label: 'Solo los que no se fabrican (recolección, vendedor, botín)', test: (m) => !m.craftable },
+    ],
+  });
+  const [shown, setShown] = useState(PAGE);
+  useEffect(() => setShown(PAGE), [filters.list]);
   if (itemId) return <MaterialDetail itemId={itemId} />;
+  const rows = filters.list;
   return (
     <div>
       <PageHead title={t('Materiales')}>{t('¿Tienes materiales (por ejemplo, de recolectar) y no sabes qué hacer con ellos? Pulsa uno para ver si conviene venderlo o usarlo en una receta.')}</PageHead>
       <PriceAlertsPanel />
-      <label className="field" style={{ maxWidth: 360 }}>{t('Buscar material')}<span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" /><input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t('Nombre del material')} /></span></label>
-      {list.loading ? <Loading rows={6} /> : list.error ? <ErrorBox error={list.error} /> : (
-        <div className="table-wrap" style={{ marginTop: 10 }}>
-          <table className="responsive">
-            <thead><tr><th>{t('Material')}</th><th className="num">{t('Recetas que lo usan')}</th></tr></thead>
-            <tbody>
-              {list.data.materials.map((m: any) => (
-                <tr key={m.item_id}><td data-label={t('Material')} className="cell-main"><ItemLabel id={m.item_id} href={`#/materiales/${m.item_id}`} name={m.name} /></td><td data-label={t('Recetas')} className="num">{m.uses}</td></tr>
-              ))}
-              {!list.data.materials.length && <tr><td colSpan={2} className="empty">{t('Sin materiales en el catálogo.')}</td></tr>}
-            </tbody>
-          </table>
-        </div>
+      {filters.ui}
+      {list.loading && !list.data ? <Loading rows={6} /> : list.error ? <ErrorBox error={list.error} onRetry={list.reload} /> : (
+        <>
+          <p className="small muted" aria-live="polite">{t('{n} de {total} materiales', { n: rows.length.toLocaleString(locale()), total: all.length.toLocaleString(locale()) })}</p>
+          <div className="table-wrap">
+            <table className="responsive">
+              <thead><tr><th>{t('Material')}</th><th className="num">{t('Recetas que lo usan')}</th></tr></thead>
+              <tbody>
+                {rows.slice(0, shown).map((m: any) => (
+                  <tr key={m.item_id}><td data-label={t('Material')} className="cell-main"><ItemLabel id={m.item_id} quality={m.quality} href={`#/materiales/${m.item_id}`} name={m.name} sub={m.craftable ? t('Se puede fabricar') : undefined} /></td><td data-label={t('Recetas')} className="num">{m.uses}</td></tr>
+                ))}
+                {!rows.length && <tr><td colSpan={2} className="empty">{all.length ? t('Ningún material cumple los filtros.') : t('Sin materiales en el catálogo.')}</td></tr>}
+              </tbody>
+            </table>
+          </div>
+          {rows.length > shown && <p><button type="button" onClick={() => setShown(shown + PAGE)}>{t('Mostrar {n} más', { n: Math.min(PAGE, rows.length - shown) })}</button></p>}
+        </>
       )}
     </div>
   );

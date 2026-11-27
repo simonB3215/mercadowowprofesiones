@@ -3,6 +3,7 @@ import { api, useApp, useAsync, Loading, ErrorBox, Empty, PageHead } from '../li
 import { WowIcon } from '../icons.js';
 import { ArrowRight, WarningCircle } from '@phosphor-icons/react';
 import { t } from '../i18n.js';
+import { useListFilters } from '../ListFilters.js';
 
 const KIND: Record<string, string> = {
   fabricacion: 'Fabricación', secundaria: 'Secundaria (fabricación)', recoleccion: 'Recolección / transformación', historica: 'Histórica', desconocido: 'Sin clasificar',
@@ -10,11 +11,25 @@ const KIND: Record<string, string> = {
 
 export function Catalog() {
   const { ctx } = useApp();
-  const p = useAsync(() => api(`/api/professions?version=${ctx.version}`), [ctx.version]);
+  const p = useAsync(() => api<any>(`/api/professions?version=${ctx.version}`), [ctx.version]);
+  const filters = useListFilters<any>(p.data?.professions ?? [], {
+    path: '/catalogo',
+    name: (x) => x.name, searchLabel: 'Buscar profesión', searchPlaceholder: 'p. ej. Alquimia',
+    status: { label: 'Tipo', get: (x) => x.kind, options: Object.entries(KIND) },
+    defaultSort: '',
+    sorts: [
+      { key: 'recipes', label: 'Número de recetas', get: (x) => x.recipes },
+      { key: 'name', label: 'Nombre', get: (x) => x.name },
+    ],
+    checks: [
+      { key: 'conrecetas', label: 'Solo con recetas', test: (x) => x.recipes > 0 },
+      { key: 'completas', label: 'Solo con todos los datos completos', test: (x) => x.complete >= x.recipes },
+    ],
+  });
   if (p.loading) return <Loading rows={4} />;
   if (p.error) return <ErrorBox error={p.error} onRetry={p.reload} />;
   const groups: Record<string, any[]> = {};
-  for (const x of p.data.professions) (groups[x.kind] ??= []).push(x);
+  for (const x of filters.list) (groups[x.kind] ??= []).push(x);
   return (
     <div>
       <PageHead title={t('Catálogo de profesiones')}>{t('Todas las profesiones de WoW Forever. Elige una para ver qué recetas dan oro o para calcular cómo subirla.')}</PageHead>
@@ -27,7 +42,9 @@ export function Catalog() {
           </div>
         </div>
       )}
+      {p.data.professions.length > 0 && filters.ui}
       {!p.data.professions.length && <Empty>{t('El catálogo de esta versión está vacío.')}</Empty>}
+      {p.data.professions.length > 0 && !filters.list.length && <Empty>{t('Ninguna profesión cumple los filtros.')}</Empty>}
       {Object.entries(groups).map(([k, list]) => (
         <section key={k} aria-labelledby={`grupo-${k}`}>
           <h2 id={`grupo-${k}`}>{t(KIND[k] ?? k)}</h2>

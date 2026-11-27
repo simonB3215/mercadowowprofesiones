@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { api, useApp, useAsync, Money, Delta, Loading, ErrorBox, Empty, PageHead, StatusBadge } from '../lib.js';
+import { api, useApp, useAsync, Money, Delta, Loading, ErrorBox, Empty, PageHead, StatusBadge, STATUS_LABEL, type Status } from '../lib.js';
+import { useListFilters, sortNum, type FilterSpec } from '../ListFilters.js';
+import { useFavorites } from '../favorites.js';
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel } from '../icons.js';
 import { SupplyText } from '../PriceHistory.js';
@@ -21,7 +23,32 @@ export function PotionsPage() {
   const [verdict, setVerdict] = useState<Verdict | ''>('');
   const d = useAsync(() => api<any>(`/api/potions?${ctxQuery}&kind=${kind}${profileId ? `&profileId=${profileId}` : ''}`), [ctxQuery, profileId, kind]);
   const all: any[] = d.data?.items ?? [];
-  const list = useMemo(() => (verdict ? all.filter((i) => i.verdict === verdict) : all), [all, verdict]);
+  const favs = useFavorites();
+  const spec: FilterSpec<any> = {
+    path: '/pociones',
+    name: (i) => i.name, searchExtra: (i) => i.output?.name ?? '', searchPlaceholder: 'Receta u objeto',
+    status: { label: 'Estado', get: (i) => i.status, options: (Object.keys(STATUS_LABEL) as Status[]).map((s) => [s, STATUS_LABEL[s]]) },
+    quality: (i) => i.output?.quality,
+    defaultSort: '',
+    sorts: [
+      { key: 'soldPerDay', label: 'Ventas al día (región)', get: (i) => i.demand?.soldPerDay },
+      { key: 'profitUnit', label: 'Ganancia por unidad', get: (i) => sortNum(i.profitUnit) },
+      { key: 'roi', label: 'ROI', get: (i) => sortNum(i.roiPct) },
+      { key: 'saleRate', label: 'Tasa de venta (región)', get: (i) => i.demand?.saleRate },
+      { key: 'cost', label: 'Costo por unidad', get: (i) => sortNum(i.costUnit) },
+      { key: 'sellPrice', label: 'Precio de venta', get: (i) => sortNum(i.sellPrice) },
+      { key: 'name', label: 'Nombre', get: (i) => i.name },
+    ],
+    depsKey: `${favs.ids.join(',')}|${profileId ?? ''}`,
+    checks: [
+      { key: 'ganancia', label: 'Solo con ganancia', test: (i) => (sortNum(i.profitUnit) ?? 0) > 0 },
+      { key: 'conocidas', label: 'Solo recetas conocidas', test: (i) => i.character === 'conoce', disabled: !profileId, hint: ' (elige un perfil manual arriba)' },
+      { key: 'vendibles', label: 'Ocultar resultados no vendibles', test: (i) => i.status !== 'no_vendible' },
+      { key: 'favoritas', label: 'Solo favoritas', test: (i) => favs.ids.includes(i.recipeId) },
+    ],
+  };
+  const filters = useListFilters(all, spec, verdict ? 1 : 0, () => setVerdict(''));
+  const list = useMemo(() => (verdict ? filters.list.filter((i) => i.verdict === verdict) : filters.list), [filters.list, verdict]);
   // Las más vendidas que además convienen: lo primero que quiere saber quien entra aquí.
   const bestSellers = useMemo(() => all.filter((i) => i.verdict === 'si' || i.verdict === 'poco').slice(0, 3), [all]);
   // Las que más oro dejan por unidad entre las que ganan algo y se venden al menos una al día.
@@ -86,6 +113,7 @@ export function PotionsPage() {
               </button>
             ))}
           </div>
+          {filters.ui}
           {!list.length ? <Empty icon={BeerBottle}>{t('Ninguna receta cumple los filtros.')}</Empty> : (
             <div className="table-wrap">
               <table className="responsive">

@@ -662,13 +662,13 @@ route('GET', '/api/materials', async (_r, _p, u, db) => {
   const version = u.searchParams.get('version') ?? 'forever';
   const search = (u.searchParams.get('search') ?? '').toLowerCase().slice(0, 60);
   const rows = await db.query<any>(
-    `select g.item_id, coalesce(i.name, 'Objeto ' || g.item_id) as name, count(distinct g.recipe_id)::int as uses,
-            bool_or(p.kind = 'recoleccion') as gathered_prof
+    `select g.item_id, coalesce(i.name, 'Objeto ' || g.item_id) as name, i.quality, count(distinct g.recipe_id)::int as uses,
+            bool_or(p.kind = 'recoleccion') as gathered_prof, bool_or(r.id is not null) as craftable
      from recipe_reagent g left join item i on i.game_version=g.game_version and i.id=g.item_id
      left join recipe r on r.game_version=g.game_version and r.crafted_item_id=g.item_id
      left join profession p on p.game_version=r.game_version and p.id=r.profession_id
      where g.game_version=$1 and ($2 = '' or lower(coalesce(i.name,'')) like '%' || $2 || '%' or lower(coalesce(i.name_en,'')) like '%' || $2 || '%')
-     group by g.item_id, i.name order by uses desc limit 100`,
+     group by g.item_id, i.name, i.quality order by uses desc limit 3000`,
     [version, search],
   );
   return { materials: rows };

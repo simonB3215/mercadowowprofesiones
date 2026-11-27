@@ -3,6 +3,7 @@ import { api, useApp, useAsync, Q, toQ, formatMoney, Money, CoinText, Loading, E
 import { MarketStatus } from '../MarketStatus.js';
 import { ItemLabel } from '../icons.js';
 import { t, isEn, locale } from '../i18n.js';
+import { useListFilters, sortNum } from '../ListFilters.js';
 import {
   ChartLineUp, ShoppingCart, Eye, HourglassMedium, TrendDown, MinusCircle, Info, ArrowLeft, MagnifyingGlass, LinkSimple, PencilSimple, Trash, Plus, type Icon,
 } from '@phosphor-icons/react';
@@ -164,14 +165,34 @@ function TimelineList() {
   const { ctxQuery, ctx } = useApp();
   const d = useAsync(() => api<any>(`/api/timeline?${ctxQuery}`), [ctxQuery]);
   const [verdict, setVerdict] = useState<Verdict | ''>('');
-  const [q, setQ] = useState('');
   const [shown, setShown] = useState(PAGE);
-  useEffect(() => setShown(PAGE), [verdict, q, ctxQuery]);
   const all: any[] = d.data?.items ?? [];
-  const list = useMemo(() => {
-    const s = q.trim().toLocaleLowerCase(locale());
-    return all.filter((i) => (!verdict || i.verdict === verdict) && (!s || String(i.name ?? '').toLocaleLowerCase(locale()).includes(s) || String(i.itemId) === s));
-  }, [all, verdict, q]);
+  const filters = useListFilters(all, {
+    path: '/linea-de-tiempo',
+    name: (i) => i.name, searchExtra: (i) => String(i.itemId),
+    searchLabel: 'Buscar material', searchPlaceholder: 'p. ej. Loto negro',
+    quality: (i) => i.quality,
+    defaultSort: '',
+    sorts: [
+      { key: 'score', label: 'Puntuación', get: (i) => i.score },
+      { key: 'potential', label: 'Potencial', get: (i) => i.potential },
+      { key: 'drop', label: 'Caída desde el pico', get: (i) => i.dropFromPeak },
+      { key: 'trend', label: 'Tendencia 7 d', get: (i) => i.trend7 },
+      { key: 'soldPerDay', label: 'Ventas al día (región)', get: (i) => i.soldPerDay },
+      { key: 'price', label: 'Precio de hoy', get: (i) => sortNum(i.priceToday) },
+      { key: 'supply', label: 'En venta', get: (i) => i.supplyToday },
+      { key: 'uses', label: 'Recetas que lo usan', get: (i) => i.uses },
+      { key: 'name', label: 'Nombre', get: (i) => i.name },
+    ],
+    checks: [
+      { key: 'recetas', label: 'Solo materiales de recetas', test: (i) => i.uses > 0 },
+      { key: 'techo', label: 'Solo con techo de vendedor', test: (i) => Boolean(i.vendorCap) },
+      { key: 'ventas', label: 'Solo con ventas en la región', test: (i) => (i.soldPerDay ?? 0) > 0 },
+      { key: 'sininflar', label: 'Ocultar precios locales inflados', test: (i) => !i.inflated },
+    ],
+  }, verdict ? 1 : 0, () => setVerdict(''));
+  const list = useMemo(() => (verdict ? filters.list.filter((i) => i.verdict === verdict) : filters.list), [filters.list, verdict]);
+  useEffect(() => setShown(PAGE), [list, ctxQuery]);
   const open = (id: number) => { location.hash = `#/linea-de-tiempo/${id}`; };
 
   return (
@@ -196,14 +217,8 @@ function TimelineList() {
                   </button>
                 ))}
               </div>
-              <div className="row" style={{ marginBottom: 12 }}>
-                <label className="field tl-search">{t('Buscar material')}
-                  <span className="input-icon"><MagnifyingGlass size={16} aria-hidden="true" />
-                    <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('p. ej. Loto negro')} />
-                  </span>
-                </label>
-                <p className="small muted" style={{ margin: 0 }} aria-live="polite">{t('{n} de {total} materiales con historial', { n: list.length.toLocaleString(locale()), total: all.length.toLocaleString(locale()) })}</p>
-              </div>
+              {filters.ui}
+              <p className="small muted" aria-live="polite">{t('{n} de {total} materiales con historial', { n: list.length.toLocaleString(locale()), total: all.length.toLocaleString(locale()) })}</p>
               {!list.length ? <Empty icon={ChartLineUp}>{t('Ningún material cumple los filtros.')}</Empty> : (
                 <div className="table-wrap">
                   <table className="responsive tl-table">
